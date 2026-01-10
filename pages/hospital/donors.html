@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donor List - BloodConnect Hospital</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Hospital Portal</div>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/pages/hospital/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/pages/hospital/request.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="droplet" class="size-5"></i
+          ><span>Request Blood</span></a
+        >
+        <a
+          href="/pages/hospital/donors.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="users" class="size-5"></i><span>Donor List</span></a
+        >
+        <a
+          href="/pages/hospital/voluntary.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="calendar" class="size-5"></i
+          ><span>Voluntary Requests</span></a
+        >
+        <a
+          href="/pages/hospital/appointments.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="calendar-check" class="size-5"></i
+          ><span>Appointments</span></a
+        >
+        <a
+          href="/pages/hospital/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">Donor List</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900">City Hospital</div>
+            <div class="text-xs text-gray-500">Hospital Admin</div>
+          </div>
+          <div
+            class="size-10 bg-blue-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="building-2" class="size-5 text-blue-600"></i>
+          </div>
+        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 pt-16">
+      <div class="p-8 space-y-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">Donor List</h1>
+            <p class="text-gray-600">
+              Browse and contact registered blood donors
+            </p>
+          </div>
+          <button
+            class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+          >
+            <i data-lucide="filter" class="size-4 inline mr-2"></i>Filter by
+            Location
+          </button>
+        </div>
+
+        <!-- Quick Filter -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="flex flex-wrap gap-3">
+            <button
+              class="px-4 py-2 border border-red-600 text-red-600 hover:bg-red-50 rounded-lg font-medium"
+            >
+              All Donors
+            </button>
+            <button
+              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+            >
+              O+
+            </button>
+            <button
+              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+            >
+              O-
+            </button>
+            <button
+              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+            >
+              A+
+            </button>
+            <button
+              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+            >
+              A-
+            </button>
+            <button
+              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+            >
+              B+
+            </button>
+            <button
+              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+            >
+              B-
+            </button>
+            <button
+              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+            >
+              AB+
+            </button>
+            <button
+              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+            >
+              AB-
+            </button>
+            <div class="flex-1"></div>
+            <button
+              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+            >
+              Available Only
+            </button>
+          </div>
+        </div>
+
+        <!-- Donors Table -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-1">
+              Registered Donors
+            </h2>
+            <p class="text-sm text-gray-600">Total 6 donors in your network</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-gray-200">
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Donor ID
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Name
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Blood Type
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Location
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Last Donation
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Total
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Availability
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-gray-900">DON001</td>
+                  <td class="py-3 px-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+                      >
+                        <i data-lucide="user" class="size-5 text-red-600"></i>
+                      </div>
+                      <div>
+                        <div class="font-medium text-gray-900">John Smith</div>
+                        <div class="text-sm text-gray-500">28 years</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
+                      >O+</span
+                    >
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">
+                    <i data-lucide="map-pin" class="size-4 inline mr-1"></i
+                    >Downtown
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">2 weeks ago</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
+                      >12 times</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full"
+                      >Available</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button
+                        class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                      >
+                        <i data-lucide="phone" class="size-4 inline mr-1"></i
+                        >Call
+                      </button>
+                      <button
+                        class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                      >
+                        <i
+                          data-lucide="message-square"
+                          class="size-4 inline mr-1"
+                        ></i
+                        >Chat
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-gray-900">DON002</td>
+                  <td class="py-3 px-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+                      >
+                        <i data-lucide="user" class="size-5 text-red-600"></i>
+                      </div>
+                      <div>
+                        <div class="font-medium text-gray-900">
+                          Maria Garcia
+                        </div>
+                        <div class="text-sm text-gray-500">32 years</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
+                      >A+</span
+                    >
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">
+                    <i data-lucide="map-pin" class="size-4 inline mr-1"></i
+                    >Uptown
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">1 month ago</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
+                      >8 times</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full"
+                      >Available</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button
+                        class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                      >
+                        <i data-lucide="phone" class="size-4 inline mr-1"></i
+                        >Call
+                      </button>
+                      <button
+                        class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                      >
+                        <i
+                          data-lucide="message-square"
+                          class="size-4 inline mr-1"
+                        ></i
+                        >Chat
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-gray-900">DON003</td>
+                  <td class="py-3 px-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+                      >
+                        <i data-lucide="user" class="size-5 text-red-600"></i>
+                      </div>
+                      <div>
+                        <div class="font-medium text-gray-900">David Lee</div>
+                        <div class="text-sm text-gray-500">25 years</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
+                      >B-</span
+                    >
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">
+                    <i data-lucide="map-pin" class="size-4 inline mr-1"></i
+                    >Westside
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">3 weeks ago</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
+                      >5 times</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-gray-600 text-gray-600 rounded-full"
+                      >Not Available</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button
+                        class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                      >
+                        <i data-lucide="phone" class="size-4 inline mr-1"></i
+                        >Call
+                      </button>
+                      <button
+                        class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                      >
+                        <i
+                          data-lucide="message-square"
+                          class="size-4 inline mr-1"
+                        ></i
+                        >Chat
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-gray-900">DON004</td>
+                  <td class="py-3 px-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+                      >
+                        <i data-lucide="user" class="size-5 text-red-600"></i>
+                      </div>
+                      <div>
+                        <div class="font-medium text-gray-900">
+                          Sarah Johnson
+                        </div>
+                        <div class="text-sm text-gray-500">30 years</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
+                      >O-</span
+                    >
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">
+                    <i data-lucide="map-pin" class="size-4 inline mr-1"></i
+                    >Eastside
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">1 week ago</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
+                      >15 times</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full"
+                      >Available</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button
+                        class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                      >
+                        <i data-lucide="phone" class="size-4 inline mr-1"></i
+                        >Call
+                      </button>
+                      <button
+                        class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                      >
+                        <i
+                          data-lucide="message-square"
+                          class="size-4 inline mr-1"
+                        ></i
+                        >Chat
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-gray-900">DON005</td>
+                  <td class="py-3 px-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+                      >
+                        <i data-lucide="user" class="size-5 text-red-600"></i>
+                      </div>
+                      <div>
+                        <div class="font-medium text-gray-900">
+                          Michael Brown
+                        </div>
+                        <div class="text-sm text-gray-500">35 years</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
+                      >AB+</span
+                    >
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">
+                    <i data-lucide="map-pin" class="size-4 inline mr-1"></i
+                    >Central
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">2 months ago</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
+                      >20 times</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full"
+                      >Available</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button
+                        class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                      >
+                        <i data-lucide="phone" class="size-4 inline mr-1"></i
+                        >Call
+                      </button>
+                      <button
+                        class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                      >
+                        <i
+                          data-lucide="message-square"
+                          class="size-4 inline mr-1"
+                        ></i
+                        >Chat
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-gray-900">DON006</td>
+                  <td class="py-3 px-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+                      >
+                        <i data-lucide="user" class="size-5 text-red-600"></i>
+                      </div>
+                      <div>
+                        <div class="font-medium text-gray-900">Emma Wilson</div>
+                        <div class="text-sm text-gray-500">27 years</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
+                      >A-</span
+                    >
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">
+                    <i data-lucide="map-pin" class="size-4 inline mr-1"></i
+                    >Northside
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">3 months ago</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
+                      >6 times</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full"
+                      >Available</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button
+                        class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                      >
+                        <i data-lucide="phone" class="size-4 inline mr-1"></i
+                        >Call
+                      </button>
+                      <button
+                        class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                      >
+                        <i
+                          data-lucide="message-square"
+                          class="size-4 inline mr-1"
+                        ></i
+                        >Chat
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

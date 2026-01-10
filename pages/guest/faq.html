@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ - BloodConnect</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <div class="max-w-4xl mx-auto px-6 py-8">
+      <a
+        href="/"
+        class="inline-flex items-center justify-center px-4 py-2 mb-6 border border-red-600 text-red-600 hover:bg-red-50 rounded-lg font-medium transition-colors"
+      >
+        <i data-lucide="arrow-left" class="size-4 mr-2"></i>
+        Back to Home
+      </a>
+
+      <div class="space-y-6">
+        <div>
+          <h1 class="text-3xl font-bold text-red-600 mb-2">
+            Frequently Asked Questions
+          </h1>
+          <p class="text-gray-600">
+            Find answers to common questions about blood donation
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <!-- FAQ Item 1 -->
+          <div
+            class="bg-white rounded-xl overflow-hidden border border-gray-200"
+          >
+            <button
+              onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+            >
+              <span class="font-medium text-gray-900 pr-4"
+                >Who can donate blood?</span
+              >
+              <i
+                data-lucide="chevron-down"
+                class="size-5 text-gray-500 flex-shrink-0 transition-transform"
+              ></i>
+            </button>
+            <div
+              class="hidden px-6 pb-6 text-gray-600 border-t border-gray-100 pt-4"
+            >
+              Generally, anyone who is healthy, weighs at least 110 pounds, and
+              is 17 years or older can donate blood. Specific eligibility
+              requirements may vary by location and individual health
+              conditions.
+            </div>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div
+            class="bg-white rounded-xl overflow-hidden border border-gray-200"
+          >
+            <button
+              onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+            >
+              <span class="font-medium text-gray-900 pr-4"
+                >How often can I donate blood?</span
+              >
+              <i
+                data-lucide="chevron-down"
+                class="size-5 text-gray-500 flex-shrink-0 transition-transform"
+              ></i>
+            </button>
+            <div
+              class="hidden px-6 pb-6 text-gray-600 border-t border-gray-100 pt-4"
+            >
+              Whole blood donations can be made every 56 days (8 weeks).
+              Platelet donations can be made every 7 days, up to 24 times per
+              year. Double red cell donations can be made every 112 days (16
+              weeks).
+            </div>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div
+            class="bg-white rounded-xl overflow-hidden border border-gray-200"
+          >
+            <button
+              onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+            >
+              <span class="font-medium text-gray-900 pr-4"
+                >Is blood donation safe?</span
+              >
+              <i
+                data-lucide="chevron-down"
+                class="size-5 text-gray-500 flex-shrink-0 transition-transform"
+              ></i>
+            </button>
+            <div
+              class="hidden px-6 pb-6 text-gray-600 border-t border-gray-100 pt-4"
+            >
+              Yes, blood donation is very safe. Only sterile, single-use needles
+              and equipment are used, and a trained professional performs the
+              donation. There is no risk of contracting a disease by donating
+              blood.
+            </div>
+          </div>
+
+          <!-- FAQ Item 4 -->
+          <div
+            class="bg-white rounded-xl overflow-hidden border border-gray-200"
+          >
+            <button
+              onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+            >
+              <span class="font-medium text-gray-900 pr-4"
+                >How long does blood donation take?</span
+              >
+              <i
+                data-lucide="chevron-down"
+                class="size-5 text-gray-500 flex-shrink-0 transition-transform"
+              ></i>
+            </button>
+            <div
+              class="hidden px-6 pb-6 text-gray-600 border-t border-gray-100 pt-4"
+            >
+              The entire process takes about 1 hour, including registration,
+              health screening, the donation itself (8-10 minutes), and
+              refreshments afterward. The actual blood collection takes only
+              about 8-10 minutes.
+            </div>
+          </div>
+
+          <!-- FAQ Item 5 -->
+          <div
+            class="bg-white rounded-xl overflow-hidden border border-gray-200"
+          >
+            <button
+              onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+            >
+              <span class="font-medium text-gray-900 pr-4"
+                >What should I do before donating blood?</span
+              >
+              <i
+                data-lucide="chevron-down"
+                class="size-5 text-gray-500 flex-shrink-0 transition-transform"
+              ></i>
+            </button>
+            <div
+              class="hidden px-6 pb-6 text-gray-600 border-t border-gray-100 pt-4"
+            >
+              Get a good night's sleep, eat a healthy meal, drink plenty of
+              fluids, and avoid fatty foods. Bring your donor card or ID, and a
+              list of medications you're taking.
+            </div>
+          </div>
+
+          <!-- FAQ Item 6 -->
+          <div
+            class="bg-white rounded-xl overflow-hidden border border-gray-200"
+          >
+            <button
+              onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+            >
+              <span class="font-medium text-gray-900 pr-4"
+                >What happens to my blood after donation?</span
+              >
+              <i
+                data-lucide="chevron-down"
+                class="size-5 text-gray-500 flex-shrink-0 transition-transform"
+              ></i>
+            </button>
+            <div
+              class="hidden px-6 pb-6 text-gray-600 border-t border-gray-100 pt-4"
+            >
+              Your blood is tested for blood type and infectious diseases, then
+              separated into components (red cells, platelets, plasma). These
+              components are stored and distributed to hospitals based on
+              patient needs.
+            </div>
+          </div>
+
+          <!-- FAQ Item 7 -->
+          <div
+            class="bg-white rounded-xl overflow-hidden border border-gray-200"
+          >
+            <button
+              onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+            >
+              <span class="font-medium text-gray-900 pr-4"
+                >Can I donate if I'm taking medication?</span
+              >
+              <i
+                data-lucide="chevron-down"
+                class="size-5 text-gray-500 flex-shrink-0 transition-transform"
+              ></i>
+            </button>
+            <div
+              class="hidden px-6 pb-6 text-gray-600 border-t border-gray-100 pt-4"
+            >
+              Most medications do not disqualify you from donating blood.
+              However, certain medications may require a waiting period. Please
+              consult with our medical staff about your specific medications.
+            </div>
+          </div>
+
+          <!-- FAQ Item 8 -->
+          <div
+            class="bg-white rounded-xl overflow-hidden border border-gray-200"
+          >
+            <button
+              onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+            >
+              <span class="font-medium text-gray-900 pr-4"
+                >Will I feel weak after donating?</span
+              >
+              <i
+                data-lucide="chevron-down"
+                class="size-5 text-gray-500 flex-shrink-0 transition-transform"
+              ></i>
+            </button>
+            <div
+              class="hidden px-6 pb-6 text-gray-600 border-t border-gray-100 pt-4"
+            >
+              Most people feel fine after donating. You may feel lightheaded or
+              dizzy for a brief period. We provide refreshments and ask you to
+              rest for 10-15 minutes after donation. Drink plenty of fluids and
+              avoid strenuous activity for the rest of the day.
+            </div>
+          </div>
+
+          <!-- FAQ Item 9 -->
+          <div
+            class="bg-white rounded-xl overflow-hidden border border-gray-200"
+          >
+            <button
+              onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+            >
+              <span class="font-medium text-gray-900 pr-4"
+                >What is my blood type used for?</span
+              >
+              <i
+                data-lucide="chevron-down"
+                class="size-5 text-gray-500 flex-shrink-0 transition-transform"
+              ></i>
+            </button>
+            <div
+              class="hidden px-6 pb-6 text-gray-600 border-t border-gray-100 pt-4"
+            >
+              Different blood types are used for different purposes. O-negative
+              is the universal donor type, used in emergencies. AB-positive is
+              the universal plasma donor. Your specific blood type will be
+              matched to patients who need it.
+            </div>
+          </div>
+
+          <!-- FAQ Item 10 -->
+          <div
+            class="bg-white rounded-xl overflow-hidden border border-gray-200"
+          >
+            <button
+              onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+            >
+              <span class="font-medium text-gray-900 pr-4"
+                >Can I donate if I have a tattoo or piercing?</span
+              >
+              <i
+                data-lucide="chevron-down"
+                class="size-5 text-gray-500 flex-shrink-0 transition-transform"
+              ></i>
+            </button>
+            <div
+              class="hidden px-6 pb-6 text-gray-600 border-t border-gray-100 pt-4"
+            >
+              Generally yes, but you may need to wait 3-12 months after getting
+              a tattoo or piercing, depending on where it was done and local
+              regulations. Contact us for specific guidance.
+            </div>
+          </div>
+
+          <!-- FAQ Item 11 -->
+          <div
+            class="bg-white rounded-xl overflow-hidden border border-gray-200"
+          >
+            <button
+              onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+            >
+              <span class="font-medium text-gray-900 pr-4"
+                >How much blood is taken during donation?</span
+              >
+              <i
+                data-lucide="chevron-down"
+                class="size-5 text-gray-500 flex-shrink-0 transition-transform"
+              ></i>
+            </button>
+            <div
+              class="hidden px-6 pb-6 text-gray-600 border-t border-gray-100 pt-4"
+            >
+              For a whole blood donation, approximately 1 pint (about 450-500
+              ml) is collected. This represents less than 10% of your total
+              blood volume, which your body replaces within 24-48 hours.
+            </div>
+          </div>
+
+          <!-- FAQ Item 12 -->
+          <div
+            class="bg-white rounded-xl overflow-hidden border border-gray-200"
+          >
+            <button
+              onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+            >
+              <span class="font-medium text-gray-900 pr-4"
+                >Can I donate blood if I'm traveling?</span
+              >
+              <i
+                data-lucide="chevron-down"
+                class="size-5 text-gray-500 flex-shrink-0 transition-transform"
+              ></i>
+            </button>
+            <div
+              class="hidden px-6 pb-6 text-gray-600 border-t border-gray-100 pt-4"
+            >
+              Travel to certain countries may temporarily defer you from
+              donating blood due to risk of exposure to infectious diseases. The
+              deferral period varies by destination. Please check with us about
+              your specific travel history.
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Card -->
+        <div class="bg-red-50 border border-red-200 rounded-xl p-6">
+          <h2 class="text-xl font-bold text-red-600 mb-2">
+            Still Have Questions?
+          </h2>
+          <p class="text-gray-700 mb-4">
+            Can't find the answer you're looking for? Our team is here to help!
+          </p>
+          <div class="space-y-2 text-gray-700">
+            <p><strong>Phone:</strong> 1-800-RED-CROSS</p>
+            <p><strong>Email:</strong> info@bloodconnect.org</p>
+            <p><strong>Hours:</strong> Monday - Friday, 9:00 AM - 5:00 PM</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

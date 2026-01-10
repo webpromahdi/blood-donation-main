@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat - BloodConnect Hospital</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Hospital Portal</div>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/pages/hospital/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/pages/hospital/request.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="droplet" class="size-5"></i
+          ><span>Request Blood</span></a
+        >
+        <a
+          href="/pages/hospital/donors.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="users" class="size-5"></i><span>Donor List</span></a
+        >
+        <a
+          href="/pages/hospital/voluntary.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="calendar" class="size-5"></i
+          ><span>Voluntary Requests</span></a
+        >
+        <a
+          href="/pages/hospital/appointments.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="calendar-check" class="size-5"></i
+          ><span>Appointments</span></a
+        >
+        <a
+          href="/pages/hospital/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">Messages</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900">City Hospital</div>
+            <div class="text-xs text-gray-500">Hospital Admin</div>
+          </div>
+          <div
+            class="size-10 bg-blue-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="building-2" class="size-5 text-blue-600"></i>
+          </div>
+        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 pt-16 h-screen">
+      <div class="flex h-[calc(100vh-64px)]">
+        <!-- Chat List -->
+        <div class="w-80 bg-white border-r border-gray-200 flex flex-col">
+          <div class="p-4 border-b border-gray-200">
+            <div class="relative">
+              <i
+                data-lucide="search"
+                class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400"
+              ></i>
+              <input
+                type="text"
+                placeholder="Search conversations..."
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              />
+            </div>
+          </div>
+          <div class="flex-1 overflow-y-auto">
+            <div class="p-4 bg-red-50 border-l-4 border-red-600 cursor-pointer">
+              <div class="flex items-center gap-3">
+                <div
+                  class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+                >
+                  <i data-lucide="shield" class="size-5 text-red-600"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <h4 class="font-medium text-gray-900 truncate">
+                      Admin Support
+                    </h4>
+                    <span class="text-xs text-gray-500">5m ago</span>
+                  </div>
+                  <p class="text-sm text-gray-600 truncate">
+                    Your request has been approved
+                  </p>
+                </div>
+                <span
+                  class="size-5 bg-red-600 text-white text-xs rounded-full flex items-center justify-center"
+                  >2</span
+                >
+              </div>
+            </div>
+            <div
+              class="p-4 hover:bg-gray-50 cursor-pointer border-b border-gray-100"
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class="size-10 bg-green-100 rounded-full flex items-center justify-center"
+                >
+                  <i data-lucide="user" class="size-5 text-green-600"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <h4 class="font-medium text-gray-900 truncate">
+                      John Smith (Donor)
+                    </h4>
+                    <span class="text-xs text-gray-500">1h ago</span>
+                  </div>
+                  <p class="text-sm text-gray-600 truncate">
+                    I'll be there at 10 AM
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="p-4 hover:bg-gray-50 cursor-pointer border-b border-gray-100"
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class="size-10 bg-green-100 rounded-full flex items-center justify-center"
+                >
+                  <i data-lucide="user" class="size-5 text-green-600"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <h4 class="font-medium text-gray-900 truncate">
+                      Maria Garcia (Donor)
+                    </h4>
+                    <span class="text-xs text-gray-500">2h ago</span>
+                  </div>
+                  <p class="text-sm text-gray-600 truncate">
+                    Is my appointment confirmed?
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="p-4 hover:bg-gray-50 cursor-pointer border-b border-gray-100"
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class="size-10 bg-purple-100 rounded-full flex items-center justify-center"
+                >
+                  <i data-lucide="search" class="size-5 text-purple-600"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <h4 class="font-medium text-gray-900 truncate">
+                      Robert Chen (Seeker)
+                    </h4>
+                    <span class="text-xs text-gray-500">3h ago</span>
+                  </div>
+                  <p class="text-sm text-gray-600 truncate">
+                    Thank you so much!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="flex-1 flex flex-col bg-gray-50">
+          <!-- Chat Header -->
+          <div
+            class="p-4 bg-white border-b border-gray-200 flex items-center justify-between"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+              >
+                <i data-lucide="shield" class="size-5 text-red-600"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Admin Support</h3>
+                <p class="text-sm text-green-600">Online</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="p-2 hover:bg-gray-100 rounded-lg">
+                <i data-lucide="phone" class="size-5 text-gray-600"></i>
+              </button>
+              <button class="p-2 hover:bg-gray-100 rounded-lg">
+                <i data-lucide="more-vertical" class="size-5 text-gray-600"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Messages -->
+          <div class="flex-1 overflow-y-auto p-6 space-y-4">
+            <div class="flex justify-start">
+              <div class="max-w-md">
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                  <p class="text-gray-900">
+                    Good morning! I've reviewed your blood request REQ003.
+                  </p>
+                </div>
+                <span class="text-xs text-gray-500 mt-1 block">9:00 AM</span>
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <div class="max-w-md">
+                <div class="bg-red-600 p-4 rounded-lg">
+                  <p class="text-white">
+                    Thank you! Is there any update on the B- blood availability?
+                  </p>
+                </div>
+                <span class="text-xs text-gray-500 mt-1 block text-right"
+                  >9:02 AM</span
+                >
+              </div>
+            </div>
+            <div class="flex justify-start">
+              <div class="max-w-md">
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                  <p class="text-gray-900">
+                    Yes! We've found a matching donor. The blood will be ready
+                    by 2 PM today.
+                  </p>
+                </div>
+                <span class="text-xs text-gray-500 mt-1 block">9:05 AM</span>
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <div class="max-w-md">
+                <div class="bg-red-600 p-4 rounded-lg">
+                  <p class="text-white">
+                    That's great news! We'll prepare for the transfusion.
+                  </p>
+                </div>
+                <span class="text-xs text-gray-500 mt-1 block text-right"
+                  >9:07 AM</span
+                >
+              </div>
+            </div>
+            <div class="flex justify-start">
+              <div class="max-w-md">
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                  <p class="text-gray-900">
+                    Your request has been approved. The delivery is scheduled.
+                  </p>
+                </div>
+                <span class="text-xs text-gray-500 mt-1 block">9:10 AM</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message Input -->
+          <div class="p-4 bg-white border-t border-gray-200">
+            <form class="flex items-center gap-3">
+              <button type="button" class="p-2 hover:bg-gray-100 rounded-lg">
+                <i data-lucide="paperclip" class="size-5 text-gray-600"></i>
+              </button>
+              <input
+                type="text"
+                placeholder="Type your message..."
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              />
+              <button
+                type="submit"
+                class="p-2 bg-red-600 hover:bg-red-700 rounded-lg"
+              >
+                <i data-lucide="send" class="size-5 text-white"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

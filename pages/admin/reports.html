@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reports - BloodConnect Admin</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Admin Panel</div>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/pages/admin/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/pages/admin/donors.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="users" class="size-5"></i><span>Donors</span></a
+        >
+        <a
+          href="/pages/admin/hospitals.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="building-2" class="size-5"></i
+          ><span>Hospitals</span></a
+        >
+        <a
+          href="/pages/admin/blood-groups.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="droplet" class="size-5"></i
+          ><span>Blood Groups</span></a
+        >
+        <a
+          href="/pages/admin/reports.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="file-text" class="size-5"></i><span>Reports</span></a
+        >
+        <a
+          href="/pages/admin/announcements.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="megaphone" class="size-5"></i
+          ><span>Announcements</span></a
+        >
+        <a
+          href="/pages/admin/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">Reports & Analytics</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900">Admin User</div>
+            <div class="text-xs text-gray-500">System Administrator</div>
+          </div>
+          <div
+            class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="user" class="size-5 text-red-600"></i>
+          </div>
+        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 pt-16">
+      <div class="p-8 space-y-8">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">
+            Reports & Analytics
+          </h1>
+          <p class="text-gray-600">
+            View and generate reports on blood donation activities
+          </p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Total Donations</p>
+                <h2 class="text-3xl font-bold text-gray-900">3,247</h2>
+              </div>
+              <div class="bg-red-100 p-3 rounded-lg">
+                <i data-lucide="droplet" class="size-6 text-red-600"></i>
+              </div>
+            </div>
+            <p class="text-sm text-green-600 mt-2">+18% from last month</p>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Total Requests</p>
+                <h2 class="text-3xl font-bold text-gray-900">2,891</h2>
+              </div>
+              <div class="bg-blue-100 p-3 rounded-lg">
+                <i
+                  data-lucide="clipboard-list"
+                  class="size-6 text-blue-600"
+                ></i>
+              </div>
+            </div>
+            <p class="text-sm text-green-600 mt-2">+12% from last month</p>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Success Rate</p>
+                <h2 class="text-3xl font-bold text-gray-900">94.2%</h2>
+              </div>
+              <div class="bg-green-100 p-3 rounded-lg">
+                <i data-lucide="check-circle" class="size-6 text-green-600"></i>
+              </div>
+            </div>
+            <p class="text-sm text-green-600 mt-2">+2.3% improvement</p>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Avg Response Time</p>
+                <h2 class="text-3xl font-bold text-gray-900">2.4h</h2>
+              </div>
+              <div class="bg-purple-100 p-3 rounded-lg">
+                <i data-lucide="clock" class="size-6 text-purple-600"></i>
+              </div>
+            </div>
+            <p class="text-sm text-green-600 mt-2">-15min from last month</p>
+          </div>
+        </div>
+
+        <!-- Report Generation -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-1">
+              Generate Reports
+            </h2>
+            <p class="text-sm text-gray-600">
+              Select date range and report type
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Start Date</label
+              >
+              <input
+                type="date"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >End Date</label
+              >
+              <input
+                type="date"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Report Type</label
+              >
+              <select
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                <option>All Activities</option>
+                <option>Donations Only</option>
+                <option>Requests Only</option>
+                <option>Emergency Cases</option>
+              </select>
+            </div>
+            <div class="flex items-end gap-2">
+              <button
+                class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+              >
+                <i data-lucide="file-text" class="size-4 inline mr-2"></i>PDF
+              </button>
+              <button
+                class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium"
+              >
+                <i data-lucide="table" class="size-4 inline mr-2"></i>Excel
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-1">
+              Recent Activity Log
+            </h2>
+            <p class="text-sm text-gray-600">
+              Latest system activities and events
+            </p>
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+              <div class="bg-green-100 p-2 rounded-full">
+                <i data-lucide="check-circle" class="size-5 text-green-600"></i>
+              </div>
+              <div class="flex-1">
+                <p class="font-medium text-gray-900">
+                  Blood request REQ001 completed successfully
+                </p>
+                <p class="text-sm text-gray-500">2 hours ago • City Hospital</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+              <div class="bg-blue-100 p-2 rounded-full">
+                <i data-lucide="user-plus" class="size-5 text-blue-600"></i>
+              </div>
+              <div class="flex-1">
+                <p class="font-medium text-gray-900">
+                  New donor registration: Alex Thompson
+                </p>
+                <p class="text-sm text-gray-500">
+                  3 hours ago • Blood Type: O+
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+              <div class="bg-red-100 p-2 rounded-full">
+                <i data-lucide="alert-circle" class="size-5 text-red-600"></i>
+              </div>
+              <div class="flex-1">
+                <p class="font-medium text-gray-900">
+                  Emergency request received for B- blood
+                </p>
+                <p class="text-sm text-gray-500">
+                  4 hours ago • Regional Hospital
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+              <div class="bg-purple-100 p-2 rounded-full">
+                <i data-lucide="building-2" class="size-5 text-purple-600"></i>
+              </div>
+              <div class="flex-1">
+                <p class="font-medium text-gray-900">
+                  New hospital registered: Community Health Center
+                </p>
+                <p class="text-sm text-gray-500">
+                  5 hours ago • Pending approval
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

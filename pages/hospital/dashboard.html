@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - BloodConnect Hospital</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Hospital Portal</div>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/pages/hospital/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/pages/hospital/request.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="droplet" class="size-5"></i
+          ><span>Request Blood</span></a
+        >
+        <a
+          href="/pages/hospital/donors.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="users" class="size-5"></i><span>Donor List</span></a
+        >
+        <a
+          href="/pages/hospital/voluntary.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="calendar" class="size-5"></i
+          ><span>Voluntary Requests</span></a
+        >
+        <a
+          href="/pages/hospital/appointments.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="calendar-check" class="size-5"></i
+          ><span>Appointments</span></a
+        >
+        <a
+          href="/pages/hospital/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">Hospital Dashboard</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+          <span
+            class="absolute top-1 right-1 size-2 bg-red-600 rounded-full"
+          ></span>
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900">City Hospital</div>
+            <div class="text-xs text-gray-500">Hospital Admin</div>
+          </div>
+          <div
+            class="size-10 bg-blue-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="building-2" class="size-5 text-blue-600"></i>
+          </div>
+        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 pt-16">
+      <div class="p-8 space-y-8">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">
+            Hospital Dashboard
+          </h1>
+          <p class="text-gray-600">Manage blood requests and appointments</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Active Requests</p>
+                <h2 class="text-3xl font-bold text-gray-900">8</h2>
+              </div>
+              <div class="bg-blue-100 p-3 rounded-lg">
+                <i data-lucide="droplet" class="size-6 text-blue-600"></i>
+              </div>
+            </div>
+            <p class="text-sm text-blue-600 mt-2">Currently processing</p>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Completed Requests</p>
+                <h2 class="text-3xl font-bold text-gray-900">47</h2>
+              </div>
+              <div class="bg-green-100 p-3 rounded-lg">
+                <i data-lucide="check-circle" class="size-6 text-green-600"></i>
+              </div>
+            </div>
+            <p class="text-sm text-green-600 mt-2">This month</p>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Urgent Alerts</p>
+                <h2 class="text-3xl font-bold text-gray-900">3</h2>
+              </div>
+              <div class="bg-red-100 p-3 rounded-lg">
+                <i data-lucide="alert-circle" class="size-6 text-red-600"></i>
+              </div>
+            </div>
+            <p class="text-sm text-red-600 mt-2">Requires attention</p>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Available Donors</p>
+                <h2 class="text-3xl font-bold text-gray-900">124</h2>
+              </div>
+              <div class="bg-purple-100 p-3 rounded-lg">
+                <i data-lucide="users" class="size-6 text-purple-600"></i>
+              </div>
+            </div>
+            <p class="text-sm text-purple-600 mt-2">In your area</p>
+          </div>
+        </div>
+
+        <!-- Quick Action -->
+        <div
+          class="p-6 bg-gradient-to-r from-red-50 to-white border border-gray-200 border-l-4 border-l-red-600 rounded-xl"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-900 mb-2">
+                Need Blood Urgently?
+              </h2>
+              <p class="text-gray-600">
+                Request blood from available donors in your network
+              </p>
+            </div>
+            <a
+              href="/pages/hospital/request.html"
+              class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+            >
+              <i data-lucide="droplet" class="size-4 inline mr-2"></i>Request
+              Blood
+            </a>
+          </div>
+        </div>
+
+        <!-- Active Requests Table -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-900 mb-1">
+                Active Blood Requests
+              </h2>
+              <p class="text-sm text-gray-600">
+                Track your ongoing blood requests
+              </p>
+            </div>
+            <button
+              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+            >
+              View All
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-gray-200">
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Request ID
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Blood Type
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Quantity
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Urgency
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Requested
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-gray-900">REQ001</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
+                      >O+</span
+                    >
+                  </td>
+                  <td class="py-3 px-4 text-gray-900">2 Units</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium bg-red-600 text-white rounded-full"
+                      ><i
+                        data-lucide="alert-circle"
+                        class="size-3 inline mr-1"
+                      ></i
+                      >Emergency</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full"
+                      >Processing</span
+                    >
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">2 hours ago</td>
+                  <td class="py-3 px-4">
+                    <button
+                      class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                    >
+                      View Details
+                    </button>
+                  </td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-gray-900">REQ002</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
+                      >A+</span
+                    >
+                  </td>
+                  <td class="py-3 px-4 text-gray-900">3 Units</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full"
+                      >Normal</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full"
+                      >Approved</span
+                    >
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">5 hours ago</td>
+                  <td class="py-3 px-4">
+                    <button
+                      class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                    >
+                      View Details
+                    </button>
+                  </td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-gray-900">REQ003</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
+                      >B-</span
+                    >
+                  </td>
+                  <td class="py-3 px-4 text-gray-900">1 Unit</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium bg-red-600 text-white rounded-full"
+                      ><i
+                        data-lucide="alert-circle"
+                        class="size-3 inline mr-1"
+                      ></i
+                      >Emergency</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full"
+                      >Pending</span
+                    >
+                  </td>
+                  <td class="py-3 px-4 text-gray-600">1 day ago</td>
+                  <td class="py-3 px-4">
+                    <button
+                      class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                    >
+                      View Details
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent Donors -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-900 mb-1">
+                Recent Donors
+              </h2>
+              <p class="text-sm text-gray-600">
+                Available donors who recently donated
+              </p>
+            </div>
+            <a
+              href="/pages/hospital/donors.html"
+              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+              >View All Donors</a
+            >
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-4 border border-gray-200 rounded-lg">
+              <div class="flex items-center gap-3 mb-3">
+                <div
+                  class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+                >
+                  <i data-lucide="user" class="size-5 text-red-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium text-gray-900">John Smith</h4>
+                  <span
+                    class="px-2 py-0.5 text-xs font-medium border border-red-600 text-red-600 rounded-full"
+                    >O+</span
+                  >
+                </div>
+              </div>
+              <p class="text-sm text-gray-600 mb-2">
+                Last donation: 2 weeks ago
+              </p>
+              <span
+                class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full"
+                >Available</span
+              >
+            </div>
+            <div class="p-4 border border-gray-200 rounded-lg">
+              <div class="flex items-center gap-3 mb-3">
+                <div
+                  class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+                >
+                  <i data-lucide="user" class="size-5 text-red-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium text-gray-900">Maria Garcia</h4>
+                  <span
+                    class="px-2 py-0.5 text-xs font-medium border border-red-600 text-red-600 rounded-full"
+                    >A+</span
+                  >
+                </div>
+              </div>
+              <p class="text-sm text-gray-600 mb-2">
+                Last donation: 1 month ago
+              </p>
+              <span
+                class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full"
+                >Available</span
+              >
+            </div>
+            <div class="p-4 border border-gray-200 rounded-lg">
+              <div class="flex items-center gap-3 mb-3">
+                <div
+                  class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+                >
+                  <i data-lucide="user" class="size-5 text-red-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium text-gray-900">David Lee</h4>
+                  <span
+                    class="px-2 py-0.5 text-xs font-medium border border-red-600 text-red-600 rounded-full"
+                    >B-</span
+                  >
+                </div>
+              </div>
+              <p class="text-sm text-gray-600 mb-2">
+                Last donation: 3 weeks ago
+              </p>
+              <span
+                class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
+                >Not Available</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

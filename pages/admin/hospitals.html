@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Approval - BloodConnect Admin</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Admin Panel</div>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/pages/admin/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/pages/admin/donors.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="users" class="size-5"></i><span>Donors</span></a
+        >
+        <a
+          href="/pages/admin/hospitals.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="building-2" class="size-5"></i
+          ><span>Hospitals</span></a
+        >
+        <a
+          href="/pages/admin/blood-groups.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="droplet" class="size-5"></i
+          ><span>Blood Groups</span></a
+        >
+        <a
+          href="/pages/admin/reports.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="file-text" class="size-5"></i><span>Reports</span></a
+        >
+        <a
+          href="/pages/admin/announcements.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="megaphone" class="size-5"></i
+          ><span>Announcements</span></a
+        >
+        <a
+          href="/pages/admin/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <div class="relative flex-1 max-w-md">
+          <i
+            data-lucide="search"
+            class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+          ></i>
+          <input
+            type="text"
+            placeholder="Search hospitals..."
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <i data-lucide="bell" class="size-5 text-gray-700"></i
+          ><span
+            class="absolute -top-1 -right-1 size-5 flex items-center justify-center bg-red-600 text-white text-xs rounded-full"
+            >5</span
+          >
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900">Admin User</div>
+            <div class="text-xs text-gray-500">System Administrator</div>
+          </div>
+          <div
+            class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="user" class="size-5 text-red-600"></i>
+          </div>
+        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 pt-16">
+      <div class="p-8 space-y-8">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">
+            Hospital Approval
+          </h1>
+          <p class="text-gray-600">Review and approve hospital registrations</p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Pending</p>
+                <h2 class="text-3xl font-bold text-gray-900">4</h2>
+              </div>
+              <div class="bg-yellow-100 p-3 rounded-lg">
+                <i data-lucide="building-2" class="size-6 text-yellow-600"></i>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Approved</p>
+                <h2 class="text-3xl font-bold text-gray-900">47</h2>
+              </div>
+              <div class="bg-green-100 p-3 rounded-lg">
+                <i data-lucide="check-circle" class="size-6 text-green-600"></i>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Rejected</p>
+                <h2 class="text-3xl font-bold text-gray-900">5</h2>
+              </div>
+              <div class="bg-red-100 p-3 rounded-lg">
+                <i data-lucide="x-circle" class="size-6 text-red-600"></i>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Active</p>
+                <h2 class="text-3xl font-bold text-gray-900">45</h2>
+              </div>
+              <div class="bg-blue-100 p-3 rounded-lg">
+                <i data-lucide="building-2" class="size-6 text-blue-600"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hospitals Table -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-1">
+              Pending Hospital Applications
+            </h2>
+            <p class="text-sm text-gray-600">
+              Review hospital information and verify credentials
+            </p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-gray-200">
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Hospital ID
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Name
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Email
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Phone
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Type
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-sm text-gray-900">HOS001</td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    City General Hospital
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    admin@citygeneral.com
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">555-1001</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-blue-600 text-blue-600 rounded-full"
+                      >Public</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full"
+                      >Pending</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button
+                        class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
+                      >
+                        View
+                      </button>
+                      <button
+                        class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-sm text-gray-900">HOS002</td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    St. Mary Medical Center
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    info@stmary.com
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">555-1002</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-purple-600 text-purple-600 rounded-full"
+                      >Private</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full"
+                      >Pending</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button
+                        class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
+                      >
+                        View
+                      </button>
+                      <button
+                        class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-sm text-gray-900">HOS003</td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    Regional Healthcare
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    contact@regional.com
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">555-1003</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-blue-600 text-blue-600 rounded-full"
+                      >Public</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full"
+                      >Pending</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button
+                        class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
+                      >
+                        View
+                      </button>
+                      <button
+                        class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="hover:bg-gray-50">
+                  <td class="py-3 px-4 text-sm text-gray-900">HOS004</td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    Community Hospital
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    hello@community.com
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">555-1004</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-purple-600 text-purple-600 rounded-full"
+                      >Private</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full"
+                      >Pending</span
+                    >
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button
+                        class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
+                      >
+                        View
+                      </button>
+                      <button
+                        class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
