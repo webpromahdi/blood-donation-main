@@ -81,6 +81,9 @@
       <div class="flex items-center gap-4">
         <button class="relative p-2 hover:bg-gray-100 rounded-lg">
           <i data-lucide="bell" class="size-5 text-gray-700"></i>
+          <span
+            class="absolute top-1 right-1 size-2 bg-red-500 rounded-full"
+          ></span>
         </button>
         <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
           <div class="text-right">
@@ -102,193 +105,366 @@
     <!-- Main Content -->
     <main class="ml-64 pt-16">
       <div class="p-8 space-y-8">
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900 mb-2">
-            Reports & Analytics
-          </h1>
-          <p class="text-gray-600">
-            View and generate reports on blood donation activities
-          </p>
+        <!-- Page Header -->
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">
+              Reports & Analytics
+            </h1>
+            <p class="text-gray-600">Generate and download system reports</p>
+          </div>
+          <div class="flex gap-3">
+            <button
+              class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+            >
+              <i data-lucide="filter" class="size-4 mr-2"></i>
+              Filter
+            </button>
+            <button
+              class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+            >
+              <i data-lucide="calendar" class="size-4 mr-2"></i>
+              Date Range
+            </button>
+          </div>
         </div>
 
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600 mb-1">Total Donations</p>
-                <h2 class="text-3xl font-bold text-gray-900">3,247</h2>
-              </div>
+        <!-- Quick Reports Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            class="p-6 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-shadow cursor-pointer"
+          >
+            <div class="flex items-center justify-between mb-4">
               <div class="bg-red-100 p-3 rounded-lg">
-                <i data-lucide="droplet" class="size-6 text-red-600"></i>
+                <i data-lucide="file-text" class="size-6 text-red-600"></i>
               </div>
             </div>
-            <p class="text-sm text-green-600 mt-2">+18% from last month</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+              Donor Report
+            </h3>
+            <p class="text-gray-600 mb-4">Complete donor statistics</p>
+            <button
+              class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium inline-flex items-center justify-center"
+            >
+              <i data-lucide="download" class="size-4 mr-2"></i>
+              Download PDF
+            </button>
           </div>
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600 mb-1">Total Requests</p>
-                <h2 class="text-3xl font-bold text-gray-900">2,891</h2>
-              </div>
+
+          <div
+            class="p-6 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-shadow cursor-pointer"
+          >
+            <div class="flex items-center justify-between mb-4">
               <div class="bg-blue-100 p-3 rounded-lg">
-                <i
-                  data-lucide="clipboard-list"
-                  class="size-6 text-blue-600"
-                ></i>
+                <i data-lucide="building-2" class="size-6 text-blue-600"></i>
               </div>
             </div>
-            <p class="text-sm text-green-600 mt-2">+12% from last month</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+              Hospital Report
+            </h3>
+            <p class="text-gray-600 mb-4">Hospital activity summary</p>
+            <button
+              class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium inline-flex items-center justify-center"
+            >
+              <i data-lucide="download" class="size-4 mr-2"></i>
+              Download PDF
+            </button>
           </div>
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600 mb-1">Success Rate</p>
-                <h2 class="text-3xl font-bold text-gray-900">94.2%</h2>
-              </div>
-              <div class="bg-green-100 p-3 rounded-lg">
-                <i data-lucide="check-circle" class="size-6 text-green-600"></i>
-              </div>
-            </div>
-            <p class="text-sm text-green-600 mt-2">+2.3% improvement</p>
-          </div>
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600 mb-1">Avg Response Time</p>
-                <h2 class="text-3xl font-bold text-gray-900">2.4h</h2>
-              </div>
+
+          <div
+            class="p-6 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-shadow cursor-pointer"
+          >
+            <div class="flex items-center justify-between mb-4">
               <div class="bg-purple-100 p-3 rounded-lg">
-                <i data-lucide="clock" class="size-6 text-purple-600"></i>
+                <i data-lucide="file-text" class="size-6 text-purple-600"></i>
               </div>
             </div>
-            <p class="text-sm text-green-600 mt-2">-15min from last month</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+              Monthly Summary
+            </h3>
+            <p class="text-gray-600 mb-4">Comprehensive overview</p>
+            <button
+              class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium inline-flex items-center justify-center"
+            >
+              <i data-lucide="download" class="size-4 mr-2"></i>
+              Download PDF
+            </button>
           </div>
         </div>
 
-        <!-- Report Generation -->
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Line Chart - Donations vs Requests -->
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="mb-6">
+              <h2 class="text-lg font-semibold text-gray-900 mb-1">
+                Donations vs Requests
+              </h2>
+              <p class="text-sm text-gray-600">Monthly comparison</p>
+            </div>
+            <div class="h-75">
+              <canvas id="lineChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Pie Chart - Blood Type Distribution -->
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="mb-6">
+              <h2 class="text-lg font-semibold text-gray-900 mb-1">
+                Blood Type Distribution
+              </h2>
+              <p class="text-sm text-gray-600">Donor count by blood type</p>
+            </div>
+            <div class="h-75">
+              <canvas id="pieChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bar Chart - Monthly Donation Trends -->
         <div class="p-6 bg-white border border-gray-200 rounded-xl">
           <div class="mb-6">
             <h2 class="text-lg font-semibold text-gray-900 mb-1">
-              Generate Reports
+              Monthly Donation Trends
             </h2>
             <p class="text-sm text-gray-600">
-              Select date range and report type
+              Compare donations and requests over time
             </p>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div class="h-87.5">
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Custom Report Generator -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-1">
+              Custom Report Generator
+            </h2>
+            <p class="text-sm text-gray-600">
+              Create a custom report with specific parameters
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >Start Date</label
-              >
-              <input
-                type="date"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >End Date</label
-              >
-              <input
-                type="date"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
+              <label class="text-gray-700 mb-2 block font-medium"
                 >Report Type</label
               >
               <select
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               >
-                <option>All Activities</option>
-                <option>Donations Only</option>
-                <option>Requests Only</option>
-                <option>Emergency Cases</option>
+                <option>Donor Report</option>
+                <option>Hospital Report</option>
+                <option>Blood Inventory</option>
+                <option>Request History</option>
               </select>
             </div>
-            <div class="flex items-end gap-2">
-              <button
-                class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+            <div>
+              <label class="text-gray-700 mb-2 block font-medium"
+                >Date Range</label
               >
-                <i data-lucide="file-text" class="size-4 inline mr-2"></i>PDF
-              </button>
-              <button
-                class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium"
+              <select
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               >
-                <i data-lucide="table" class="size-4 inline mr-2"></i>Excel
-              </button>
+                <option>Last 7 Days</option>
+                <option>Last 30 Days</option>
+                <option>Last 3 Months</option>
+                <option>Last Year</option>
+                <option>Custom Range</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-gray-700 mb-2 block font-medium">Format</label>
+              <select
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                <option>PDF</option>
+                <option>Excel</option>
+                <option>CSV</option>
+              </select>
             </div>
           </div>
-        </div>
 
-        <!-- Recent Activity -->
-        <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="mb-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-1">
-              Recent Activity Log
-            </h2>
-            <p class="text-sm text-gray-600">
-              Latest system activities and events
-            </p>
-          </div>
-          <div class="space-y-4">
-            <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
-              <div class="bg-green-100 p-2 rounded-full">
-                <i data-lucide="check-circle" class="size-5 text-green-600"></i>
-              </div>
-              <div class="flex-1">
-                <p class="font-medium text-gray-900">
-                  Blood request REQ001 completed successfully
-                </p>
-                <p class="text-sm text-gray-500">2 hours ago • City Hospital</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
-              <div class="bg-blue-100 p-2 rounded-full">
-                <i data-lucide="user-plus" class="size-5 text-blue-600"></i>
-              </div>
-              <div class="flex-1">
-                <p class="font-medium text-gray-900">
-                  New donor registration: Alex Thompson
-                </p>
-                <p class="text-sm text-gray-500">
-                  3 hours ago • Blood Type: O+
-                </p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
-              <div class="bg-red-100 p-2 rounded-full">
-                <i data-lucide="alert-circle" class="size-5 text-red-600"></i>
-              </div>
-              <div class="flex-1">
-                <p class="font-medium text-gray-900">
-                  Emergency request received for B- blood
-                </p>
-                <p class="text-sm text-gray-500">
-                  4 hours ago • Regional Hospital
-                </p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
-              <div class="bg-purple-100 p-2 rounded-full">
-                <i data-lucide="building-2" class="size-5 text-purple-600"></i>
-              </div>
-              <div class="flex-1">
-                <p class="font-medium text-gray-900">
-                  New hospital registered: Community Health Center
-                </p>
-                <p class="text-sm text-gray-500">
-                  5 hours ago • Pending approval
-                </p>
-              </div>
-            </div>
-          </div>
+          <button
+            class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium inline-flex items-center"
+          >
+            <i data-lucide="download" class="size-4 mr-2"></i>
+            Generate Custom Report
+          </button>
         </div>
       </div>
     </main>
 
     <script type="module" src="/main.js"></script>
+    <script type="module">
+      import Chart from "chart.js/auto";
+
+      // Chart data from TSX
+      const donationData = [
+        { month: "Jan", donations: 145, requests: 132 },
+        { month: "Feb", donations: 167, requests: 158 },
+        { month: "Mar", donations: 189, requests: 171 },
+        { month: "Apr", donations: 156, requests: 149 },
+        { month: "May", donations: 178, requests: 165 },
+        { month: "Jun", donations: 198, requests: 184 },
+      ];
+
+      const bloodTypeData = [
+        { name: "O+", value: 423, color: "#EF4444" },
+        { name: "A+", value: 342, color: "#F97316" },
+        { name: "B+", value: 289, color: "#F59E0B" },
+        { name: "AB+", value: 156, color: "#10B981" },
+        { name: "O-", value: 185, color: "#3B82F6" },
+        { name: "A-", value: 128, color: "#6366F1" },
+        { name: "B-", value: 94, color: "#8B5CF6" },
+        { name: "AB-", value: 67, color: "#EC4899" },
+      ];
+
+      // Initialize charts after DOM is loaded
+      document.addEventListener("DOMContentLoaded", () => {
+        initLineChart();
+        initPieChart();
+        initBarChart();
+      });
+
+      function initLineChart() {
+        const ctx = document.getElementById("lineChart").getContext("2d");
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: donationData.map((d) => d.month),
+            datasets: [
+              {
+                label: "Donations",
+                data: donationData.map((d) => d.donations),
+                borderColor: "#EF4444",
+                backgroundColor: "rgba(239, 68, 68, 0.1)",
+                borderWidth: 2,
+                tension: 0.3,
+                fill: false,
+              },
+              {
+                label: "Requests",
+                data: donationData.map((d) => d.requests),
+                borderColor: "#3B82F6",
+                backgroundColor: "rgba(59, 130, 246, 0.1)",
+                borderWidth: 2,
+                tension: 0.3,
+                fill: false,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)",
+                },
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+          },
+        });
+      }
+
+      function initPieChart() {
+        const ctx = document.getElementById("pieChart").getContext("2d");
+        new Chart(ctx, {
+          type: "pie",
+          data: {
+            labels: bloodTypeData.map((d) => d.name),
+            datasets: [
+              {
+                data: bloodTypeData.map((d) => d.value),
+                backgroundColor: bloodTypeData.map((d) => d.color),
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "right",
+                labels: {
+                  usePointStyle: true,
+                  padding: 15,
+                },
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const label = context.label || "";
+                    const value = context.raw || 0;
+                    return `${label}: ${value} donors`;
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+
+      function initBarChart() {
+        const ctx = document.getElementById("barChart").getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: donationData.map((d) => d.month),
+            datasets: [
+              {
+                label: "Donations",
+                data: donationData.map((d) => d.donations),
+                backgroundColor: "#EF4444",
+                borderRadius: 4,
+              },
+              {
+                label: "Requests",
+                data: donationData.map((d) => d.requests),
+                backgroundColor: "#3B82F6",
+                borderRadius: 4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)",
+                },
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+          },
+        });
+      }
+    </script>
   </body>
 </html>
