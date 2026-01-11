@@ -89,13 +89,49 @@
         </div>
       </div>
       <div class="flex items-center gap-4">
-        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
-          <i data-lucide="bell" class="size-5 text-gray-700"></i
-          ><span
-            class="absolute -top-1 -right-1 size-5 flex items-center justify-center bg-red-600 text-white text-xs rounded-full"
-            >5</span
+        <!-- Notification Dropdown -->
+        <div class="relative" id="notificationDropdown">
+          <button
+            class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            onclick="toggleNotifications()"
+            id="notificationBell"
           >
-        </button>
+            <i data-lucide="bell" class="size-5 text-gray-700"></i>
+            <span
+              class="absolute -top-1 -right-1 size-5 flex items-center justify-center p-0 bg-red-600 text-white text-xs rounded-full"
+              id="notificationBadge"
+              >4</span
+            >
+          </button>
+
+          <!-- Notification Panel -->
+          <div
+            id="notificationPanel"
+            class="hidden absolute right-0 top-12 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50"
+          >
+            <div
+              class="p-4 border-b border-gray-200 flex items-center justify-between"
+            >
+              <h3 class="font-semibold text-gray-900">Notifications</h3>
+              <button
+                onclick="markAllAsRead()"
+                class="text-xs text-red-600 hover:text-red-700 font-medium"
+              >
+                Mark all as read
+              </button>
+            </div>
+            <div class="max-h-80 overflow-y-auto" id="notificationList">
+              <!-- Notifications will be populated by JS -->
+            </div>
+            <div class="p-3 border-t border-gray-200 text-center">
+              <button
+                class="text-sm text-red-600 hover:text-red-700 font-medium"
+              >
+                View all notifications
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
           <div class="text-right">
             <div class="text-sm font-medium text-gray-900">Admin User</div>
@@ -394,6 +430,391 @@
       </div>
     </main>
 
+    <script>
+      // Notification System
+      const notifications = [
+        {
+          id: 1,
+          title: "New Donor Registration",
+          message: "John Doe has registered as a new blood donor",
+          time: "2 minutes ago",
+          read: false,
+          icon: "user-plus",
+          iconBg: "bg-green-100",
+          iconColor: "text-green-600",
+        },
+        {
+          id: 2,
+          title: "Hospital Request Approved",
+          message: "City General Hospital blood request approved",
+          time: "15 minutes ago",
+          read: false,
+          icon: "check-circle",
+          iconBg: "bg-blue-100",
+          iconColor: "text-blue-600",
+        },
+        {
+          id: 3,
+          title: "Urgent Blood Request",
+          message: "Emergency O- blood needed at St. Mary Hospital",
+          time: "1 hour ago",
+          read: false,
+          icon: "alert-circle",
+          iconBg: "bg-red-100",
+          iconColor: "text-red-600",
+        },
+        {
+          id: 4,
+          title: "Monthly Report Generated",
+          message: "November 2024 donation report is ready",
+          time: "3 hours ago",
+          read: false,
+          icon: "file-text",
+          iconBg: "bg-purple-100",
+          iconColor: "text-purple-600",
+        },
+        {
+          id: 5,
+          title: "New Hospital Registration",
+          message: "Regional Medical Center pending approval",
+          time: "5 hours ago",
+          read: true,
+          icon: "building-2",
+          iconBg: "bg-orange-100",
+          iconColor: "text-orange-600",
+        },
+        {
+          id: 6,
+          title: "Blood Camp Scheduled",
+          message: "Community blood drive scheduled for Dec 15",
+          time: "1 day ago",
+          read: true,
+          icon: "calendar",
+          iconBg: "bg-teal-100",
+          iconColor: "text-teal-600",
+        },
+      ];
+
+      function renderNotifications() {
+        const container = document.getElementById("notificationList");
+        const unreadCount = notifications.filter((n) => !n.read).length;
+        const badge = document.getElementById("notificationBadge");
+        if (unreadCount > 0) {
+          badge.textContent = unreadCount;
+          badge.classList.remove("hidden");
+        } else {
+          badge.classList.add("hidden");
+        }
+        container.innerHTML = notifications
+          .map(
+            (n) => `
+          <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
+            n.read ? "opacity-70" : ""
+          }" data-id="${n.id}" onclick="markAsRead(${n.id})">
+            <div class="flex gap-3">
+              <div class="${n.iconBg} p-2 rounded-lg h-fit"><i data-lucide="${
+              n.icon
+            }" class="size-4 ${n.iconColor}"></i></div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-2">
+                  <p class="text-sm ${
+                    n.read
+                      ? "font-normal text-gray-700"
+                      : "font-semibold text-gray-900"
+                  } truncate">${n.title}</p>
+                  ${
+                    !n.read
+                      ? '<span class="size-2 bg-red-600 rounded-full flex-shrink-0 mt-1.5"></span>'
+                      : ""
+                  }
+                </div>
+                <p class="text-xs text-gray-500 mt-0.5 line-clamp-1">${
+                  n.message
+                }</p>
+                <p class="text-xs text-gray-400 mt-1">${n.time}</p>
+              </div>
+            </div>
+          </div>
+        `
+          )
+          .join("");
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }
+
+      function toggleNotifications() {
+        const panel = document.getElementById("notificationPanel");
+        panel.classList.toggle("hidden");
+        if (!panel.classList.contains("hidden")) {
+          renderNotifications();
+        }
+      }
+      function markAsRead(id) {
+        const n = notifications.find((x) => x.id === id);
+        if (n) {
+          n.read = true;
+          renderNotifications();
+        }
+      }
+      function markAllAsRead() {
+        notifications.forEach((n) => (n.read = true));
+        renderNotifications();
+      }
+      document.addEventListener("click", function (e) {
+        const dropdown = document.getElementById("notificationDropdown");
+        const panel = document.getElementById("notificationPanel");
+        if (
+          !dropdown.contains(e.target) &&
+          !panel.classList.contains("hidden")
+        ) {
+          panel.classList.add("hidden");
+        }
+      });
+      document.addEventListener("DOMContentLoaded", function () {
+        renderNotifications();
+      });
+    </script>
     <script type="module" src="/main.js"></script>
+    <script>
+      // Admin Hospital Approval - Interactive State Management
+      document.addEventListener("DOMContentLoaded", function () {
+        // Hospital data
+        let hospitals = [
+          {
+            id: "HOS001",
+            name: "City General Hospital",
+            email: "admin@citygeneral.com",
+            phone: "555-1001",
+            type: "Public",
+            status: "Pending",
+          },
+          {
+            id: "HOS002",
+            name: "St. Mary Medical Center",
+            email: "info@stmary.com",
+            phone: "555-1002",
+            type: "Private",
+            status: "Pending",
+          },
+          {
+            id: "HOS003",
+            name: "Regional Healthcare",
+            email: "contact@regional.com",
+            phone: "555-1003",
+            type: "Public",
+            status: "Pending",
+          },
+          {
+            id: "HOS004",
+            name: "Community Hospital",
+            email: "hello@community.com",
+            phone: "555-1004",
+            type: "Private",
+            status: "Pending",
+          },
+          {
+            id: "HOS005",
+            name: "Metro Medical",
+            email: "admin@metro.com",
+            phone: "555-1005",
+            type: "Public",
+            status: "Approved",
+          },
+          {
+            id: "HOS006",
+            name: "Valley Healthcare",
+            email: "info@valley.com",
+            phone: "555-1006",
+            type: "Private",
+            status: "Rejected",
+          },
+        ];
+
+        let filterStatus = "Pending";
+        const tableBody = document.querySelector("tbody");
+        const statCards = document.querySelectorAll(
+          ".grid.grid-cols-1.md\\:grid-cols-4 .text-3xl"
+        );
+
+        // Create filter tabs
+        const tableCard =
+          document.querySelector(".overflow-x-auto").parentElement;
+        const filterContainer = document.createElement("div");
+        filterContainer.className = "flex items-center gap-2 mb-6";
+        filterContainer.innerHTML = `
+          <button class="filter-btn px-4 py-2 rounded-lg border text-sm bg-red-50 border-red-600 text-red-600" data-status="Pending">Pending</button>
+          <button class="filter-btn px-4 py-2 rounded-lg border text-sm border-gray-300 text-gray-700" data-status="Approved">Approved</button>
+          <button class="filter-btn px-4 py-2 rounded-lg border text-sm border-gray-300 text-gray-700" data-status="Rejected">Rejected</button>
+          <button class="filter-btn px-4 py-2 rounded-lg border text-sm border-gray-300 text-gray-700" data-status="All">All</button>
+        `;
+        tableCard.querySelector(".mb-6").after(filterContainer);
+
+        filterContainer.querySelectorAll(".filter-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            filterStatus = this.dataset.status;
+            filterContainer.querySelectorAll(".filter-btn").forEach((b) => {
+              b.classList.remove("bg-red-50", "border-red-600", "text-red-600");
+              b.classList.add("border-gray-300", "text-gray-700");
+            });
+            this.classList.remove("border-gray-300", "text-gray-700");
+            this.classList.add("bg-red-50", "border-red-600", "text-red-600");
+            renderHospitals();
+          });
+        });
+
+        function updateStats() {
+          const pending = hospitals.filter(
+            (h) => h.status === "Pending"
+          ).length;
+          const approved = hospitals.filter(
+            (h) => h.status === "Approved"
+          ).length;
+          const rejected = hospitals.filter(
+            (h) => h.status === "Rejected"
+          ).length;
+          const active = approved;
+
+          if (statCards.length >= 4) {
+            statCards[0].textContent = pending;
+            statCards[1].textContent = approved;
+            statCards[2].textContent = rejected;
+            statCards[3].textContent = active;
+          }
+        }
+
+        function getTypeBadge(type) {
+          return type === "Public"
+            ? "border-blue-600 text-blue-600"
+            : "border-purple-600 text-purple-600";
+        }
+
+        function getStatusBadge(status) {
+          if (status === "Pending") return "border-yellow-600 text-yellow-600";
+          if (status === "Approved") return "border-green-600 text-green-600";
+          if (status === "Rejected") return "border-red-600 text-red-600";
+          return "border-gray-600 text-gray-600";
+        }
+
+        function getActionButtons(hospital) {
+          if (hospital.status === "Pending") {
+            return `
+              <div class="flex gap-2">
+                <button class="view-btn px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50" data-id="${hospital.id}">View</button>
+                <button class="approve-btn px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700" data-id="${hospital.id}">Approve</button>
+                <button class="reject-btn px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700" data-id="${hospital.id}">Reject</button>
+              </div>
+            `;
+          }
+          return `<button class="view-btn px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50" data-id="${hospital.id}">View</button>`;
+        }
+
+        function renderHospitals() {
+          const filtered =
+            filterStatus === "All"
+              ? hospitals
+              : hospitals.filter((h) => h.status === filterStatus);
+
+          if (filtered.length === 0) {
+            tableBody.innerHTML = `
+              <tr>
+                <td colspan="7" class="py-12 text-center">
+                  <div class="inline-flex items-center justify-center size-16 rounded-full bg-gray-100 mb-4">
+                    <i data-lucide="building-2" class="size-8 text-gray-400"></i>
+                  </div>
+                  <p class="text-gray-500">No ${filterStatus.toLowerCase()} hospitals found</p>
+                </td>
+              </tr>
+            `;
+            lucide.createIcons();
+            return;
+          }
+
+          tableBody.innerHTML = filtered
+            .map(
+              (hospital) => `
+            <tr class="border-b border-gray-100 hover:bg-gray-50" data-id="${
+              hospital.id
+            }">
+              <td class="py-3 px-4 text-sm text-gray-900">${hospital.id}</td>
+              <td class="py-3 px-4 text-sm text-gray-900">${hospital.name}</td>
+              <td class="py-3 px-4 text-sm text-gray-900">${hospital.email}</td>
+              <td class="py-3 px-4 text-sm text-gray-900">${hospital.phone}</td>
+              <td class="py-3 px-4">
+                <span class="px-2 py-1 text-xs font-medium border ${getTypeBadge(
+                  hospital.type
+                )} rounded-full">${hospital.type}</span>
+              </td>
+              <td class="py-3 px-4">
+                <span class="px-2 py-1 text-xs font-medium border ${getStatusBadge(
+                  hospital.status
+                )} rounded-full">${hospital.status}</span>
+              </td>
+              <td class="py-3 px-4">${getActionButtons(hospital)}</td>
+            </tr>
+          `
+            )
+            .join("");
+
+          lucide.createIcons();
+          attachEventListeners();
+          updateStats();
+        }
+
+        function attachEventListeners() {
+          document.querySelectorAll(".approve-btn").forEach((btn) => {
+            btn.addEventListener("click", () =>
+              updateHospitalStatus(btn.dataset.id, "Approved")
+            );
+          });
+          document.querySelectorAll(".reject-btn").forEach((btn) => {
+            btn.addEventListener("click", () =>
+              updateHospitalStatus(btn.dataset.id, "Rejected")
+            );
+          });
+        }
+
+        function updateHospitalStatus(id, newStatus) {
+          const hospital = hospitals.find((h) => h.id === id);
+          if (hospital) {
+            hospital.status = newStatus;
+            showNotification(
+              `<strong>${
+                hospital.name
+              }</strong> has been ${newStatus.toLowerCase()} successfully!`,
+              newStatus === "Approved" ? "success" : "error"
+            );
+            renderHospitals();
+          }
+        }
+
+        function showNotification(message, type = "success") {
+          const bgColor =
+            type === "success"
+              ? "bg-green-50 border-green-600"
+              : "bg-red-50 border-red-600";
+          const textColor =
+            type === "success" ? "text-green-900" : "text-red-900";
+          const iconColor =
+            type === "success" ? "text-green-600" : "text-red-600";
+          const icon = type === "success" ? "check-circle" : "x-circle";
+
+          const notification = document.createElement("div");
+          notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50`;
+          notification.innerHTML = `
+            <div class="flex items-center gap-3">
+              <i data-lucide="${icon}" class="size-5 ${iconColor}"></i>
+              <p class="${textColor}">${message}</p>
+            </div>
+          `;
+          document.body.appendChild(notification);
+          lucide.createIcons();
+          setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Initial render
+        renderHospitals();
+      });
+    </script>
   </body>
 </html>

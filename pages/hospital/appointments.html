@@ -516,5 +516,236 @@
     </main>
 
     <script type="module" src="/main.js"></script>
+    <script>
+      // Hospital Appointments - Interactive State Management
+      document.addEventListener("DOMContentLoaded", function () {
+        // Appointment data
+        let appointments = [
+          {
+            id: "APT001",
+            donor: "John Smith",
+            bloodType: "O+",
+            date: "2024-11-25",
+            time: "10:00 AM",
+            requestId: "REQ001",
+            status: "Confirmed",
+          },
+          {
+            id: "APT002",
+            donor: "Maria Garcia",
+            bloodType: "A+",
+            date: "2024-11-25",
+            time: "11:30 AM",
+            requestId: "REQ002",
+            status: "Confirmed",
+          },
+          {
+            id: "APT003",
+            donor: "David Lee",
+            bloodType: "B-",
+            date: "2024-11-26",
+            time: "09:00 AM",
+            requestId: "REQ003",
+            status: "Pending",
+          },
+          {
+            id: "APT004",
+            donor: "Sarah Johnson",
+            bloodType: "O-",
+            date: "2024-11-26",
+            time: "02:00 PM",
+            requestId: "REQ004",
+            status: "Confirmed",
+          },
+          {
+            id: "APT005",
+            donor: "Michael Brown",
+            bloodType: "AB+",
+            date: "2024-11-27",
+            time: "03:30 PM",
+            requestId: "REQ005",
+            status: "Pending",
+          },
+          {
+            id: "APT006",
+            donor: "Emma Wilson",
+            bloodType: "A-",
+            date: "2024-11-23",
+            time: "01:00 PM",
+            requestId: "REQ006",
+            status: "Completed",
+          },
+        ];
+
+        const tableBody = document.querySelector("tbody");
+        const statCards = document.querySelectorAll(
+          ".grid.grid-cols-1.md\\:grid-cols-4 .text-3xl"
+        );
+
+        function updateStats() {
+          const total = appointments.length;
+          const confirmed = appointments.filter(
+            (a) => a.status === "Confirmed"
+          ).length;
+          const pending = appointments.filter(
+            (a) => a.status === "Pending"
+          ).length;
+          const completed = appointments.filter(
+            (a) => a.status === "Completed"
+          ).length;
+
+          if (statCards.length >= 4) {
+            statCards[0].textContent = total;
+            statCards[1].textContent = confirmed;
+            statCards[2].textContent = pending;
+            statCards[3].textContent = completed;
+          }
+        }
+
+        function getStatusBadge(status) {
+          if (status === "Confirmed") return "bg-green-100 text-green-700";
+          if (status === "Pending") return "bg-yellow-100 text-yellow-700";
+          if (status === "Completed") return "bg-purple-100 text-purple-700";
+          if (status === "Cancelled") return "bg-red-100 text-red-700";
+          return "bg-gray-100 text-gray-700";
+        }
+
+        function getActionButtons(apt) {
+          if (apt.status === "Pending") {
+            return `
+              <div class="flex gap-2">
+                <button class="confirm-btn px-3 py-1 text-sm bg-green-600 hover:bg-green-700 text-white rounded-lg" data-id="${apt.id}">Confirm</button>
+                <button class="cancel-btn px-3 py-1 text-sm text-red-600 border border-red-300 hover:bg-red-50 rounded-lg" data-id="${apt.id}">Cancel</button>
+              </div>
+            `;
+          }
+          if (apt.status === "Confirmed") {
+            return `
+              <div class="flex gap-2">
+                <button class="complete-btn px-3 py-1 text-sm bg-purple-600 hover:bg-purple-700 text-white rounded-lg" data-id="${apt.id}">Mark Complete</button>
+                <button class="cancel-btn px-3 py-1 text-sm text-red-600 border border-red-300 hover:bg-red-50 rounded-lg" data-id="${apt.id}">Cancel</button>
+              </div>
+            `;
+          }
+          if (apt.status === "Completed") {
+            return `<button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg">View Details</button>`;
+          }
+          return '<span class="text-sm text-gray-500">—</span>';
+        }
+
+        function renderAppointments() {
+          tableBody.innerHTML = appointments
+            .map(
+              (apt) => `
+            <tr class="border-b border-gray-100 hover:bg-gray-50" data-id="${
+              apt.id
+            }">
+              <td class="py-3 px-4 text-gray-900 font-medium">${apt.id}</td>
+              <td class="py-3 px-4">
+                <div class="flex items-center gap-3">
+                  <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                    <i data-lucide="user" class="size-5 text-red-600"></i>
+                  </div>
+                  <span class="font-medium text-gray-900">${apt.donor}</span>
+                </div>
+              </td>
+              <td class="py-3 px-4">
+                <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${
+                  apt.bloodType
+                }</span>
+              </td>
+              <td class="py-3 px-4 text-gray-900">${apt.date}</td>
+              <td class="py-3 px-4 text-gray-900">${apt.time}</td>
+              <td class="py-3 px-4">
+                <span class="px-2 py-1 text-xs font-medium border border-gray-300 text-gray-600 rounded-full">${
+                  apt.requestId
+                }</span>
+              </td>
+              <td class="py-3 px-4">
+                <span class="px-2 py-1 text-xs font-medium ${getStatusBadge(
+                  apt.status
+                )} rounded-full">${apt.status}</span>
+              </td>
+              <td class="py-3 px-4">
+                ${getActionButtons(apt)}
+              </td>
+            </tr>
+          `
+            )
+            .join("");
+
+          lucide.createIcons();
+          attachEventListeners();
+          updateStats();
+        }
+
+        function attachEventListeners() {
+          document.querySelectorAll(".confirm-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              updateAppointmentStatus(this.dataset.id, "Confirmed");
+            });
+          });
+          document.querySelectorAll(".complete-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              updateAppointmentStatus(this.dataset.id, "Completed");
+            });
+          });
+          document.querySelectorAll(".cancel-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              updateAppointmentStatus(this.dataset.id, "Cancelled");
+            });
+          });
+        }
+
+        function updateAppointmentStatus(id, newStatus) {
+          const apt = appointments.find((a) => a.id === id);
+          if (apt) {
+            const oldStatus = apt.status;
+            apt.status = newStatus;
+
+            let message = "";
+            let type = "success";
+            if (newStatus === "Confirmed") {
+              message = `Appointment with ${apt.donor} has been confirmed!`;
+            } else if (newStatus === "Completed") {
+              message = `Donation from ${apt.donor} marked as completed!`;
+            } else if (newStatus === "Cancelled") {
+              message = `Appointment with ${apt.donor} has been cancelled.`;
+              type = "info";
+            }
+
+            showNotification(message, type);
+            renderAppointments();
+          }
+        }
+
+        function showNotification(message, type = "success") {
+          const bgColor =
+            type === "success"
+              ? "bg-green-50 border-green-600"
+              : "bg-gray-50 border-gray-600";
+          const textColor =
+            type === "success" ? "text-green-900" : "text-gray-900";
+          const iconColor =
+            type === "success" ? "text-green-600" : "text-gray-600";
+          const icon = type === "success" ? "check-circle" : "info";
+
+          const notification = document.createElement("div");
+          notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50`;
+          notification.innerHTML = `
+            <div class="flex items-center gap-3">
+              <i data-lucide="${icon}" class="size-5 ${iconColor}"></i>
+              <p class="${textColor}">${message}</p>
+            </div>
+          `;
+          document.body.appendChild(notification);
+          lucide.createIcons();
+          setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Initial render
+        renderAppointments();
+      });
+    </script>
   </body>
 </html>

@@ -239,13 +239,17 @@
                     <div class="flex gap-2">
                       <button
                         class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                        data-id="DON012"
+                        onclick="openDonationModal('DON012')"
                       >
                         View
                       </button>
                       <button
                         class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                        data-id="DON012"
+                        onclick="openCertificatePreview('DON012')"
                       >
-                        <i data-lucide="download" class="size-4 inline mr-1"></i
+                        <i data-lucide="award" class="size-4 inline mr-1"></i
                         >Certificate
                       </button>
                     </div>
@@ -272,13 +276,17 @@
                     <div class="flex gap-2">
                       <button
                         class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                        data-id="DON011"
+                        onclick="openDonationModal('DON011')"
                       >
                         View
                       </button>
                       <button
                         class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                        data-id="DON011"
+                        onclick="openCertificatePreview('DON011')"
                       >
-                        <i data-lucide="download" class="size-4 inline mr-1"></i
+                        <i data-lucide="award" class="size-4 inline mr-1"></i
                         >Certificate
                       </button>
                     </div>
@@ -305,13 +313,17 @@
                     <div class="flex gap-2">
                       <button
                         class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                        data-id="DON010"
+                        onclick="openDonationModal('DON010')"
                       >
                         View
                       </button>
                       <button
                         class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                        data-id="DON010"
+                        onclick="openCertificatePreview('DON010')"
                       >
-                        <i data-lucide="download" class="size-4 inline mr-1"></i
+                        <i data-lucide="award" class="size-4 inline mr-1"></i
                         >Certificate
                       </button>
                     </div>
@@ -338,13 +350,17 @@
                     <div class="flex gap-2">
                       <button
                         class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                        data-id="DON009"
+                        onclick="openDonationModal('DON009')"
                       >
                         View
                       </button>
                       <button
                         class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                        data-id="DON009"
+                        onclick="openCertificatePreview('DON009')"
                       >
-                        <i data-lucide="download" class="size-4 inline mr-1"></i
+                        <i data-lucide="award" class="size-4 inline mr-1"></i
                         >Certificate
                       </button>
                     </div>
@@ -371,13 +387,17 @@
                     <div class="flex gap-2">
                       <button
                         class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                        data-id="DON008"
+                        onclick="openDonationModal('DON008')"
                       >
                         View
                       </button>
                       <button
                         class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                        data-id="DON008"
+                        onclick="openCertificatePreview('DON008')"
                       >
-                        <i data-lucide="download" class="size-4 inline mr-1"></i
+                        <i data-lucide="award" class="size-4 inline mr-1"></i
                         >Certificate
                       </button>
                     </div>
@@ -390,6 +410,304 @@
       </div>
     </main>
 
+    <!-- Certificate Preview Modal -->
+    <dialog id="certificateModal" class="modal">
+      <div class="modal-box bg-white max-w-2xl w-full p-0">
+        <form method="dialog">
+          <button
+            class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-10 bg-white/80 hover:bg-white"
+          >
+            <i data-lucide="x" class="size-5"></i>
+          </button>
+        </form>
+        <div id="certificatePreviewContent">
+          <!-- Content will be populated dynamically -->
+        </div>
+        <div class="modal-action px-6 pb-6">
+          <form method="dialog">
+            <button
+              class="btn bg-gray-100 hover:bg-gray-200 text-gray-700 border-0"
+            >
+              Close Preview
+            </button>
+          </form>
+        </div>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+    <!-- Donation Details Modal -->
+    <dialog id="donationModal" class="modal">
+      <div class="modal-box bg-white max-w-lg">
+        <form method="dialog">
+          <button
+            class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4"
+          >
+            <i data-lucide="x" class="size-5"></i>
+          </button>
+        </form>
+        <h3
+          class="font-bold text-xl text-gray-900 mb-6 flex items-center gap-2"
+        >
+          <i data-lucide="file-text" class="size-6 text-red-600"></i>
+          Donation Details
+        </h3>
+        <div class="space-y-4" id="donationModalContent">
+          <!-- Content will be populated dynamically -->
+        </div>
+        <div class="modal-action">
+          <form method="dialog">
+            <button
+              class="btn bg-gray-100 hover:bg-gray-200 text-gray-700 border-0"
+            >
+              Close
+            </button>
+          </form>
+        </div>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+    <script>
+      // Dummy donation data
+      const donationData = {
+        DON012: {
+          id: "DON012",
+          date: "2024-11-10",
+          hospital: "City Hospital",
+          bloodGroup: "A+",
+          quantity: "500 ml",
+          type: "Emergency",
+          status: "Completed",
+          notes:
+            "Emergency donation for accident victim. Donor showed excellent health parameters.",
+        },
+        DON011: {
+          id: "DON011",
+          date: "2024-08-15",
+          hospital: "St. Mary Medical",
+          bloodGroup: "A+",
+          quantity: "450 ml",
+          type: "Voluntary",
+          status: "Completed",
+          notes:
+            "Participated in annual blood donation camp organized by the hospital.",
+        },
+        DON010: {
+          id: "DON010",
+          date: "2024-05-20",
+          hospital: "Regional Hospital",
+          bloodGroup: "A+",
+          quantity: "500 ml",
+          type: "Emergency",
+          status: "Completed",
+          notes: "Donation for scheduled surgery patient. All tests cleared.",
+        },
+        DON009: {
+          id: "DON009",
+          date: "2024-02-10",
+          hospital: "Community Hospital",
+          bloodGroup: "A+",
+          quantity: "450 ml",
+          type: "Voluntary",
+          status: "Completed",
+          notes: "Regular voluntary donation. Hemoglobin levels: 14.2 g/dL.",
+        },
+        DON008: {
+          id: "DON008",
+          date: "2023-11-05",
+          hospital: "City Hospital",
+          bloodGroup: "A+",
+          quantity: "500 ml",
+          type: "Emergency",
+          status: "Completed",
+          notes: "Emergency request fulfilled within 2 hours of notification.",
+        },
+      };
+
+      function openDonationModal(id) {
+        const donation = donationData[id];
+        if (!donation) return;
+
+        const typeClass =
+          donation.type === "Emergency"
+            ? "bg-red-100 text-red-700"
+            : "bg-green-100 text-green-700";
+
+        const content = `
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Donation ID</p>
+              <p class="font-semibold text-gray-900">${donation.id}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Date</p>
+              <p class="font-semibold text-gray-900">${donation.date}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Hospital Name</p>
+              <p class="font-semibold text-gray-900">${donation.hospital}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Blood Group</p>
+              <p><span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${donation.bloodGroup}</span></p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Quantity</p>
+              <p class="font-semibold text-gray-900">${donation.quantity}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Donation Type</p>
+              <p><span class="px-2 py-1 text-xs font-medium ${typeClass} rounded-full">${donation.type}</span></p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Status</p>
+              <p><span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">${donation.status}</span></p>
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-200">
+            <p class="text-sm text-gray-500 mb-2">Notes</p>
+            <p class="text-gray-700 text-sm bg-gray-50 p-3 rounded-lg">${donation.notes}</p>
+          </div>
+        `;
+
+        document.getElementById("donationModalContent").innerHTML = content;
+        document.getElementById("donationModal").showModal();
+
+        // Re-initialize Lucide icons in the modal
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }
+
+      // Certificate data (using donationData for consistency)
+      const certificateData = {
+        DON012: {
+          id: "DON012",
+          certId: "CERT-2024-DON012",
+          donorName: "John Smith",
+          bloodGroup: "A+",
+          date: "2024-11-10",
+          hospital: "City Hospital",
+          quantity: "500 ml",
+        },
+        DON011: {
+          id: "DON011",
+          certId: "CERT-2024-DON011",
+          donorName: "John Smith",
+          bloodGroup: "A+",
+          date: "2024-08-15",
+          hospital: "St. Mary Medical",
+          quantity: "450 ml",
+        },
+        DON010: {
+          id: "DON010",
+          certId: "CERT-2024-DON010",
+          donorName: "John Smith",
+          bloodGroup: "A+",
+          date: "2024-05-20",
+          hospital: "Regional Hospital",
+          quantity: "500 ml",
+        },
+        DON009: {
+          id: "DON009",
+          certId: "CERT-2024-DON009",
+          donorName: "John Smith",
+          bloodGroup: "A+",
+          date: "2024-02-10",
+          hospital: "Community Hospital",
+          quantity: "450 ml",
+        },
+        DON008: {
+          id: "DON008",
+          certId: "CERT-2023-DON008",
+          donorName: "John Smith",
+          bloodGroup: "A+",
+          date: "2023-11-05",
+          hospital: "City Hospital",
+          quantity: "500 ml",
+        },
+      };
+
+      function openCertificatePreview(id) {
+        const cert = certificateData[id];
+        if (!cert) return;
+
+        const formattedDate = new Date(cert.date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+
+        const content = `
+          <div class="bg-gradient-to-br from-red-50 via-white to-red-50 p-8">
+            <!-- Certificate Border -->
+            <div class="border-4 border-red-600 rounded-lg p-6 bg-white shadow-lg">
+              <!-- Header -->
+              <div class="text-center border-b-2 border-red-200 pb-6 mb-6">
+                <div class="flex justify-center mb-4">
+                  <div class="bg-red-600 p-3 rounded-full">
+                    <i data-lucide="heart" class="size-10 text-white fill-white"></i>
+                  </div>
+                </div>
+                <h2 class="text-3xl font-bold text-red-600 mb-2">BloodConnect</h2>
+                <h3 class="text-xl font-semibold text-gray-700">Certificate of Blood Donation</h3>
+              </div>
+              
+              <!-- Main Content -->
+              <div class="text-center mb-6">
+                <p class="text-gray-600 mb-4">This is to certify that</p>
+                <h4 class="text-2xl font-bold text-gray-900 mb-4">${cert.donorName}</h4>
+                <p class="text-gray-600 mb-2">has generously donated blood on</p>
+                <p class="text-xl font-semibold text-red-600 mb-4">${formattedDate}</p>
+              </div>
+              
+              <!-- Details Grid -->
+              <div class="grid grid-cols-2 gap-4 bg-gray-50 rounded-lg p-4 mb-6">
+                <div class="text-center p-3">
+                  <p class="text-sm text-gray-500 mb-1">Blood Group</p>
+                  <p class="text-xl font-bold text-red-600">${cert.bloodGroup}</p>
+                </div>
+                <div class="text-center p-3">
+                  <p class="text-sm text-gray-500 mb-1">Quantity Donated</p>
+                  <p class="text-xl font-bold text-gray-900">${cert.quantity}</p>
+                </div>
+                <div class="text-center p-3">
+                  <p class="text-sm text-gray-500 mb-1">Donation Center</p>
+                  <p class="text-lg font-semibold text-gray-900">${cert.hospital}</p>
+                </div>
+                <div class="text-center p-3">
+                  <p class="text-sm text-gray-500 mb-1">Certificate ID</p>
+                  <p class="text-lg font-semibold text-gray-900">${cert.certId}</p>
+                </div>
+              </div>
+              
+              <!-- Footer -->
+              <div class="text-center border-t-2 border-red-200 pt-6">
+                <div class="flex justify-center items-center gap-2 mb-2">
+                  <i data-lucide="award" class="size-5 text-red-600"></i>
+                  <span class="text-gray-600">Your gift saves lives</span>
+                </div>
+                <p class="text-sm text-gray-500">Thank you for being a hero. Every drop counts!</p>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.getElementById("certificatePreviewContent").innerHTML =
+          content;
+        document.getElementById("certificateModal").showModal();
+
+        // Re-initialize Lucide icons in the modal
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }
+    </script>
     <script type="module" src="/main.js"></script>
   </body>
 </html>

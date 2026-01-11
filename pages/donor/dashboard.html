@@ -391,5 +391,303 @@
     </main>
 
     <script type="module" src="/main.js"></script>
+    <script>
+      // Donor Dashboard - Interactive State Management
+      document.addEventListener("DOMContentLoaded", function () {
+        // Emergency alerts data
+        let emergencyAlerts = [
+          {
+            id: 1,
+            bloodType: "O+",
+            hospital: "Regional Hospital",
+            urgency: "Critical",
+            time: "2 hours ago",
+            status: "pending",
+          },
+          {
+            id: 2,
+            bloodType: "O+",
+            hospital: "Community Medical",
+            urgency: "Urgent",
+            time: "5 hours ago",
+            status: "pending",
+          },
+        ];
+
+        // Non-emergency requests data
+        let nonEmergencyRequests = [
+          {
+            id: 1,
+            bloodType: "O+",
+            hospital: "General Hospital",
+            requestType: "Routine",
+            time: "1 day ago",
+            units: 2,
+            status: "pending",
+          },
+          {
+            id: 2,
+            bloodType: "O+",
+            hospital: "Valley Medical Center",
+            requestType: "Scheduled",
+            time: "2 days ago",
+            units: 1,
+            status: "pending",
+          },
+        ];
+
+        // Upcoming appointments
+        let appointments = [
+          {
+            id: "APT001",
+            hospital: "City Hospital",
+            date: "Nov 25, 2024",
+            time: "10:00 AM",
+            status: "Confirmed",
+          },
+          {
+            id: "APT002",
+            hospital: "St. Mary Medical",
+            date: "Dec 1, 2024",
+            time: "02:00 PM",
+            status: "Pending",
+          },
+        ];
+
+        const emergencyContainer = document.querySelector(
+          ".border-l-red-600 .space-y-3"
+        );
+        const nonEmergencyContainer = document.querySelector(
+          ".border-l-blue-600 .space-y-3"
+        );
+
+        function renderEmergencyAlerts() {
+          if (
+            emergencyAlerts.filter((a) => a.status === "pending").length === 0
+          ) {
+            emergencyContainer.innerHTML = `
+              <div class="text-center py-8 text-gray-500">
+                <i data-lucide="check-circle" class="size-12 mx-auto mb-3 text-green-400"></i>
+                <p>No pending emergency requests. Thank you!</p>
+              </div>
+            `;
+            lucide.createIcons();
+            return;
+          }
+
+          emergencyContainer.innerHTML = emergencyAlerts
+            .filter((a) => a.status === "pending")
+            .map(
+              (alert) => `
+              <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-red-200" data-id="${
+                alert.id
+              }">
+                <div class="flex items-center gap-4">
+                  <div class="size-12 bg-red-100 rounded-full flex items-center justify-center">
+                    <i data-lucide="droplet" class="size-6 text-red-600 fill-red-600"></i>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2 mb-1">
+                      <h3 class="font-medium text-gray-900">${
+                        alert.hospital
+                      }</h3>
+                      <span class="px-2 py-1 text-xs font-medium ${
+                        alert.urgency === "Critical"
+                          ? "bg-red-600"
+                          : "bg-orange-500"
+                      } text-white rounded-full">${alert.urgency}</span>
+                    </div>
+                    <p class="text-sm text-gray-600">Blood Type: <strong>${
+                      alert.bloodType
+                    }</strong> • ${alert.time}</p>
+                  </div>
+                </div>
+                <div class="flex gap-2">
+                  <button class="decline-emergency-btn px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg" data-id="${
+                    alert.id
+                  }">Later</button>
+                  <button class="accept-emergency-btn px-3 py-1.5 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg" data-id="${
+                    alert.id
+                  }">
+                    <i data-lucide="check-circle" class="size-4 inline mr-1"></i>Accept
+                  </button>
+                </div>
+              </div>
+            `
+            )
+            .join("");
+
+          lucide.createIcons();
+
+          document.querySelectorAll(".accept-emergency-btn").forEach((btn) => {
+            btn.addEventListener("click", () =>
+              handleEmergencyAction(parseInt(btn.dataset.id), "accept")
+            );
+          });
+          document.querySelectorAll(".decline-emergency-btn").forEach((btn) => {
+            btn.addEventListener("click", () =>
+              handleEmergencyAction(parseInt(btn.dataset.id), "decline")
+            );
+          });
+        }
+
+        function renderNonEmergencyRequests() {
+          if (
+            nonEmergencyRequests.filter((r) => r.status === "pending")
+              .length === 0
+          ) {
+            nonEmergencyContainer.innerHTML = `
+              <div class="text-center py-8 text-gray-500">
+                <i data-lucide="check-circle" class="size-12 mx-auto mb-3 text-blue-400"></i>
+                <p>No pending routine requests.</p>
+              </div>
+            `;
+            lucide.createIcons();
+            return;
+          }
+
+          nonEmergencyContainer.innerHTML = nonEmergencyRequests
+            .filter((r) => r.status === "pending")
+            .map(
+              (request) => `
+              <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-blue-200" data-id="${
+                request.id
+              }">
+                <div class="flex items-center gap-4">
+                  <div class="size-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <i data-lucide="droplet" class="size-6 text-blue-600"></i>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2 mb-1">
+                      <h3 class="font-medium text-gray-900">${
+                        request.hospital
+                      }</h3>
+                      <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">${
+                        request.requestType
+                      } • ${request.units} unit${
+                request.units !== 1 ? "s" : ""
+              }</span>
+                    </div>
+                    <p class="text-sm text-gray-600">Blood Type: <strong>${
+                      request.bloodType
+                    }</strong> • ${request.time}</p>
+                  </div>
+                </div>
+                <div class="flex gap-2">
+                  <button class="decline-request-btn px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg" data-id="${
+                    request.id
+                  }">Decline</button>
+                  <button class="accept-request-btn px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg" data-id="${
+                    request.id
+                  }">
+                    <i data-lucide="check-circle" class="size-4 inline mr-1"></i>Accept
+                  </button>
+                </div>
+              </div>
+            `
+            )
+            .join("");
+
+          lucide.createIcons();
+
+          document.querySelectorAll(".accept-request-btn").forEach((btn) => {
+            btn.addEventListener("click", () =>
+              handleNonEmergencyAction(parseInt(btn.dataset.id), "accept")
+            );
+          });
+          document.querySelectorAll(".decline-request-btn").forEach((btn) => {
+            btn.addEventListener("click", () =>
+              handleNonEmergencyAction(parseInt(btn.dataset.id), "decline")
+            );
+          });
+        }
+
+        function handleEmergencyAction(id, action) {
+          const alert = emergencyAlerts.find((a) => a.id === id);
+          if (alert) {
+            alert.status = action === "accept" ? "accepted" : "declined";
+
+            if (action === "accept") {
+              showNotification(
+                `You have accepted the emergency request from ${alert.hospital}. An appointment will be scheduled.`,
+                "success"
+              );
+              // Add to appointments
+              appointments.push({
+                id: `APT${appointments.length + 1}`.padStart(3, "0"),
+                hospital: alert.hospital,
+                date: "Today",
+                time: "ASAP",
+                status: "Pending",
+              });
+            } else {
+              showNotification(
+                `Emergency request from ${alert.hospital} has been postponed.`,
+                "info"
+              );
+            }
+
+            setTimeout(() => {
+              emergencyAlerts = emergencyAlerts.filter((a) => a.id !== id);
+              renderEmergencyAlerts();
+            }, 500);
+          }
+        }
+
+        function handleNonEmergencyAction(id, action) {
+          const request = nonEmergencyRequests.find((r) => r.id === id);
+          if (request) {
+            request.status = action === "accept" ? "accepted" : "declined";
+
+            if (action === "accept") {
+              showNotification(
+                `You have accepted the request from ${request.hospital}. You will be contacted for scheduling.`,
+                "success"
+              );
+            } else {
+              showNotification(
+                `Request from ${request.hospital} has been declined.`,
+                "info"
+              );
+            }
+
+            setTimeout(() => {
+              nonEmergencyRequests = nonEmergencyRequests.filter(
+                (r) => r.id !== id
+              );
+              renderNonEmergencyRequests();
+            }, 500);
+          }
+        }
+
+        function showNotification(message, type = "success") {
+          const bgColor =
+            type === "success"
+              ? "bg-green-50 border-green-600"
+              : "bg-gray-50 border-gray-600";
+          const textColor =
+            type === "success" ? "text-green-900" : "text-gray-900";
+          const iconColor =
+            type === "success" ? "text-green-600" : "text-gray-600";
+          const icon = type === "success" ? "check-circle" : "clock";
+
+          const notification = document.createElement("div");
+          notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50 max-w-md`;
+          notification.innerHTML = `
+            <div class="flex items-center gap-3">
+              <i data-lucide="${icon}" class="size-5 ${iconColor} flex-shrink-0"></i>
+              <p class="${textColor}">${message}</p>
+            </div>
+          `;
+          document.body.appendChild(notification);
+          lucide.createIcons();
+          setTimeout(() => notification.remove(), 4000);
+        }
+
+        // Initial render
+        renderEmergencyAlerts();
+        renderNonEmergencyRequests();
+      });
+    </script>
   </body>
 </html>

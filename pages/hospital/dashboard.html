@@ -270,6 +270,8 @@
                   <td class="py-3 px-4">
                     <button
                       class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                      data-id="REQ001"
+                      onclick="openRequestModal('REQ001')"
                     >
                       View Details
                     </button>
@@ -300,6 +302,8 @@
                   <td class="py-3 px-4">
                     <button
                       class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                      data-id="REQ002"
+                      onclick="openRequestModal('REQ002')"
                     >
                       View Details
                     </button>
@@ -334,6 +338,8 @@
                   <td class="py-3 px-4">
                     <button
                       class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+                      data-id="REQ003"
+                      onclick="openRequestModal('REQ003')"
                     >
                       View Details
                     </button>
@@ -436,6 +442,148 @@
       </div>
     </main>
 
+    <!-- Blood Request Details Modal -->
+    <dialog id="requestModal" class="modal">
+      <div class="modal-box bg-white max-w-lg">
+        <form method="dialog">
+          <button
+            class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4"
+          >
+            <i data-lucide="x" class="size-5"></i>
+          </button>
+        </form>
+        <h3
+          class="font-bold text-xl text-gray-900 mb-6 flex items-center gap-2"
+        >
+          <i data-lucide="droplet" class="size-6 text-red-600"></i>
+          Blood Request Details
+        </h3>
+        <div class="space-y-4" id="requestModalContent">
+          <!-- Content will be populated dynamically -->
+        </div>
+        <div class="modal-action">
+          <form method="dialog">
+            <button
+              class="btn bg-gray-100 hover:bg-gray-200 text-gray-700 border-0"
+            >
+              Close
+            </button>
+          </form>
+        </div>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+    <script>
+      // Dummy blood request data
+      const requestData = {
+        REQ001: {
+          id: "REQ001",
+          patientName: "Michael Johnson",
+          bloodGroup: "O+",
+          quantity: "2 Units",
+          urgency: "Emergency",
+          requestedDate: "2024-11-10",
+          requiredByDate: "2024-11-10",
+          status: "Processing",
+          notes:
+            "Critical patient in ICU. Road accident victim requiring immediate transfusion. Cross-matching in progress.",
+        },
+        REQ002: {
+          id: "REQ002",
+          patientName: "Sarah Williams",
+          bloodGroup: "A+",
+          quantity: "3 Units",
+          urgency: "Normal",
+          requestedDate: "2024-11-10",
+          requiredByDate: "2024-11-15",
+          status: "Approved",
+          notes:
+            "Scheduled surgery on Nov 15. Pre-operative blood arrangement. Patient consent obtained.",
+        },
+        REQ003: {
+          id: "REQ003",
+          patientName: "Robert Chen",
+          bloodGroup: "B-",
+          quantity: "1 Unit",
+          urgency: "Emergency",
+          requestedDate: "2024-11-09",
+          requiredByDate: "2024-11-10",
+          status: "Pending",
+          notes:
+            "Rare blood type needed. Searching for compatible donors in the network. Please expedite.",
+        },
+      };
+
+      function openRequestModal(id) {
+        const request = requestData[id];
+        if (!request) return;
+
+        const urgencyClass =
+          request.urgency === "Emergency"
+            ? "bg-red-600 text-white"
+            : "bg-green-100 text-green-700";
+
+        const statusClass =
+          {
+            Processing: "bg-blue-100 text-blue-700",
+            Approved: "bg-green-100 text-green-700",
+            Pending: "bg-yellow-100 text-yellow-700",
+            Completed: "bg-green-100 text-green-700",
+          }[request.status] || "bg-gray-100 text-gray-700";
+
+        const content = `
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Request ID</p>
+              <p class="font-semibold text-gray-900">${request.id}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Patient Name</p>
+              <p class="font-semibold text-gray-900">${request.patientName}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Blood Group</p>
+              <p><span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${request.bloodGroup}</span></p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Quantity</p>
+              <p class="font-semibold text-gray-900">${request.quantity}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Urgency</p>
+              <p><span class="px-2 py-1 text-xs font-medium ${urgencyClass} rounded-full">${request.urgency}</span></p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Status</p>
+              <p><span class="px-2 py-1 text-xs font-medium ${statusClass} rounded-full">${request.status}</span></p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Requested Date</p>
+              <p class="font-semibold text-gray-900">${request.requestedDate}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">Required By</p>
+              <p class="font-semibold text-gray-900">${request.requiredByDate}</p>
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-200">
+            <p class="text-sm text-gray-500 mb-2">Hospital Notes</p>
+            <p class="text-gray-700 text-sm bg-gray-50 p-3 rounded-lg">${request.notes}</p>
+          </div>
+        `;
+
+        document.getElementById("requestModalContent").innerHTML = content;
+        document.getElementById("requestModal").showModal();
+
+        // Re-initialize Lucide icons in the modal
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }
+    </script>
     <script type="module" src="/main.js"></script>
   </body>
 </html>

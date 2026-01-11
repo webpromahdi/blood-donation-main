@@ -2,17 +2,14 @@ import { createIcons, icons } from "lucide";
 
 createIcons({ icons });
 
-// Initialize all Lucide icons on page load
 document.addEventListener("DOMContentLoaded", () => {
   createIcons({ icons });
 });
 
-// Expose lucide globally for dynamic icon updates
 window.lucide = {
   createIcons: () => createIcons({ icons }),
 };
 
-// Re-initialize icons when content is dynamically added
 window.initIcons = () => {
   createIcons({ icons });
 };

@@ -431,10 +431,231 @@
               </tbody>
             </table>
           </div>
+          <!-- Empty State (hidden by default) -->
+          <div id="emptyState" class="hidden text-center py-16 px-6">
+            <div
+              class="inline-flex items-center justify-center size-20 rounded-full bg-gray-100 mb-4"
+            >
+              <i data-lucide="calendar" class="size-10 text-gray-400"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+              No pending requests
+            </h3>
+            <p class="text-gray-600 mb-6">
+              All voluntary donation requests have been processed
+            </p>
+          </div>
         </div>
       </div>
     </main>
 
     <script type="module" src="/main.js"></script>
+    <script>
+      // Hospital Voluntary Requests - Interactive State Management
+      document.addEventListener("DOMContentLoaded", function () {
+        // Request data
+        let requests = [
+          {
+            id: "VR001",
+            donorName: "John Smith",
+            bloodType: "O+",
+            phone: "555-0101",
+            email: "john@email.com",
+            requestedDate: "2024-12-10",
+            requestedTime: "10:00 AM",
+            submittedOn: "2 hours ago",
+            status: "Pending",
+          },
+          {
+            id: "VR002",
+            donorName: "Maria Garcia",
+            bloodType: "A+",
+            phone: "555-0102",
+            email: "maria@email.com",
+            requestedDate: "2024-12-12",
+            requestedTime: "02:00 PM",
+            submittedOn: "5 hours ago",
+            status: "Pending",
+          },
+          {
+            id: "VR003",
+            donorName: "David Lee",
+            bloodType: "B-",
+            phone: "555-0103",
+            email: "david@email.com",
+            requestedDate: "2024-12-08",
+            requestedTime: "11:00 AM",
+            submittedOn: "1 day ago",
+            status: "Pending",
+          },
+          {
+            id: "VR004",
+            donorName: "Sarah Johnson",
+            bloodType: "O-",
+            phone: "555-0104",
+            email: "sarah@email.com",
+            requestedDate: "2024-12-15",
+            requestedTime: "09:00 AM",
+            submittedOn: "3 hours ago",
+            status: "Pending",
+          },
+        ];
+
+        const tableBody = document.querySelector("tbody");
+        const emptyState = document.getElementById("emptyState");
+        const pendingBadge = document.querySelector(
+          ".bg-blue-600.text-white.rounded-full"
+        );
+        const statCards = document.querySelectorAll(
+          ".grid.grid-cols-1.md\\:grid-cols-3 .text-3xl"
+        );
+
+        function updateStats() {
+          const pending = requests.filter((r) => r.status === "Pending").length;
+          const approved = requests.filter(
+            (r) => r.status === "Approved"
+          ).length;
+          const uniqueDonors = new Set(
+            requests
+              .filter((r) => r.status === "Pending")
+              .map((r) => r.donorName)
+          ).size;
+
+          if (pendingBadge) {
+            pendingBadge.textContent = `${pending} Pending Requests`;
+          }
+          if (statCards.length >= 3) {
+            statCards[0].textContent = requests.length;
+            statCards[1].textContent = pending;
+            statCards[2].textContent = uniqueDonors;
+          }
+        }
+
+        function renderRequests() {
+          const pendingRequests = requests.filter(
+            (r) => r.status === "Pending"
+          );
+
+          if (pendingRequests.length === 0) {
+            tableBody.parentElement.classList.add("hidden");
+            emptyState.classList.remove("hidden");
+          } else {
+            tableBody.parentElement.classList.remove("hidden");
+            emptyState.classList.add("hidden");
+
+            tableBody.innerHTML = pendingRequests
+              .map(
+                (req) => `
+              <tr class="border-b border-gray-100 hover:bg-gray-50" data-id="${req.id}">
+                <td class="py-3 px-4 text-gray-900 font-medium">${req.id}</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                      <i data-lucide="user" class="size-5 text-red-600"></i>
+                    </div>
+                    <span class="font-medium text-gray-900">${req.donorName}</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${req.bloodType}</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="text-sm text-gray-600">
+                    <div class="flex items-center gap-1"><i data-lucide="phone" class="size-4"></i>${req.phone}</div>
+                    <div class="flex items-center gap-1"><i data-lucide="mail" class="size-4"></i>${req.email}</div>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-gray-900">${req.requestedDate}</td>
+                <td class="py-3 px-4 text-gray-900">${req.requestedTime}</td>
+                <td class="py-3 px-4 text-gray-600">${req.submittedOn}</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">${req.status}</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex gap-2">
+                    <button class="approve-btn p-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg" data-id="${req.id}" title="Accept">
+                      <i data-lucide="check" class="size-4"></i>
+                    </button>
+                    <button class="reject-btn p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg" data-id="${req.id}" title="Decline">
+                      <i data-lucide="x" class="size-4"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `
+              )
+              .join("");
+
+            lucide.createIcons();
+            attachEventListeners();
+          }
+          updateStats();
+        }
+
+        function attachEventListeners() {
+          document.querySelectorAll(".approve-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              approveRequest(this.dataset.id);
+            });
+          });
+          document.querySelectorAll(".reject-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              rejectRequest(this.dataset.id);
+            });
+          });
+        }
+
+        function approveRequest(id) {
+          const request = requests.find((r) => r.id === id);
+          if (request) {
+            request.status = "Approved";
+            showNotification(
+              `Request from ${request.donorName} has been approved! Appointment scheduled.`,
+              "success"
+            );
+            renderRequests();
+          }
+        }
+
+        function rejectRequest(id) {
+          const request = requests.find((r) => r.id === id);
+          if (request) {
+            request.status = "Rejected";
+            showNotification(
+              `Request from ${request.donorName} has been declined.`,
+              "info"
+            );
+            renderRequests();
+          }
+        }
+
+        function showNotification(message, type = "success") {
+          const bgColor =
+            type === "success"
+              ? "bg-green-50 border-green-600"
+              : "bg-gray-50 border-gray-600";
+          const textColor =
+            type === "success" ? "text-green-900" : "text-gray-900";
+          const iconColor =
+            type === "success" ? "text-green-600" : "text-gray-600";
+          const icon = type === "success" ? "check-circle" : "info";
+
+          const notification = document.createElement("div");
+          notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50`;
+          notification.innerHTML = `
+            <div class="flex items-center gap-3">
+              <i data-lucide="${icon}" class="size-5 ${iconColor}"></i>
+              <p class="${textColor}">${message}</p>
+            </div>
+          `;
+          document.body.appendChild(notification);
+          lucide.createIcons();
+          setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Initial render
+        renderRequests();
+      });
+    </script>
   </body>
 </html>

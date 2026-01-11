@@ -529,5 +529,359 @@
     </main>
 
     <script type="module" src="/main.js"></script>
+    <script>
+      // Seeker Request Details - Interactive State Management
+      document.addEventListener("DOMContentLoaded", function () {
+        // Donors data
+        let donors = [
+          {
+            id: 1,
+            name: "Michael Johnson",
+            bloodType: "O+",
+            location: "Downtown",
+            status: "Confirmed",
+          },
+          {
+            id: 2,
+            name: "Sarah Williams",
+            bloodType: "O+",
+            location: "Westside",
+            status: "Available",
+          },
+          {
+            id: 3,
+            name: "Robert Miller",
+            bloodType: "O+",
+            location: "Downtown",
+            status: "Confirmed",
+          },
+          {
+            id: 4,
+            name: "Emily Chen",
+            bloodType: "O+",
+            location: "Eastside",
+            status: "Available",
+          },
+          {
+            id: 5,
+            name: "David Brown",
+            bloodType: "O-",
+            location: "Northside",
+            status: "Available",
+          },
+        ];
+
+        // Timeline steps
+        let timelineSteps = [
+          {
+            step: 1,
+            label: "Request Submitted",
+            icon: "send",
+            status: "completed",
+            time: "2024-11-24 10:30 AM",
+          },
+          {
+            step: 2,
+            label: "Request Verified",
+            icon: "check-circle",
+            status: "completed",
+            time: "2024-11-24 10:35 AM",
+          },
+          {
+            step: 3,
+            label: "Matching Donors",
+            icon: "clock",
+            status: "completed",
+            time: "2024-11-24 11:00 AM",
+          },
+          {
+            step: 4,
+            label: "Donor Matched",
+            icon: "user-check",
+            status: "current",
+            time: "2024-11-24 02:15 PM",
+          },
+          {
+            step: 5,
+            label: "Donation Scheduled",
+            icon: "calendar",
+            status: "pending",
+            time: null,
+          },
+          {
+            step: 6,
+            label: "Completed",
+            icon: "package",
+            status: "pending",
+            time: null,
+          },
+        ];
+
+        const donorListContainer = document.querySelector(".space-y-4");
+        const timelineContainer = document.querySelector(
+          ".p-6.bg-white.border.border-gray-200.rounded-xl .space-y-4"
+        );
+
+        function getStatusBadge(status) {
+          switch (status) {
+            case "Confirmed":
+              return { bg: "bg-green-600", text: "text-white", border: "" };
+            case "Available":
+              return { bg: "bg-blue-100", text: "text-blue-700", border: "" };
+            case "Selected":
+              return { bg: "bg-purple-600", text: "text-white", border: "" };
+            default:
+              return { bg: "bg-gray-100", text: "text-gray-700", border: "" };
+          }
+        }
+
+        function renderDonors() {
+          const confirmedDonors = donors.filter(
+            (d) => d.status === "Confirmed" || d.status === "Selected"
+          );
+          const totalDonors = donors.length;
+
+          // Update donor count badge
+          const countBadge = document
+            .querySelector(".space-y-4")
+            .previousElementSibling?.querySelector("span");
+          if (countBadge) {
+            countBadge.textContent = `${totalDonors} Donors`;
+          }
+
+          donorListContainer.innerHTML = donors
+            .map((donor) => {
+              const badge = getStatusBadge(donor.status);
+              const isHighlighted =
+                donor.status === "Confirmed" || donor.status === "Selected";
+
+              return `
+              <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg ${
+                isHighlighted ? "bg-green-50" : ""
+              }" data-donor-id="${donor.id}">
+                <div class="flex items-center gap-4">
+                  <div class="size-12 ${
+                    isHighlighted ? "bg-green-100" : "bg-gray-100"
+                  } rounded-full flex items-center justify-center">
+                    <i data-lucide="user" class="size-6 ${
+                      isHighlighted ? "text-green-600" : "text-gray-600"
+                    }"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-medium text-gray-900">${donor.name}</h4>
+                    <div class="flex items-center gap-4 text-sm text-gray-600">
+                      <span class="flex items-center gap-1"><i data-lucide="droplet" class="size-4 text-red-600"></i>${
+                        donor.bloodType
+                      }</span>
+                      <span class="flex items-center gap-1"><i data-lucide="map-pin" class="size-4"></i>${
+                        donor.location
+                      }</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  ${
+                    donor.status === "Available"
+                      ? `
+                    <button class="select-donor-btn px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg" data-donor-id="${donor.id}">
+                      Select Donor
+                    </button>
+                  `
+                      : `
+                    <span class="px-3 py-1 text-sm ${badge.bg} ${badge.text} rounded-full">${donor.status}</span>
+                  `
+                  }
+                  <a href="/pages/seeker/chat.html" class="p-2 border border-gray-300 hover:bg-gray-100 rounded-lg">
+                    <i data-lucide="message-square" class="size-5 text-gray-600"></i>
+                  </a>
+                </div>
+              </div>
+            `;
+            })
+            .join("");
+
+          lucide.createIcons();
+
+          // Attach select button listeners
+          document.querySelectorAll(".select-donor-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              selectDonor(parseInt(this.dataset.donorId));
+            });
+          });
+        }
+
+        function selectDonor(donorId) {
+          const donor = donors.find((d) => d.id === donorId);
+          if (donor) {
+            donor.status = "Selected";
+
+            // Advance timeline to "Donation Scheduled"
+            const scheduledStep = timelineSteps.find((s) => s.step === 5);
+            if (scheduledStep && scheduledStep.status === "pending") {
+              // Mark "Donor Matched" as completed
+              const matchedStep = timelineSteps.find((s) => s.step === 4);
+              if (matchedStep) matchedStep.status = "completed";
+
+              scheduledStep.status = "current";
+              scheduledStep.time = new Date().toLocaleString();
+              renderTimeline();
+            }
+
+            showNotification(
+              `${donor.name} has been selected as donor!`,
+              "success"
+            );
+            renderDonors();
+          }
+        }
+
+        function renderTimeline() {
+          const timelineEl = document.querySelector(
+            ".p-6.bg-white.border.border-gray-200.rounded-xl:has(h2)"
+          );
+          if (!timelineEl) return;
+
+          const timelineSpace = timelineEl.querySelector(".space-y-4");
+          if (!timelineSpace) return;
+
+          timelineSpace.innerHTML = timelineSteps
+            .map((step, index) => {
+              const isLast = index === timelineSteps.length - 1;
+
+              let bgColor, textColor, lineColor;
+              switch (step.status) {
+                case "completed":
+                  bgColor = "bg-green-100";
+                  textColor = "text-green-600";
+                  lineColor = "bg-green-200";
+                  break;
+                case "current":
+                  bgColor = "bg-blue-100";
+                  textColor = "text-blue-600";
+                  lineColor = "bg-gray-200";
+                  break;
+                default:
+                  bgColor = "bg-gray-100";
+                  textColor = "text-gray-400";
+                  lineColor = "bg-gray-200";
+              }
+
+              const labelColor =
+                step.status === "pending" ? "text-gray-400" : "text-gray-900";
+              const descColor =
+                step.status === "pending" ? "text-gray-400" : "text-gray-600";
+              const timeColor =
+                step.status === "completed"
+                  ? "text-green-600"
+                  : step.status === "current"
+                  ? "text-blue-600"
+                  : "text-gray-400";
+
+              const descriptions = {
+                "Request Submitted":
+                  "Your blood request was successfully submitted",
+                "Request Verified": "Admin verified your request and details",
+                "Matching Donors": "System is notifying compatible donors",
+                "Donor Matched":
+                  "Compatible donors have confirmed availability",
+                "Donation Scheduled": "Donation appointment has been scheduled",
+                Completed: "Blood donation completed successfully",
+              };
+
+              return `
+              <div class="flex gap-4">
+                <div class="flex flex-col items-center">
+                  <div class="size-10 rounded-full ${bgColor} flex items-center justify-center">
+                    <i data-lucide="${
+                      step.icon
+                    }" class="size-5 ${textColor}"></i>
+                  </div>
+                  ${
+                    !isLast
+                      ? `<div class="w-0.5 h-full ${lineColor} my-2"></div>`
+                      : ""
+                  }
+                </div>
+                <div class="${!isLast ? "pb-4" : ""}">
+                  <h4 class="font-medium ${labelColor}">${step.label}</h4>
+                  <p class="text-sm ${descColor}">${
+                descriptions[step.label] || ""
+              }</p>
+                  <p class="text-sm ${timeColor} mt-1">${
+                step.time || "Pending"
+              }</p>
+                  ${
+                    step.status === "current" && step.step < 6
+                      ? `
+                    <button class="advance-timeline-btn mt-2 px-3 py-1 text-sm bg-green-600 hover:bg-green-700 text-white rounded-lg" data-step="${step.step}">
+                      Mark Complete
+                    </button>
+                  `
+                      : ""
+                  }
+                </div>
+              </div>
+            `;
+            })
+            .join("");
+
+          lucide.createIcons();
+
+          // Attach advance button listeners
+          document.querySelectorAll(".advance-timeline-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              advanceTimeline(parseInt(this.dataset.step));
+            });
+          });
+        }
+
+        function advanceTimeline(currentStep) {
+          const step = timelineSteps.find((s) => s.step === currentStep);
+          if (step) {
+            step.status = "completed";
+            step.time = step.time || new Date().toLocaleString();
+
+            const nextStep = timelineSteps.find(
+              (s) => s.step === currentStep + 1
+            );
+            if (nextStep) {
+              nextStep.status = "current";
+              nextStep.time = new Date().toLocaleString();
+            }
+
+            showNotification(`${step.label} marked as complete!`, "success");
+            renderTimeline();
+          }
+        }
+
+        function showNotification(message, type = "success") {
+          const bgColor =
+            type === "success"
+              ? "bg-green-50 border-green-600"
+              : "bg-blue-50 border-blue-600";
+          const textColor =
+            type === "success" ? "text-green-900" : "text-blue-900";
+          const iconColor =
+            type === "success" ? "text-green-600" : "text-blue-600";
+
+          const notification = document.createElement("div");
+          notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50`;
+          notification.innerHTML = `
+            <div class="flex items-center gap-3">
+              <i data-lucide="check-circle" class="size-5 ${iconColor}"></i>
+              <p class="${textColor}">${message}</p>
+            </div>
+          `;
+          document.body.appendChild(notification);
+          lucide.createIcons();
+          setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Initial renders
+        renderDonors();
+        // Timeline is already in HTML, but we can re-render it for interactivity
+        // renderTimeline(); // Uncomment to enable full dynamic timeline
+      });
+    </script>
   </body>
 </html>

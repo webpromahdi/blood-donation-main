@@ -581,10 +581,328 @@
               </tbody>
             </table>
           </div>
+          <!-- Empty State (hidden by default) -->
+          <div id="emptyState" class="hidden text-center py-16 px-6">
+            <div
+              class="inline-flex items-center justify-center size-20 rounded-full bg-gray-100 mb-4"
+            >
+              <i data-lucide="droplet" class="size-10 text-gray-400"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+              No donors found
+            </h3>
+            <p id="emptyStateMessage" class="text-gray-600 mb-6">
+              No donors match your current filters
+            </p>
+            <button
+              id="clearFiltersBtn"
+              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+            >
+              Clear Filters
+            </button>
+          </div>
         </div>
       </div>
     </main>
 
     <script type="module" src="/main.js"></script>
+    <script>
+      // Hospital Donor List - Interactive State Management
+      document.addEventListener("DOMContentLoaded", function () {
+        // Donor data
+        const donors = [
+          {
+            id: "DON001",
+            name: "John Smith",
+            age: 28,
+            bloodType: "O+",
+            location: "Downtown",
+            lastDonation: "2 weeks ago",
+            totalDonations: 12,
+            isAvailable: true,
+            contacted: false,
+          },
+          {
+            id: "DON002",
+            name: "Maria Garcia",
+            age: 32,
+            bloodType: "A+",
+            location: "Uptown",
+            lastDonation: "1 month ago",
+            totalDonations: 8,
+            isAvailable: true,
+            contacted: false,
+          },
+          {
+            id: "DON003",
+            name: "David Lee",
+            age: 25,
+            bloodType: "B-",
+            location: "Westside",
+            lastDonation: "3 weeks ago",
+            totalDonations: 5,
+            isAvailable: false,
+            contacted: false,
+          },
+          {
+            id: "DON004",
+            name: "Sarah Johnson",
+            age: 30,
+            bloodType: "O-",
+            location: "Eastside",
+            lastDonation: "1 week ago",
+            totalDonations: 15,
+            isAvailable: true,
+            contacted: false,
+          },
+          {
+            id: "DON005",
+            name: "Michael Brown",
+            age: 35,
+            bloodType: "AB+",
+            location: "Central",
+            lastDonation: "2 months ago",
+            totalDonations: 20,
+            isAvailable: true,
+            contacted: false,
+          },
+          {
+            id: "DON006",
+            name: "Emma Wilson",
+            age: 27,
+            bloodType: "A-",
+            location: "Northside",
+            lastDonation: "3 months ago",
+            totalDonations: 6,
+            isAvailable: true,
+            contacted: false,
+          },
+          {
+            id: "DON007",
+            name: "James Taylor",
+            age: 29,
+            bloodType: "B+",
+            location: "Southside",
+            lastDonation: "5 months ago",
+            totalDonations: 10,
+            isAvailable: true,
+            contacted: false,
+          },
+          {
+            id: "DON008",
+            name: "Lisa Anderson",
+            age: 31,
+            bloodType: "AB-",
+            location: "Downtown",
+            lastDonation: "3 months ago",
+            totalDonations: 7,
+            isAvailable: false,
+            contacted: false,
+          },
+        ];
+
+        let selectedBloodGroup = "All Donors";
+        let availableOnly = false;
+
+        const filterContainer = document.querySelector(".flex.flex-wrap.gap-3");
+        const filterButtons = filterContainer.querySelectorAll("button");
+        const tableBody = document.querySelector("tbody");
+        const donorCountText = document.querySelector(".text-sm.text-gray-600");
+        const emptyState = document.getElementById("emptyState");
+        const emptyStateMessage = document.getElementById("emptyStateMessage");
+        const clearFiltersBtn = document.getElementById("clearFiltersBtn");
+
+        // Set up filter button event listeners
+        filterButtons.forEach((btn, index) => {
+          btn.addEventListener("click", function () {
+            const btnText = btn.textContent.trim();
+
+            if (btnText === "Available Only") {
+              availableOnly = !availableOnly;
+              btn.classList.toggle("border-green-600", availableOnly);
+              btn.classList.toggle("text-green-600", availableOnly);
+              btn.classList.toggle("bg-green-50", availableOnly);
+              btn.classList.toggle("border-gray-300", !availableOnly);
+              btn.classList.toggle("text-gray-700", !availableOnly);
+            } else {
+              selectedBloodGroup = btnText;
+              // Update active state on all blood group buttons
+              filterButtons.forEach((b) => {
+                const bText = b.textContent.trim();
+                if (bText !== "Available Only") {
+                  const isActive = bText === selectedBloodGroup;
+                  b.classList.toggle("border-red-600", isActive);
+                  b.classList.toggle("text-red-600", isActive);
+                  b.classList.toggle("bg-red-50", isActive);
+                  b.classList.toggle("border-gray-300", !isActive);
+                  b.classList.toggle("text-gray-700", !isActive);
+                }
+              });
+            }
+            renderDonors();
+          });
+        });
+
+        // Clear filters button
+        clearFiltersBtn.addEventListener("click", function () {
+          selectedBloodGroup = "All Donors";
+          availableOnly = false;
+          filterButtons.forEach((btn) => {
+            const btnText = btn.textContent.trim();
+            if (btnText === "All Donors") {
+              btn.classList.add("border-red-600", "text-red-600");
+              btn.classList.remove("border-gray-300", "text-gray-700");
+            } else if (btnText === "Available Only") {
+              btn.classList.remove(
+                "border-green-600",
+                "text-green-600",
+                "bg-green-50"
+              );
+              btn.classList.add("border-gray-300", "text-gray-700");
+            } else {
+              btn.classList.remove(
+                "border-red-600",
+                "text-red-600",
+                "bg-red-50"
+              );
+              btn.classList.add("border-gray-300", "text-gray-700");
+            }
+          });
+          renderDonors();
+        });
+
+        function renderDonors() {
+          const filtered = donors.filter((donor) => {
+            const matchesBlood =
+              selectedBloodGroup === "All Donors" ||
+              donor.bloodType === selectedBloodGroup;
+            const matchesAvailable = !availableOnly || donor.isAvailable;
+            return matchesBlood && matchesAvailable;
+          });
+
+          if (filtered.length === 0) {
+            tableBody.parentElement.classList.add("hidden");
+            emptyState.classList.remove("hidden");
+            emptyStateMessage.textContent =
+              selectedBloodGroup !== "All Donors"
+                ? `No donors found for ${selectedBloodGroup} blood type`
+                : "No donors match your current filters";
+            donorCountText.textContent = "Total 0 donors in your network";
+          } else {
+            tableBody.parentElement.classList.remove("hidden");
+            emptyState.classList.add("hidden");
+            donorCountText.textContent = `Total ${filtered.length} donor${
+              filtered.length !== 1 ? "s" : ""
+            } ${
+              selectedBloodGroup !== "All Donors"
+                ? `with ${selectedBloodGroup} blood type `
+                : ""
+            }in your network`;
+
+            tableBody.innerHTML = filtered
+              .map(
+                (donor) => `
+              <tr class="border-b border-gray-100 hover:bg-gray-50" data-id="${
+                donor.id
+              }">
+                <td class="py-3 px-4 text-gray-900">${donor.id}</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                      <i data-lucide="user" class="size-5 text-red-600"></i>
+                    </div>
+                    <div>
+                      <div class="font-medium text-gray-900">${donor.name}</div>
+                      <div class="text-sm text-gray-500">${
+                        donor.age
+                      } years</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${
+                    donor.bloodType
+                  }</span>
+                </td>
+                <td class="py-3 px-4 text-gray-600">
+                  <i data-lucide="map-pin" class="size-4 inline mr-1"></i>${
+                    donor.location
+                  }
+                </td>
+                <td class="py-3 px-4 text-gray-600">${donor.lastDonation}</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">${
+                    donor.totalDonations
+                  } times</span>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border ${
+                    donor.isAvailable
+                      ? "border-green-600 text-green-600"
+                      : "border-gray-600 text-gray-600"
+                  } rounded-full">
+                    ${donor.isAvailable ? "Available" : "Not Available"}
+                  </span>
+                </td>
+                <td class="py-3 px-4">
+                  ${
+                    donor.contacted
+                      ? '<span class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-lg">Contacted</span>'
+                      : `<div class="flex gap-2">
+                        <button class="call-btn px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg" data-id="${donor.id}">
+                          <i data-lucide="phone" class="size-4 inline mr-1"></i>Call
+                        </button>
+                        <button class="chat-btn px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg" data-id="${donor.id}">
+                          <i data-lucide="message-square" class="size-4 inline mr-1"></i>Chat
+                        </button>
+                      </div>`
+                  }
+                </td>
+              </tr>
+            `
+              )
+              .join("");
+
+            // Re-init lucide icons
+            lucide.createIcons();
+
+            // Attach event listeners for Call/Chat buttons
+            document.querySelectorAll(".call-btn, .chat-btn").forEach((btn) => {
+              btn.addEventListener("click", function () {
+                const donorId = this.dataset.id;
+                markAsContacted(donorId);
+              });
+            });
+          }
+        }
+
+        function markAsContacted(donorId) {
+          const donor = donors.find((d) => d.id === donorId);
+          if (donor) {
+            donor.contacted = true;
+            renderDonors();
+            showNotification(`${donor.name} has been marked as contacted`);
+          }
+        }
+
+        function showNotification(message) {
+          const notification = document.createElement("div");
+          notification.className =
+            "fixed top-20 right-8 p-4 bg-green-50 border-l-4 border-green-600 rounded-lg shadow-lg z-50 animate-slide-in";
+          notification.innerHTML = `
+            <div class="flex items-center gap-3">
+              <i data-lucide="check-circle" class="size-5 text-green-600"></i>
+              <p class="text-green-900">${message}</p>
+            </div>
+          `;
+          document.body.appendChild(notification);
+          lucide.createIcons();
+          setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Initial render
+        renderDonors();
+      });
+    </script>
   </body>
 </html>
