@@ -1332,11 +1332,16 @@
                     }</strong> • ${request.time}</p>
                   </div>
                 </div>
-                <button class="view-details-btn px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg" data-id="${
-                  request.id
-                }" data-type="normal">
-                  <i data-lucide="eye" class="size-4 inline mr-1"></i>View Details
-                </button>
+                <div class="flex gap-2">
+                  <button class="decline-request-btn px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg" data-id="${
+                    request.id
+                  }">Decline</button>
+                  <button class="view-details-btn px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg" data-id="${
+                    request.id
+                  }" data-type="normal">
+                    <i data-lucide="eye" class="size-4 inline mr-1"></i>View Details
+                  </button>
+                </div>
               </div>
             `
             )
@@ -1376,6 +1381,14 @@
               handleDecline(id, "emergency");
             });
           });
+
+          // Decline buttons for non-emergency
+          document.querySelectorAll(".decline-request-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const id = parseInt(btn.dataset.id);
+              handleDecline(id, "normal");
+            });
+          });
         }
 
         // ============================================
@@ -1392,6 +1405,17 @@
               setTimeout(() => {
                 emergencyAlerts = emergencyAlerts.filter((a) => a.id !== id);
                 renderEmergencyAlerts();
+              }, 500);
+            }
+          } else if (type === "normal") {
+            const request = nonEmergencyRequests.find((r) => r.id === id);
+            if (request) {
+              showNotification(`You have declined this request.`, "info");
+              setTimeout(() => {
+                nonEmergencyRequests = nonEmergencyRequests.filter(
+                  (r) => r.id !== id
+                );
+                renderNonEmergencyRequests();
               }, 500);
             }
           }
