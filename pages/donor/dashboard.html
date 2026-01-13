@@ -551,13 +551,15 @@
       <div class="absolute inset-0 flex items-center justify-center p-4">
         <div
           id="modalContent"
-          class="bg-white rounded-xl shadow-xl w-full max-w-lg transform transition-all scale-95 opacity-0"
+          class="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col transform transition-all scale-95 opacity-0"
         >
           <!-- Modal Header -->
           <div
-            class="flex items-center justify-between p-6 border-b border-gray-200"
+            class="flex items-center justify-between p-6 border-b border-gray-200 shrink-0"
           >
-            <h3 class="text-lg font-semibold text-gray-900">Request Details</h3>
+            <h3 class="text-lg font-semibold text-gray-900">
+              Blood Request Details
+            </h3>
             <button
               id="modalCloseBtn"
               class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -567,7 +569,7 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="p-6 space-y-4">
+          <div class="p-6 space-y-5 overflow-y-auto flex-1">
             <!-- Hospital Info -->
             <div class="flex items-center gap-4">
               <div
@@ -583,41 +585,84 @@
                 >
                   Hospital Name
                 </h4>
+                <p id="modalCity" class="text-sm text-gray-600">City</p>
                 <p id="modalUrgency" class="text-sm text-red-600 font-medium">
-                  Critical Request
+                  Emergency Request
                 </p>
               </div>
             </div>
 
-            <!-- Details Grid -->
-            <div class="grid grid-cols-2 gap-4 pt-4">
+            <!-- Patient Info Section -->
+            <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <h5
+                class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2"
+              >
+                <i data-lucide="user" class="size-4 text-blue-600"></i>
+                Patient Information
+              </h5>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <p class="text-xs text-gray-500">Patient Name</p>
+                  <p id="modalPatientName" class="font-medium text-gray-900">
+                    -
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500">Age</p>
+                  <p id="modalPatientAge" class="font-medium text-gray-900">
+                    -
+                  </p>
+                </div>
+                <div class="col-span-2">
+                  <p class="text-xs text-gray-500">Contact Phone</p>
+                  <p id="modalContactPhone" class="font-medium text-gray-900">
+                    -
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Request Details Grid -->
+            <div class="grid grid-cols-2 gap-4">
               <div class="p-3 bg-gray-50 rounded-lg">
                 <p class="text-xs text-gray-500 mb-1">Blood Type Required</p>
-                <p id="modalBloodType" class="font-semibold text-gray-900">
+                <p
+                  id="modalBloodType"
+                  class="font-semibold text-gray-900 text-lg"
+                >
                   O+
                 </p>
               </div>
+
               <div class="p-3 bg-gray-50 rounded-lg">
                 <p class="text-xs text-gray-500 mb-1">Units Needed</p>
-                <p id="modalUnits" class="font-semibold text-gray-900">
+                <p id="modalUnits" class="font-semibold text-gray-900 text-lg">
                   1 unit
                 </p>
               </div>
+
               <div class="p-3 bg-gray-50 rounded-lg">
-                <p class="text-xs text-gray-500 mb-1">Request Time</p>
+                <p class="text-xs text-gray-500 mb-1">Required By</p>
+                <p id="modalRequiredDate" class="font-semibold text-gray-900">
+                  -
+                </p>
+              </div>
+
+              <div class="p-3 bg-gray-50 rounded-lg">
+                <p class="text-xs text-gray-500 mb-1">Requested</p>
                 <p id="modalTime" class="font-semibold text-gray-900">
                   2 hours ago
                 </p>
               </div>
-              <div class="p-3 bg-gray-50 rounded-lg">
-                <p class="text-xs text-gray-500 mb-1">Distance</p>
-                <p id="modalDistance" class="font-semibold text-gray-900">
-                  ~5 km away
-                </p>
-              </div>
             </div>
 
-            <!-- Additional Info -->
+            <!-- Medical Reason -->
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <p class="text-xs text-gray-500 mb-2">Medical Reason</p>
+              <p id="modalMedicalReason" class="text-sm text-gray-700">-</p>
+            </div>
+
+            <!-- Important Note -->
             <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
               <div class="flex items-start gap-3">
                 <i
@@ -629,9 +674,9 @@
                     Important Note
                   </p>
                   <p class="text-sm text-yellow-700 mt-1">
-                    By accepting this request, you commit to donating blood at
-                    this hospital. Please ensure you are healthy and eligible to
-                    donate.
+                    By accepting this request, you confirm that you are
+                    currently healthy and willing to donate blood at the
+                    specified hospital.
                   </p>
                 </div>
               </div>
@@ -640,7 +685,7 @@
 
           <!-- Modal Footer -->
           <div
-            class="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl"
+            class="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl shrink-0"
           >
             <button
               id="modalCancelBtn"
@@ -652,8 +697,8 @@
               id="modalAcceptBtn"
               class="px-6 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
             >
-              <i data-lucide="check-circle" class="size-4 inline mr-1"></i
-              >Accept Request
+              <i data-lucide="check-circle" class="size-4 inline mr-1"></i>
+              Accept Request
             </button>
           </div>
         </div>
@@ -684,23 +729,35 @@
         let emergencyAlerts = [
           {
             id: 1,
+            patientName: "Rahul Sharma",
+            patientAge: 45,
+            contactPhone: "+91 98765 43210",
             bloodType: "O+",
             hospital: "Regional Hospital",
+            city: "Mumbai",
             urgency: "Critical",
+            requiredByDate: "2026-01-14",
+            medicalReason:
+              "Emergency surgery required due to accident. Patient has lost significant blood and needs immediate transfusion.",
             time: "2 hours ago",
-            units: 1,
-            distance: "3 km",
+            units: 2,
             status: "pending",
             type: "emergency",
           },
           {
             id: 2,
+            patientName: "Priya Patel",
+            patientAge: 32,
+            contactPhone: "+91 87654 32109",
             bloodType: "O+",
-            hospital: "Community Medical",
+            hospital: "Community Medical Center",
+            city: "Mumbai",
             urgency: "Urgent",
+            requiredByDate: "2026-01-15",
+            medicalReason:
+              "Post-delivery complications. Mother needs blood transfusion urgently.",
             time: "5 hours ago",
-            units: 2,
-            distance: "7 km",
+            units: 1,
             status: "pending",
             type: "emergency",
           },
@@ -710,23 +767,34 @@
         let nonEmergencyRequests = [
           {
             id: 101,
+            patientName: "Amit Kumar",
+            patientAge: 58,
+            contactPhone: "+91 99887 76655",
             bloodType: "O+",
             hospital: "General Hospital",
+            city: "Pune",
             urgency: "Routine",
+            requiredByDate: "2026-01-20",
+            medicalReason:
+              "Scheduled surgery for knee replacement. Blood required as precautionary measure.",
             time: "1 day ago",
             units: 2,
-            distance: "5 km",
             status: "pending",
             type: "normal",
           },
           {
             id: 102,
+            patientName: "Sneha Desai",
+            patientAge: 28,
+            contactPhone: "+91 88776 65544",
             bloodType: "O+",
             hospital: "Valley Medical Center",
+            city: "Nashik",
             urgency: "Scheduled",
+            requiredByDate: "2026-01-25",
+            medicalReason: "Thalassemia patient requiring regular transfusion.",
             time: "2 days ago",
             units: 1,
-            distance: "10 km",
             status: "pending",
             type: "normal",
           },
@@ -776,37 +844,87 @@
         // MODAL FUNCTIONS
         // ============================================
         function openModal(request) {
+          if (!request) {
+            console.warn("openModal called with no request data");
+            return;
+          }
+
           selectedRequest = request;
 
-          // Populate modal with request data
-          document.getElementById("modalHospitalName").textContent =
-            request.hospital;
-          document.getElementById("modalBloodType").textContent =
-            request.bloodType;
-          document.getElementById("modalUnits").textContent =
-            request.units + " unit" + (request.units > 1 ? "s" : "");
-          document.getElementById("modalTime").textContent = request.time;
-          document.getElementById("modalDistance").textContent =
-            "~" + request.distance + " away";
-
-          // Set urgency styling
+          // Get all modal elements
+          const hospitalEl = document.getElementById("modalHospitalName");
+          const cityEl = document.getElementById("modalCity");
+          const bloodTypeEl = document.getElementById("modalBloodType");
+          const unitsEl = document.getElementById("modalUnits");
+          const timeEl = document.getElementById("modalTime");
           const modalIcon = document.getElementById("modalIcon");
           const modalUrgency = document.getElementById("modalUrgency");
+          const patientNameEl = document.getElementById("modalPatientName");
+          const patientAgeEl = document.getElementById("modalPatientAge");
+          const contactPhoneEl = document.getElementById("modalContactPhone");
+          const requiredDateEl = document.getElementById("modalRequiredDate");
+          const medicalReasonEl = document.getElementById("modalMedicalReason");
 
-          if (request.type === "emergency") {
-            modalIcon.className =
-              "size-14 bg-red-100 rounded-full flex items-center justify-center";
-            modalUrgency.textContent = request.urgency + " Request";
-            modalUrgency.className = "text-sm text-red-600 font-medium";
-            modalAcceptBtn.className =
-              "px-6 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors";
-          } else {
-            modalIcon.className =
-              "size-14 bg-blue-100 rounded-full flex items-center justify-center";
-            modalUrgency.textContent = request.urgency + " Request";
-            modalUrgency.className = "text-sm text-blue-600 font-medium";
-            modalAcceptBtn.className =
-              "px-6 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors";
+          // Safe data binding with fallbacks - Hospital Info
+          if (hospitalEl) hospitalEl.textContent = request.hospital || "N/A";
+          if (cityEl) cityEl.textContent = request.city || "N/A";
+          if (bloodTypeEl) bloodTypeEl.textContent = request.bloodType || "N/A";
+          if (unitsEl) {
+            const units = request.units || 1;
+            unitsEl.textContent = units + " unit" + (units > 1 ? "s" : "");
+          }
+          if (timeEl) timeEl.textContent = request.time || "N/A";
+
+          // Patient Information
+          if (patientNameEl)
+            patientNameEl.textContent = request.patientName || "N/A";
+          if (patientAgeEl)
+            patientAgeEl.textContent = request.patientAge
+              ? request.patientAge + " years"
+              : "N/A";
+          if (contactPhoneEl)
+            contactPhoneEl.textContent = request.contactPhone || "N/A";
+
+          // Required Date formatting
+          if (requiredDateEl) {
+            if (request.requiredByDate) {
+              const date = new Date(request.requiredByDate);
+              requiredDateEl.textContent = date.toLocaleDateString("en-IN", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              });
+            } else {
+              requiredDateEl.textContent = "N/A";
+            }
+          }
+
+          // Medical Reason
+          if (medicalReasonEl)
+            medicalReasonEl.textContent =
+              request.medicalReason || "No additional information provided.";
+
+          // Set urgency styling with safe checks
+          const urgencyText = request.urgency || "Standard";
+          const isEmergency = request.type === "emergency";
+
+          if (modalIcon) {
+            modalIcon.className = isEmergency
+              ? "size-14 bg-red-100 rounded-full flex items-center justify-center"
+              : "size-14 bg-blue-100 rounded-full flex items-center justify-center";
+          }
+
+          if (modalUrgency) {
+            modalUrgency.textContent = urgencyText + " Request";
+            modalUrgency.className = isEmergency
+              ? "text-sm text-red-600 font-medium"
+              : "text-sm text-blue-600 font-medium";
+          }
+
+          if (modalAcceptBtn) {
+            modalAcceptBtn.className = isEmergency
+              ? "px-6 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+              : "px-6 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors";
           }
 
           // Show modal with animation
@@ -884,12 +1002,23 @@
           // Show active donation section
           activeDonationSection.classList.remove("hidden");
 
-          // Update active donation details
-          document.getElementById("activeHospitalName").textContent =
-            activeDonation.hospital;
-          document.getElementById(
+          // Update active donation details (with safe fallbacks)
+          const hospitalNameEl = document.getElementById("activeHospitalName");
+          const requestDetailsEl = document.getElementById(
             "activeRequestDetails"
-          ).textContent = `Blood Type: ${activeDonation.bloodType} • ${activeDonation.units} unit(s) • ${activeDonation.distance} away`;
+          );
+
+          if (hospitalNameEl) {
+            hospitalNameEl.textContent = activeDonation.hospital || "N/A";
+          }
+          if (requestDetailsEl) {
+            const bloodType = activeDonation.bloodType || "N/A";
+            const units = activeDonation.units || 1;
+            const time = activeDonation.time || "";
+            requestDetailsEl.textContent = `Blood Type: ${bloodType} • ${units} unit(s)${
+              time ? " • " + time : ""
+            }`;
+          }
 
           const urgencyBadge = document.getElementById("activeUrgencyBadge");
           if (activeDonation.type === "emergency") {
