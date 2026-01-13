@@ -430,6 +430,311 @@
       </div>
     </main>
 
+    <!-- Hospital Details Modal -->
+    <div id="hospitalModal" class="fixed inset-0 z-50 hidden">
+      <div
+        class="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onclick="closeHospitalModal()"
+      ></div>
+      <div class="flex items-center justify-center min-h-screen p-4">
+        <div
+          class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+        >
+          <!-- Modal Header -->
+          <div
+            class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl"
+          >
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-blue-100">
+                  <i data-lucide="building-2" class="size-5 text-blue-600"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900">
+                    Hospital Details
+                  </h3>
+                  <p id="modalHospitalId" class="text-sm text-gray-500">
+                    HOS001
+                  </p>
+                </div>
+              </div>
+              <button
+                onclick="closeHospitalModal()"
+                class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <i data-lucide="x" class="size-5 text-gray-500"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Modal Content -->
+          <div class="p-6 space-y-6">
+            <!-- Status & Type Badges -->
+            <div class="flex items-center gap-3 flex-wrap">
+              <span
+                id="modalHospitalStatus"
+                class="px-3 py-1.5 text-sm font-medium border border-yellow-600 text-yellow-600 rounded-full"
+                >Pending</span
+              >
+              <span
+                id="modalHospitalType"
+                class="px-3 py-1.5 text-sm font-medium border border-blue-600 text-blue-600 rounded-full"
+                >Public</span
+              >
+              <span
+                id="modalEmergencyServices"
+                class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full"
+              >
+                <i data-lucide="check-circle" class="size-4 mr-1"></i>24/7
+                Emergency
+              </span>
+            </div>
+
+            <!-- Hospital Information -->
+            <div class="bg-gray-50 rounded-xl p-4">
+              <h4
+                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
+              >
+                <i data-lucide="building-2" class="size-4 text-gray-600"></i>
+                Hospital Information
+              </h4>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="col-span-2">
+                  <p class="text-xs text-gray-500 mb-1">Hospital Name</p>
+                  <p
+                    id="modalHospitalName"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    City General Hospital
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Website</p>
+                  <p
+                    id="modalHospitalWebsite"
+                    class="text-sm font-medium text-blue-600"
+                  >
+                    www.citygeneralhospital.com
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Registered At</p>
+                  <p
+                    id="modalHospitalRegisteredAt"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    2024-12-10
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="bg-blue-50 rounded-xl p-4">
+              <h4
+                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
+              >
+                <i data-lucide="phone" class="size-4 text-blue-600"></i>
+                Contact Information
+              </h4>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Email</p>
+                  <p
+                    id="modalHospitalEmail"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    admin@citygeneral.com
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Phone</p>
+                  <p
+                    id="modalHospitalPhone"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    555-1001
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Contact Person</p>
+                  <p
+                    id="modalHospitalContactPerson"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    Dr. Sarah Johnson
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Contact Person Phone</p>
+                  <p
+                    id="modalHospitalContactPhone"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    555-1001-EXT
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Location -->
+            <div class="bg-green-50 rounded-xl p-4">
+              <h4
+                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
+              >
+                <i data-lucide="map-pin" class="size-4 text-green-600"></i>
+                Location
+              </h4>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="col-span-2">
+                  <p class="text-xs text-gray-500 mb-1">Address</p>
+                  <p
+                    id="modalHospitalAddress"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    100 Medical Center Drive
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">City</p>
+                  <p
+                    id="modalHospitalCity"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    Downtown
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">State</p>
+                  <p
+                    id="modalHospitalState"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    New York
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">ZIP Code</p>
+                  <p
+                    id="modalHospitalZip"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    10001
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- License Information -->
+            <div class="bg-purple-50 rounded-xl p-4">
+              <h4
+                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
+              >
+                <i data-lucide="file-badge" class="size-4 text-purple-600"></i>
+                License Information
+              </h4>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">License Number</p>
+                  <p
+                    id="modalHospitalLicense"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    LIC-2024-001
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">License Expiry</p>
+                  <p
+                    id="modalHospitalLicenseExpiry"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    2025-12-31
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Capacity Information -->
+            <div class="bg-red-50 rounded-xl p-4">
+              <h4
+                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
+              >
+                <i data-lucide="activity" class="size-4 text-red-600"></i>
+                Capacity
+              </h4>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Bed Capacity</p>
+                  <p
+                    id="modalHospitalBedCapacity"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    500 beds
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Blood Bank Capacity</p>
+                  <p
+                    id="modalHospitalBloodBank"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    1000 units
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Rejection Reason (if rejected) -->
+            <div
+              id="modalRejectionSection"
+              class="hidden bg-red-50 border border-red-200 rounded-xl p-4"
+            >
+              <h4
+                class="text-sm font-semibold text-red-900 mb-2 flex items-center gap-2"
+              >
+                <i data-lucide="alert-triangle" class="size-4 text-red-600"></i>
+                Rejection Reason
+              </h4>
+              <p id="modalRejectionReason" class="text-sm text-red-700">
+                License expired
+              </p>
+            </div>
+          </div>
+
+          <!-- Modal Footer -->
+          <div
+            class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 rounded-b-2xl"
+          >
+            <div class="flex items-center justify-end gap-3">
+              <button
+                onclick="closeHospitalModal()"
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Close
+              </button>
+              <button
+                id="modalRejectBtn"
+                onclick="rejectFromModal()"
+                class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+              >
+                <i data-lucide="x-circle" class="size-4 inline mr-1.5"></i
+                >Reject
+              </button>
+              <button
+                id="modalApproveBtn"
+                onclick="approveFromModal()"
+                class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <i data-lucide="check-circle" class="size-4 inline mr-1.5"></i
+                >Approve
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
       // Notification System
       const notifications = [
@@ -579,7 +884,7 @@
     <script>
       // Admin Hospital Approval - Interactive State Management
       document.addEventListener("DOMContentLoaded", function () {
-        // Hospital data
+        // Hospital data with enhanced details
         let hospitals = [
           {
             id: "HOS001",
@@ -588,6 +893,19 @@
             phone: "555-1001",
             type: "Public",
             status: "Pending",
+            address: "100 Medical Center Drive",
+            city: "Downtown",
+            state: "New York",
+            zipCode: "10001",
+            licenseNumber: "LIC-2024-001",
+            licenseExpiry: "2025-12-31",
+            bedCapacity: 500,
+            bloodBankCapacity: "1000 units",
+            emergencyServices: true,
+            contactPerson: "Dr. Sarah Johnson",
+            contactPersonPhone: "555-1001-EXT",
+            registeredAt: "2024-12-10",
+            website: "www.citygeneralhospital.com",
           },
           {
             id: "HOS002",
@@ -596,6 +914,19 @@
             phone: "555-1002",
             type: "Private",
             status: "Pending",
+            address: "250 Healthcare Boulevard",
+            city: "Midtown",
+            state: "New York",
+            zipCode: "10002",
+            licenseNumber: "LIC-2024-002",
+            licenseExpiry: "2025-06-30",
+            bedCapacity: 350,
+            bloodBankCapacity: "750 units",
+            emergencyServices: true,
+            contactPerson: "Dr. Michael Chen",
+            contactPersonPhone: "555-1002-EXT",
+            registeredAt: "2024-12-11",
+            website: "www.stmarymedical.com",
           },
           {
             id: "HOS003",
@@ -604,6 +935,19 @@
             phone: "555-1003",
             type: "Public",
             status: "Pending",
+            address: "75 Regional Road",
+            city: "Uptown",
+            state: "New York",
+            zipCode: "10003",
+            licenseNumber: "LIC-2024-003",
+            licenseExpiry: "2025-09-15",
+            bedCapacity: 200,
+            bloodBankCapacity: "500 units",
+            emergencyServices: false,
+            contactPerson: "Dr. Emily Davis",
+            contactPersonPhone: "555-1003-EXT",
+            registeredAt: "2024-12-12",
+            website: "www.regionalhealthcare.com",
           },
           {
             id: "HOS004",
@@ -612,6 +956,19 @@
             phone: "555-1004",
             type: "Private",
             status: "Pending",
+            address: "400 Community Lane",
+            city: "Eastside",
+            state: "New York",
+            zipCode: "10004",
+            licenseNumber: "LIC-2024-004",
+            licenseExpiry: "2025-03-20",
+            bedCapacity: 150,
+            bloodBankCapacity: "300 units",
+            emergencyServices: true,
+            contactPerson: "Dr. James Wilson",
+            contactPersonPhone: "555-1004-EXT",
+            registeredAt: "2024-12-13",
+            website: "www.communityhospital.com",
           },
           {
             id: "HOS005",
@@ -620,6 +977,19 @@
             phone: "555-1005",
             type: "Public",
             status: "Approved",
+            address: "888 Metro Avenue",
+            city: "Central",
+            state: "New York",
+            zipCode: "10005",
+            licenseNumber: "LIC-2023-005",
+            licenseExpiry: "2024-12-31",
+            bedCapacity: 400,
+            bloodBankCapacity: "800 units",
+            emergencyServices: true,
+            contactPerson: "Dr. Lisa Anderson",
+            contactPersonPhone: "555-1005-EXT",
+            registeredAt: "2024-10-01",
+            website: "www.metromedical.com",
           },
           {
             id: "HOS006",
@@ -628,6 +998,20 @@
             phone: "555-1006",
             type: "Private",
             status: "Rejected",
+            address: "555 Valley Road",
+            city: "Southside",
+            state: "New York",
+            zipCode: "10006",
+            licenseNumber: "LIC-2024-006",
+            licenseExpiry: "2024-01-15",
+            bedCapacity: 100,
+            bloodBankCapacity: "200 units",
+            emergencyServices: false,
+            contactPerson: "Dr. Robert Brown",
+            contactPersonPhone: "555-1006-EXT",
+            registeredAt: "2024-11-15",
+            website: "www.valleyhealthcare.com",
+            rejectionReason: "License expired - requires renewal",
           },
         ];
 
@@ -772,7 +1156,156 @@
               updateHospitalStatus(btn.dataset.id, "Rejected")
             );
           });
+          document.querySelectorAll(".view-btn").forEach((btn) => {
+            btn.addEventListener("click", () =>
+              openHospitalModal(btn.dataset.id)
+            );
+          });
         }
+
+        // Modal state
+        let currentModalHospitalId = null;
+
+        // Open hospital modal
+        function openHospitalModal(hospitalId) {
+          const hospital = hospitals.find((h) => h.id === hospitalId);
+          if (!hospital) return;
+
+          currentModalHospitalId = hospitalId;
+
+          // Update modal content
+          document.getElementById("modalHospitalId").textContent = hospital.id;
+          document.getElementById("modalHospitalName").textContent =
+            hospital.name;
+          document.getElementById("modalHospitalEmail").textContent =
+            hospital.email;
+          document.getElementById("modalHospitalPhone").textContent =
+            hospital.phone;
+          document.getElementById("modalHospitalAddress").textContent =
+            hospital.address;
+          document.getElementById("modalHospitalCity").textContent =
+            hospital.city;
+          document.getElementById("modalHospitalState").textContent =
+            hospital.state;
+          document.getElementById("modalHospitalZip").textContent =
+            hospital.zipCode;
+          document.getElementById("modalHospitalLicense").textContent =
+            hospital.licenseNumber;
+          document.getElementById("modalHospitalLicenseExpiry").textContent =
+            hospital.licenseExpiry;
+          document.getElementById("modalHospitalBedCapacity").textContent =
+            hospital.bedCapacity + " beds";
+          document.getElementById("modalHospitalBloodBank").textContent =
+            hospital.bloodBankCapacity;
+          document.getElementById("modalHospitalContactPerson").textContent =
+            hospital.contactPerson;
+          document.getElementById("modalHospitalContactPhone").textContent =
+            hospital.contactPersonPhone;
+          document.getElementById("modalHospitalRegisteredAt").textContent =
+            hospital.registeredAt;
+          document.getElementById("modalHospitalWebsite").textContent =
+            hospital.website || "N/A";
+
+          // Update type badge
+          const typeBadge = document.getElementById("modalHospitalType");
+          if (hospital.type === "Public") {
+            typeBadge.className =
+              "px-3 py-1.5 text-sm font-medium border border-blue-600 text-blue-600 rounded-full";
+          } else {
+            typeBadge.className =
+              "px-3 py-1.5 text-sm font-medium border border-purple-600 text-purple-600 rounded-full";
+          }
+          typeBadge.textContent = hospital.type;
+
+          // Update emergency services badge
+          const emergencyBadge = document.getElementById(
+            "modalEmergencyServices"
+          );
+          if (hospital.emergencyServices) {
+            emergencyBadge.innerHTML =
+              '<i data-lucide="check-circle" class="size-4 mr-1"></i>24/7 Emergency';
+            emergencyBadge.className =
+              "inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full";
+          } else {
+            emergencyBadge.innerHTML =
+              '<i data-lucide="x-circle" class="size-4 mr-1"></i>No Emergency';
+            emergencyBadge.className =
+              "inline-flex items-center px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full";
+          }
+
+          // Update status badge
+          const statusBadge = document.getElementById("modalHospitalStatus");
+          if (hospital.status === "Pending") {
+            statusBadge.className =
+              "px-3 py-1.5 text-sm font-medium border border-yellow-600 text-yellow-600 rounded-full";
+          } else if (hospital.status === "Approved") {
+            statusBadge.className =
+              "px-3 py-1.5 text-sm font-medium border border-green-600 text-green-600 rounded-full";
+          } else {
+            statusBadge.className =
+              "px-3 py-1.5 text-sm font-medium border border-red-600 text-red-600 rounded-full";
+          }
+          statusBadge.textContent = hospital.status;
+
+          // Show/hide rejection reason
+          const rejectionSection = document.getElementById(
+            "modalRejectionSection"
+          );
+          if (hospital.status === "Rejected" && hospital.rejectionReason) {
+            rejectionSection.classList.remove("hidden");
+            document.getElementById("modalRejectionReason").textContent =
+              hospital.rejectionReason;
+          } else {
+            rejectionSection.classList.add("hidden");
+          }
+
+          // Show/hide action buttons
+          const approveBtn = document.getElementById("modalApproveBtn");
+          const rejectBtn = document.getElementById("modalRejectBtn");
+          if (hospital.status === "Pending") {
+            approveBtn.classList.remove("hidden");
+            rejectBtn.classList.remove("hidden");
+          } else {
+            approveBtn.classList.add("hidden");
+            rejectBtn.classList.add("hidden");
+          }
+
+          // Show modal
+          document.getElementById("hospitalModal").classList.remove("hidden");
+          document.body.style.overflow = "hidden";
+
+          lucide.createIcons();
+        }
+
+        // Close hospital modal
+        function closeHospitalModal() {
+          document.getElementById("hospitalModal").classList.add("hidden");
+          document.body.style.overflow = "";
+          currentModalHospitalId = null;
+        }
+
+        // Approve from modal
+        function approveFromModal() {
+          if (currentModalHospitalId) {
+            updateHospitalStatus(currentModalHospitalId, "Approved");
+            closeHospitalModal();
+          }
+        }
+
+        // Reject from modal
+        function rejectFromModal() {
+          if (currentModalHospitalId) {
+            updateHospitalStatus(currentModalHospitalId, "Rejected");
+            closeHospitalModal();
+          }
+        }
+
+        // Close modal on ESC key
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            closeHospitalModal();
+          }
+        });
 
         function updateHospitalStatus(id, newStatus) {
           const hospital = hospitals.find((h) => h.id === id);
