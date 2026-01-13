@@ -209,7 +209,12 @@
               <div class="flex items-center justify-between">
                 <div>
                   <p class="text-sm text-gray-600 mb-1">Pending Approvals</p>
-                  <h2 class="text-3xl font-bold text-gray-900">23</h2>
+                  <h2
+                    class="text-3xl font-bold text-gray-900"
+                    data-stat="pending-approvals"
+                  >
+                    3
+                  </h2>
                 </div>
                 <div class="bg-yellow-100 p-3 rounded-lg">
                   <i data-lucide="clock" class="size-6 text-yellow-600"></i>
@@ -297,212 +302,8 @@
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr class="border-b border-gray-100 hover:bg-gray-50">
-                    <td class="py-3 px-4 text-sm text-gray-900">REQ001</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">John Doe</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                        >O+</span
-                      >
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">2 Units</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      City Hospital
-                    </td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="inline-flex items-center px-2 py-1 text-xs font-medium bg-red-600 text-white rounded-full"
-                        ><i data-lucide="alert-circle" class="size-3 mr-1"></i
-                        >Emergency</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full"
-                        >Pending</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <div class="flex gap-2">
-                        <button
-                          class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                          View
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          Action
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="border-b border-gray-100 hover:bg-gray-50">
-                    <td class="py-3 px-4 text-sm text-gray-900">REQ002</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">Sarah Smith</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                        >A+</span
-                      >
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">3 Units</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      General Hospital
-                    </td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-full"
-                        >Normal</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full"
-                        >Approved</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <div class="flex gap-2">
-                        <button
-                          class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                          View
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          Action
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="border-b border-gray-100 hover:bg-gray-50">
-                    <td class="py-3 px-4 text-sm text-gray-900">REQ003</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      Mike Johnson
-                    </td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                        >B-</span
-                      >
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">1 Unit</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">St. Mary's</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="inline-flex items-center px-2 py-1 text-xs font-medium bg-red-600 text-white rounded-full"
-                        ><i data-lucide="alert-circle" class="size-3 mr-1"></i
-                        >Emergency</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-blue-600 text-blue-600 rounded-full"
-                        >Processing</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <div class="flex gap-2">
-                        <button
-                          class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                          View
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          Action
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="border-b border-gray-100 hover:bg-gray-50">
-                    <td class="py-3 px-4 text-sm text-gray-900">REQ004</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">Emily Davis</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                        >AB+</span
-                      >
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">2 Units</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      Regional Medical
-                    </td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-full"
-                        >Normal</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full"
-                        >Completed</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <div class="flex gap-2">
-                        <button
-                          class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                          View
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          Action
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-gray-50">
-                    <td class="py-3 px-4 text-sm text-gray-900">REQ005</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      James Wilson
-                    </td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                        >O-</span
-                      >
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">4 Units</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      Central Hospital
-                    </td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="inline-flex items-center px-2 py-1 text-xs font-medium bg-red-600 text-white rounded-full"
-                        ><i data-lucide="alert-circle" class="size-3 mr-1"></i
-                        >Emergency</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full"
-                        >Pending</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <div class="flex gap-2">
-                        <button
-                          class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                          View
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          Action
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                <tbody id="requestsTableBody">
+                  <!-- Requests will be populated by JS -->
                 </tbody>
               </table>
             </div>
@@ -512,6 +313,211 @@
     </main>
 
     <script>
+      // Dummy blood requests data
+      const bloodRequests = [
+        {
+          id: "REQ001",
+          name: "John Doe",
+          bloodType: "O+",
+          quantity: "2 Units",
+          hospital: "City Hospital",
+          urgency: "emergency",
+          status: "pending",
+        },
+        {
+          id: "REQ002",
+          name: "Sarah Smith",
+          bloodType: "A+",
+          quantity: "3 Units",
+          hospital: "General Hospital",
+          urgency: "normal",
+          status: "approved",
+        },
+        {
+          id: "REQ003",
+          name: "Mike Johnson",
+          bloodType: "B-",
+          quantity: "1 Unit",
+          hospital: "St. Mary's",
+          urgency: "emergency",
+          status: "pending",
+        },
+        {
+          id: "REQ004",
+          name: "Emily Davis",
+          bloodType: "AB+",
+          quantity: "2 Units",
+          hospital: "Regional Medical",
+          urgency: "normal",
+          status: "completed",
+        },
+        {
+          id: "REQ005",
+          name: "James Wilson",
+          bloodType: "O-",
+          quantity: "4 Units",
+          hospital: "Central Hospital",
+          urgency: "emergency",
+          status: "pending",
+        },
+      ];
+
+      // Render urgency badge
+      function renderUrgencyBadge(urgency) {
+        if (urgency === "emergency") {
+          return `<span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-red-600 text-white rounded-full"><i data-lucide="alert-circle" class="size-3 mr-1"></i>Emergency</span>`;
+        }
+        return `<span class="px-2 py-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-full">Normal</span>`;
+      }
+
+      // Render status badge
+      function renderStatusBadge(status) {
+        const statusConfig = {
+          pending: {
+            border: "border-yellow-600",
+            text: "text-yellow-600",
+            label: "Pending",
+          },
+          approved: {
+            border: "border-green-600",
+            text: "text-green-600",
+            label: "Approved",
+          },
+          rejected: {
+            border: "border-red-600",
+            text: "text-red-600",
+            label: "Rejected",
+          },
+          completed: {
+            border: "border-green-600",
+            text: "text-green-600",
+            label: "Completed",
+          },
+          processing: {
+            border: "border-blue-600",
+            text: "text-blue-600",
+            label: "Processing",
+          },
+        };
+        const config = statusConfig[status] || statusConfig.pending;
+        return `<span class="px-2 py-1 text-xs font-medium border ${config.border} ${config.text} rounded-full">${config.label}</span>`;
+      }
+
+      // Render action buttons based on status
+      function renderActionButtons(request) {
+        if (request.status === "pending") {
+          return `
+            <div class="flex gap-2">
+              <button onclick="approveRequest('${request.id}')" class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700" data-id="${request.id}">Approve</button>
+              <button onclick="rejectRequest('${request.id}')" class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700" data-id="${request.id}">Reject</button>
+            </div>
+          `;
+        } else if (request.status === "approved") {
+          return `
+            <div class="flex gap-2">
+              <button class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50">View</button>
+              <button onclick="cancelRequest('${request.id}')" class="px-3 py-1 text-xs border border-red-300 text-red-600 rounded-lg hover:bg-red-50" data-id="${request.id}">Cancel</button>
+            </div>
+          `;
+        } else if (request.status === "rejected") {
+          return `
+            <div class="flex gap-2">
+              <button class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50">View</button>
+              <button onclick="dismissRequest('${request.id}')" class="px-3 py-1 text-xs border border-gray-300 text-gray-500 rounded-lg hover:bg-gray-50" data-id="${request.id}">Dismiss</button>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="flex gap-2">
+              <button class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50">View</button>
+            </div>
+          `;
+        }
+      }
+
+      // Render blood requests table
+      function renderBloodRequests() {
+        const tbody = document.getElementById("requestsTableBody");
+        tbody.innerHTML = bloodRequests
+          .map(
+            (request, index) => `
+          <tr class="${
+            index < bloodRequests.length - 1 ? "border-b border-gray-100" : ""
+          } hover:bg-gray-50" data-request-id="${request.id}">
+            <td class="py-3 px-4 text-sm text-gray-900">${request.id}</td>
+            <td class="py-3 px-4 text-sm text-gray-900">${request.name}</td>
+            <td class="py-3 px-4">
+              <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${
+                request.bloodType
+              }</span>
+            </td>
+            <td class="py-3 px-4 text-sm text-gray-900">${request.quantity}</td>
+            <td class="py-3 px-4 text-sm text-gray-900">${request.hospital}</td>
+            <td class="py-3 px-4">${renderUrgencyBadge(request.urgency)}</td>
+            <td class="py-3 px-4">${renderStatusBadge(request.status)}</td>
+            <td class="py-3 px-4">${renderActionButtons(request)}</td>
+          </tr>
+        `
+          )
+          .join("");
+
+        // Re-initialize Lucide icons for dynamically added content
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }
+
+      // Approve a request
+      function approveRequest(id) {
+        const request = bloodRequests.find((r) => r.id === id);
+        if (request) {
+          request.status = "approved";
+          renderBloodRequests();
+          updatePendingCount();
+        }
+      }
+
+      // Reject a request
+      function rejectRequest(id) {
+        const request = bloodRequests.find((r) => r.id === id);
+        if (request) {
+          request.status = "rejected";
+          renderBloodRequests();
+          updatePendingCount();
+        }
+      }
+
+      // Cancel an approved request
+      function cancelRequest(id) {
+        const request = bloodRequests.find((r) => r.id === id);
+        if (request) {
+          request.status = "rejected";
+          renderBloodRequests();
+        }
+      }
+
+      // Dismiss a rejected request (remove from list)
+      function dismissRequest(id) {
+        const index = bloodRequests.findIndex((r) => r.id === id);
+        if (index > -1) {
+          bloodRequests.splice(index, 1);
+          renderBloodRequests();
+        }
+      }
+
+      // Update pending approvals count in stats card
+      function updatePendingCount() {
+        const pendingCount = bloodRequests.filter(
+          (r) => r.status === "pending"
+        ).length;
+        const pendingStatsEl = document.querySelector(
+          '[data-stat="pending-approvals"]'
+        );
+        if (pendingStatsEl) {
+          pendingStatsEl.textContent = pendingCount;
+        }
+      }
+
       // Dummy notification data
       const notifications = [
         {
@@ -673,9 +679,10 @@
         }
       });
 
-      // Initialize notifications on page load
+      // Initialize on page load
       document.addEventListener("DOMContentLoaded", function () {
         renderNotifications();
+        renderBloodRequests();
       });
     </script>
     <script type="module" src="/main.js"></script>
