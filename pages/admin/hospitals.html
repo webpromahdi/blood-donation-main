@@ -1277,33 +1277,31 @@
           lucide.createIcons();
         }
 
-        // Close hospital modal
-        function closeHospitalModal() {
+        // Expose functions to global scope for onclick handlers
+        window.closeHospitalModal = function () {
           document.getElementById("hospitalModal").classList.add("hidden");
           document.body.style.overflow = "";
           currentModalHospitalId = null;
-        }
+        };
 
-        // Approve from modal
-        function approveFromModal() {
+        window.approveFromModal = function () {
           if (currentModalHospitalId) {
             updateHospitalStatus(currentModalHospitalId, "Approved");
-            closeHospitalModal();
+            window.closeHospitalModal();
           }
-        }
+        };
 
-        // Reject from modal
-        function rejectFromModal() {
+        window.rejectFromModal = function () {
           if (currentModalHospitalId) {
             updateHospitalStatus(currentModalHospitalId, "Rejected");
-            closeHospitalModal();
+            window.closeHospitalModal();
           }
-        }
+        };
 
         // Close modal on ESC key
         document.addEventListener("keydown", function (e) {
           if (e.key === "Escape") {
-            closeHospitalModal();
+            window.closeHospitalModal();
           }
         });
 

@@ -1325,33 +1325,31 @@
           lucide.createIcons();
         }
 
-        // Close donor modal
-        function closeDonorModal() {
+        // Expose functions to global scope for onclick handlers
+        window.closeDonorModal = function () {
           document.getElementById("donorModal").classList.add("hidden");
           document.body.style.overflow = "";
           currentModalDonorId = null;
-        }
+        };
 
-        // Approve from modal
-        function approveFromModal() {
+        window.approveFromModal = function () {
           if (currentModalDonorId) {
             updateDonorStatus(currentModalDonorId, "Approved");
-            closeDonorModal();
+            window.closeDonorModal();
           }
-        }
+        };
 
-        // Reject from modal
-        function rejectFromModal() {
+        window.rejectFromModal = function () {
           if (currentModalDonorId) {
             updateDonorStatus(currentModalDonorId, "Rejected");
-            closeDonorModal();
+            window.closeDonorModal();
           }
-        }
+        };
 
         // Close modal on ESC key
         document.addEventListener("keydown", function (e) {
           if (e.key === "Escape") {
-            closeDonorModal();
+            window.closeDonorModal();
           }
         });
 
