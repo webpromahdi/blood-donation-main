@@ -561,25 +561,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Assigned Donor (if approved) -->
-            <div
-              id="modalDonorSection"
-              class="hidden bg-green-50 rounded-xl p-4"
-            >
-              <h4
-                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
-              >
-                <i data-lucide="heart" class="size-4 text-green-600"></i>
-                Assigned Donor
-              </h4>
-              <p
-                id="modalAssignedDonor"
-                class="text-sm font-medium text-gray-900"
-              >
-                Michael Brown
-              </p>
-            </div>
           </div>
 
           <!-- Modal Footer -->
@@ -1017,16 +998,6 @@
         const config = statusConfig[request.status] || statusConfig.pending;
         statusBadge.textContent = config.label;
         statusBadge.className = `px-3 py-1.5 text-sm font-medium border ${config.border} ${config.text} rounded-full`;
-
-        // Show/hide donor section
-        const donorSection = document.getElementById("modalDonorSection");
-        if (request.assignedDonor) {
-          donorSection.classList.remove("hidden");
-          document.getElementById("modalAssignedDonor").textContent =
-            request.assignedDonor;
-        } else {
-          donorSection.classList.add("hidden");
-        }
 
         // Show/hide action buttons based on status
         const approveBtn = document.getElementById("modalApproveBtn");
