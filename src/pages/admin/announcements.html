@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Announcements - BloodConnect Admin</title>
+    <link rel="stylesheet" href="/src/styles/styles.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Admin Panel</div>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/src/pages/admin/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/src/pages/admin/donors.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="users" class="size-5"></i><span>Donors</span></a
+        >
+        <a
+          href="/src/pages/admin/hospitals.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="building-2" class="size-5"></i
+          ><span>Hospitals</span></a
+        >
+        <a
+          href="/src/pages/admin/blood-groups.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="droplet" class="size-5"></i
+          ><span>Blood Groups</span></a
+        >
+        <a
+          href="/src/pages/admin/reports.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="file-text" class="size-5"></i><span>Reports</span></a
+        >
+        <a
+          href="/src/pages/admin/announcements.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="megaphone" class="size-5"></i
+          ><span>Announcements</span></a
+        >
+        <a
+          href="/src/pages/admin/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">Announcements</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <!-- Notification Dropdown -->
+        <div class="relative" id="notificationDropdown">
+          <button
+            class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            onclick="toggleNotifications()"
+            id="notificationBell"
+          >
+            <i data-lucide="bell" class="size-5 text-gray-700"></i>
+            <span
+              class="absolute -top-1 -right-1 size-5 flex items-center justify-center p-0 bg-red-600 text-white text-xs rounded-full"
+              id="notificationBadge"
+              >4</span
+            >
+          </button>
+
+          <!-- Notification Panel -->
+          <div
+            id="notificationPanel"
+            class="hidden absolute right-0 top-12 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50"
+          >
+            <div
+              class="p-4 border-b border-gray-200 flex items-center justify-between"
+            >
+              <h3 class="font-semibold text-gray-900">Notifications</h3>
+              <button
+                onclick="markAllAsRead()"
+                class="text-xs text-red-600 hover:text-red-700 font-medium"
+              >
+                Mark all as read
+              </button>
+            </div>
+            <div class="max-h-80 overflow-y-auto" id="notificationList">
+              <!-- Notifications will be populated by JS -->
+            </div>
+            <div class="p-3 border-t border-gray-200 text-center">
+              <button
+                class="text-sm text-red-600 hover:text-red-700 font-medium"
+              >
+                View all notifications
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900">Admin User</div>
+            <div class="text-xs text-gray-500">System Administrator</div>
+          </div>
+          <div
+            class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="user" class="size-5 text-red-600"></i>
+          </div>
+        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 pt-16">
+      <div class="p-8 space-y-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">Announcements</h1>
+            <p class="text-gray-600">Create and manage system announcements</p>
+          </div>
+          <button
+            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+          >
+            <i data-lucide="plus" class="size-4 inline mr-2"></i>New
+            Announcement
+          </button>
+        </div>
+
+        <!-- Create Announcement Form -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-1">
+              Create New Announcement
+            </h2>
+            <p class="text-sm text-gray-600">
+              Broadcast important updates to all users
+            </p>
+          </div>
+          <form class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Title</label
+              >
+              <input
+                type="text"
+                placeholder="Announcement title..."
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Message</label
+              >
+              <textarea
+                rows="4"
+                placeholder="Write your announcement message..."
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              ></textarea>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >Target Audience</label
+                >
+                <select
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  <option>All Users</option>
+                  <option>Donors Only</option>
+                  <option>Hospitals Only</option>
+                  <option>Seekers Only</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >Priority</label
+                >
+                <select
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  <option>Normal</option>
+                  <option>High</option>
+                  <option>Urgent</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >Schedule</label
+                >
+                <input
+                  type="datetime-local"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <button
+                type="submit"
+                class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+              >
+                <i data-lucide="send" class="size-4 inline mr-2"></i>Publish Now
+              </button>
+              <button
+                type="button"
+                class="px-6 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+              >
+                <i data-lucide="clock" class="size-4 inline mr-2"></i>Schedule
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Existing Announcements -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-1">
+              Recent Announcements
+            </h2>
+            <p class="text-sm text-gray-600">
+              Manage published and scheduled announcements
+            </p>
+          </div>
+          <div class="space-y-4">
+            <div
+              class="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+            >
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span
+                    class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full"
+                    >Active</span
+                  >
+                  <span
+                    class="px-2 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-full"
+                    >Urgent</span
+                  >
+                </div>
+                <span class="text-sm text-gray-500">Posted: Jan 10, 2026</span>
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-2">
+                Emergency: O- Blood Critically Low
+              </h3>
+              <p class="text-gray-600 text-sm mb-3">
+                We are experiencing critically low levels of O- blood. All
+                eligible O- donors are urged to donate as soon as possible.
+                Please visit your nearest donation center.
+              </p>
+              <div class="flex items-center gap-4 text-sm text-gray-500">
+                <span
+                  ><i data-lucide="users" class="size-4 inline mr-1"></i>All
+                  Users</span
+                >
+                <span
+                  ><i data-lucide="eye" class="size-4 inline mr-1"></i>2,341
+                  views</span
+                >
+              </div>
+            </div>
+
+            <div
+              class="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+            >
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span
+                    class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full"
+                    >Active</span
+                  >
+                  <span
+                    class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full"
+                    >Normal</span
+                  >
+                </div>
+                <span class="text-sm text-gray-500">Posted: Jan 8, 2026</span>
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-2">
+                Blood Donation Camp - January 15th
+              </h3>
+              <p class="text-gray-600 text-sm mb-3">
+                Join us for our monthly blood donation camp at City Convention
+                Center. Free health check-ups for all donors. Refreshments
+                provided.
+              </p>
+              <div class="flex items-center gap-4 text-sm text-gray-500">
+                <span
+                  ><i data-lucide="users" class="size-4 inline mr-1"></i>Donors
+                  Only</span
+                >
+                <span
+                  ><i data-lucide="eye" class="size-4 inline mr-1"></i>1,567
+                  views</span
+                >
+              </div>
+            </div>
+
+            <div
+              class="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+            >
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span
+                    class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full"
+                    >Scheduled</span
+                  >
+                  <span
+                    class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full"
+                    >Normal</span
+                  >
+                </div>
+                <span class="text-sm text-gray-500"
+                  >Scheduled: Jan 20, 2026</span
+                >
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-2">
+                System Maintenance Notice
+              </h3>
+              <p class="text-gray-600 text-sm mb-3">
+                The system will undergo scheduled maintenance on January 20th
+                from 2:00 AM to 4:00 AM. Services may be temporarily
+                unavailable.
+              </p>
+              <div class="flex items-center gap-4 text-sm text-gray-500">
+                <span
+                  ><i data-lucide="users" class="size-4 inline mr-1"></i>All
+                  Users</span
+                >
+                <span
+                  ><i data-lucide="clock" class="size-4 inline mr-1"></i
+                  >Pending</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Notification System
+      const notifications = [
+        {
+          id: 1,
+          title: "New Donor Registration",
+          message: "John Doe has registered as a new blood donor",
+          time: "2 minutes ago",
+          read: false,
+          icon: "user-plus",
+          iconBg: "bg-green-100",
+          iconColor: "text-green-600",
+        },
+        {
+          id: 2,
+          title: "Hospital Request Approved",
+          message: "City General Hospital blood request approved",
+          time: "15 minutes ago",
+          read: false,
+          icon: "check-circle",
+          iconBg: "bg-blue-100",
+          iconColor: "text-blue-600",
+        },
+        {
+          id: 3,
+          title: "Urgent Blood Request",
+          message: "Emergency O- blood needed at St. Mary Hospital",
+          time: "1 hour ago",
+          read: false,
+          icon: "alert-circle",
+          iconBg: "bg-red-100",
+          iconColor: "text-red-600",
+        },
+        {
+          id: 4,
+          title: "Monthly Report Generated",
+          message: "November 2024 donation report is ready",
+          time: "3 hours ago",
+          read: false,
+          icon: "file-text",
+          iconBg: "bg-purple-100",
+          iconColor: "text-purple-600",
+        },
+        {
+          id: 5,
+          title: "New Hospital Registration",
+          message: "Regional Medical Center pending approval",
+          time: "5 hours ago",
+          read: true,
+          icon: "building-2",
+          iconBg: "bg-orange-100",
+          iconColor: "text-orange-600",
+        },
+        {
+          id: 6,
+          title: "Blood Camp Scheduled",
+          message: "Community blood drive scheduled for Dec 15",
+          time: "1 day ago",
+          read: true,
+          icon: "calendar",
+          iconBg: "bg-teal-100",
+          iconColor: "text-teal-600",
+        },
+      ];
+
+      function renderNotifications() {
+        const container = document.getElementById("notificationList");
+        const unreadCount = notifications.filter((n) => !n.read).length;
+        const badge = document.getElementById("notificationBadge");
+        if (unreadCount > 0) {
+          badge.textContent = unreadCount;
+          badge.classList.remove("hidden");
+        } else {
+          badge.classList.add("hidden");
+        }
+        container.innerHTML = notifications
+          .map(
+            (n) => `
+          <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
+            n.read ? "opacity-70" : ""
+          }" data-id="${n.id}" onclick="markAsRead(${n.id})">
+            <div class="flex gap-3">
+              <div class="${n.iconBg} p-2 rounded-lg h-fit"><i data-lucide="${
+              n.icon
+            }" class="size-4 ${n.iconColor}"></i></div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-2">
+                  <p class="text-sm ${
+                    n.read
+                      ? "font-normal text-gray-700"
+                      : "font-semibold text-gray-900"
+                  } truncate">${n.title}</p>
+                  ${
+                    !n.read
+                      ? '<span class="size-2 bg-red-600 rounded-full flex-shrink-0 mt-1.5"></span>'
+                      : ""
+                  }
+                </div>
+                <p class="text-xs text-gray-500 mt-0.5 line-clamp-1">${
+                  n.message
+                }</p>
+                <p class="text-xs text-gray-400 mt-1">${n.time}</p>
+              </div>
+            </div>
+          </div>
+        `
+          )
+          .join("");
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }
+
+      function toggleNotifications() {
+        const panel = document.getElementById("notificationPanel");
+        panel.classList.toggle("hidden");
+        if (!panel.classList.contains("hidden")) {
+          renderNotifications();
+        }
+      }
+      function markAsRead(id) {
+        const n = notifications.find((x) => x.id === id);
+        if (n) {
+          n.read = true;
+          renderNotifications();
+        }
+      }
+      function markAllAsRead() {
+        notifications.forEach((n) => (n.read = true));
+        renderNotifications();
+      }
+      document.addEventListener("click", function (e) {
+        const dropdown = document.getElementById("notificationDropdown");
+        const panel = document.getElementById("notificationPanel");
+        if (
+          !dropdown.contains(e.target) &&
+          !panel.classList.contains("hidden")
+        ) {
+          panel.classList.add("hidden");
+        }
+      });
+      document.addEventListener("DOMContentLoaded", function () {
+        renderNotifications();
+      });
+    </script>
+    <script type="module" src="/src/scripts/main.js"></script>
+  </body>
+</html>
+
+

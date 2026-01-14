@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Certificates - BloodConnect Donor</title>
+    <link rel="stylesheet" href="/src/styles/styles.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Donor Portal</div>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/src/pages/donor/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/src/pages/donor/health.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="heart" class="size-5"></i><span>Health Info</span></a
+        >
+        <a
+          href="/src/pages/donor/voluntary.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="calendar" class="size-5"></i
+          ><span>Donate Voluntarily</span></a
+        >
+        <a
+          href="/src/pages/donor/history.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="file-text" class="size-5"></i
+          ><span>Donation History</span></a
+        >
+        <a
+          href="/src/pages/donor/certificates.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="award" class="size-5"></i
+          ><span>Certificates</span></a
+        >
+        <a
+          href="/src/pages/donor/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">
+          Certificates & Awards
+        </h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900">John Smith</div>
+            <div class="text-xs text-gray-500">Blood Donor</div>
+          </div>
+          <div
+            class="size-10 bg-green-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="user" class="size-5 text-green-600"></i>
+          </div>
+        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 pt-16">
+      <div class="p-8 space-y-8">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">
+            Certificates & Awards
+          </h1>
+          <p class="text-gray-600">
+            Download and share your donation certificates
+          </p>
+        </div>
+
+        <!-- Donation Progress -->
+        <div
+          class="p-6 bg-linear-to-r from-red-50 to-red-100 border border-red-200 rounded-xl"
+        >
+          <div class="flex items-center gap-4">
+            <div class="bg-red-600 p-4 rounded-full">
+              <i data-lucide="heart" class="size-8 text-white fill-white"></i>
+            </div>
+            <div class="flex-1">
+              <h3 class="font-semibold text-gray-900 mb-1">
+                Your Donation Progress
+              </h3>
+              <p class="text-gray-700">
+                You have completed
+                <span class="text-red-600 font-semibold">4 donations</span>
+              </p>
+              <div class="flex gap-2 mt-2 flex-wrap">
+                <span
+                  class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 border border-green-300 rounded-full"
+                  ><i data-lucide="check-circle" class="size-3 inline mr-1"></i
+                  >Silver Unlocked</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Achievement Certificates -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">
+            Achievement Certificates
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Silver Certificate - Unlocked -->
+            <div
+              class="p-6 bg-white border-2 border-green-200 rounded-xl hover:shadow-xl transition-all"
+            >
+              <div class="flex items-center justify-center mb-4 relative">
+                <div
+                  class="size-20 bg-linear-to-br from-gray-400 to-gray-500 rounded-full flex items-center justify-center"
+                >
+                  <i data-lucide="award" class="size-10 text-white"></i>
+                </div>
+                <div
+                  class="absolute -top-2 -right-2 bg-green-500 rounded-full p-1"
+                >
+                  <i data-lucide="check-circle" class="size-5 text-white"></i>
+                </div>
+              </div>
+              <div class="text-center mb-4">
+                <h3 class="font-semibold text-gray-900 mb-2">
+                  Silver Certificate
+                </h3>
+                <p class="text-sm text-gray-600 mb-2">
+                  Unlocked on Sep 15, 2024
+                </p>
+                <span
+                  class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 border border-green-300 rounded-full"
+                  ><i data-lucide="check-circle" class="size-3 inline mr-1"></i
+                  >Unlocked</span
+                >
+              </div>
+              <button
+                class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+              >
+                <i data-lucide="download" class="size-4 inline mr-2"></i
+                >Download
+              </button>
+            </div>
+
+            <!-- Platinum Certificate - Locked -->
+            <div
+              class="p-6 bg-white border-2 border-gray-200 rounded-xl opacity-60"
+            >
+              <div class="flex items-center justify-center mb-4">
+                <div
+                  class="size-20 bg-linear-to-br from-gray-300 to-gray-400 rounded-full flex items-center justify-center"
+                >
+                  <i data-lucide="lock" class="size-10 text-gray-500"></i>
+                </div>
+              </div>
+              <div class="text-center mb-4">
+                <h3 class="font-semibold text-gray-500 mb-2">
+                  Platinum Certificate
+                </h3>
+                <p class="text-sm text-gray-500 mb-2">Requires 5 donations</p>
+                <span
+                  class="px-2 py-1 text-xs font-medium border border-gray-400 text-gray-600 rounded-full"
+                  >1 more donation needed</span
+                >
+              </div>
+              <button
+                class="w-full px-4 py-2 border border-gray-300 text-gray-400 rounded-lg font-medium cursor-not-allowed"
+                disabled
+              >
+                <i data-lucide="lock" class="size-4 inline mr-2"></i>Locked
+              </button>
+            </div>
+
+            <!-- Diamond Certificate - Locked -->
+            <div
+              class="p-6 bg-white border-2 border-gray-200 rounded-xl opacity-60"
+            >
+              <div class="flex items-center justify-center mb-4">
+                <div
+                  class="size-20 bg-linear-to-br from-gray-300 to-gray-400 rounded-full flex items-center justify-center"
+                >
+                  <i data-lucide="lock" class="size-10 text-gray-500"></i>
+                </div>
+              </div>
+              <div class="text-center mb-4">
+                <h3 class="font-semibold text-gray-500 mb-2">
+                  Diamond Certificate
+                </h3>
+                <p class="text-sm text-gray-500 mb-2">Requires 8 donations</p>
+                <span
+                  class="px-2 py-1 text-xs font-medium border border-gray-400 text-gray-600 rounded-full"
+                  >4 more donations needed</span
+                >
+              </div>
+              <button
+                class="w-full px-4 py-2 border border-gray-300 text-gray-400 rounded-lg font-medium cursor-not-allowed"
+                disabled
+              >
+                <i data-lucide="lock" class="size-4 inline mr-2"></i>Locked
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Donation Certificates -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-1">
+              Recent Donation Certificates
+            </h2>
+            <p class="text-sm text-gray-600">
+              Download individual certificates for each donation
+            </p>
+          </div>
+          <div class="space-y-4">
+            <div
+              class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+            >
+              <div class="flex items-center gap-4">
+                <div class="bg-red-100 p-3 rounded-lg">
+                  <i data-lucide="file-text" class="size-6 text-red-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium text-gray-900">
+                    Donation Certificate - DON012
+                  </h4>
+                  <p class="text-sm text-gray-600">
+                    City Hospital • Nov 10, 2024
+                  </p>
+                </div>
+              </div>
+              <button
+                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+              >
+                <i data-lucide="download" class="size-4 inline mr-2"></i
+                >Download
+              </button>
+            </div>
+            <div
+              class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+            >
+              <div class="flex items-center gap-4">
+                <div class="bg-red-100 p-3 rounded-lg">
+                  <i data-lucide="file-text" class="size-6 text-red-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium text-gray-900">
+                    Donation Certificate - DON011
+                  </h4>
+                  <p class="text-sm text-gray-600">
+                    St. Mary Medical • Aug 15, 2024
+                  </p>
+                </div>
+              </div>
+              <button
+                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+              >
+                <i data-lucide="download" class="size-4 inline mr-2"></i
+                >Download
+              </button>
+            </div>
+            <div
+              class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+            >
+              <div class="flex items-center gap-4">
+                <div class="bg-red-100 p-3 rounded-lg">
+                  <i data-lucide="file-text" class="size-6 text-red-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium text-gray-900">
+                    Donation Certificate - DON010
+                  </h4>
+                  <p class="text-sm text-gray-600">
+                    Regional Hospital • May 20, 2024
+                  </p>
+                </div>
+              </div>
+              <button
+                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+              >
+                <i data-lucide="download" class="size-4 inline mr-2"></i
+                >Download
+              </button>
+            </div>
+            <div
+              class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+            >
+              <div class="flex items-center gap-4">
+                <div class="bg-red-100 p-3 rounded-lg">
+                  <i data-lucide="file-text" class="size-6 text-red-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium text-gray-900">
+                    Donation Certificate - DON009
+                  </h4>
+                  <p class="text-sm text-gray-600">
+                    Community Hospital • Feb 10, 2024
+                  </p>
+                </div>
+              </div>
+              <button
+                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+              >
+                <i data-lucide="download" class="size-4 inline mr-2"></i
+                >Download
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/src/scripts/main.js"></script>
+  </body>
+</html>
+
+

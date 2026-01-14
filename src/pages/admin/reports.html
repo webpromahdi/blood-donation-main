@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reports - BloodConnect Admin</title>
+    <link rel="stylesheet" href="/src/styles/styles.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Admin Panel</div>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/src/pages/admin/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/src/pages/admin/donors.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="users" class="size-5"></i><span>Donors</span></a
+        >
+        <a
+          href="/src/pages/admin/hospitals.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="building-2" class="size-5"></i
+          ><span>Hospitals</span></a
+        >
+        <a
+          href="/src/pages/admin/blood-groups.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="droplet" class="size-5"></i
+          ><span>Blood Groups</span></a
+        >
+        <a
+          href="/src/pages/admin/reports.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="file-text" class="size-5"></i><span>Reports</span></a
+        >
+        <a
+          href="/src/pages/admin/announcements.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="megaphone" class="size-5"></i
+          ><span>Announcements</span></a
+        >
+        <a
+          href="/src/pages/admin/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">Reports & Analytics</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <!-- Notification Dropdown -->
+        <div class="relative" id="notificationDropdown">
+          <button
+            class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            onclick="toggleNotifications()"
+            id="notificationBell"
+          >
+            <i data-lucide="bell" class="size-5 text-gray-700"></i>
+            <span
+              class="absolute -top-1 -right-1 size-5 flex items-center justify-center p-0 bg-red-600 text-white text-xs rounded-full"
+              id="notificationBadge"
+              >4</span
+            >
+          </button>
+
+          <!-- Notification Panel -->
+          <div
+            id="notificationPanel"
+            class="hidden absolute right-0 top-12 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50"
+          >
+            <div
+              class="p-4 border-b border-gray-200 flex items-center justify-between"
+            >
+              <h3 class="font-semibold text-gray-900">Notifications</h3>
+              <button
+                onclick="markAllAsRead()"
+                class="text-xs text-red-600 hover:text-red-700 font-medium"
+              >
+                Mark all as read
+              </button>
+            </div>
+            <div class="max-h-80 overflow-y-auto" id="notificationList">
+              <!-- Notifications will be populated by JS -->
+            </div>
+            <div class="p-3 border-t border-gray-200 text-center">
+              <button
+                class="text-sm text-red-600 hover:text-red-700 font-medium"
+              >
+                View all notifications
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900">Admin User</div>
+            <div class="text-xs text-gray-500">System Administrator</div>
+          </div>
+          <div
+            class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="user" class="size-5 text-red-600"></i>
+          </div>
+        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 pt-16">
+      <div class="p-8 space-y-8">
+        <!-- Page Header -->
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">
+              Reports & Analytics
+            </h1>
+            <p class="text-gray-600">Generate and download system reports</p>
+          </div>
+          <div class="flex gap-3">
+            <button
+              class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+            >
+              <i data-lucide="filter" class="size-4 mr-2"></i>
+              Filter
+            </button>
+            <button
+              class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+            >
+              <i data-lucide="calendar" class="size-4 mr-2"></i>
+              Date Range
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Reports Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            class="p-6 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-shadow cursor-pointer"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <div class="bg-red-100 p-3 rounded-lg">
+                <i data-lucide="file-text" class="size-6 text-red-600"></i>
+              </div>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+              Donor Report
+            </h3>
+            <p class="text-gray-600 mb-4">Complete donor statistics</p>
+            <button
+              class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium inline-flex items-center justify-center"
+            >
+              <i data-lucide="download" class="size-4 mr-2"></i>
+              Download PDF
+            </button>
+          </div>
+
+          <div
+            class="p-6 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-shadow cursor-pointer"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <div class="bg-blue-100 p-3 rounded-lg">
+                <i data-lucide="building-2" class="size-6 text-blue-600"></i>
+              </div>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+              Hospital Report
+            </h3>
+            <p class="text-gray-600 mb-4">Hospital activity summary</p>
+            <button
+              class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium inline-flex items-center justify-center"
+            >
+              <i data-lucide="download" class="size-4 mr-2"></i>
+              Download PDF
+            </button>
+          </div>
+
+          <div
+            class="p-6 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-shadow cursor-pointer"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <div class="bg-purple-100 p-3 rounded-lg">
+                <i data-lucide="file-text" class="size-6 text-purple-600"></i>
+              </div>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+              Monthly Summary
+            </h3>
+            <p class="text-gray-600 mb-4">Comprehensive overview</p>
+            <button
+              class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium inline-flex items-center justify-center"
+            >
+              <i data-lucide="download" class="size-4 mr-2"></i>
+              Download PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Line Chart - Donations vs Requests -->
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="mb-6">
+              <h2 class="text-lg font-semibold text-gray-900 mb-1">
+                Donations vs Requests
+              </h2>
+              <p class="text-sm text-gray-600">Monthly comparison</p>
+            </div>
+            <div class="h-75">
+              <canvas id="lineChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Pie Chart - Blood Type Distribution -->
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="mb-6">
+              <h2 class="text-lg font-semibold text-gray-900 mb-1">
+                Blood Type Distribution
+              </h2>
+              <p class="text-sm text-gray-600">Donor count by blood type</p>
+            </div>
+            <div class="h-75">
+              <canvas id="pieChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bar Chart - Monthly Donation Trends -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-1">
+              Monthly Donation Trends
+            </h2>
+            <p class="text-sm text-gray-600">
+              Compare donations and requests over time
+            </p>
+          </div>
+          <div class="h-87.5">
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Custom Report Generator -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-1">
+              Custom Report Generator
+            </h2>
+            <p class="text-sm text-gray-600">
+              Create a custom report with specific parameters
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div>
+              <label class="text-gray-700 mb-2 block font-medium"
+                >Report Type</label
+              >
+              <select
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                <option>Donor Report</option>
+                <option>Hospital Report</option>
+                <option>Blood Inventory</option>
+                <option>Request History</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-gray-700 mb-2 block font-medium"
+                >Date Range</label
+              >
+              <select
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                <option>Last 7 Days</option>
+                <option>Last 30 Days</option>
+                <option>Last 3 Months</option>
+                <option>Last Year</option>
+                <option>Custom Range</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-gray-700 mb-2 block font-medium">Format</label>
+              <select
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                <option>PDF</option>
+                <option>Excel</option>
+                <option>CSV</option>
+              </select>
+            </div>
+          </div>
+
+          <button
+            class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium inline-flex items-center"
+            onclick="openReportPreview()"
+          >
+            <i data-lucide="file-text" class="size-4 mr-2"></i>
+            Generate Custom Report
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Report Preview Modal -->
+    <dialog id="reportModal" class="modal">
+      <div class="modal-box bg-white max-w-4xl w-full">
+        <form method="dialog">
+          <button
+            class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4"
+          >
+            <i data-lucide="x" class="size-5"></i>
+          </button>
+        </form>
+        <div id="reportPreviewContent">
+          <!-- Content will be populated dynamically -->
+        </div>
+        <div class="modal-action">
+          <form method="dialog">
+            <button
+              class="btn bg-gray-100 hover:bg-gray-200 text-gray-700 border-0"
+            >
+              Close Preview
+            </button>
+          </form>
+        </div>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+    <script>
+      function openReportPreview() {
+        // Get selected values from the form
+        const reportTypeSelect = document.querySelector("select");
+        const dateRangeSelect = document.querySelectorAll("select")[1];
+        const formatSelect = document.querySelectorAll("select")[2];
+
+        const reportType = reportTypeSelect?.value || "Donor Report";
+        const dateRange = dateRangeSelect?.value || "Last 30 Days";
+        const format = formatSelect?.value || "PDF";
+
+        // Generate current date for the report
+        const today = new Date();
+        const generatedDate = today.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+
+        // Calculate date range display
+        const endDate = today.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+        let startDate;
+        if (dateRange === "Last 7 Days") {
+          startDate = new Date(
+            today.getTime() - 7 * 24 * 60 * 60 * 1000
+          ).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+        } else if (dateRange === "Last 30 Days") {
+          startDate = new Date(
+            today.getTime() - 30 * 24 * 60 * 60 * 1000
+          ).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+        } else if (dateRange === "Last 3 Months") {
+          startDate = new Date(
+            today.getTime() - 90 * 24 * 60 * 60 * 1000
+          ).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+        } else {
+          startDate = new Date(
+            today.getTime() - 365 * 24 * 60 * 60 * 1000
+          ).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+        }
+
+        const content = `
+          <div class="border-b border-gray-200 pb-6 mb-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="bg-red-100 p-3 rounded-lg">
+                <i data-lucide="file-text" class="size-8 text-red-600"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-2xl text-gray-900">${reportType}</h3>
+                <p class="text-gray-500">Generated on ${generatedDate}</p>
+              </div>
+            </div>
+            <div class="flex gap-6 text-sm">
+              <div class="flex items-center gap-2">
+                <i data-lucide="calendar" class="size-4 text-gray-400"></i>
+                <span class="text-gray-600">Period: ${startDate} - ${endDate}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="file" class="size-4 text-gray-400"></i>
+                <span class="text-gray-600">Format: ${format}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary Statistics -->
+          <div class="mb-6">
+            <h4 class="font-semibold text-lg text-gray-900 mb-4">Summary Statistics</h4>
+            <div class="grid grid-cols-4 gap-4">
+              <div class="bg-red-50 p-4 rounded-lg text-center">
+                <p class="text-3xl font-bold text-red-600">1,247</p>
+                <p class="text-sm text-gray-600">Total Donations</p>
+              </div>
+              <div class="bg-blue-50 p-4 rounded-lg text-center">
+                <p class="text-3xl font-bold text-blue-600">892</p>
+                <p class="text-sm text-gray-600">Active Donors</p>
+              </div>
+              <div class="bg-green-50 p-4 rounded-lg text-center">
+                <p class="text-3xl font-bold text-green-600">98.5%</p>
+                <p class="text-sm text-gray-600">Success Rate</p>
+              </div>
+              <div class="bg-purple-50 p-4 rounded-lg text-center">
+                <p class="text-3xl font-bold text-purple-600">3,741</p>
+                <p class="text-sm text-gray-600">Lives Saved</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Table Preview -->
+          <div class="mb-6">
+            <h4 class="font-semibold text-lg text-gray-900 mb-4">Detailed Data Preview</h4>
+            <div class="overflow-x-auto border border-gray-200 rounded-lg">
+              <table class="w-full">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">ID</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">Date</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">Category</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">Blood Type</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">Quantity</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-t border-gray-100">
+                    <td class="py-3 px-4 text-gray-900 font-medium">RPT-001</td>
+                    <td class="py-3 px-4 text-gray-600">2024-11-10</td>
+                    <td class="py-3 px-4 text-gray-600">Emergency</td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">O+</span></td>
+                    <td class="py-3 px-4 text-gray-900">2 Units</td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Completed</span></td>
+                  </tr>
+                  <tr class="border-t border-gray-100">
+                    <td class="py-3 px-4 text-gray-900 font-medium">RPT-002</td>
+                    <td class="py-3 px-4 text-gray-600">2024-11-09</td>
+                    <td class="py-3 px-4 text-gray-600">Scheduled</td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">A+</span></td>
+                    <td class="py-3 px-4 text-gray-900">3 Units</td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Completed</span></td>
+                  </tr>
+                  <tr class="border-t border-gray-100">
+                    <td class="py-3 px-4 text-gray-900 font-medium">RPT-003</td>
+                    <td class="py-3 px-4 text-gray-600">2024-11-08</td>
+                    <td class="py-3 px-4 text-gray-600">Voluntary</td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">B-</span></td>
+                    <td class="py-3 px-4 text-gray-900">1 Unit</td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">Processing</span></td>
+                  </tr>
+                  <tr class="border-t border-gray-100">
+                    <td class="py-3 px-4 text-gray-900 font-medium">RPT-004</td>
+                    <td class="py-3 px-4 text-gray-600">2024-11-07</td>
+                    <td class="py-3 px-4 text-gray-600">Emergency</td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">AB+</span></td>
+                    <td class="py-3 px-4 text-gray-900">2 Units</td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Completed</span></td>
+                  </tr>
+                  <tr class="border-t border-gray-100">
+                    <td class="py-3 px-4 text-gray-900 font-medium">RPT-005</td>
+                    <td class="py-3 px-4 text-gray-600">2024-11-06</td>
+                    <td class="py-3 px-4 text-gray-600">Scheduled</td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">O-</span></td>
+                    <td class="py-3 px-4 text-gray-900">1 Unit</td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Completed</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-sm text-gray-500 mt-2 italic">Showing 5 of 1,247 records. Full data available in downloaded report.</p>
+          </div>
+
+          <!-- Blood Type Distribution -->
+          <div>
+            <h4 class="font-semibold text-lg text-gray-900 mb-4">Blood Type Distribution</h4>
+            <div class="grid grid-cols-4 gap-3">
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <span class="font-medium text-gray-900">O+</span>
+                <span class="text-red-600 font-semibold">423 (25.1%)</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <span class="font-medium text-gray-900">A+</span>
+                <span class="text-red-600 font-semibold">342 (20.3%)</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <span class="font-medium text-gray-900">B+</span>
+                <span class="text-red-600 font-semibold">289 (17.2%)</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <span class="font-medium text-gray-900">AB+</span>
+                <span class="text-red-600 font-semibold">156 (9.3%)</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <span class="font-medium text-gray-900">O-</span>
+                <span class="text-red-600 font-semibold">185 (11.0%)</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <span class="font-medium text-gray-900">A-</span>
+                <span class="text-red-600 font-semibold">128 (7.6%)</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <span class="font-medium text-gray-900">B-</span>
+                <span class="text-red-600 font-semibold">94 (5.6%)</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <span class="font-medium text-gray-900">AB-</span>
+                <span class="text-red-600 font-semibold">67 (4.0%)</span>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.getElementById("reportPreviewContent").innerHTML = content;
+        document.getElementById("reportModal").showModal();
+
+        // Re-initialize Lucide icons in the modal
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }
+
+      // Notification System
+      const notifications = [
+        {
+          id: 1,
+          title: "New Donor Registration",
+          message: "John Doe has registered as a new blood donor",
+          time: "2 minutes ago",
+          read: false,
+          icon: "user-plus",
+          iconBg: "bg-green-100",
+          iconColor: "text-green-600",
+        },
+        {
+          id: 2,
+          title: "Hospital Request Approved",
+          message: "City General Hospital blood request approved",
+          time: "15 minutes ago",
+          read: false,
+          icon: "check-circle",
+          iconBg: "bg-blue-100",
+          iconColor: "text-blue-600",
+        },
+        {
+          id: 3,
+          title: "Urgent Blood Request",
+          message: "Emergency O- blood needed at St. Mary Hospital",
+          time: "1 hour ago",
+          read: false,
+          icon: "alert-circle",
+          iconBg: "bg-red-100",
+          iconColor: "text-red-600",
+        },
+        {
+          id: 4,
+          title: "Monthly Report Generated",
+          message: "November 2024 donation report is ready",
+          time: "3 hours ago",
+          read: false,
+          icon: "file-text",
+          iconBg: "bg-purple-100",
+          iconColor: "text-purple-600",
+        },
+        {
+          id: 5,
+          title: "New Hospital Registration",
+          message: "Regional Medical Center pending approval",
+          time: "5 hours ago",
+          read: true,
+          icon: "building-2",
+          iconBg: "bg-orange-100",
+          iconColor: "text-orange-600",
+        },
+        {
+          id: 6,
+          title: "Blood Camp Scheduled",
+          message: "Community blood drive scheduled for Dec 15",
+          time: "1 day ago",
+          read: true,
+          icon: "calendar",
+          iconBg: "bg-teal-100",
+          iconColor: "text-teal-600",
+        },
+      ];
+
+      function renderNotifications() {
+        const container = document.getElementById("notificationList");
+        const unreadCount = notifications.filter((n) => !n.read).length;
+        const badge = document.getElementById("notificationBadge");
+        if (unreadCount > 0) {
+          badge.textContent = unreadCount;
+          badge.classList.remove("hidden");
+        } else {
+          badge.classList.add("hidden");
+        }
+        container.innerHTML = notifications
+          .map(
+            (n) => `
+          <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
+            n.read ? "opacity-70" : ""
+          }" data-id="${n.id}" onclick="markAsRead(${n.id})">
+            <div class="flex gap-3">
+              <div class="${n.iconBg} p-2 rounded-lg h-fit"><i data-lucide="${
+              n.icon
+            }" class="size-4 ${n.iconColor}"></i></div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-2">
+                  <p class="text-sm ${
+                    n.read
+                      ? "font-normal text-gray-700"
+                      : "font-semibold text-gray-900"
+                  } truncate">${n.title}</p>
+                  ${
+                    !n.read
+                      ? '<span class="size-2 bg-red-600 rounded-full flex-shrink-0 mt-1.5"></span>'
+                      : ""
+                  }
+                </div>
+                <p class="text-xs text-gray-500 mt-0.5 line-clamp-1">${
+                  n.message
+                }</p>
+                <p class="text-xs text-gray-400 mt-1">${n.time}</p>
+              </div>
+            </div>
+          </div>
+        `
+          )
+          .join("");
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }
+
+      function toggleNotifications() {
+        const panel = document.getElementById("notificationPanel");
+        panel.classList.toggle("hidden");
+        if (!panel.classList.contains("hidden")) {
+          renderNotifications();
+        }
+      }
+      function markAsRead(id) {
+        const n = notifications.find((x) => x.id === id);
+        if (n) {
+          n.read = true;
+          renderNotifications();
+        }
+      }
+      function markAllAsRead() {
+        notifications.forEach((n) => (n.read = true));
+        renderNotifications();
+      }
+      document.addEventListener("click", function (e) {
+        const dropdown = document.getElementById("notificationDropdown");
+        const panel = document.getElementById("notificationPanel");
+        if (
+          !dropdown.contains(e.target) &&
+          !panel.classList.contains("hidden")
+        ) {
+          panel.classList.add("hidden");
+        }
+      });
+      document.addEventListener("DOMContentLoaded", function () {
+        renderNotifications();
+      });
+    </script>
+    <script type="module" src="/src/scripts/main.js"></script>
+    <script type="module">
+      import Chart from "chart.js/auto";
+
+      // Chart data from TSX
+      const donationData = [
+        { month: "Jan", donations: 145, requests: 132 },
+        { month: "Feb", donations: 167, requests: 158 },
+        { month: "Mar", donations: 189, requests: 171 },
+        { month: "Apr", donations: 156, requests: 149 },
+        { month: "May", donations: 178, requests: 165 },
+        { month: "Jun", donations: 198, requests: 184 },
+      ];
+
+      const bloodTypeData = [
+        { name: "O+", value: 423, color: "#EF4444" },
+        { name: "A+", value: 342, color: "#F97316" },
+        { name: "B+", value: 289, color: "#F59E0B" },
+        { name: "AB+", value: 156, color: "#10B981" },
+        { name: "O-", value: 185, color: "#3B82F6" },
+        { name: "A-", value: 128, color: "#6366F1" },
+        { name: "B-", value: 94, color: "#8B5CF6" },
+        { name: "AB-", value: 67, color: "#EC4899" },
+      ];
+
+      // Initialize charts after DOM is loaded
+      document.addEventListener("DOMContentLoaded", () => {
+        initLineChart();
+        initPieChart();
+        initBarChart();
+      });
+
+      function initLineChart() {
+        const ctx = document.getElementById("lineChart").getContext("2d");
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: donationData.map((d) => d.month),
+            datasets: [
+              {
+                label: "Donations",
+                data: donationData.map((d) => d.donations),
+                borderColor: "#EF4444",
+                backgroundColor: "rgba(239, 68, 68, 0.1)",
+                borderWidth: 2,
+                tension: 0.3,
+                fill: false,
+              },
+              {
+                label: "Requests",
+                data: donationData.map((d) => d.requests),
+                borderColor: "#3B82F6",
+                backgroundColor: "rgba(59, 130, 246, 0.1)",
+                borderWidth: 2,
+                tension: 0.3,
+                fill: false,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)",
+                },
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+          },
+        });
+      }
+
+      function initPieChart() {
+        const ctx = document.getElementById("pieChart").getContext("2d");
+        new Chart(ctx, {
+          type: "pie",
+          data: {
+            labels: bloodTypeData.map((d) => d.name),
+            datasets: [
+              {
+                data: bloodTypeData.map((d) => d.value),
+                backgroundColor: bloodTypeData.map((d) => d.color),
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "right",
+                labels: {
+                  usePointStyle: true,
+                  padding: 15,
+                },
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const label = context.label || "";
+                    const value = context.raw || 0;
+                    return `${label}: ${value} donors`;
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+
+      function initBarChart() {
+        const ctx = document.getElementById("barChart").getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: donationData.map((d) => d.month),
+            datasets: [
+              {
+                label: "Donations",
+                data: donationData.map((d) => d.donations),
+                backgroundColor: "#EF4444",
+                borderRadius: 4,
+              },
+              {
+                label: "Requests",
+                data: donationData.map((d) => d.requests),
+                backgroundColor: "#3B82F6",
+                borderRadius: 4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)",
+                },
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+          },
+        });
+      }
+    </script>
+  </body>
+</html>
+
+

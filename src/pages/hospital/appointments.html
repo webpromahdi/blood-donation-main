@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointments - BloodConnect Hospital</title>
+    <link rel="stylesheet" href="/src/styles/styles.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Hospital Portal</div>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/src/pages/hospital/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/src/pages/hospital/request.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="droplet" class="size-5"></i
+          ><span>Request Blood</span></a
+        >
+        <a
+          href="/src/pages/hospital/donors.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="users" class="size-5"></i><span>Donor List</span></a
+        >
+        <a
+          href="/src/pages/hospital/appointments.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="calendar-check" class="size-5"></i
+          ><span>Appointments</span></a
+        >
+        <a
+          href="/src/pages/hospital/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">Appointments</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900">City Hospital</div>
+            <div class="text-xs text-gray-500">Hospital Admin</div>
+          </div>
+          <div
+            class="size-10 bg-blue-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="building-2" class="size-5 text-blue-600"></i>
+          </div>
+        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 pt-16">
+      <div class="p-8 space-y-8">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">Appointments</h1>
+          <p class="text-gray-600">
+            Manage donation appointments and schedules
+          </p>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Total Appointments</p>
+                <h2 class="text-3xl font-bold text-gray-900">6</h2>
+              </div>
+              <div class="bg-blue-100 p-3 rounded-lg">
+                <i data-lucide="calendar" class="size-6 text-blue-600"></i>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Confirmed</p>
+                <h2 class="text-3xl font-bold text-gray-900">3</h2>
+              </div>
+              <div class="bg-green-100 p-3 rounded-lg">
+                <i data-lucide="check-circle" class="size-6 text-green-600"></i>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Pending</p>
+                <h2 class="text-3xl font-bold text-gray-900">2</h2>
+              </div>
+              <div class="bg-yellow-100 p-3 rounded-lg">
+                <i data-lucide="clock" class="size-6 text-yellow-600"></i>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Completed</p>
+                <h2 class="text-3xl font-bold text-gray-900">1</h2>
+              </div>
+              <div class="bg-purple-100 p-3 rounded-lg">
+                <i
+                  data-lucide="check-circle"
+                  class="size-6 text-purple-600"
+                ></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Appointments Table -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="mb-6 flex items-center justify-between">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-900 mb-1">
+                Appointments
+              </h2>
+              <p class="text-sm text-gray-600">
+                View and manage donation appointments
+              </p>
+            </div>
+            <button
+              class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+            >
+              <i data-lucide="calendar" class="size-4 inline mr-2"></i>Schedule
+              New
+            </button>
+          </div>
+
+          <!-- Tab Navigation -->
+          <div class="flex gap-2 mb-6 border-b border-gray-200">
+            <button
+              id="tabPending"
+              class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-red-600 text-red-600"
+              data-tab="pending"
+            >
+              Pending
+              <span
+                id="pendingCount"
+                class="ml-1 px-2 py-0.5 text-xs bg-yellow-100 text-yellow-700 rounded-full"
+                >0</span
+              >
+            </button>
+            <button
+              id="tabScheduled"
+              class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900"
+              data-tab="scheduled"
+            >
+              Accepted / Scheduled
+              <span
+                id="scheduledCount"
+                class="ml-1 px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded-full"
+                >0</span
+              >
+            </button>
+            <button
+              id="tabAll"
+              class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900"
+              data-tab="all"
+            >
+              All Appointments
+              <span
+                id="allCount"
+                class="ml-1 px-2 py-0.5 text-xs bg-gray-100 text-gray-700 rounded-full"
+                >0</span
+              >
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-gray-200">
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    ID
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Donor Name
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Blood Type
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Date
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Time
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Type
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="appointmentsTableBody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty State -->
+          <div id="emptyState" class="hidden text-center py-16 px-6">
+            <div
+              class="inline-flex items-center justify-center size-20 rounded-full bg-gray-100 mb-4"
+            >
+              <i data-lucide="calendar" class="size-10 text-gray-400"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+              No appointments found
+            </h3>
+            <p id="emptyStateMessage" class="text-gray-600">
+              No appointments match the current filter
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/src/scripts/main.js"></script>
+    <script>
+      // Hospital Appointments - Interactive State Management with Tabs
+      document.addEventListener("DOMContentLoaded", function () {
+        // Combined appointment data (regular + voluntary donations)
+        let appointments = [
+          // Regular appointments
+          {
+            id: "APT001",
+            donor: "John Smith",
+            bloodType: "O+",
+            date: "2024-11-25",
+            time: "10:00 AM",
+            type: "Request",
+            status: "Confirmed",
+          },
+          {
+            id: "APT002",
+            donor: "Maria Garcia",
+            bloodType: "A+",
+            date: "2024-11-25",
+            time: "11:30 AM",
+            type: "Request",
+            status: "Confirmed",
+          },
+          {
+            id: "APT003",
+            donor: "David Lee",
+            bloodType: "B-",
+            date: "2024-11-26",
+            time: "09:00 AM",
+            type: "Request",
+            status: "Pending",
+          },
+          {
+            id: "APT004",
+            donor: "Sarah Johnson",
+            bloodType: "O-",
+            date: "2024-11-26",
+            time: "02:00 PM",
+            type: "Request",
+            status: "Confirmed",
+          },
+          {
+            id: "APT005",
+            donor: "Michael Brown",
+            bloodType: "AB+",
+            date: "2024-11-27",
+            time: "03:30 PM",
+            type: "Request",
+            status: "Pending",
+          },
+          {
+            id: "APT006",
+            donor: "Emma Wilson",
+            bloodType: "A-",
+            date: "2024-11-23",
+            time: "01:00 PM",
+            type: "Request",
+            status: "Completed",
+          },
+          // Voluntary donation requests
+          {
+            id: "VR001",
+            donor: "Robert Chen",
+            bloodType: "O+",
+            date: "2024-12-10",
+            time: "10:00 AM",
+            type: "Voluntary",
+            status: "Pending",
+          },
+          {
+            id: "VR002",
+            donor: "Jennifer White",
+            bloodType: "A+",
+            date: "2024-12-12",
+            time: "02:00 PM",
+            type: "Voluntary",
+            status: "Pending",
+          },
+          {
+            id: "VR003",
+            donor: "Kevin Park",
+            bloodType: "B-",
+            date: "2024-12-08",
+            time: "11:00 AM",
+            type: "Voluntary",
+            status: "Pending",
+          },
+          {
+            id: "VR004",
+            donor: "Amanda Miller",
+            bloodType: "O-",
+            date: "2024-12-15",
+            time: "09:00 AM",
+            type: "Voluntary",
+            status: "Pending",
+          },
+        ];
+
+        let currentTab = "pending";
+
+        const tableBody = document.getElementById("appointmentsTableBody");
+        const emptyState = document.getElementById("emptyState");
+        const emptyStateMessage = document.getElementById("emptyStateMessage");
+        const statCards = document.querySelectorAll(
+          ".grid.grid-cols-1.md\\:grid-cols-4 .text-3xl"
+        );
+        const tabButtons = document.querySelectorAll(".tab-btn");
+
+        // Tab click handlers
+        tabButtons.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            currentTab = this.dataset.tab;
+            updateTabStyles();
+            renderAppointments();
+          });
+        });
+
+        function updateTabStyles() {
+          tabButtons.forEach((btn) => {
+            const isActive = btn.dataset.tab === currentTab;
+            btn.classList.toggle("border-red-600", isActive);
+            btn.classList.toggle("text-red-600", isActive);
+            btn.classList.toggle("border-transparent", !isActive);
+            btn.classList.toggle("text-gray-600", !isActive);
+          });
+        }
+
+        function getFilteredAppointments() {
+          if (currentTab === "pending") {
+            return appointments.filter((a) => a.status === "Pending");
+          } else if (currentTab === "scheduled") {
+            return appointments.filter((a) => a.status === "Confirmed");
+          } else {
+            return appointments;
+          }
+        }
+
+        function updateStats() {
+          const total = appointments.length;
+          const confirmed = appointments.filter(
+            (a) => a.status === "Confirmed"
+          ).length;
+          const pending = appointments.filter(
+            (a) => a.status === "Pending"
+          ).length;
+          const completed = appointments.filter(
+            (a) => a.status === "Completed"
+          ).length;
+
+          if (statCards.length >= 4) {
+            statCards[0].textContent = total;
+            statCards[1].textContent = confirmed;
+            statCards[2].textContent = pending;
+            statCards[3].textContent = completed;
+          }
+
+          // Update tab counts
+          document.getElementById("pendingCount").textContent = pending;
+          document.getElementById("scheduledCount").textContent = confirmed;
+          document.getElementById("allCount").textContent = total;
+        }
+
+        function getStatusBadge(status) {
+          if (status === "Confirmed") return "bg-green-100 text-green-700";
+          if (status === "Pending") return "bg-yellow-100 text-yellow-700";
+          if (status === "Completed") return "bg-purple-100 text-purple-700";
+          if (status === "Cancelled") return "bg-red-100 text-red-700";
+          return "bg-gray-100 text-gray-700";
+        }
+
+        function getTypeBadge(type) {
+          if (type === "Voluntary") return "bg-blue-100 text-blue-700";
+          return "bg-gray-100 text-gray-700";
+        }
+
+        function getActionButtons(apt) {
+          if (apt.status === "Pending") {
+            return `
+              <div class="flex gap-2">
+                <button class="confirm-btn px-3 py-1 text-sm bg-green-600 hover:bg-green-700 text-white rounded-lg" data-id="${apt.id}">Accept</button>
+                <button class="cancel-btn px-3 py-1 text-sm text-red-600 border border-red-300 hover:bg-red-50 rounded-lg" data-id="${apt.id}">Decline</button>
+              </div>
+            `;
+          }
+          if (apt.status === "Confirmed") {
+            return `
+              <div class="flex gap-2">
+                <button class="complete-btn px-3 py-1 text-sm bg-purple-600 hover:bg-purple-700 text-white rounded-lg" data-id="${apt.id}">Complete</button>
+                <button class="cancel-btn px-3 py-1 text-sm text-red-600 border border-red-300 hover:bg-red-50 rounded-lg" data-id="${apt.id}">Cancel</button>
+              </div>
+            `;
+          }
+          if (apt.status === "Completed") {
+            return `<span class="text-sm text-green-600 font-medium">Donation Complete</span>`;
+          }
+          return '<span class="text-sm text-gray-500">—</span>';
+        }
+
+        function renderAppointments() {
+          const filtered = getFilteredAppointments();
+
+          if (filtered.length === 0) {
+            tableBody.parentElement.classList.add("hidden");
+            emptyState.classList.remove("hidden");
+            const tabName =
+              currentTab === "pending"
+                ? "pending"
+                : currentTab === "scheduled"
+                ? "accepted/scheduled"
+                : "";
+            emptyStateMessage.textContent = tabName
+              ? `No ${tabName} appointments at this time`
+              : "No appointments found";
+          } else {
+            tableBody.parentElement.classList.remove("hidden");
+            emptyState.classList.add("hidden");
+
+            tableBody.innerHTML = filtered
+              .map(
+                (apt) => `
+              <tr class="border-b border-gray-100 hover:bg-gray-50" data-id="${
+                apt.id
+              }">
+                <td class="py-3 px-4 text-gray-900 font-medium">${apt.id}</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                      <i data-lucide="user" class="size-5 text-red-600"></i>
+                    </div>
+                    <span class="font-medium text-gray-900">${apt.donor}</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${
+                    apt.bloodType
+                  }</span>
+                </td>
+                <td class="py-3 px-4 text-gray-900">${apt.date}</td>
+                <td class="py-3 px-4 text-gray-900">${apt.time}</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium ${getTypeBadge(
+                    apt.type
+                  )} rounded-full">${apt.type}</span>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium ${getStatusBadge(
+                    apt.status
+                  )} rounded-full">${apt.status}</span>
+                </td>
+                <td class="py-3 px-4">
+                  ${getActionButtons(apt)}
+                </td>
+              </tr>
+            `
+              )
+              .join("");
+
+            lucide.createIcons();
+            attachEventListeners();
+          }
+          updateStats();
+        }
+
+        function attachEventListeners() {
+          document.querySelectorAll(".confirm-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              updateAppointmentStatus(this.dataset.id, "Confirmed");
+            });
+          });
+          document.querySelectorAll(".complete-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              updateAppointmentStatus(this.dataset.id, "Completed");
+            });
+          });
+          document.querySelectorAll(".cancel-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              updateAppointmentStatus(this.dataset.id, "Cancelled");
+            });
+          });
+        }
+
+        function updateAppointmentStatus(id, newStatus) {
+          const apt = appointments.find((a) => a.id === id);
+          if (apt) {
+            apt.status = newStatus;
+
+            let message = "";
+            let type = "success";
+            if (newStatus === "Confirmed") {
+              message = `Appointment with ${apt.donor} has been accepted!`;
+            } else if (newStatus === "Completed") {
+              message = `Donation from ${apt.donor} marked as completed!`;
+            } else if (newStatus === "Cancelled") {
+              message = `Appointment with ${apt.donor} has been cancelled.`;
+              type = "info";
+            }
+
+            showNotification(message, type);
+            renderAppointments();
+          }
+        }
+
+        function showNotification(message, type = "success") {
+          const bgColor =
+            type === "success"
+              ? "bg-green-50 border-green-600"
+              : "bg-gray-50 border-gray-600";
+          const textColor =
+            type === "success" ? "text-green-900" : "text-gray-900";
+          const iconColor =
+            type === "success" ? "text-green-600" : "text-gray-600";
+          const icon = type === "success" ? "check-circle" : "info";
+
+          const notification = document.createElement("div");
+          notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50`;
+          notification.innerHTML = `
+            <div class="flex items-center gap-3">
+              <i data-lucide="${icon}" class="size-5 ${iconColor}"></i>
+              <p class="${textColor}">${message}</p>
+            </div>
+          `;
+          document.body.appendChild(notification);
+          lucide.createIcons();
+          setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Initial render
+        renderAppointments();
+      });
+    </script>
+  </body>
+</html>
+
+
