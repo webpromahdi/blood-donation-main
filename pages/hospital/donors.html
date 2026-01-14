@@ -41,12 +41,6 @@
           ><i data-lucide="users" class="size-5"></i><span>Donor List</span></a
         >
         <a
-          href="/pages/hospital/voluntary.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="calendar" class="size-5"></i
-          ><span>Voluntary Requests</span></a
-        >
-        <a
           href="/pages/hospital/appointments.html"
           class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
           ><i data-lucide="calendar-check" class="size-5"></i
@@ -605,11 +599,44 @@
       </div>
     </main>
 
+    <!-- Donor Details Modal -->
+    <div
+      id="donorModal"
+      class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center"
+    >
+      <div class="bg-white rounded-xl max-w-md w-full mx-4 shadow-xl">
+        <div
+          class="p-6 border-b border-gray-200 flex items-center justify-between"
+        >
+          <h3
+            class="text-lg font-semibold text-gray-900 flex items-center gap-2"
+          >
+            <i data-lucide="user" class="size-5 text-red-600"></i>
+            Donor Details
+          </h3>
+          <button id="closeModalBtn" class="p-2 hover:bg-gray-100 rounded-lg">
+            <i data-lucide="x" class="size-5 text-gray-500"></i>
+          </button>
+        </div>
+        <div class="p-6 space-y-4" id="donorModalContent">
+          <!-- Content will be populated dynamically -->
+        </div>
+        <div class="p-4 border-t border-gray-200 flex justify-end">
+          <button
+            id="closeModalFooterBtn"
+            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script type="module" src="/main.js"></script>
     <script>
       // Hospital Donor List - Interactive State Management
       document.addEventListener("DOMContentLoaded", function () {
-        // Donor data
+        // Donor data with contact info
         const donors = [
           {
             id: "DON001",
@@ -620,7 +647,8 @@
             lastDonation: "2 weeks ago",
             totalDonations: 12,
             isAvailable: true,
-            contacted: false,
+            phone: "555-0101",
+            email: "john.smith@email.com",
           },
           {
             id: "DON002",
@@ -631,7 +659,8 @@
             lastDonation: "1 month ago",
             totalDonations: 8,
             isAvailable: true,
-            contacted: false,
+            phone: "555-0102",
+            email: "maria.garcia@email.com",
           },
           {
             id: "DON003",
@@ -642,7 +671,8 @@
             lastDonation: "3 weeks ago",
             totalDonations: 5,
             isAvailable: false,
-            contacted: false,
+            phone: "555-0103",
+            email: "david.lee@email.com",
           },
           {
             id: "DON004",
@@ -653,7 +683,8 @@
             lastDonation: "1 week ago",
             totalDonations: 15,
             isAvailable: true,
-            contacted: false,
+            phone: "555-0104",
+            email: "sarah.johnson@email.com",
           },
           {
             id: "DON005",
@@ -664,7 +695,8 @@
             lastDonation: "2 months ago",
             totalDonations: 20,
             isAvailable: true,
-            contacted: false,
+            phone: "555-0105",
+            email: "michael.brown@email.com",
           },
           {
             id: "DON006",
@@ -675,7 +707,8 @@
             lastDonation: "3 months ago",
             totalDonations: 6,
             isAvailable: true,
-            contacted: false,
+            phone: "555-0106",
+            email: "emma.wilson@email.com",
           },
           {
             id: "DON007",
@@ -686,7 +719,8 @@
             lastDonation: "5 months ago",
             totalDonations: 10,
             isAvailable: true,
-            contacted: false,
+            phone: "555-0107",
+            email: "james.taylor@email.com",
           },
           {
             id: "DON008",
@@ -697,7 +731,8 @@
             lastDonation: "3 months ago",
             totalDonations: 7,
             isAvailable: false,
-            contacted: false,
+            phone: "555-0108",
+            email: "lisa.anderson@email.com",
           },
         ];
 
@@ -711,6 +746,101 @@
         const emptyState = document.getElementById("emptyState");
         const emptyStateMessage = document.getElementById("emptyStateMessage");
         const clearFiltersBtn = document.getElementById("clearFiltersBtn");
+
+        // Modal elements
+        const donorModal = document.getElementById("donorModal");
+        const donorModalContent = document.getElementById("donorModalContent");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+        const closeModalFooterBtn = document.getElementById(
+          "closeModalFooterBtn"
+        );
+
+        // Modal functions
+        function openDonorModal(donorId) {
+          const donor = donors.find((d) => d.id === donorId);
+          if (!donor) return;
+
+          const availabilityClass = donor.isAvailable
+            ? "border-green-600 text-green-600"
+            : "border-gray-600 text-gray-600";
+
+          donorModalContent.innerHTML = `
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <p class="text-sm text-gray-500">Name</p>
+                <p class="font-semibold text-gray-900">${donor.name}</p>
+              </div>
+              <div class="space-y-1">
+                <p class="text-sm text-gray-500">Age</p>
+                <p class="font-semibold text-gray-900">${donor.age} years</p>
+              </div>
+              <div class="space-y-1">
+                <p class="text-sm text-gray-500">Blood Type</p>
+                <p><span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${
+                  donor.bloodType
+                }</span></p>
+              </div>
+              <div class="space-y-1">
+                <p class="text-sm text-gray-500">Availability</p>
+                <p><span class="px-2 py-1 text-xs font-medium border ${availabilityClass} rounded-full">${
+            donor.isAvailable ? "Available" : "Not Available"
+          }</span></p>
+              </div>
+              <div class="space-y-1">
+                <p class="text-sm text-gray-500">Last Donation</p>
+                <p class="font-semibold text-gray-900">${donor.lastDonation}</p>
+              </div>
+              <div class="space-y-1">
+                <p class="text-sm text-gray-500">Total Donations</p>
+                <p class="font-semibold text-gray-900">${
+                  donor.totalDonations
+                } times</p>
+              </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-200 space-y-3">
+              <p class="text-sm font-medium text-gray-700">Contact Information</p>
+              <div class="flex items-center gap-2 text-gray-600">
+                <i data-lucide="phone" class="size-4"></i>
+                <span>${donor.phone}</span>
+              </div>
+              <div class="flex items-center gap-2 text-gray-600">
+                <i data-lucide="mail" class="size-4"></i>
+                <span>${donor.email}</span>
+              </div>
+              <div class="flex items-center gap-2 text-gray-600">
+                <i data-lucide="map-pin" class="size-4"></i>
+                <span>${donor.location}</span>
+              </div>
+            </div>
+          `;
+
+          donorModal.classList.remove("hidden");
+          donorModal.classList.add("flex");
+          lucide.createIcons();
+        }
+
+        function closeDonorModal() {
+          donorModal.classList.add("hidden");
+          donorModal.classList.remove("flex");
+        }
+
+        // Modal event listeners
+        closeModalBtn.addEventListener("click", closeDonorModal);
+        closeModalFooterBtn.addEventListener("click", closeDonorModal);
+
+        // Close on outside click
+        donorModal.addEventListener("click", function (e) {
+          if (e.target === donorModal) {
+            closeDonorModal();
+          }
+        });
+
+        // Close on ESC key
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && !donorModal.classList.contains("hidden")) {
+            closeDonorModal();
+          }
+        });
 
         // Set up filter button event listeners
         filterButtons.forEach((btn, index) => {
@@ -845,18 +975,18 @@
                   </span>
                 </td>
                 <td class="py-3 px-4">
-                  ${
-                    donor.contacted
-                      ? '<span class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-lg">Contacted</span>'
-                      : `<div class="flex gap-2">
-                        <button class="call-btn px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg" data-id="${donor.id}">
-                          <i data-lucide="phone" class="size-4 inline mr-1"></i>Call
-                        </button>
-                        <button class="chat-btn px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg" data-id="${donor.id}">
-                          <i data-lucide="message-square" class="size-4 inline mr-1"></i>Chat
-                        </button>
-                      </div>`
-                  }
+                  <div class="flex gap-2">
+                    <button class="view-details-btn px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg" data-id="${
+                      donor.id
+                    }">
+                      <i data-lucide="eye" class="size-4 inline mr-1"></i>View Details
+                    </button>
+                    <button class="chat-btn px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg" data-id="${
+                      donor.id
+                    }">
+                      <i data-lucide="message-square" class="size-4 inline mr-1"></i>Chat
+                    </button>
+                  </div>
                 </td>
               </tr>
             `
@@ -866,22 +996,24 @@
             // Re-init lucide icons
             lucide.createIcons();
 
-            // Attach event listeners for Call/Chat buttons
-            document.querySelectorAll(".call-btn, .chat-btn").forEach((btn) => {
+            // Attach event listeners for View Details/Chat buttons
+            document.querySelectorAll(".view-details-btn").forEach((btn) => {
               btn.addEventListener("click", function () {
                 const donorId = this.dataset.id;
-                markAsContacted(donorId);
+                openDonorModal(donorId);
               });
             });
-          }
-        }
-
-        function markAsContacted(donorId) {
-          const donor = donors.find((d) => d.id === donorId);
-          if (donor) {
-            donor.contacted = true;
-            renderDonors();
-            showNotification(`${donor.name} has been marked as contacted`);
+            document.querySelectorAll(".chat-btn").forEach((btn) => {
+              btn.addEventListener("click", function () {
+                const donorId = this.dataset.id;
+                const donor = donors.find((d) => d.id === donorId);
+                if (donor) {
+                  showNotification(`Opening chat with ${donor.name}...`);
+                  // Navigate to chat page (in real app)
+                  // window.location.href = '/pages/hospital/chat.html';
+                }
+              });
+            });
           }
         }
 
