@@ -577,80 +577,105 @@
       let activeDonation = null; // Stores the accepted request
       let selectedRequest = null; // Stores request being viewed in modal
 
-      // Emergency alerts data
-      let emergencyAlerts = [
-        {
-          id: 1,
-          patientName: "Rahul Sharma",
-          patientAge: 45,
-          contactPhone: "+91 98765 43210",
-          bloodType: "O+",
-          hospital: "Regional Hospital",
-          city: "Mumbai",
-          urgency: "Critical",
-          requiredByDate: "2026-01-14",
-          medicalReason:
-            "Emergency surgery required due to accident. Patient has lost significant blood and needs immediate transfusion.",
-          time: "2 hours ago",
-          units: 2,
-          status: "pending",
-          type: "emergency",
-        },
-        {
-          id: 2,
-          patientName: "Priya Patel",
-          patientAge: 32,
-          contactPhone: "+91 87654 32109",
-          bloodType: "O+",
-          hospital: "Community Medical Center",
-          city: "Mumbai",
-          urgency: "Urgent",
-          requiredByDate: "2026-01-15",
-          medicalReason:
-            "Post-delivery complications. Mother needs blood transfusion urgently.",
-          time: "5 hours ago",
-          units: 1,
-          status: "pending",
-          type: "emergency",
-        },
-      ];
+      // Emergency alerts data - loaded from API
+      let emergencyAlerts = [];
 
-      // Non-emergency requests data
-      let nonEmergencyRequests = [
-        {
-          id: 101,
-          patientName: "Amit Kumar",
-          patientAge: 58,
-          contactPhone: "+91 99887 76655",
-          bloodType: "O+",
-          hospital: "General Hospital",
-          city: "Pune",
-          urgency: "Routine",
-          requiredByDate: "2026-01-20",
-          medicalReason:
-            "Scheduled surgery for knee replacement. Blood required as precautionary measure.",
-          time: "1 day ago",
-          units: 2,
-          status: "pending",
-          type: "normal",
-        },
-        {
-          id: 102,
-          patientName: "Sneha Desai",
-          patientAge: 28,
-          contactPhone: "+91 88776 65544",
-          bloodType: "O+",
-          hospital: "Valley Medical Center",
-          city: "Nashik",
-          urgency: "Scheduled",
-          requiredByDate: "2026-01-25",
-          medicalReason: "Thalassemia patient requiring regular transfusion.",
-          time: "2 days ago",
-          units: 1,
-          status: "pending",
-          type: "normal",
-        },
-      ];
+      // Non-emergency requests data - loaded from API
+      let nonEmergencyRequests = [];
+
+      // Fetch donor profile and stats
+      async function fetchDonorProfile() {
+        try {
+          const response = await fetch('/api/donor/profile.php');
+          const data = await response.json();
+          if (data.success) {
+            // Update stats cards
+            const statsCards = document.querySelectorAll('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 > div');
+            if (statsCards[0]) statsCards[0].querySelector('h2').textContent = data.stats.total_donations;
+            if (statsCards[1]) statsCards[1].querySelector('h2').textContent = data.stats.lives_saved;
+            if (statsCards[0]) {
+              const lastDonation = data.stats.last_donation ? new Date(data.stats.last_donation).toLocaleDateString() : 'No donations yet';
+              statsCards[0].querySelector('.text-green-600').textContent = `Last donation: ${lastDonation}`;
+            }
+            if (statsCards[2] && data.stats.next_eligible) {
+              statsCards[2].querySelector('h2').textContent = new Date(data.stats.next_eligible).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }
+            // Update header name
+            const headerName = document.querySelector('.text-sm.font-medium.text-gray-900');
+            if (headerName && data.profile.name) {
+              headerName.textContent = data.profile.name;
+            }
+            // Update blood type
+            if (statsCards[3] && data.profile.blood_group) {
+              statsCards[3].querySelector('h2').textContent = data.profile.blood_group;
+            }
+          }
+        } catch (error) {
+          console.error('Failed to fetch profile:', error);
+        }
+      }
+
+      // Fetch matching blood requests
+      async function fetchMatchingRequests() {
+        try {
+          const response = await fetch('/api/donor/requests.php');
+          const data = await response.json();
+          if (data.success) {
+            // Map to frontend format
+            emergencyAlerts = data.emergency_requests.map(req => ({
+              id: req.id,
+              dbId: req.id,
+              patientName: req.patient_name,
+              patientAge: 0,
+              contactPhone: '',
+              bloodType: req.blood_type,
+              hospital: req.hospital_name,
+              city: req.city,
+              urgency: 'Critical',
+              requiredByDate: req.required_date,
+              medicalReason: req.medical_reason || 'Emergency blood needed',
+              time: formatTimeAgo(req.created_at),
+              units: req.quantity,
+              status: 'pending',
+              type: 'emergency'
+            }));
+
+            nonEmergencyRequests = data.normal_requests.map(req => ({
+              id: req.id,
+              dbId: req.id,
+              patientName: req.patient_name,
+              patientAge: 0,
+              contactPhone: '',
+              bloodType: req.blood_type,
+              hospital: req.hospital_name,
+              city: req.city,
+              urgency: 'Scheduled',
+              requiredByDate: req.required_date,
+              medicalReason: req.medical_reason || 'Blood donation needed',
+              time: formatTimeAgo(req.created_at),
+              units: req.quantity,
+              status: 'pending',
+              type: 'normal'
+            }));
+
+            renderEmergencyAlerts();
+            renderNonEmergencyRequests();
+          }
+        } catch (error) {
+          console.error('Failed to fetch requests:', error);
+        }
+      }
+
+      // Helper to format time ago
+      function formatTimeAgo(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffHours = Math.floor((now - date) / (1000 * 60 * 60));
+        if (diffHours < 1) return 'Just now';
+        if (diffHours < 24) return `${diffHours} hours ago`;
+        const diffDays = Math.floor(diffHours / 24);
+        return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+      }
 
       // Upcoming appointments
       let appointments = [
@@ -822,24 +847,39 @@
       });
 
       // ============================================
-      // ACCEPT REQUEST FUNCTION
+      // ACCEPT REQUEST FUNCTION (API Connected)
       // ============================================
-      function acceptRequest(request) {
+      async function acceptRequest(request) {
         // Close modal first
         closeModal();
 
-        // Set active donation
-        activeDonation = { ...request };
-        currentDonationState = DONATION_STATES.ACCEPTED;
+        try {
+          const response = await fetch('/api/donor/requests/accept.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ request_id: request.dbId || request.id })
+          });
+          const data = await response.json();
 
-        // Update UI
-        updateDashboardForActiveDonation();
+          if (data.success) {
+            // Set active donation
+            activeDonation = { ...request, donationId: data.donation?.id };
+            currentDonationState = DONATION_STATES.ACCEPTED;
 
-        showNotification(
-          `You have accepted the ${request.urgency.toLowerCase()} request from ${request.hospital
-          }. Please proceed to the hospital.`,
-          "success"
-        );
+            // Update UI
+            updateDashboardForActiveDonation();
+
+            showNotification(
+              `You have accepted the ${request.urgency.toLowerCase()} request from ${request.hospital}. Please proceed to the hospital.`,
+              "success"
+            );
+          } else {
+            showNotification(data.message || 'Failed to accept request', 'error');
+          }
+        } catch (error) {
+          console.error('Accept error:', error);
+          showNotification('Connection error. Please try again.', 'error');
+        }
       }
 
       // ============================================
@@ -1286,10 +1326,10 @@
       }
 
       // ============================================
-      // INITIAL RENDER
+      // INITIAL RENDER - Fetch from API
       // ============================================
-      renderEmergencyAlerts();
-      renderNonEmergencyRequests();
+      fetchDonorProfile();
+      fetchMatchingRequests();
     });
   </script>
 </body>

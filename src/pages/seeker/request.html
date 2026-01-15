@@ -329,7 +329,7 @@
     });
 
     // Form submission
-    document.getElementById('seekerRequestForm').addEventListener('submit', function (e) {
+    document.getElementById('seekerRequestForm').addEventListener('submit', async function (e) {
       e.preventDefault();
       clearAllErrors();
 
@@ -340,12 +340,16 @@
         email: document.getElementById('email').value.trim(),
         bloodType: document.getElementById('bloodType').value,
         quantity: document.getElementById('quantity').value,
-        hospital: document.getElementById('hospital').value.trim(),
+        hospitalName: document.getElementById('hospital').value.trim(),
         city: document.getElementById('city').value.trim(),
-        requiredDate: document.getElementById('requiredDate').value
+        requiredDate: document.getElementById('requiredDate').value,
+        medicalReason: document.getElementById('medicalReason')?.value?.trim() || '',
+        emergency: document.getElementById('emergency-toggle')?.checked || false
       };
 
-      const result = seekerRequestSchema.safeParse(formData);
+      // Local validation
+      const localFormData = { ...formData, hospital: formData.hospitalName };
+      const result = seekerRequestSchema.safeParse(localFormData);
 
       if (!result.success) {
         result.error.errors.forEach(err => {
@@ -355,9 +359,40 @@
         return;
       }
 
-      // Validation passed - show success (demo mode)
-      showNotification('Blood request submitted successfully!', 'success');
-      this.reset();
+      // Show loading state
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i data-lucide="loader-2" class="size-5 animate-spin"></i> Submitting...';
+      lucide.createIcons();
+
+      try {
+        const response = await fetch('/api/seeker/requests/create.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showNotification(`Request submitted! Code: ${data.request.request_code}`, 'success');
+          this.reset();
+          // Redirect to tracking after 2 seconds
+          setTimeout(() => {
+            window.location.href = '/src/pages/seeker/tracking.html';
+          }, 2000);
+        } else {
+          showNotification(data.message || 'Failed to submit request', 'error');
+        }
+      } catch (error) {
+        console.error('Request error:', error);
+        showNotification('Connection error. Please try again.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        lucide.createIcons();
+      }
     });
 
     function showNotification(message, type) {
@@ -376,7 +411,7 @@
       `;
       document.body.appendChild(notification);
       lucide.createIcons();
-      setTimeout(() => notification.remove(), 3000);
+      setTimeout(() => notification.remove(), 5000);
     }
   </script>
 </body>

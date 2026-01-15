@@ -421,64 +421,41 @@
         }
       };
 
-      // Blood requests data with lifecycle status
-      let requests = [
-        {
-          id: "REQ001",
-          patientName: "John Doe",
-          bloodType: "O+",
-          quantity: 2,
-          hospital: "City Hospital",
-          urgency: "Emergency",
-          status: "on_the_way",
-          requiredBy: "2024-11-25",
-          submittedOn: "2024-11-24 10:30 AM",
-        },
-        {
-          id: "REQ002",
-          patientName: "Jane Smith",
-          bloodType: "A-",
-          quantity: 1,
-          hospital: "General Hospital",
-          urgency: "Normal",
-          status: "approved",
-          requiredBy: "2024-11-28",
-          submittedOn: "2024-11-25 08:15 AM",
-        },
-        {
-          id: "REQ003",
-          patientName: "Bob Johnson",
-          bloodType: "B+",
-          quantity: 3,
-          hospital: "Medical Center",
-          urgency: "Emergency",
-          status: "donor_assigned",
-          requiredBy: "2024-11-24",
-          submittedOn: "2024-11-23 02:45 PM",
-        },
-        {
-          id: "REQ004",
-          patientName: "Alice Williams",
-          bloodType: "AB+",
-          quantity: 1,
-          hospital: "Community Hospital",
-          urgency: "Normal",
-          status: "completed",
-          requiredBy: "2024-11-22",
-          submittedOn: "2024-11-20 11:20 AM",
-        },
-        {
-          id: "REQ005",
-          patientName: "Charlie Brown",
-          bloodType: "O-",
-          quantity: 2,
-          hospital: "Regional Hospital",
-          urgency: "Normal",
-          status: "rejected",
-          requiredBy: "2024-11-26",
-          submittedOn: "2024-11-24 03:00 PM",
-        },
-      ];
+      // Blood requests data with lifecycle status - loaded from API
+      let requests = [];
+
+      // Fetch requests from API
+      async function fetchRequests() {
+        try {
+          const response = await fetch('/api/seeker/requests.php');
+          const data = await response.json();
+          if (data.success) {
+            requests = data.requests.map(req => ({
+              id: req.request_code,
+              patientName: req.patient_name,
+              bloodType: req.blood_type,
+              quantity: req.quantity,
+              hospital: req.hospital_name || 'N/A',
+              urgency: req.urgency === 'emergency' ? 'Emergency' : 'Normal',
+              status: req.lifecycle_status,
+              requiredBy: req.required_date,
+              submittedOn: new Date(req.created_at).toLocaleString(),
+            }));
+            renderRequests();
+
+            // Update stats
+            if (data.stats) {
+              document.getElementById('totalCount').textContent = data.stats.total;
+              document.getElementById('activeCount').textContent = data.stats.active;
+              document.getElementById('completedCount').textContent = data.stats.completed;
+              document.getElementById('donorCount').textContent = data.stats.rejected;
+            }
+          }
+        } catch (error) {
+          console.error('Failed to fetch requests:', error);
+          showNotification('Failed to load requests', 'error');
+        }
+      }
 
       const requestsContainer = document.querySelector(
         ".grid.grid-cols-1.md\\:grid-cols-2.gap-6"
@@ -665,8 +642,8 @@
         setTimeout(() => notification.remove(), 3000);
       }
 
-      // Initial render
-      renderRequests();
+      // Initial render - fetch from API
+      fetchRequests();
     });
   </script>
   <script type="module">

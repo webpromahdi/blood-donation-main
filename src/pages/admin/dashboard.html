@@ -445,109 +445,56 @@
     setupLogoutButton();
   </script>
   <script>
-    // Dummy blood requests data with enhanced details
-    const bloodRequests = [
-      {
-        id: "REQ001",
-        name: "John Doe",
-        patientAge: 45,
-        contactPhone: "555-0201",
-        bloodType: "O+",
-        quantity: "2 Units",
-        hospital: "City Hospital",
-        city: "Downtown",
-        medicalReason: "Emergency surgery - traffic accident victim",
-        requiredByDate: "2024-12-15",
-        urgency: "emergency",
-        status: "pending",
-        requestedAt: "2024-12-14 08:30 AM",
-        seekerName: "Dr. Smith (City Hospital)",
-      },
-      {
-        id: "REQ002",
-        name: "Sarah Smith",
-        patientAge: 32,
-        contactPhone: "555-0202",
-        bloodType: "A+",
-        quantity: "3 Units",
-        hospital: "General Hospital",
-        city: "Midtown",
-        medicalReason: "Scheduled surgery - organ transplant",
-        requiredByDate: "2024-12-18",
-        urgency: "normal",
-        status: "approved",
-        requestedAt: "2024-12-13 02:15 PM",
-        seekerName: "Dr. Johnson (General Hospital)",
-        assignedDonor: "Michael Brown",
-      },
-      {
-        id: "REQ003",
-        name: "Mike Johnson",
-        patientAge: 28,
-        contactPhone: "555-0203",
-        bloodType: "B-",
-        quantity: "1 Unit",
-        hospital: "St. Mary's",
-        city: "Uptown",
-        medicalReason: "Severe anemia treatment",
-        requiredByDate: "2024-12-14",
-        urgency: "emergency",
-        status: "pending",
-        requestedAt: "2024-12-14 10:00 AM",
-        seekerName: "Dr. Williams (St. Mary's)",
-      },
-      {
-        id: "REQ004",
-        name: "Emily Davis",
-        patientAge: 55,
-        contactPhone: "555-0204",
-        bloodType: "AB+",
-        quantity: "2 Units",
-        hospital: "Regional Medical",
-        city: "Eastside",
-        medicalReason: "Cancer treatment - chemotherapy support",
-        requiredByDate: "2024-12-12",
-        urgency: "normal",
-        status: "completed",
-        requestedAt: "2024-12-10 09:00 AM",
-        seekerName: "Dr. Taylor (Regional Medical)",
-        assignedDonor: "Jennifer White",
-        completedAt: "2024-12-12 03:45 PM",
-      },
-      {
-        id: "REQ005",
-        name: "James Wilson",
-        patientAge: 62,
-        contactPhone: "555-0205",
-        bloodType: "O-",
-        quantity: "4 Units",
-        hospital: "Central Hospital",
-        city: "Westside",
-        medicalReason: "Emergency cardiac surgery",
-        requiredByDate: "2024-12-14",
-        urgency: "emergency",
-        status: "pending",
-        requestedAt: "2024-12-14 06:45 AM",
-        seekerName: "Dr. Anderson (Central Hospital)",
-      },
-      {
-        id: "REQ006",
-        name: "Anna Martinez",
-        patientAge: 38,
-        contactPhone: "555-0206",
-        bloodType: "A-",
-        quantity: "2 Units",
-        hospital: "City Hospital",
-        city: "Downtown",
-        medicalReason: "Post-delivery complications",
-        requiredByDate: "2024-12-16",
-        urgency: "normal",
-        status: "approved",
-        requestedAt: "2024-12-13 11:30 AM",
-        seekerName: "Dr. Garcia (City Hospital)",
-        assignedDonor: "David Lee",
-      },
-    ];
+    // Blood requests data - loaded from API
+    let bloodRequests = [];
+
+    // Fetch stats from API
+    async function fetchStats() {
+      try {
+        const response = await fetch('/api/admin/stats.php');
+        const data = await response.json();
+        if (data.success) {
+          document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 > div:nth-child(1) h2').textContent = data.stats.total_donors.toLocaleString();
+          document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 > div:nth-child(2) h2').textContent = data.stats.total_hospitals;
+          document.querySelector('[data-stat="pending-approvals"]').textContent = data.stats.pending_approvals;
+          document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 > div:nth-child(4) h2').textContent = data.stats.emergency_requests;
+        }
+      } catch (error) {
+        console.error('Failed to fetch stats:', error);
+      }
+    }
+
+    // Fetch blood requests from API
+    async function fetchBloodRequests() {
+      try {
+        const response = await fetch('/api/admin/requests.php');
+        const data = await response.json();
+        if (data.success) {
+          bloodRequests = data.requests.map(req => ({
+            id: req.request_code,
+            dbId: req.id,
+            name: req.patient_name,
+            patientAge: req.patient_age,
+            contactPhone: req.contact_phone,
+            bloodType: req.blood_type,
+            quantity: req.quantity + ' Unit' + (req.quantity > 1 ? 's' : ''),
+            hospital: req.hospital_name || 'N/A',
+            city: req.city,
+            medicalReason: req.medical_reason || 'Not specified',
+            requiredByDate: req.required_date,
+            urgency: req.urgency,
+            status: req.status,
+            requestedAt: new Date(req.created_at).toLocaleString(),
+            seekerName: req.requester_name + ' (' + (req.requester_type === 'hospital' ? 'Hospital' : 'Seeker') + ')',
+            assignedDonor: req.donation?.donor_name || null
+          }));
+          renderBloodRequests();
+          updatePendingCount();
+        }
+      } catch (error) {
+        console.error('Failed to fetch requests:', error);
+      }
+    }
 
     // Render urgency badge
     function renderUrgencyBadge(urgency) {
@@ -886,31 +833,59 @@
       }
     });
 
-    // Approve a request
-    function approveRequest(id) {
+    // Approve a request via API
+    async function approveRequest(id) {
       const request = bloodRequests.find((r) => r.id === id);
-      if (request) {
-        request.status = "approved";
-        renderBloodRequests();
-        updatePendingCount();
-        showNotification(
-          `Request <strong>${id}</strong> for ${request.name} has been approved!`,
-          "success"
-        );
+      if (!request) return;
+
+      try {
+        const response = await fetch('/api/admin/requests/approve.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ request_id: request.dbId })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          request.status = 'approved';
+          renderBloodRequests();
+          updatePendingCount();
+          fetchStats();
+          showNotification(`Request <strong>${id}</strong> for ${request.name} has been approved!`, 'success');
+        } else {
+          showNotification(data.message || 'Failed to approve request', 'error');
+        }
+      } catch (error) {
+        console.error('Approve error:', error);
+        showNotification('Connection error. Please try again.', 'error');
       }
     }
 
-    // Reject a request
-    function rejectRequest(id) {
+    // Reject a request via API
+    async function rejectRequest(id) {
       const request = bloodRequests.find((r) => r.id === id);
-      if (request) {
-        request.status = "rejected";
-        renderBloodRequests();
-        updatePendingCount();
-        showNotification(
-          `Request <strong>${id}</strong> has been rejected.`,
-          "error"
-        );
+      if (!request) return;
+
+      try {
+        const response = await fetch('/api/admin/requests/reject.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ request_id: request.dbId })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          request.status = 'rejected';
+          renderBloodRequests();
+          updatePendingCount();
+          fetchStats();
+          showNotification(`Request <strong>${id}</strong> has been rejected.`, 'error');
+        } else {
+          showNotification(data.message || 'Failed to reject request', 'error');
+        }
+      } catch (error) {
+        console.error('Reject error:', error);
+        showNotification('Connection error. Please try again.', 'error');
       }
     }
 
@@ -1131,10 +1106,11 @@
     });
 
     // Initialize on page load
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", async function () {
       renderNotifications();
-      renderBloodRequests();
       setupFilterButtons();
+      await fetchStats();
+      await fetchBloodRequests();
     });
   </script>
   <script type="module" src="/src/scripts/main.js"></script>

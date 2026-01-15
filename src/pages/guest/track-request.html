@@ -60,11 +60,11 @@
         </p>
       </div>
 
-      <!-- Sample Data Info -->
+      <!-- Info Box -->
       <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
         <p class="text-blue-800 text-sm">
-          <strong>Demo:</strong> Try searching for REQ001, REQ003, 555-1234,
-          or 555-5678 to see sample results.
+          <strong>Note:</strong> Enter your Request Code (e.g., REQ00001) or
+          registered phone number to track your blood request status.
         </p>
       </div>
     </div>
@@ -72,66 +72,6 @@
 
   <script type="module" src="/src/scripts/main.js"></script>
   <script>
-    // Sample data for demo purposes
-    const mockRequests = [
-      {
-        id: "REQ001",
-        patientName: "John Doe",
-        bloodType: "O+",
-        quantity: "2 Units",
-        status: "Processing",
-        urgency: "Emergency",
-        hospital: "City Hospital",
-        phone: "555-1234",
-        requestDate: "2024-01-05",
-        timeline: [
-          {
-            status: "Submitted",
-            date: "2024-01-05 10:30 AM",
-            completed: true,
-          },
-          {
-            status: "Approved",
-            date: "2024-01-05 11:00 AM",
-            completed: true,
-          },
-          {
-            status: "Donor Assigned",
-            date: "2024-01-05 02:00 PM",
-            completed: true,
-          },
-          { status: "In Progress", date: "Pending", completed: false },
-          { status: "Completed", date: "Pending", completed: false },
-        ],
-      },
-      {
-        id: "REQ003",
-        patientName: "Mike Johnson",
-        bloodType: "B-",
-        quantity: "1 Unit",
-        status: "Pending",
-        urgency: "Normal",
-        hospital: "St. Mary's Hospital",
-        phone: "555-5678",
-        requestDate: "2024-01-06",
-        timeline: [
-          {
-            status: "Submitted",
-            date: "2024-01-06 09:00 AM",
-            completed: true,
-          },
-          {
-            status: "Approved",
-            date: "2024-01-06 10:30 AM",
-            completed: true,
-          },
-          { status: "Donor Assigned", date: "Pending", completed: false },
-          { status: "In Progress", date: "Pending", completed: false },
-          { status: "Completed", date: "Pending", completed: false },
-        ],
-      },
-    ];
-
     // Get query param on page load
     document.addEventListener("DOMContentLoaded", () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -182,109 +122,105 @@
       errorEl.classList.add('hidden');
     });
 
-    function performSearch(query) {
-      const results = mockRequests.filter(
-        (req) =>
-          req.id.toLowerCase().includes(query.toLowerCase()) ||
-          req.phone.includes(query)
-      );
-
+    async function performSearch(query) {
       const resultsSection = document.getElementById("resultsSection");
       const noResults = document.getElementById("noResults");
       const container = document.getElementById("resultsContainer");
 
-      if (results.length > 0) {
-        resultsSection.classList.remove("hidden");
-        noResults.classList.add("hidden");
-        container.innerHTML = results
-          .map((req) => createRequestCard(req))
-          .join("");
-        if (window.initIcons) window.initIcons();
-      } else {
-        resultsSection.classList.add("hidden");
-        noResults.classList.remove("hidden");
+      // Show loading state
+      resultsSection.classList.remove("hidden");
+      noResults.classList.add("hidden");
+      container.innerHTML = `
+        <div class="p-8 bg-white border border-gray-200 rounded-xl text-center">
+          <div class="animate-spin size-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p class="text-gray-600">Searching...</p>
+        </div>
+      `;
+
+      try {
+        // Determine if query is a request code or phone number
+        const isCode = query.toUpperCase().startsWith('REQ');
+        const params = isCode ? `code=${encodeURIComponent(query)}` : `phone=${encodeURIComponent(query)}`;
+
+        const response = await fetch(`/api/guest/track.php?${params}`);
+        const data = await response.json();
+
+        if (data.success && data.requests && data.requests.length > 0) {
+          resultsSection.classList.remove("hidden");
+          noResults.classList.add("hidden");
+          container.innerHTML = data.requests.map(req => createRequestCard(req)).join("");
+          lucide.createIcons();
+        } else {
+          resultsSection.classList.add("hidden");
+          noResults.classList.remove("hidden");
+        }
+      } catch (error) {
+        console.error('Search error:', error);
+        container.innerHTML = `
+          <div class="p-8 bg-red-50 border border-red-200 rounded-xl text-center">
+            <i data-lucide="alert-circle" class="size-12 text-red-400 mx-auto mb-4"></i>
+            <h3 class="text-lg font-semibold text-red-900 mb-2">Connection Error</h3>
+            <p class="text-red-700">Unable to connect to server. Please try again.</p>
+          </div>
+        `;
+        lucide.createIcons();
       }
     }
 
     function createRequestCard(req) {
-      const urgencyBadge =
-        req.urgency === "Emergency"
-          ? '<span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-full"><i data-lucide="alert-circle" class="size-3 mr-1"></i>Emergency</span>'
-          : '<span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">Normal</span>';
+      const urgencyBadge = req.urgency === "emergency"
+        ? '<span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-full"><i data-lucide="alert-circle" class="size-3 mr-1"></i>Emergency</span>'
+        : '<span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">Normal</span>';
 
-      const statusColor =
-        req.status === "Processing"
-          ? "text-blue-600 border-blue-600"
-          : req.status === "Pending"
-            ? "text-yellow-600 border-yellow-600"
-            : "text-green-600 border-green-600";
+      const statusColors = {
+        'pending': 'text-yellow-600 border-yellow-600 bg-yellow-50',
+        'approved': 'text-blue-600 border-blue-600 bg-blue-50',
+        'donor_assigned': 'text-indigo-600 border-indigo-600 bg-indigo-50',
+        'on_the_way': 'text-purple-600 border-purple-600 bg-purple-50',
+        'reached': 'text-teal-600 border-teal-600 bg-teal-50',
+        'in_progress': 'text-blue-600 border-blue-600 bg-blue-50',
+        'completed': 'text-green-600 border-green-600 bg-green-50',
+        'rejected': 'text-red-600 border-red-600 bg-red-50',
+        'cancelled': 'text-gray-600 border-gray-600 bg-gray-50'
+      };
 
-      const timelineHtml = req.timeline
-        .map(
-          (step, index) => `
-        <div class="flex items-start gap-3">
-          <div class="flex flex-col items-center">
-            <div class="size-8 rounded-full flex items-center justify-center ${step.completed
-              ? "bg-green-100 text-green-600"
-              : "bg-gray-100 text-gray-400"
-            }">
-              ${step.completed
-              ? '<i data-lucide="check" class="size-4"></i>'
-              : '<i data-lucide="circle" class="size-4"></i>'
-            }
-            </div>
-            ${index < req.timeline.length - 1
-              ? '<div class="w-0.5 h-8 bg-gray-200"></div>'
-              : ""
-            }
-          </div>
-          <div class="pb-4">
-            <p class="font-medium ${step.completed ? "text-gray-900" : "text-gray-500"
-            }">${step.status}</p>
-            <p class="text-sm text-gray-500">${step.date}</p>
-          </div>
-        </div>
-      `
-        )
-        .join("");
+      const statusColor = statusColors[req.status] || 'text-gray-600 border-gray-600';
 
       return `
-        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+        <div class="p-6 bg-white border border-gray-200 rounded-xl mb-4">
           <div class="flex items-start justify-between mb-4">
             <div>
               <div class="flex items-center gap-2 mb-1">
-                <h3 class="text-lg font-semibold text-gray-900">${req.id}</h3>
+                <h3 class="text-lg font-semibold text-gray-900">${req.request_code}</h3>
                 ${urgencyBadge}
               </div>
-              <p class="text-gray-600">Patient: ${req.patientName}</p>
+              <p class="text-gray-600">Patient: ${req.patient_name}</p>
             </div>
-            <span class="px-3 py-1 text-sm font-medium border rounded-full ${statusColor}">${req.status}</span>
+            <span class="px-3 py-1 text-sm font-medium border rounded-full ${statusColor}">${req.status_label}</span>
           </div>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
             <div>
               <p class="text-sm text-gray-500">Blood Type</p>
-              <p class="font-semibold text-red-600">${req.bloodType}</p>
+              <p class="font-semibold text-red-600">${req.blood_type}</p>
             </div>
             <div>
               <p class="text-sm text-gray-500">Quantity</p>
-              <p class="font-semibold text-gray-900">${req.quantity}</p>
+              <p class="font-semibold text-gray-900">${req.quantity} Unit${req.quantity > 1 ? 's' : ''}</p>
             </div>
             <div>
               <p class="text-sm text-gray-500">Hospital</p>
-              <p class="font-semibold text-gray-900">${req.hospital}</p>
+              <p class="font-semibold text-gray-900">${req.hospital_name || 'N/A'}</p>
             </div>
             <div>
               <p class="text-sm text-gray-500">Request Date</p>
-              <p class="font-semibold text-gray-900">${req.requestDate}</p>
+              <p class="font-semibold text-gray-900">${new Date(req.created_at).toLocaleDateString()}</p>
             </div>
           </div>
 
-          <div>
-            <h4 class="font-semibold text-gray-900 mb-4">Request Timeline</h4>
-            <div class="ml-2">
-              ${timelineHtml}
-            </div>
+          <div class="p-4 rounded-lg ${statusColor.replace('border-', 'bg-').replace('text-', 'text-')}">
+            <p class="font-medium">${req.status_label}</p>
+            <p class="text-sm opacity-80">${req.status_message}</p>
           </div>
         </div>
       `;

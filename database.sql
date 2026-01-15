@@ -33,3 +33,89 @@ CREATE TABLE IF NOT EXISTS users (
 -- Create index on email for faster lookups
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_role ON users(role);
+
+-- =====================================================
+-- BLOOD REQUESTS TABLE
+-- Stores all blood requests from hospitals and seekers
+-- =====================================================
+CREATE TABLE IF NOT EXISTS blood_requests (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    request_code VARCHAR(20) UNIQUE NOT NULL,  -- e.g., 'REQ001'
+    
+    -- Requester (Hospital or Seeker)
+    requester_id INT NOT NULL,
+    requester_type ENUM('hospital', 'seeker') NOT NULL,
+    
+    -- Patient Information
+    patient_name VARCHAR(255) NOT NULL,
+    patient_age INT,
+    contact_phone VARCHAR(20) NOT NULL,
+    contact_email VARCHAR(255),
+    
+    -- Blood Request Details
+    blood_type ENUM('A+','A-','B+','B-','AB+','AB-','O+','O-') NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    hospital_id INT,  -- FK to users where role='hospital' (for seeker requests)
+    hospital_name VARCHAR(255),
+    city VARCHAR(100),
+    required_date DATE NOT NULL,
+    medical_reason TEXT,
+    
+    -- Urgency & Status
+    urgency ENUM('normal', 'emergency') DEFAULT 'normal',
+    status ENUM('pending', 'approved', 'rejected', 'in_progress', 'completed', 'cancelled') DEFAULT 'pending',
+    
+    -- Admin Processing
+    admin_id INT,  -- FK to users where role='admin'
+    approved_at TIMESTAMP NULL,
+    rejected_at TIMESTAMP NULL,
+    rejection_reason TEXT,
+    
+    -- Timestamps
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (requester_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (hospital_id) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE SET NULL
+);
+
+-- Blood requests indexes
+CREATE INDEX idx_requests_status ON blood_requests(status);
+CREATE INDEX idx_requests_blood_type ON blood_requests(blood_type);
+CREATE INDEX idx_requests_urgency ON blood_requests(urgency);
+CREATE INDEX idx_requests_requester ON blood_requests(requester_id, requester_type);
+CREATE INDEX idx_requests_code ON blood_requests(request_code);
+
+-- =====================================================
+-- DONATIONS TABLE
+-- Tracks donation journey from acceptance to completion
+-- =====================================================
+CREATE TABLE IF NOT EXISTS donations (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    request_id INT NOT NULL,
+    donor_id INT NOT NULL,
+    
+    -- Donation Status
+    status ENUM('accepted', 'on_the_way', 'reached', 'completed', 'cancelled') DEFAULT 'accepted',
+    
+    -- Journey Timestamps
+    accepted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    started_at TIMESTAMP NULL,        -- When donor starts journey (on_the_way)
+    reached_at TIMESTAMP NULL,        -- When donor reaches hospital
+    completed_at TIMESTAMP NULL,      -- When donation is done
+    cancelled_at TIMESTAMP NULL,
+    cancel_reason TEXT,
+    
+    -- Timestamps
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (request_id) REFERENCES blood_requests(id) ON DELETE CASCADE,
+    FOREIGN KEY (donor_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Donations indexes
+CREATE INDEX idx_donations_request ON donations(request_id);
+CREATE INDEX idx_donations_donor ON donations(donor_id);
+CREATE INDEX idx_donations_status ON donations(status);

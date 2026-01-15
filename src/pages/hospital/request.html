@@ -302,7 +302,7 @@
       }
     });
 
-    document.getElementById('hospitalRequestForm').addEventListener('submit', function (e) {
+    document.getElementById('hospitalRequestForm').addEventListener('submit', async function (e) {
       e.preventDefault();
       fieldIds.forEach(id => clearError(id));
 
@@ -314,7 +314,9 @@
         bloodType: document.getElementById('bloodType').value,
         quantity: document.getElementById('quantity').value,
         city: document.getElementById('city').value.trim(),
-        requiredDate: document.getElementById('requiredDate').value
+        requiredDate: document.getElementById('requiredDate').value,
+        medicalReason: document.getElementById('medicalReason')?.value?.trim() || '',
+        emergency: document.getElementById('emergency-toggle')?.checked || false
       };
 
       const result = hospitalRequestSchema.safeParse(formData);
@@ -324,14 +326,53 @@
         return;
       }
 
-      // Success
-      const notification = document.createElement('div');
-      notification.className = 'fixed top-20 right-8 p-4 bg-green-50 border-l-4 border-green-600 rounded-lg shadow-lg z-50';
-      notification.innerHTML = '<div class="flex items-center gap-3"><i data-lucide="check-circle" class="size-5 text-green-600"></i><p class="text-green-900">Blood request submitted successfully!</p></div>';
-      document.body.appendChild(notification);
+      // Show loading state
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i data-lucide="loader-2" class="size-5 animate-spin"></i> Submitting...';
       lucide.createIcons();
-      setTimeout(() => notification.remove(), 3000);
-      this.reset();
+
+      try {
+        const response = await fetch('/api/hospital/requests/create.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Success notification
+          const notification = document.createElement('div');
+          notification.className = 'fixed top-20 right-8 p-4 bg-green-50 border-l-4 border-green-600 rounded-lg shadow-lg z-50';
+          notification.innerHTML = `<div class="flex items-center gap-3"><i data-lucide="check-circle" class="size-5 text-green-600"></i><div><p class="text-green-900 font-medium">Blood request submitted!</p><p class="text-sm text-green-700">Request Code: ${data.request.request_code}</p></div></div>`;
+          document.body.appendChild(notification);
+          lucide.createIcons();
+          setTimeout(() => notification.remove(), 5000);
+          this.reset();
+        } else {
+          // Error notification
+          const notification = document.createElement('div');
+          notification.className = 'fixed top-20 right-8 p-4 bg-red-50 border-l-4 border-red-600 rounded-lg shadow-lg z-50';
+          notification.innerHTML = `<div class="flex items-center gap-3"><i data-lucide="alert-circle" class="size-5 text-red-600"></i><p class="text-red-900">${data.message || 'Failed to submit request'}</p></div>`;
+          document.body.appendChild(notification);
+          lucide.createIcons();
+          setTimeout(() => notification.remove(), 5000);
+        }
+      } catch (error) {
+        console.error('Request error:', error);
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-20 right-8 p-4 bg-red-50 border-l-4 border-red-600 rounded-lg shadow-lg z-50';
+        notification.innerHTML = '<div class="flex items-center gap-3"><i data-lucide="alert-circle" class="size-5 text-red-600"></i><p class="text-red-900">Connection error. Please try again.</p></div>';
+        document.body.appendChild(notification);
+        lucide.createIcons();
+        setTimeout(() => notification.remove(), 5000);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        lucide.createIcons();
+      }
     });
   </script>
 </body>
