@@ -64,6 +64,17 @@
 
       <!-- Registration Form -->
       <form id="registerForm" class="space-y-5">
+        <!-- Name Field (hidden for admin) -->
+        <div id="nameFieldContainer">
+          <label for="name" class="text-gray-700 mb-2 block font-medium">Full Name</label>
+          <div class="relative">
+            <i data-lucide="user" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
+            <input id="name" name="name" type="text" placeholder="Enter your full name"
+              class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
+          </div>
+          <p class="text-red-500 text-sm mt-1 hidden" id="nameError"></p>
+        </div>
+
         <!-- Email Field -->
         <div>
           <label for="email" class="text-gray-700 mb-2 block font-medium">Email Address</label>
@@ -339,6 +350,14 @@
       document.getElementById("donorFields").classList.add("hidden");
       document.getElementById("hospitalFields").classList.add("hidden");
 
+      // Show/hide name field (hidden for admin only)
+      const nameFieldContainer = document.getElementById("nameFieldContainer");
+      if (role === "admin") {
+        nameFieldContainer.classList.add("hidden");
+      } else {
+        nameFieldContainer.classList.remove("hidden");
+      }
+
       if (role === "donor") {
         document.getElementById("donorFields").classList.remove("hidden");
       } else if (role === "hospital") {
@@ -422,6 +441,7 @@
         "city",
         "contactPerson",
         "terms",
+        "name",
       ];
       errorFields.forEach((field) => clearError(field));
     }
@@ -431,12 +451,19 @@
       clearAllErrors();
 
       // Get form values
+      const name = document.getElementById("name").value.trim();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const confirmPassword =
         document.getElementById("confirmPassword").value;
       const phone = document.getElementById("phone").value.trim();
       const terms = document.getElementById("terms").checked;
+
+      // Name validation (required for all except admin)
+      if (selectedRole !== "admin" && !name) {
+        showError("name", "Full name is required");
+        isValid = false;
+      }
 
       // Email validation
       if (!email) {
@@ -571,7 +598,7 @@
             password: document.getElementById("password").value,
             phone: document.getElementById("phone").value,
             role: selectedRole,
-            name: '', // Can be derived from email or added as a field
+            name: selectedRole !== "admin" ? document.getElementById("name").value.trim() : 'Admin',
           };
 
           // Add role-specific data
