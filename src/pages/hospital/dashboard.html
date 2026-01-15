@@ -1,381 +1,525 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - BloodConnect Hospital</title>
+    <link rel="stylesheet" href="/src/styles/styles.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - BloodConnect Hospital</title>
-  <link rel="stylesheet" href="/src/styles/styles.css" />
-</head>
-
-<body class="min-h-screen bg-gray-50">
-  <!-- Sidebar -->
-  <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
-    <div class="p-6 border-b border-gray-200">
-      <div class="flex items-center gap-3">
-        <div class="bg-red-600 p-2 rounded-lg">
-          <i data-lucide="heart" class="size-6 text-white fill-white"></i>
-        </div>
-        <div>
-          <div class="font-semibold text-red-600">BloodConnect</div>
-          <div class="text-sm text-gray-500">Hospital Portal</div>
-        </div>
-      </div>
-    </div>
-    <nav class="flex-1 overflow-y-auto py-4">
-      <a href="/src/pages/hospital/dashboard.html"
-        class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"><i
-          data-lucide="layout-dashboard" class="size-5"></i><span>Dashboard</span></a>
-      <a href="/src/pages/hospital/request.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="droplet" class="size-5"></i><span>Request Blood</span></a>
-      <a href="/src/pages/hospital/donors.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="users" class="size-5"></i><span>Donor List</span></a>
-      <a href="/src/pages/hospital/appointments.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="calendar-check" class="size-5"></i><span>Appointments</span></a>
-      <a href="/src/pages/hospital/chat.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="message-square" class="size-5"></i><span>Chat</span></a>
-    </nav>
-    <div class="p-4 border-t border-gray-200">
-      <div class="text-center text-sm text-gray-500">
-        <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Header -->
-  <header
-    class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8">
-    <div class="flex items-center gap-4 flex-1">
-      <h2 class="text-lg font-semibold text-gray-900">Hospital Dashboard</h2>
-    </div>
-    <div class="flex items-center gap-4">
-      <button class="relative p-2 hover:bg-gray-100 rounded-lg">
-        <i data-lucide="bell" class="size-5 text-gray-700"></i>
-        <span class="absolute top-1 right-1 size-2 bg-red-600 rounded-full"></span>
-      </button>
-      <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
-        <div class="text-right">
-          <div class="text-sm font-medium text-gray-900" data-user-name>City Hospital</div>
-          <div class="text-xs text-gray-500" data-user-role>Hospital Staff</div>
-        </div>
-        <div class="size-10 bg-blue-100 rounded-full flex items-center justify-center">
-          <i data-lucide="building-2" class="size-5 text-blue-600"></i>
-        </div>
-      </div>
-      <button data-logout class="p-2 text-gray-600 hover:text-red-600 cursor-pointer"><i data-lucide="log-out"
-          class="size-5"></i></button>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="ml-64 pt-16">
-    <div class="p-8 space-y-8">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900 mb-2">
-          Hospital Dashboard
-        </h1>
-        <p class="text-gray-600">Manage blood requests and appointments</p>
-      </div>
-
-      <!-- Stats Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Active Requests</p>
-              <h2 class="text-3xl font-bold text-gray-900">8</h2>
-            </div>
-            <div class="bg-blue-100 p-3 rounded-lg">
-              <i data-lucide="droplet" class="size-6 text-blue-600"></i>
-            </div>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
           </div>
-          <p class="text-sm text-blue-600 mt-2">Currently processing</p>
-        </div>
-        <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Completed Requests</p>
-              <h2 class="text-3xl font-bold text-gray-900">47</h2>
-            </div>
-            <div class="bg-green-100 p-3 rounded-lg">
-              <i data-lucide="check-circle" class="size-6 text-green-600"></i>
-            </div>
-          </div>
-          <p class="text-sm text-green-600 mt-2">This month</p>
-        </div>
-        <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Urgent Alerts</p>
-              <h2 class="text-3xl font-bold text-gray-900">3</h2>
-            </div>
-            <div class="bg-red-100 p-3 rounded-lg">
-              <i data-lucide="alert-circle" class="size-6 text-red-600"></i>
-            </div>
-          </div>
-          <p class="text-sm text-red-600 mt-2">Requires attention</p>
-        </div>
-        <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Available Donors</p>
-              <h2 class="text-3xl font-bold text-gray-900">124</h2>
-            </div>
-            <div class="bg-purple-100 p-3 rounded-lg">
-              <i data-lucide="users" class="size-6 text-purple-600"></i>
-            </div>
-          </div>
-          <p class="text-sm text-purple-600 mt-2">In your area</p>
-        </div>
-      </div>
-
-      <!-- Quick Action -->
-      <div
-        class="p-6 bg-linear-to-r from-red-50 to-white border border-gray-200 border-l-4 border-l-red-600 rounded-xl">
-        <div class="flex items-center justify-between">
           <div>
-            <h2 class="text-lg font-semibold text-gray-900 mb-2">
-              Need Blood Urgently?
-            </h2>
-            <p class="text-gray-600">
-              Request blood from available donors in your network
-            </p>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Hospital Portal</div>
           </div>
-          <a href="/src/pages/hospital/request.html"
-            class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium">
-            <i data-lucide="droplet" class="size-4 inline mr-2"></i>Request
-            Blood
-          </a>
         </div>
       </div>
-
-      <!-- Active Requests - Split into Emergency and Normal -->
-      <div class="space-y-6">
-        <!-- Emergency Requests Section -->
-        <div class="p-6 bg-white border border-red-200 rounded-xl">
-          <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-              <div class="bg-red-100 p-2 rounded-lg">
-                <i data-lucide="alert-circle" class="size-5 text-red-600"></i>
-              </div>
-              <div>
-                <h2 class="text-lg font-semibold text-gray-900 mb-1">
-                  Emergency Requests
-                </h2>
-                <p class="text-sm text-gray-600">
-                  Urgent blood requests requiring immediate attention
-                </p>
-              </div>
-            </div>
-            <span class="px-3 py-1 text-sm font-medium bg-red-100 text-red-700 rounded-full" id="emergencyCount">2
-              Active</span>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full">
-              <thead>
-                <tr class="border-b border-gray-200">
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Request ID
-                  </th>
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Blood Type
-                  </th>
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Quantity
-                  </th>
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Status
-                  </th>
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Donor Status
-                  </th>
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Requested
-                  </th>
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody id="emergencyRequestsBody">
-                <!-- Populated dynamically by JavaScript -->
-                <tr>
-                  <td colspan="7" class="py-8 text-center">
-                    <div
-                      class="animate-spin size-6 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-2">
-                    </div>
-                    <p class="text-gray-500 text-sm">Loading requests...</p>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Normal Requests Section -->
-        <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-              <div class="bg-blue-100 p-2 rounded-lg">
-                <i data-lucide="droplet" class="size-5 text-blue-600"></i>
-              </div>
-              <div>
-                <h2 class="text-lg font-semibold text-gray-900 mb-1">
-                  Normal Requests
-                </h2>
-                <p class="text-sm text-gray-600">
-                  Standard blood requests with regular priority
-                </p>
-              </div>
-            </div>
-            <span class="px-3 py-1 text-sm font-medium bg-blue-100 text-blue-700 rounded-full" id="normalCount">1
-              Active</span>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full">
-              <thead>
-                <tr class="border-b border-gray-200">
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Request ID
-                  </th>
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Blood Type
-                  </th>
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Quantity
-                  </th>
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Status
-                  </th>
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Donor Status
-                  </th>
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Requested
-                  </th>
-                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody id="normalRequestsBody">
-                <!-- Populated dynamically by JavaScript -->
-                <tr>
-                  <td colspan="7" class="py-8 text-center">
-                    <div
-                      class="animate-spin size-6 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-2">
-                    </div>
-                    <p class="text-gray-500 text-sm">Loading requests...</p>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/src/pages/hospital/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/src/pages/hospital/request.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="droplet" class="size-5"></i
+          ><span>Request Blood</span></a
+        >
+        <a
+          href="/src/pages/hospital/donors.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="users" class="size-5"></i><span>Donor List</span></a
+        >
+        <a
+          href="/src/pages/hospital/appointments.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="calendar-check" class="size-5"></i
+          ><span>Appointments</span></a
+        >
+        <a
+          href="/src/pages/hospital/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
         </div>
       </div>
     </div>
-  </main>
 
-  <!-- Blood Request Details Modal -->
-  <dialog id="requestModal" class="modal">
-    <div class="modal-box bg-white max-w-lg">
-      <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4">
-          <i data-lucide="x" class="size-5"></i>
-        </button>
-      </form>
-      <h3 class="font-bold text-xl text-gray-900 mb-6 flex items-center gap-2">
-        <i data-lucide="droplet" class="size-6 text-red-600"></i>
-        Blood Request Details
-      </h3>
-      <div class="space-y-4" id="requestModalContent">
-        <!-- Content will be populated dynamically -->
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">Hospital Dashboard</h2>
       </div>
-      <div class="modal-action">
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+          <span
+            class="absolute top-1 right-1 size-2 bg-red-600 rounded-full"
+          ></span>
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900" data-user-name>
+              City Hospital
+            </div>
+            <div class="text-xs text-gray-500" data-user-role>
+              Hospital Staff
+            </div>
+          </div>
+          <div
+            class="size-10 bg-blue-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="building-2" class="size-5 text-blue-600"></i>
+          </div>
+        </div>
+        <button
+          data-logout
+          class="p-2 text-gray-600 hover:text-red-600 cursor-pointer"
+        >
+          <i data-lucide="log-out" class="size-5"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 pt-16">
+      <div class="p-8 space-y-8">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">
+            Hospital Dashboard
+          </h1>
+          <p class="text-gray-600">Manage blood requests and appointments</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Active Requests</p>
+                <h2
+                  class="text-3xl font-bold text-gray-900"
+                  id="activeRequestsCount"
+                >
+                  0
+                </h2>
+              </div>
+              <div class="bg-blue-100 p-3 rounded-lg">
+                <i data-lucide="droplet" class="size-6 text-blue-600"></i>
+              </div>
+            </div>
+            <p class="text-sm text-blue-600 mt-2">Currently processing</p>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Completed Requests</p>
+                <h2
+                  class="text-3xl font-bold text-gray-900"
+                  id="completedRequestsCount"
+                >
+                  0
+                </h2>
+              </div>
+              <div class="bg-green-100 p-3 rounded-lg">
+                <i data-lucide="check-circle" class="size-6 text-green-600"></i>
+              </div>
+            </div>
+            <p class="text-sm text-green-600 mt-2">This month</p>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Urgent Alerts</p>
+                <h2
+                  class="text-3xl font-bold text-gray-900"
+                  id="urgentAlertsCount"
+                >
+                  0
+                </h2>
+              </div>
+              <div class="bg-red-100 p-3 rounded-lg">
+                <i data-lucide="alert-circle" class="size-6 text-red-600"></i>
+              </div>
+            </div>
+            <p class="text-sm text-red-600 mt-2">Requires attention</p>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Available Donors</p>
+                <h2
+                  class="text-3xl font-bold text-gray-900"
+                  id="availableDonorsCount"
+                >
+                  0
+                </h2>
+              </div>
+              <div class="bg-purple-100 p-3 rounded-lg">
+                <i data-lucide="users" class="size-6 text-purple-600"></i>
+              </div>
+            </div>
+            <p class="text-sm text-purple-600 mt-2">In your area</p>
+          </div>
+        </div>
+
+        <!-- Quick Action -->
+        <div
+          class="p-6 bg-linear-to-r from-red-50 to-white border border-gray-200 border-l-4 border-l-red-600 rounded-xl"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-900 mb-2">
+                Need Blood Urgently?
+              </h2>
+              <p class="text-gray-600">
+                Request blood from available donors in your network
+              </p>
+            </div>
+            <a
+              href="/src/pages/hospital/request.html"
+              class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+            >
+              <i data-lucide="droplet" class="size-4 inline mr-2"></i>Request
+              Blood
+            </a>
+          </div>
+        </div>
+
+        <!-- Active Requests - Split into Emergency and Normal -->
+        <div class="space-y-6">
+          <!-- Emergency Requests Section -->
+          <div class="p-6 bg-white border border-red-200 rounded-xl">
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center gap-3">
+                <div class="bg-red-100 p-2 rounded-lg">
+                  <i data-lucide="alert-circle" class="size-5 text-red-600"></i>
+                </div>
+                <div>
+                  <h2 class="text-lg font-semibold text-gray-900 mb-1">
+                    Emergency Requests
+                  </h2>
+                  <p class="text-sm text-gray-600">
+                    Urgent blood requests requiring immediate attention
+                  </p>
+                </div>
+              </div>
+              <span
+                class="px-3 py-1 text-sm font-medium bg-red-100 text-red-700 rounded-full"
+                id="emergencyCount"
+                >0 Active</span
+              >
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead>
+                  <tr class="border-b border-gray-200">
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Request ID
+                    </th>
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Blood Type
+                    </th>
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Quantity
+                    </th>
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Status
+                    </th>
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Donor Status
+                    </th>
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Requested
+                    </th>
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="emergencyRequestsBody">
+                  <!-- Populated dynamically by JavaScript -->
+                  <tr>
+                    <td colspan="7" class="py-8 text-center">
+                      <div
+                        class="animate-spin size-6 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-2"
+                      ></div>
+                      <p class="text-gray-500 text-sm">Loading requests...</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Normal Requests Section -->
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center gap-3">
+                <div class="bg-blue-100 p-2 rounded-lg">
+                  <i data-lucide="droplet" class="size-5 text-blue-600"></i>
+                </div>
+                <div>
+                  <h2 class="text-lg font-semibold text-gray-900 mb-1">
+                    Normal Requests
+                  </h2>
+                  <p class="text-sm text-gray-600">
+                    Standard blood requests with regular priority
+                  </p>
+                </div>
+              </div>
+              <span
+                class="px-3 py-1 text-sm font-medium bg-blue-100 text-blue-700 rounded-full"
+                id="normalCount"
+                >0 Active</span
+              >
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead>
+                  <tr class="border-b border-gray-200">
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Request ID
+                    </th>
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Blood Type
+                    </th>
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Quantity
+                    </th>
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Status
+                    </th>
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Donor Status
+                    </th>
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Requested
+                    </th>
+                    <th
+                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                    >
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="normalRequestsBody">
+                  <!-- Populated dynamically by JavaScript -->
+                  <tr>
+                    <td colspan="7" class="py-8 text-center">
+                      <div
+                        class="animate-spin size-6 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-2"
+                      ></div>
+                      <p class="text-gray-500 text-sm">Loading requests...</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Blood Request Details Modal -->
+    <dialog id="requestModal" class="modal">
+      <div class="modal-box bg-white max-w-lg">
         <form method="dialog">
-          <button class="btn bg-gray-100 hover:bg-gray-200 text-gray-700 border-0">
-            Close
+          <button
+            class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4"
+          >
+            <i data-lucide="x" class="size-5"></i>
           </button>
         </form>
+        <h3
+          class="font-bold text-xl text-gray-900 mb-6 flex items-center gap-2"
+        >
+          <i data-lucide="droplet" class="size-6 text-red-600"></i>
+          Blood Request Details
+        </h3>
+        <div class="space-y-4" id="requestModalContent">
+          <!-- Content will be populated dynamically -->
+        </div>
+        <div class="modal-action">
+          <form method="dialog">
+            <button
+              class="btn bg-gray-100 hover:bg-gray-200 text-gray-700 border-0"
+            >
+              Close
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-    <form method="dialog" class="modal-backdrop">
-      <button>close</button>
-    </form>
-  </dialog>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
 
-  <script type="module">
-    import { setupLogoutButton } from '/src/scripts/auth.js';
-    import { initUserLoader } from '/src/scripts/user-loader.js';
-    setupLogoutButton();
-    initUserLoader();
-  </script>
-  <script>
-    // Hospital Dashboard - Dynamic Data from API
-    let requests = [];
-    let requestData = {};
+    <script type="module">
+      import { setupLogoutButton } from "/src/scripts/auth.js";
+      import { initUserLoader } from "/src/scripts/user-loader.js";
+      setupLogoutButton();
+      initUserLoader();
+    </script>
+    <script>
+      // Hospital Dashboard - Dynamic Data from API
+      let requests = [];
+      let requestData = {};
 
-    // Format date for display
-    function formatDate(dateStr) {
-      if (!dateStr) return 'N/A';
-      const date = new Date(dateStr);
-      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-    }
-
-    // Format relative time
-    function formatRelativeTime(dateStr) {
-      if (!dateStr) return 'N/A';
-      const date = new Date(dateStr);
-      const now = new Date();
-      const diff = now - date;
-      const hours = Math.floor(diff / (1000 * 60 * 60));
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-      if (hours < 1) return 'Just now';
-      if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-      if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
-      return formatDate(dateStr);
-    }
-
-    // Get status badge HTML
-    function getStatusBadge(status) {
-      const config = {
-        pending: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: 'Pending' },
-        approved: { bg: 'bg-green-100', text: 'text-green-700', label: 'Approved' },
-        in_progress: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Processing' },
-        completed: { bg: 'bg-green-100', text: 'text-green-700', label: 'Completed' },
-        rejected: { bg: 'bg-red-100', text: 'text-red-700', label: 'Rejected' }
-      };
-      const c = config[status] || { bg: 'bg-gray-100', text: 'text-gray-700', label: status };
-      return `<span class="px-2 py-1 text-xs font-medium ${c.bg} ${c.text} rounded-full">${c.label}</span>`;
-    }
-
-    // Get donor status badge HTML
-    function getDonorStatusBadge(donation) {
-      if (!donation) {
-        return '<span class="text-xs text-gray-400 italic">Awaiting Donor</span>';
+      // Format date for display
+      function formatDate(dateStr) {
+        if (!dateStr) return "N/A";
+        const date = new Date(dateStr);
+        return date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
       }
-      const statusConfig = {
-        accepted: { bg: 'bg-gray-100', text: 'text-gray-700', icon: 'check', label: 'Accepted' },
-        on_the_way: { bg: 'bg-blue-100', text: 'text-blue-700', icon: 'navigation', label: 'On the Way' },
-        reached: { bg: 'bg-blue-100', text: 'text-blue-700', icon: 'map-pin', label: 'Reached' },
-        completed: { bg: 'bg-green-100', text: 'text-green-700', icon: 'check-circle', label: 'Completed' }
-      };
-      const config = statusConfig[donation.status] || { bg: 'bg-gray-100', text: 'text-gray-700', icon: 'clock', label: donation.status };
-      return `<span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium ${config.bg} ${config.text} rounded-full">
+
+      // Format relative time
+      function formatRelativeTime(dateStr) {
+        if (!dateStr) return "N/A";
+        const date = new Date(dateStr);
+        const now = new Date();
+        const diff = now - date;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+        if (hours < 1) return "Just now";
+        if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+        if (days < 7) return `${days} day${days > 1 ? "s" : ""} ago`;
+        return formatDate(dateStr);
+      }
+
+      // Get status badge HTML
+      function getStatusBadge(status) {
+        const config = {
+          pending: {
+            bg: "bg-yellow-100",
+            text: "text-yellow-700",
+            label: "Pending",
+          },
+          approved: {
+            bg: "bg-green-100",
+            text: "text-green-700",
+            label: "Approved",
+          },
+          in_progress: {
+            bg: "bg-blue-100",
+            text: "text-blue-700",
+            label: "Processing",
+          },
+          completed: {
+            bg: "bg-green-100",
+            text: "text-green-700",
+            label: "Completed",
+          },
+          rejected: {
+            bg: "bg-red-100",
+            text: "text-red-700",
+            label: "Rejected",
+          },
+        };
+        const c = config[status] || {
+          bg: "bg-gray-100",
+          text: "text-gray-700",
+          label: status,
+        };
+        return `<span class="px-2 py-1 text-xs font-medium ${c.bg} ${c.text} rounded-full">${c.label}</span>`;
+      }
+
+      // Get donor status badge HTML
+      function getDonorStatusBadge(donation) {
+        if (!donation) {
+          return '<span class="text-xs text-gray-400 italic">Awaiting Donor</span>';
+        }
+        const statusConfig = {
+          accepted: {
+            bg: "bg-gray-100",
+            text: "text-gray-700",
+            icon: "check",
+            label: "Accepted",
+          },
+          on_the_way: {
+            bg: "bg-blue-100",
+            text: "text-blue-700",
+            icon: "navigation",
+            label: "On the Way",
+          },
+          reached: {
+            bg: "bg-blue-100",
+            text: "text-blue-700",
+            icon: "map-pin",
+            label: "Reached",
+          },
+          completed: {
+            bg: "bg-green-100",
+            text: "text-green-700",
+            icon: "check-circle",
+            label: "Completed",
+          },
+        };
+        const config = statusConfig[donation.status] || {
+          bg: "bg-gray-100",
+          text: "text-gray-700",
+          icon: "clock",
+          label: donation.status,
+        };
+        return `<span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium ${config.bg} ${config.text} rounded-full">
         <i data-lucide="${config.icon}" class="size-3"></i>${config.label}
       </span>`;
-    }
+      }
 
-    // Show loading state
-    function showLoading(tableId) {
-      const tbody = document.getElementById(tableId);
-      if (tbody) {
-        tbody.innerHTML = `
+      // Show loading state
+      function showLoading(tableId) {
+        const tbody = document.getElementById(tableId);
+        if (tbody) {
+          tbody.innerHTML = `
           <tr>
             <td colspan="7" class="py-8 text-center">
               <div class="animate-spin size-6 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-2"></div>
@@ -383,14 +527,14 @@
             </td>
           </tr>
         `;
+        }
       }
-    }
 
-    // Show empty state
-    function showEmptyState(tableId, message) {
-      const tbody = document.getElementById(tableId);
-      if (tbody) {
-        tbody.innerHTML = `
+      // Show empty state
+      function showEmptyState(tableId, message) {
+        const tbody = document.getElementById(tableId);
+        if (tbody) {
+          tbody.innerHTML = `
           <tr>
             <td colspan="7" class="py-8 text-center">
               <i data-lucide="inbox" class="size-8 text-gray-300 mx-auto mb-2"></i>
@@ -398,23 +542,32 @@
             </td>
           </tr>
         `;
-        lucide.createIcons();
+          lucide.createIcons();
+        }
       }
-    }
 
-    // Render request row
-    function renderRequestRow(req, isEmergency) {
-      const requestCode = req.request_code || `REQ${String(req.id).padStart(3, '0')}`;
-      return `
-        <tr class="border-b border-gray-100 hover:bg-${isEmergency ? 'red' : 'gray'}-50">
+      // Render request row
+      function renderRequestRow(req, isEmergency) {
+        const requestCode =
+          req.request_code || `REQ${String(req.id).padStart(3, "0")}`;
+        return `
+        <tr class="border-b border-gray-100 hover:bg-${
+          isEmergency ? "red" : "gray"
+        }-50">
           <td class="py-3 px-4 text-gray-900 font-medium">${requestCode}</td>
           <td class="py-3 px-4">
-            <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${req.blood_type}</span>
+            <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${
+              req.blood_type
+            }</span>
           </td>
-          <td class="py-3 px-4 text-gray-900">${req.quantity} Unit${req.quantity > 1 ? 's' : ''}</td>
+          <td class="py-3 px-4 text-gray-900">${req.quantity} Unit${
+          req.quantity > 1 ? "s" : ""
+        }</td>
           <td class="py-3 px-4">${getStatusBadge(req.status)}</td>
           <td class="py-3 px-4">${getDonorStatusBadge(req.donation)}</td>
-          <td class="py-3 px-4 text-gray-600">${formatRelativeTime(req.created_at)}</td>
+          <td class="py-3 px-4 text-gray-600">${formatRelativeTime(
+            req.created_at
+          )}</td>
           <td class="py-3 px-4">
             <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
               onclick="openRequestModal('${req.id}')">
@@ -423,136 +576,200 @@
           </td>
         </tr>
       `;
-    }
-
-    // Render tables
-    function renderTables() {
-      const emergencyRequests = requests.filter(r => r.urgency === 'emergency' && r.status !== 'completed' && r.status !== 'rejected');
-      const normalRequests = requests.filter(r => r.urgency !== 'emergency' && r.status !== 'completed' && r.status !== 'rejected');
-
-      // Update counts
-      document.getElementById('emergencyCount').textContent = `${emergencyRequests.length} Active`;
-      document.getElementById('normalCount').textContent = `${normalRequests.length} Active`;
-
-      // Render emergency table
-      const emergencyBody = document.getElementById('emergencyRequestsBody');
-      if (emergencyRequests.length === 0) {
-        showEmptyState('emergencyRequestsBody', 'No emergency requests at the moment');
-      } else {
-        emergencyBody.innerHTML = emergencyRequests.map(req => renderRequestRow(req, true)).join('');
-        lucide.createIcons();
       }
 
-      // Render normal table
-      const normalBody = document.getElementById('normalRequestsBody');
-      if (normalRequests.length === 0) {
-        showEmptyState('normalRequestsBody', 'No normal requests at the moment');
-      } else {
-        normalBody.innerHTML = normalRequests.map(req => renderRequestRow(req, false)).join('');
-        lucide.createIcons();
-      }
-    }
+      // Render tables
+      function renderTables() {
+        const emergencyRequests = requests.filter(
+          (r) =>
+            r.urgency === "emergency" &&
+            r.status !== "completed" &&
+            r.status !== "rejected"
+        );
+        const normalRequests = requests.filter(
+          (r) =>
+            r.urgency !== "emergency" &&
+            r.status !== "completed" &&
+            r.status !== "rejected"
+        );
 
-    // Update stats cards
-    function updateStats(stats) {
-      const statCards = document.querySelectorAll('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 .text-3xl');
-      if (statCards.length >= 4) {
-        statCards[0].textContent = stats.active || 0;  // Active Requests
-        statCards[1].textContent = stats.completed || 0;  // Completed Requests
-        statCards[2].textContent = stats.emergency || 0;  // Urgent Alerts
-        // Keep Available Donors static for now (would need a donors API)
-      }
-    }
+        // Update counts
+        document.getElementById(
+          "emergencyCount"
+        ).textContent = `${emergencyRequests.length} Active`;
+        document.getElementById(
+          "normalCount"
+        ).textContent = `${normalRequests.length} Active`;
 
-    // Fetch requests from API
-    async function loadDashboardData() {
-      showLoading('emergencyRequestsBody');
-      showLoading('normalRequestsBody');
-
-      try {
-        const response = await fetch('/api/hospital/requests.php');
-
-        if (response.status === 401) {
-          window.location.href = '/src/pages/auth/login.html';
-          return;
+        // Render emergency table
+        const emergencyBody = document.getElementById("emergencyRequestsBody");
+        if (emergencyRequests.length === 0) {
+          showEmptyState(
+            "emergencyRequestsBody",
+            "No emergency requests at the moment"
+          );
+        } else {
+          emergencyBody.innerHTML = emergencyRequests
+            .map((req) => renderRequestRow(req, true))
+            .join("");
+          lucide.createIcons();
         }
 
-        const data = await response.json();
-
-        if (!data.success) {
-          showEmptyState('emergencyRequestsBody', data.message || 'Failed to load requests');
-          showEmptyState('normalRequestsBody', data.message || 'Failed to load requests');
-          return;
+        // Render normal table
+        const normalBody = document.getElementById("normalRequestsBody");
+        if (normalRequests.length === 0) {
+          showEmptyState(
+            "normalRequestsBody",
+            "No normal requests at the moment"
+          );
+        } else {
+          normalBody.innerHTML = normalRequests
+            .map((req) => renderRequestRow(req, false))
+            .join("");
+          lucide.createIcons();
         }
+      }
 
-        requests = data.requests || [];
+      // Update stats cards
+      function updateStats(stats) {
+        const statCards = document.querySelectorAll(
+          ".grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 .text-3xl"
+        );
+        if (statCards.length >= 4) {
+          statCards[0].textContent = stats.active || 0; // Active Requests
+          statCards[1].textContent = stats.completed || 0; // Completed Requests
+          statCards[2].textContent = stats.emergency || 0; // Urgent Alerts
+          // Keep Available Donors static for now (would need a donors API)
+        }
+      }
 
-        // Build requestData lookup for modal
-        requests.forEach(req => {
-          const id = req.id;
-          requestData[id] = {
-            id: req.request_code || `REQ${String(req.id).padStart(3, '0')}`,
-            patientName: req.patient_name || 'Unknown Patient',
-            bloodGroup: req.blood_type,
-            quantity: `${req.quantity} Unit${req.quantity > 1 ? 's' : ''}`,
-            urgency: req.urgency === 'emergency' ? 'Emergency' : 'Normal',
-            requestedDate: formatDate(req.created_at),
-            requiredByDate: formatDate(req.required_date),
-            status: req.status.charAt(0).toUpperCase() + req.status.slice(1).replace(/_/g, ' '),
-            notes: req.medical_reason || 'No additional notes provided.',
-            donorName: req.donation?.donor_name || null,
-            donorStatus: req.donation?.status ? req.donation.status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : null,
-            donorStatusUpdatedAt: req.donation?.reached_at || req.donation?.started_at || req.donation?.accepted_at || null
+      // Fetch requests from API
+      async function loadDashboardData() {
+        showLoading("emergencyRequestsBody");
+        showLoading("normalRequestsBody");
+
+        try {
+          const response = await fetch("/api/hospital/requests.php");
+
+          if (response.status === 401) {
+            window.location.href = "/src/pages/auth/login.html";
+            return;
+          }
+
+          const data = await response.json();
+
+          if (!data.success) {
+            showEmptyState(
+              "emergencyRequestsBody",
+              data.message || "Failed to load requests"
+            );
+            showEmptyState(
+              "normalRequestsBody",
+              data.message || "Failed to load requests"
+            );
+            return;
+          }
+
+          requests = data.requests || [];
+
+          // Build requestData lookup for modal
+          requests.forEach((req) => {
+            const id = req.id;
+            requestData[id] = {
+              id: req.request_code || `REQ${String(req.id).padStart(3, "0")}`,
+              patientName: req.patient_name || "Unknown Patient",
+              bloodGroup: req.blood_type,
+              quantity: `${req.quantity} Unit${req.quantity > 1 ? "s" : ""}`,
+              urgency: req.urgency === "emergency" ? "Emergency" : "Normal",
+              requestedDate: formatDate(req.created_at),
+              requiredByDate: formatDate(req.required_date),
+              status:
+                req.status.charAt(0).toUpperCase() +
+                req.status.slice(1).replace(/_/g, " "),
+              notes: req.medical_reason || "No additional notes provided.",
+              donorName: req.donation?.donor_name || null,
+              donorStatus: req.donation?.status
+                ? req.donation.status
+                    .replace(/_/g, " ")
+                    .replace(/\b\w/g, (l) => l.toUpperCase())
+                : null,
+              donorStatusUpdatedAt:
+                req.donation?.reached_at ||
+                req.donation?.started_at ||
+                req.donation?.accepted_at ||
+                null,
+            };
+          });
+
+          renderTables();
+          updateStats(data.stats || {});
+        } catch (error) {
+          console.error("Error loading dashboard:", error);
+          showEmptyState(
+            "emergencyRequestsBody",
+            "Unable to connect to server"
+          );
+          showEmptyState("normalRequestsBody", "Unable to connect to server");
+        }
+      }
+
+      function openRequestModal(id) {
+        const request = requestData[id];
+        if (!request) return;
+
+        const urgencyClass =
+          request.urgency === "Emergency"
+            ? "bg-red-600 text-white"
+            : "bg-green-100 text-green-700";
+
+        const statusClass =
+          {
+            Processing: "bg-blue-100 text-blue-700",
+            Approved: "bg-green-100 text-green-700",
+            Pending: "bg-yellow-100 text-yellow-700",
+            Completed: "bg-green-100 text-green-700",
+            "In progress": "bg-blue-100 text-blue-700",
+          }[request.status] || "bg-gray-100 text-gray-700";
+
+        // Donor journey status badge colors
+        const getDonorStatusModalBadge = (status) => {
+          if (!status) return "";
+          const statusConfig = {
+            Accepted: {
+              bg: "bg-gray-100",
+              text: "text-gray-700",
+              icon: "check",
+            },
+            "On The Way": {
+              bg: "bg-blue-100",
+              text: "text-blue-700",
+              icon: "navigation",
+            },
+            Reached: {
+              bg: "bg-blue-100",
+              text: "text-blue-700",
+              icon: "map-pin",
+            },
+            Completed: {
+              bg: "bg-green-100",
+              text: "text-green-700",
+              icon: "check-circle",
+            },
           };
-        });
-
-        renderTables();
-        updateStats(data.stats || {});
-
-      } catch (error) {
-        console.error('Error loading dashboard:', error);
-        showEmptyState('emergencyRequestsBody', 'Unable to connect to server');
-        showEmptyState('normalRequestsBody', 'Unable to connect to server');
-      }
-    }
-
-    function openRequestModal(id) {
-      const request = requestData[id];
-      if (!request) return;
-
-      const urgencyClass =
-        request.urgency === "Emergency"
-          ? "bg-red-600 text-white"
-          : "bg-green-100 text-green-700";
-
-      const statusClass =
-        {
-          Processing: "bg-blue-100 text-blue-700",
-          Approved: "bg-green-100 text-green-700",
-          Pending: "bg-yellow-100 text-yellow-700",
-          Completed: "bg-green-100 text-green-700",
-          'In progress': "bg-blue-100 text-blue-700",
-        }[request.status] || "bg-gray-100 text-gray-700";
-
-      // Donor journey status badge colors
-      const getDonorStatusModalBadge = (status) => {
-        if (!status) return '';
-        const statusConfig = {
-          'Accepted': { bg: 'bg-gray-100', text: 'text-gray-700', icon: 'check' },
-          'On The Way': { bg: 'bg-blue-100', text: 'text-blue-700', icon: 'navigation' },
-          'Reached': { bg: 'bg-blue-100', text: 'text-blue-700', icon: 'map-pin' },
-          'Completed': { bg: 'bg-green-100', text: 'text-green-700', icon: 'check-circle' },
-        };
-        const config = statusConfig[status] || { bg: 'bg-gray-100', text: 'text-gray-700', icon: 'clock' };
-        return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium ${config.bg} ${config.text} rounded-full">
+          const config = statusConfig[status] || {
+            bg: "bg-gray-100",
+            text: "text-gray-700",
+            icon: "clock",
+          };
+          return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium ${config.bg} ${config.text} rounded-full">
             <i data-lucide="${config.icon}" class="size-3"></i>${status}
           </span>`;
-      };
+        };
 
-      // Build donor journey section (only if donor assigned)
-      let donorJourneySection = '';
-      if (request.donorName && request.donorStatus) {
-        donorJourneySection = `
+        // Build donor journey section (only if donor assigned)
+        let donorJourneySection = "";
+        if (request.donorName && request.donorStatus) {
+          donorJourneySection = `
             <div class="mt-4 pt-4 border-t border-gray-200">
               <div class="flex items-center gap-2 mb-3">
                 <i data-lucide="activity" class="size-4 text-green-600"></i>
@@ -563,7 +780,9 @@
                 <div class="grid grid-cols-2 gap-3">
                   <div class="space-y-1">
                     <p class="text-xs text-gray-500">Assigned Donor</p>
-                    <p class="font-medium text-gray-900 text-sm">${request.donorName}</p>
+                    <p class="font-medium text-gray-900 text-sm">${
+                      request.donorName
+                    }</p>
                   </div>
                   <div class="space-y-1">
                     <p class="text-xs text-gray-500">Donor Status</p>
@@ -571,14 +790,18 @@
                   </div>
                   <div class="col-span-2 space-y-1">
                     <p class="text-xs text-gray-500">Last Updated</p>
-                    <p class="text-sm text-gray-600">${request.donorStatusUpdatedAt ? formatRelativeTime(request.donorStatusUpdatedAt) : 'N/A'}</p>
+                    <p class="text-sm text-gray-600">${
+                      request.donorStatusUpdatedAt
+                        ? formatRelativeTime(request.donorStatusUpdatedAt)
+                        : "N/A"
+                    }</p>
                   </div>
                 </div>
               </div>
             </div>
           `;
-      } else if (request.status === 'Pending') {
-        donorJourneySection = `
+        } else if (request.status === "Pending") {
+          donorJourneySection = `
             <div class="mt-4 pt-4 border-t border-gray-200">
               <div class="flex items-center gap-2 mb-3">
                 <i data-lucide="activity" class="size-4 text-gray-400"></i>
@@ -590,9 +813,9 @@
               </div>
             </div>
           `;
-      }
+        }
 
-      const content = `
+        const content = `
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-1">
               <p class="text-sm text-gray-500">Request ID</p>
@@ -634,20 +857,18 @@
           ${donorJourneySection}
         `;
 
+        document.getElementById("requestModalContent").innerHTML = content;
+        document.getElementById("requestModal").showModal();
 
-      document.getElementById("requestModalContent").innerHTML = content;
-      document.getElementById("requestModal").showModal();
-
-      // Re-initialize Lucide icons in the modal
-      if (window.lucide) {
-        window.lucide.createIcons();
+        // Re-initialize Lucide icons in the modal
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
       }
-    }
 
-    // Load on page ready
-    document.addEventListener('DOMContentLoaded', loadDashboardData);
-  </script>
-  <script type="module" src="/src/scripts/main.js"></script>
-</body>
-
+      // Load on page ready
+      document.addEventListener("DOMContentLoaded", loadDashboardData);
+    </script>
+    <script type="module" src="/src/scripts/main.js"></script>
+  </body>
 </html>
