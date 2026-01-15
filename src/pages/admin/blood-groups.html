@@ -1,305 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blood Groups - BloodConnect Admin</title>
+    <link rel="stylesheet" href="/src/styles/styles.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blood Groups - BloodConnect Admin</title>
-  <link rel="stylesheet" href="/src/styles/styles.css" />
-</head>
-
-<body class="min-h-screen bg-gray-50">
-  <!-- Sidebar -->
-  <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
-    <div class="p-6 border-b border-gray-200">
-      <div class="flex items-center gap-3">
-        <div class="bg-red-600 p-2 rounded-lg">
-          <i data-lucide="heart" class="size-6 text-white fill-white"></i>
-        </div>
-        <div>
-          <div class="font-semibold text-red-600">BloodConnect</div>
-          <div class="text-sm text-gray-500">Admin Panel</div>
-        </div>
-      </div>
-    </div>
-    <nav class="flex-1 overflow-y-auto py-4">
-      <a href="/src/pages/admin/dashboard.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="layout-dashboard" class="size-5"></i><span>Dashboard</span></a>
-      <a href="/src/pages/admin/donors.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="users" class="size-5"></i><span>Donors</span></a>
-      <a href="/src/pages/admin/hospitals.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="building-2" class="size-5"></i><span>Hospitals</span></a>
-      <a href="/src/pages/admin/blood-groups.html"
-        class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"><i
-          data-lucide="droplet" class="size-5"></i><span>Blood Groups</span></a>
-      <a href="/src/pages/admin/reports.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="file-text" class="size-5"></i><span>Reports</span></a>
-      <a href="/src/pages/admin/announcements.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="megaphone" class="size-5"></i><span>Announcements</span></a>
-      <a href="/src/pages/admin/chat.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="message-square" class="size-5"></i><span>Chat</span></a>
-    </nav>
-    <div class="p-4 border-t border-gray-200">
-      <div class="text-center text-sm text-gray-500">
-        <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Header -->
-  <header
-    class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8">
-    <div class="flex items-center gap-4 flex-1">
-      <h2 class="text-lg font-semibold text-gray-900">
-        Blood Group Management
-      </h2>
-    </div>
-    <div class="flex items-center gap-4">
-      <!-- Notification Dropdown -->
-      <div class="relative" id="notificationDropdown">
-        <button class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="toggleNotifications()"
-          id="notificationBell">
-          <i data-lucide="bell" class="size-5 text-gray-700"></i>
-          <span
-            class="absolute -top-1 -right-1 size-5 flex items-center justify-center p-0 bg-red-600 text-white text-xs rounded-full"
-            id="notificationBadge">4</span>
-        </button>
-
-        <!-- Notification Panel -->
-        <div id="notificationPanel"
-          class="hidden absolute right-0 top-12 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50">
-          <div class="p-4 border-b border-gray-200 flex items-center justify-between">
-            <h3 class="font-semibold text-gray-900">Notifications</h3>
-            <button onclick="markAllAsRead()" class="text-xs text-red-600 hover:text-red-700 font-medium">
-              Mark all as read
-            </button>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
           </div>
-          <div class="max-h-80 overflow-y-auto" id="notificationList">
-            <!-- Notifications will be populated by JS -->
-          </div>
-          <div class="p-3 border-t border-gray-200 text-center">
-            <button class="text-sm text-red-600 hover:text-red-700 font-medium">
-              View all notifications
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
-        <div class="text-right">
-          <div class="text-sm font-medium text-gray-900">Admin User</div>
-          <div class="text-xs text-gray-500">System Administrator</div>
-        </div>
-        <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
-          <i data-lucide="user" class="size-5 text-red-600"></i>
-        </div>
-      </div>
-      <a href="/" class="p-2 text-gray-600 hover:text-red-600"><i data-lucide="log-out" class="size-5"></i></a>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="ml-64 pt-16">
-    <div class="p-8 space-y-8">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900 mb-2">
-          Blood Group Management
-        </h1>
-        <p class="text-gray-600">
-          View and manage available donors by blood group
-        </p>
-      </div>
-
-      <!-- Blood Type Cards Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <div onclick="filterDonors('O+')"
-          class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
-          id="card-O+">
-
-          <div
-            class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
-            <span class="text-2xl font-bold text-red-600">O+</span>
-          </div>
-          <h3 class="font-semibold text-gray-900">O Positive</h3>
-          <p class="text-2xl font-bold text-gray-900 mt-2">12</p>
-          <p class="text-sm text-gray-500">Donors Available</p>
-        </div>
-
-        <div onclick="filterDonors('O-')"
-          class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
-          id="card-O-">
-
-          <div
-            class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
-            <span class="text-2xl font-bold text-red-600">O-</span>
-          </div>
-          <h3 class="font-semibold text-gray-900">O Negative</h3>
-          <p class="text-2xl font-bold text-gray-900 mt-2">4</p>
-          <p class="text-sm text-gray-500">Donors Available</p>
-        </div>
-
-        <div onclick="filterDonors('A+')"
-          class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
-          id="card-A+">
-
-          <div
-            class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
-            <span class="text-2xl font-bold text-red-600">A+</span>
-          </div>
-          <h3 class="font-semibold text-gray-900">A Positive</h3>
-          <p class="text-2xl font-bold text-gray-900 mt-2">18</p>
-          <p class="text-sm text-gray-500">Donors Available</p>
-        </div>
-
-        <div onclick="filterDonors('A-')"
-          class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
-          id="card-A-">
-
-          <div
-            class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
-            <span class="text-2xl font-bold text-red-600">A-</span>
-          </div>
-          <h3 class="font-semibold text-gray-900">A Negative</h3>
-          <p class="text-2xl font-bold text-gray-900 mt-2">3</p>
-          <p class="text-sm text-gray-500">Donors Available</p>
-        </div>
-
-        <div onclick="filterDonors('B+')"
-          class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
-          id="card-B+">
-
-          <div
-            class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
-            <span class="text-2xl font-bold text-red-600">B+</span>
-          </div>
-          <h3 class="font-semibold text-gray-900">B Positive</h3>
-          <p class="text-2xl font-bold text-gray-900 mt-2">15</p>
-          <p class="text-sm text-gray-500">Donors Available</p>
-        </div>
-
-        <div onclick="filterDonors('B-')"
-          class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
-          id="card-B-">
-
-          <div
-            class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
-            <span class="text-2xl font-bold text-red-600">B-</span>
-          </div>
-          <h3 class="font-semibold text-gray-900">B Negative</h3>
-          <p class="text-2xl font-bold text-gray-900 mt-2">2</p>
-          <p class="text-sm text-gray-500">Donors Available</p>
-        </div>
-
-        <div onclick="filterDonors('AB+')"
-          class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
-          id="card-AB+">
-
-          <div
-            class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
-            <span class="text-2xl font-bold text-red-600">AB+</span>
-          </div>
-          <h3 class="font-semibold text-gray-900">AB Positive</h3>
-          <p class="text-2xl font-bold text-gray-900 mt-2">6</p>
-          <p class="text-sm text-gray-500">Donors Available</p>
-        </div>
-
-        <div onclick="filterDonors('AB-')"
-          class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
-          id="card-AB-">
-
-          <div
-            class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
-            <span class="text-2xl font-bold text-red-600">AB-</span>
-          </div>
-          <h3 class="font-semibold text-gray-900">AB Negative</h3>
-          <p class="text-2xl font-bold text-gray-900 mt-2">1</p>
-          <p class="text-sm text-gray-500">Donors Available</p>
-        </div>
-      </div>
-
-      <!-- Donors List -->
-      <div class="p-6 bg-white border border-gray-200 rounded-xl" id="donorsSection">
-        <div class="flex items-center justify-between mb-6">
           <div>
-            <h2 class="text-lg font-semibold text-gray-900 mb-1" id="listTitle">
-              All Available Donors
-            </h2>
-            <p class="text-sm text-gray-600" id="listSubtitle">
-              Select a blood group above to filter results
-            </p>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Admin Panel</div>
           </div>
         </div>
-
-        <div class="space-y-4" id="donorsListContainer">
-          <!-- Donors will be injected here -->
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/src/pages/admin/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/src/pages/admin/donors.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="users" class="size-5"></i><span>Donors</span></a
+        >
+        <a
+          href="/src/pages/admin/hospitals.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="building-2" class="size-5"></i
+          ><span>Hospitals</span></a
+        >
+        <a
+          href="/src/pages/admin/blood-groups.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="droplet" class="size-5"></i
+          ><span>Blood Groups</span></a
+        >
+        <a
+          href="/src/pages/admin/reports.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="file-text" class="size-5"></i><span>Reports</span></a
+        >
+        <a
+          href="/src/pages/admin/announcements.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="megaphone" class="size-5"></i
+          ><span>Announcements</span></a
+        >
+        <a
+          href="/src/pages/admin/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
         </div>
       </div>
     </div>
-  </main>
 
-  <script type="module" src="/src/scripts/main.js"></script>
-  <script type="module">
-    import { initNotificationDropdown } from '/src/scripts/components/notification-dropdown.js';
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">
+          Blood Group Management
+        </h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <!-- Notification Dropdown -->
+        <div class="relative" id="notificationDropdown">
+          <button
+            class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            onclick="toggleNotifications()"
+            id="notificationBell"
+          >
+            <i data-lucide="bell" class="size-5 text-gray-700"></i>
+            <span
+              class="absolute -top-1 -right-1 size-5 flex items-center justify-center p-0 bg-red-600 text-white text-xs rounded-full"
+              id="notificationBadge"
+              >4</span
+            >
+          </button>
 
-    // Initialize notifications
-    initNotificationDropdown('admin');
+          <!-- Notification Panel -->
+          <div
+            id="notificationPanel"
+            class="hidden absolute right-0 top-12 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50"
+          >
+            <div
+              class="p-4 border-b border-gray-200 flex items-center justify-between"
+            >
+              <h3 class="font-semibold text-gray-900">Notifications</h3>
+              <button
+                onclick="markAllAsRead()"
+                class="text-xs text-red-600 hover:text-red-700 font-medium"
+              >
+                Mark all as read
+              </button>
+            </div>
+            <div class="max-h-80 overflow-y-auto" id="notificationList">
+              <!-- Notifications will be populated by JS -->
+            </div>
+            <div class="p-3 border-t border-gray-200 text-center">
+              <button
+                class="text-sm text-red-600 hover:text-red-700 font-medium"
+              >
+                View all notifications
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900">Admin User</div>
+            <div class="text-xs text-gray-500">System Administrator</div>
+          </div>
+          <div
+            class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="user" class="size-5 text-red-600"></i>
+          </div>
+        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
+      </div>
+    </header>
 
-    // Sample Donors Data with extended health and profile information
-    const donors = [
-      { id: 1, name: "Sarah Johnson", group: "O+", location: "New York, NY", donations: 12, status: "Active", lastDonation: "2023-11-15", phone: "+1 234-567-8901", email: "sarah.johnson@email.com", age: 28, gender: "Female", weight: 62, address: "123 Main Street, Manhattan", city: "New York", healthStatus: "Healthy", registeredAt: "2022-03-15" },
-      { id: 2, name: "Michael Chen", group: "O+", location: "Brooklyn, NY", donations: 5, status: "Active", lastDonation: "2023-12-01", phone: "+1 234-567-8902", email: "michael.chen@email.com", age: 34, gender: "Male", weight: 78, address: "456 Oak Avenue, Brooklyn Heights", city: "Brooklyn", healthStatus: "Healthy", registeredAt: "2022-06-20" },
-      { id: 3, name: "David Smith", group: "A+", location: "Queens, NY", donations: 8, status: "Active", lastDonation: "2023-10-20", phone: "+1 234-567-8903", email: "david.smith@email.com", age: 42, gender: "Male", weight: 85, address: "789 Elm Street, Astoria", city: "Queens", healthStatus: "Healthy", registeredAt: "2021-11-10" },
-      { id: 4, name: "Emily Davis", group: "A-", location: "Manhattan, NY", donations: 3, status: "Available", lastDonation: "2023-09-10", phone: "+1 234-567-8904", email: "emily.davis@email.com", age: 26, gender: "Female", weight: 55, address: "321 Park Avenue, Upper East Side", city: "Manhattan", healthStatus: "Healthy", registeredAt: "2023-01-05" },
-      { id: 5, name: "James Wilson", group: "B+", location: "Bronx, NY", donations: 15, status: "Active", lastDonation: "2023-12-10", phone: "+1 234-567-8905", email: "james.wilson@email.com", age: 38, gender: "Male", weight: 90, address: "654 River Road, Riverdale", city: "Bronx", healthStatus: "Healthy", registeredAt: "2020-08-22" },
-      { id: 6, name: "Lisa Anderson", group: "B-", location: "Staten Island, NY", donations: 2, status: "Unavailable", lastDonation: "2023-08-05", phone: "+1 234-567-8906", email: "lisa.anderson@email.com", age: 31, gender: "Female", weight: 58, address: "987 Beach Boulevard, South Beach", city: "Staten Island", healthStatus: "Temporarily Unwell", registeredAt: "2023-02-14" },
-      { id: 7, name: "Robert Taylor", group: "AB+", location: "Jersey City, NJ", donations: 6, status: "Active", lastDonation: "2023-11-01", phone: "+1 234-567-8907", email: "robert.taylor@email.com", age: 45, gender: "Male", weight: 82, address: "147 Liberty Street, Downtown", city: "Jersey City", healthStatus: "Healthy", registeredAt: "2022-04-30" },
-      { id: 8, name: "Jennifer Brown", group: "AB-", location: "Hoboken, NJ", donations: 1, status: "Active", lastDonation: "2023-12-20", phone: "+1 234-567-8908", email: "jennifer.brown@email.com", age: 29, gender: "Female", weight: 60, address: "258 Washington Street, Uptown", city: "Hoboken", healthStatus: "Healthy", registeredAt: "2023-11-01" },
-      { id: 9, name: "William Martinez", group: "O-", location: "Newark, NJ", donations: 9, status: "Active", lastDonation: "2023-10-05", phone: "+1 234-567-8909", email: "william.martinez@email.com", age: 36, gender: "Male", weight: 75, address: "369 Broad Street, Ironbound", city: "Newark", healthStatus: "Healthy", registeredAt: "2021-07-18" },
-      { id: 10, name: "Elizabeth Garcia", group: "O+", location: "New York, NY", donations: 4, status: "Active", lastDonation: "2023-11-25", phone: "+1 234-567-8910", email: "elizabeth.garcia@email.com", age: 33, gender: "Female", weight: 65, address: "741 Broadway, SoHo", city: "New York", healthStatus: "Healthy", registeredAt: "2022-09-12" },
-      { id: 11, name: "Thomas Robinson", group: "O+", location: "Brooklyn, NY", donations: 7, status: "Available", lastDonation: "2023-12-05", phone: "+1 234-567-8911", email: "thomas.robinson@email.com", age: 40, gender: "Male", weight: 88, address: "852 Atlantic Avenue, Prospect Heights", city: "Brooklyn", healthStatus: "Healthy", registeredAt: "2021-12-25" },
-      { id: 12, name: "Jessica White", group: "A+", location: "Queens, NY", donations: 10, status: "Active", lastDonation: "2023-11-10", phone: "+1 234-567-8912", email: "jessica.white@email.com", age: 27, gender: "Female", weight: 57, address: "963 Queens Boulevard, Forest Hills", city: "Queens", healthStatus: "Healthy", registeredAt: "2022-01-08" }
-    ];
+    <!-- Main Content -->
+    <main class="ml-64 pt-16">
+      <div class="p-8 space-y-8">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">
+            Blood Group Management
+          </h1>
+          <p class="text-gray-600">
+            View and manage available donors by blood group
+          </p>
+        </div>
 
-    // Expose filter function to window for onclick attributes
-    window.filterDonors = function (group) {
-      const container = document.getElementById('donorsListContainer');
-      const title = document.getElementById('listTitle');
-      const subtitle = document.getElementById('listSubtitle');
+        <!-- Blood Type Cards Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div
+            onclick="filterDonors('O+')"
+            class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
+            id="card-O+"
+          >
+            <div
+              class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors"
+            >
+              <span class="text-2xl font-bold text-red-600">O+</span>
+            </div>
+            <h3 class="font-semibold text-gray-900">O Positive</h3>
+            <p class="text-2xl font-bold text-gray-900 mt-2" id="count-O+">0</p>
+            <p class="text-sm text-gray-500">Donors Available</p>
+          </div>
 
-      // Update selection styling
-      document.querySelectorAll('[id^="card-"]').forEach(card => {
-        card.classList.remove('ring-2', 'ring-red-500', 'bg-red-50');
-        card.classList.add('bg-white');
-      });
+          <div
+            onclick="filterDonors('O-')"
+            class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
+            id="card-O-"
+          >
+            <div
+              class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors"
+            >
+              <span class="text-2xl font-bold text-red-600">O-</span>
+            </div>
+            <h3 class="font-semibold text-gray-900">O Negative</h3>
+            <p class="text-2xl font-bold text-gray-900 mt-2" id="count-O-">0</p>
+            <p class="text-sm text-gray-500">Donors Available</p>
+          </div>
 
-      const selectedCard = document.getElementById(`card-${group}`);
-      if (selectedCard) {
-        selectedCard.classList.remove('bg-white');
-        selectedCard.classList.add('bg-red-50', 'ring-2', 'ring-red-500');
-      }
+          <div
+            onclick="filterDonors('A+')"
+            class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
+            id="card-A+"
+          >
+            <div
+              class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors"
+            >
+              <span class="text-2xl font-bold text-red-600">A+</span>
+            </div>
+            <h3 class="font-semibold text-gray-900">A Positive</h3>
+            <p class="text-2xl font-bold text-gray-900 mt-2" id="count-A+">0</p>
+            <p class="text-sm text-gray-500">Donors Available</p>
+          </div>
 
-      // Filter data
-      const filteredDonors = donors.filter(d => d.group === group);
+          <div
+            onclick="filterDonors('A-')"
+            class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
+            id="card-A-"
+          >
+            <div
+              class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors"
+            >
+              <span class="text-2xl font-bold text-red-600">A-</span>
+            </div>
+            <h3 class="font-semibold text-gray-900">A Negative</h3>
+            <p class="text-2xl font-bold text-gray-900 mt-2" id="count-A-">0</p>
+            <p class="text-sm text-gray-500">Donors Available</p>
+          </div>
 
-      // Update title
-      title.textContent = `${group} Donors List`;
-      subtitle.textContent = `Showing ${filteredDonors.length} available donors`;
+          <div
+            onclick="filterDonors('B+')"
+            class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
+            id="card-B+"
+          >
+            <div
+              class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors"
+            >
+              <span class="text-2xl font-bold text-red-600">B+</span>
+            </div>
+            <h3 class="font-semibold text-gray-900">B Positive</h3>
+            <p class="text-2xl font-bold text-gray-900 mt-2" id="count-B+">0</p>
+            <p class="text-sm text-gray-500">Donors Available</p>
+          </div>
 
-      // Render list
-      if (filteredDonors.length === 0) {
-        container.innerHTML = `
+          <div
+            onclick="filterDonors('B-')"
+            class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
+            id="card-B-"
+          >
+            <div
+              class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors"
+            >
+              <span class="text-2xl font-bold text-red-600">B-</span>
+            </div>
+            <h3 class="font-semibold text-gray-900">B Negative</h3>
+            <p class="text-2xl font-bold text-gray-900 mt-2" id="count-B-">0</p>
+            <p class="text-sm text-gray-500">Donors Available</p>
+          </div>
+
+          <div
+            onclick="filterDonors('AB+')"
+            class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
+            id="card-AB+"
+          >
+            <div
+              class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors"
+            >
+              <span class="text-2xl font-bold text-red-600">AB+</span>
+            </div>
+            <h3 class="font-semibold text-gray-900">AB Positive</h3>
+            <p class="text-2xl font-bold text-gray-900 mt-2" id="count-AB+">
+              0
+            </p>
+            <p class="text-sm text-gray-500">Donors Available</p>
+          </div>
+
+          <div
+            onclick="filterDonors('AB-')"
+            class="p-6 bg-white border border-gray-200 rounded-xl text-center cursor-pointer hover:shadow-md transition-shadow hover:border-red-200 group relative overflow-hidden"
+            id="card-AB-"
+          >
+            <div
+              class="size-16 bg-red-100 group-hover:bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors"
+            >
+              <span class="text-2xl font-bold text-red-600">AB-</span>
+            </div>
+            <h3 class="font-semibold text-gray-900">AB Negative</h3>
+            <p class="text-2xl font-bold text-gray-900 mt-2" id="count-AB-">
+              0
+            </p>
+            <p class="text-sm text-gray-500">Donors Available</p>
+          </div>
+        </div>
+
+        <!-- Donors List -->
+        <div
+          class="p-6 bg-white border border-gray-200 rounded-xl"
+          id="donorsSection"
+        >
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h2
+                class="text-lg font-semibold text-gray-900 mb-1"
+                id="listTitle"
+              >
+                All Available Donors
+              </h2>
+              <p class="text-sm text-gray-600" id="listSubtitle">
+                Select a blood group above to filter results
+              </p>
+            </div>
+          </div>
+
+          <div class="space-y-4" id="donorsListContainer">
+            <!-- Donors will be injected here -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/src/scripts/main.js"></script>
+    <script type="module">
+      import { initNotificationDropdown } from "/src/scripts/components/notification-dropdown.js";
+
+      // Initialize notifications
+      initNotificationDropdown("admin");
+
+      // Donors data - loaded from API
+      let donors = [];
+
+      // Expose filter function to window for onclick attributes
+      window.filterDonors = function (group) {
+        const container = document.getElementById("donorsListContainer");
+        const title = document.getElementById("listTitle");
+        const subtitle = document.getElementById("listSubtitle");
+
+        // Update selection styling
+        document.querySelectorAll('[id^="card-"]').forEach((card) => {
+          card.classList.remove("ring-2", "ring-red-500", "bg-red-50");
+          card.classList.add("bg-white");
+        });
+
+        const selectedCard = document.getElementById(`card-${group}`);
+        if (selectedCard) {
+          selectedCard.classList.remove("bg-white");
+          selectedCard.classList.add("bg-red-50", "ring-2", "ring-red-500");
+        }
+
+        // Filter data
+        const filteredDonors = donors.filter((d) => d.group === group);
+
+        // Update title
+        title.textContent = `${group} Donors List`;
+        subtitle.textContent = `Showing ${filteredDonors.length} available donors`;
+
+        // Render list
+        if (filteredDonors.length === 0) {
+          container.innerHTML = `
             <div class="text-center py-12 text-gray-500">
               <i data-lucide="users" class="size-12 mx-auto mb-3 opacity-20"></i>
               <p>No available donors found for blood group ${group}</p>
             </div>
           `;
-      } else {
-        container.innerHTML = filteredDonors.map(donor => `
+        } else {
+          container.innerHTML = filteredDonors
+            .map(
+              (donor) => `
             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100 hover:border-red-200 transition-colors">
               <div class="flex items-center gap-4">
                 <div class="size-12 bg-white border border-gray-200 rounded-full flex items-center justify-center shrink-0">
@@ -308,16 +362,26 @@
                 <div>
                   <div class="flex items-center gap-2 mb-1">
                     <h3 class="font-semibold text-gray-900">${donor.name}</h3>
-                    <span class="px-2 py-0.5 text-xs font-medium ${donor.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'} rounded-full">${donor.status}</span>
+                    <span class="px-2 py-0.5 text-xs font-medium ${
+                      donor.status === "Active"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-gray-100 text-gray-600"
+                    } rounded-full">${donor.status}</span>
                   </div>
                   <div class="flex items-center gap-4 text-sm text-gray-500">
-                    <span class="flex items-center gap-1"><i data-lucide="map-pin" class="size-3"></i> ${donor.location}</span>
-                    <span class="flex items-center gap-1"><i data-lucide="droplet" class="size-3"></i> ${donor.donations} donations</span>
+                    <span class="flex items-center gap-1"><i data-lucide="map-pin" class="size-3"></i> ${
+                      donor.location
+                    }</span>
+                    <span class="flex items-center gap-1"><i data-lucide="droplet" class="size-3"></i> ${
+                      donor.donations
+                    } donations</span>
                   </div>
                 </div>
               </div>
               <div class="flex items-center gap-3">
-                <button onclick="viewDonorDetails(${donor.id})" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                <button onclick="viewDonorDetails(${
+                  donor.id
+                })" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                   View Details
                 </button>
                 <button onclick="window.location.href='/src/pages/admin/chat.html'" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2">
@@ -325,259 +389,380 @@
                 </button>
               </div>
             </div>
-          `).join('');
-      }
+          `
+            )
+            .join("");
+        }
 
-      if (window.lucide) window.lucide.createIcons();
-    };
+        if (window.lucide) window.lucide.createIcons();
+      };
 
-    // View Donor Details - open modal with donor information
-    window.viewDonorDetails = function (donorId) {
-      const donor = donors.find(d => d.id === donorId);
-      if (!donor) return;
+      // View Donor Details - open modal with donor information
+      window.viewDonorDetails = function (donorId) {
+        const donor = donors.find((d) => d.id === donorId);
+        if (!donor) return;
 
-      // Populate modal with donor data
-      document.getElementById('modalDonorId').textContent = `DON${String(donor.id).padStart(3, '0')}`;
-      document.getElementById('modalDonorName').textContent = donor.name;
-      document.getElementById('modalDonorAge').textContent = `${donor.age} years`;
-      document.getElementById('modalDonorGender').textContent = donor.gender;
-      document.getElementById('modalDonorWeight').textContent = `${donor.weight} kg`;
-      document.getElementById('modalDonorEmail').textContent = donor.email;
-      document.getElementById('modalDonorPhone').textContent = donor.phone;
-      document.getElementById('modalDonorAddress').textContent = donor.address;
-      document.getElementById('modalDonorCity').textContent = donor.city;
-      document.getElementById('modalDonorBloodType').textContent = donor.group;
-      document.getElementById('modalDonorHealthStatus').textContent = donor.healthStatus;
-      document.getElementById('modalDonorTotalDonations').textContent = donor.donations;
-      document.getElementById('modalDonorLastDonation').textContent = donor.lastDonation;
-      document.getElementById('modalDonorRegisteredAt').textContent = donor.registeredAt;
-      document.getElementById('modalDonorLocation').textContent = donor.location;
+        // Populate modal with donor data
+        document.getElementById("modalDonorId").textContent = `DON${String(
+          donor.id
+        ).padStart(3, "0")}`;
+        document.getElementById("modalDonorName").textContent = donor.name;
+        document.getElementById(
+          "modalDonorAge"
+        ).textContent = `${donor.age} years`;
+        document.getElementById("modalDonorGender").textContent = donor.gender;
+        document.getElementById(
+          "modalDonorWeight"
+        ).textContent = `${donor.weight} kg`;
+        document.getElementById("modalDonorEmail").textContent = donor.email;
+        document.getElementById("modalDonorPhone").textContent = donor.phone;
+        document.getElementById("modalDonorAddress").textContent =
+          donor.address;
+        document.getElementById("modalDonorCity").textContent = donor.city;
+        document.getElementById("modalDonorBloodType").textContent =
+          donor.group;
+        document.getElementById("modalDonorHealthStatus").textContent =
+          donor.healthStatus;
+        document.getElementById("modalDonorTotalDonations").textContent =
+          donor.donations;
+        document.getElementById("modalDonorLastDonation").textContent =
+          donor.lastDonation;
+        document.getElementById("modalDonorRegisteredAt").textContent =
+          donor.registeredAt;
+        document.getElementById("modalDonorLocation").textContent =
+          donor.location;
 
-      // Set status badge styling
-      const statusBadge = document.getElementById('modalDonorStatus');
-      statusBadge.textContent = donor.status;
-      statusBadge.className = 'px-3 py-1.5 text-sm font-medium rounded-full ';
-      if (donor.status === 'Active') {
-        statusBadge.className += 'border border-green-600 text-green-600';
-      } else if (donor.status === 'Available') {
-        statusBadge.className += 'border border-blue-600 text-blue-600';
-      } else {
-        statusBadge.className += 'border border-gray-600 text-gray-600';
-      }
+        // Set status badge styling
+        const statusBadge = document.getElementById("modalDonorStatus");
+        statusBadge.textContent = donor.status;
+        statusBadge.className = "px-3 py-1.5 text-sm font-medium rounded-full ";
+        if (donor.status === "Active") {
+          statusBadge.className += "border border-green-600 text-green-600";
+        } else if (donor.status === "Available") {
+          statusBadge.className += "border border-blue-600 text-blue-600";
+        } else {
+          statusBadge.className += "border border-gray-600 text-gray-600";
+        }
 
-      // Set health status styling
-      const healthBadge = document.getElementById('modalHealthBadge');
-      if (donor.healthStatus === 'Healthy') {
-        healthBadge.innerHTML = '<i data-lucide="shield-check" class="size-4 mr-1"></i>Verified Healthy';
-        healthBadge.className = 'inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full';
-      } else {
-        healthBadge.innerHTML = '<i data-lucide="shield-alert" class="size-4 mr-1"></i>' + donor.healthStatus;
-        healthBadge.className = 'inline-flex items-center px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full';
-      }
+        // Set health status styling
+        const healthBadge = document.getElementById("modalHealthBadge");
+        if (donor.healthStatus === "Healthy") {
+          healthBadge.innerHTML =
+            '<i data-lucide="shield-check" class="size-4 mr-1"></i>Verified Healthy';
+          healthBadge.className =
+            "inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full";
+        } else {
+          healthBadge.innerHTML =
+            '<i data-lucide="shield-alert" class="size-4 mr-1"></i>' +
+            donor.healthStatus;
+          healthBadge.className =
+            "inline-flex items-center px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full";
+        }
 
-      // Show modal with animation
-      const modal = document.getElementById('donorModal');
-      const modalContent = document.getElementById('donorModalContent');
-      modal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
+        // Show modal with animation
+        const modal = document.getElementById("donorModal");
+        const modalContent = document.getElementById("donorModalContent");
+        modal.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
 
-      // Animate in
-      requestAnimationFrame(() => {
-        modalContent.classList.remove('scale-95', 'opacity-0');
-        modalContent.classList.add('scale-100', 'opacity-100');
+        // Animate in
+        requestAnimationFrame(() => {
+          modalContent.classList.remove("scale-95", "opacity-0");
+          modalContent.classList.add("scale-100", "opacity-100");
+        });
+
+        // Reinitialize icons for the modal
+        if (window.lucide) window.lucide.createIcons();
+      };
+
+      // Close Donor Modal with animation
+      window.closeDonorModal = function () {
+        const modal = document.getElementById("donorModal");
+        const modalContent = document.getElementById("donorModalContent");
+
+        // Animate out
+        modalContent.classList.remove("scale-100", "opacity-100");
+        modalContent.classList.add("scale-95", "opacity-0");
+
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          document.body.style.overflow = "";
+        }, 200);
+      };
+
+      // Close modal on escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeDonorModal();
+        }
       });
 
-      // Reinitialize icons for the modal
-      if (window.lucide) window.lucide.createIcons();
-    };
+      // Initial render - show O+ by default or all
+      document.addEventListener("DOMContentLoaded", () => {
+        window.filterDonors("O+"); // Default selection
+      });
+    </script>
 
-    // Close Donor Modal with animation
-    window.closeDonorModal = function () {
-      const modal = document.getElementById('donorModal');
-      const modalContent = document.getElementById('donorModalContent');
-
-      // Animate out
-      modalContent.classList.remove('scale-100', 'opacity-100');
-      modalContent.classList.add('scale-95', 'opacity-0');
-
-      setTimeout(() => {
-        modal.classList.add('hidden');
-        document.body.style.overflow = '';
-      }, 200);
-    };
-
-    // Close modal on escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeDonorModal();
-      }
-    });
-
-    // Initial render - show O+ by default or all
-    document.addEventListener('DOMContentLoaded', () => {
-      window.filterDonors('O+'); // Default selection
-    });
-  </script>
-
-  <!-- Donor Details Modal -->
-  <div id="donorModal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="closeDonorModal()"></div>
-    <div class="absolute inset-0 flex items-center justify-center p-4">
-      <div id="donorModalContent"
-        class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-200 scale-95 opacity-0">
-        <!-- Modal Header -->
-        <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl z-10">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="p-2 rounded-lg bg-red-100">
-                <i data-lucide="user" class="size-5 text-red-600"></i>
+    <!-- Donor Details Modal -->
+    <div id="donorModal" class="fixed inset-0 z-50 hidden">
+      <div
+        class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+        onclick="closeDonorModal()"
+      ></div>
+      <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div
+          id="donorModalContent"
+          class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-200 scale-95 opacity-0"
+        >
+          <!-- Modal Header -->
+          <div
+            class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl z-10"
+          >
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-red-100">
+                  <i data-lucide="user" class="size-5 text-red-600"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900">
+                    Donor Details
+                  </h3>
+                  <p id="modalDonorId" class="text-sm text-gray-500">--</p>
+                </div>
               </div>
-              <div>
-                <h3 class="text-lg font-semibold text-gray-900">Donor Details</h3>
-                <p id="modalDonorId" class="text-sm text-gray-500">DON001</p>
-              </div>
-            </div>
-            <button onclick="closeDonorModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-              <i data-lucide="x" class="size-5 text-gray-500"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Modal Content -->
-        <div class="p-6 space-y-6">
-          <!-- Status Badges -->
-          <div class="flex items-center gap-3 flex-wrap">
-            <span id="modalDonorStatus"
-              class="px-3 py-1.5 text-sm font-medium border border-green-600 text-green-600 rounded-full">Active</span>
-            <span id="modalHealthBadge"
-              class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
-              <i data-lucide="shield-check" class="size-4 mr-1"></i>Verified Healthy
-            </span>
-          </div>
-
-          <!-- Personal Information -->
-          <div class="bg-gray-50 rounded-xl p-4">
-            <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <i data-lucide="user" class="size-4 text-gray-600"></i>
-              Personal Information
-            </h4>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <p class="text-xs text-gray-500 mb-1">Full Name</p>
-                <p id="modalDonorName" class="text-sm font-medium text-gray-900">Sarah Johnson</p>
-              </div>
-              <div>
-                <p class="text-xs text-gray-500 mb-1">Age</p>
-                <p id="modalDonorAge" class="text-sm font-medium text-gray-900">28 years</p>
-              </div>
-              <div>
-                <p class="text-xs text-gray-500 mb-1">Gender</p>
-                <p id="modalDonorGender" class="text-sm font-medium text-gray-900">Female</p>
-              </div>
-              <div>
-                <p class="text-xs text-gray-500 mb-1">Weight</p>
-                <p id="modalDonorWeight" class="text-sm font-medium text-gray-900">62 kg</p>
-              </div>
+              <button
+                onclick="closeDonorModal()"
+                class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <i data-lucide="x" class="size-5 text-gray-500"></i>
+              </button>
             </div>
           </div>
 
-          <!-- Contact Information -->
-          <div class="bg-blue-50 rounded-xl p-4">
-            <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <i data-lucide="phone" class="size-4 text-blue-600"></i>
-              Contact Information
-            </h4>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <p class="text-xs text-gray-500 mb-1">Email</p>
-                <p id="modalDonorEmail" class="text-sm font-medium text-gray-900">sarah.johnson@email.com</p>
+          <!-- Modal Content -->
+          <div class="p-6 space-y-6">
+            <!-- Status Badges -->
+            <div class="flex items-center gap-3 flex-wrap">
+              <span
+                id="modalDonorStatus"
+                class="px-3 py-1.5 text-sm font-medium border border-green-600 text-green-600 rounded-full"
+                >Active</span
+              >
+              <span
+                id="modalHealthBadge"
+                class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full"
+              >
+                <i data-lucide="shield-check" class="size-4 mr-1"></i>Verified
+                Healthy
+              </span>
+            </div>
+
+            <!-- Personal Information -->
+            <div class="bg-gray-50 rounded-xl p-4">
+              <h4
+                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
+              >
+                <i data-lucide="user" class="size-4 text-gray-600"></i>
+                Personal Information
+              </h4>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Full Name</p>
+                  <p
+                    id="modalDonorName"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Age</p>
+                  <p
+                    id="modalDonorAge"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Gender</p>
+                  <p
+                    id="modalDonorGender"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Weight</p>
+                  <p
+                    id="modalDonorWeight"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
+                  </p>
+                </div>
               </div>
-              <div>
-                <p class="text-xs text-gray-500 mb-1">Phone</p>
-                <p id="modalDonorPhone" class="text-sm font-medium text-gray-900">+1 234-567-8901</p>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="bg-blue-50 rounded-xl p-4">
+              <h4
+                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
+              >
+                <i data-lucide="phone" class="size-4 text-blue-600"></i>
+                Contact Information
+              </h4>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Email</p>
+                  <p
+                    id="modalDonorEmail"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Phone</p>
+                  <p
+                    id="modalDonorPhone"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
+                  </p>
+                </div>
+                <div class="col-span-2">
+                  <p class="text-xs text-gray-500 mb-1">Address</p>
+                  <p
+                    id="modalDonorAddress"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">City</p>
+                  <p
+                    id="modalDonorCity"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Location</p>
+                  <p
+                    id="modalDonorLocation"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
+                  </p>
+                </div>
               </div>
-              <div class="col-span-2">
-                <p class="text-xs text-gray-500 mb-1">Address</p>
-                <p id="modalDonorAddress" class="text-sm font-medium text-gray-900">123 Main Street, Manhattan</p>
+            </div>
+
+            <!-- Blood & Health Information -->
+            <div class="bg-red-50 rounded-xl p-4">
+              <h4
+                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
+              >
+                <i data-lucide="droplet" class="size-4 text-red-600"></i>
+                Blood & Health Information
+              </h4>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Blood Type</p>
+                  <span
+                    id="modalDonorBloodType"
+                    class="inline-block px-3 py-1 text-sm font-bold border-2 border-red-600 text-red-600 rounded-full"
+                    >O+</span
+                  >
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Health Status</p>
+                  <p
+                    id="modalDonorHealthStatus"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
+                  </p>
+                </div>
               </div>
-              <div>
-                <p class="text-xs text-gray-500 mb-1">City</p>
-                <p id="modalDonorCity" class="text-sm font-medium text-gray-900">New York</p>
+            </div>
+
+            <!-- Donation History -->
+            <div class="bg-green-50 rounded-xl p-4">
+              <h4
+                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
+              >
+                <i data-lucide="heart" class="size-4 text-green-600"></i>
+                Donation History
+              </h4>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Total Donations</p>
+                  <p
+                    id="modalDonorTotalDonations"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Last Donation</p>
+                  <p
+                    id="modalDonorLastDonation"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
+                  </p>
+                </div>
               </div>
+            </div>
+
+            <!-- Registration Info -->
+            <div class="bg-purple-50 rounded-xl p-4">
+              <h4
+                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
+              >
+                <i data-lucide="calendar" class="size-4 text-purple-600"></i>
+                Registration
+              </h4>
               <div>
-                <p class="text-xs text-gray-500 mb-1">Location</p>
-                <p id="modalDonorLocation" class="text-sm font-medium text-gray-900">New York, NY</p>
+                <p class="text-xs text-gray-500 mb-1">Registered At</p>
+                <p
+                  id="modalDonorRegisteredAt"
+                  class="text-sm font-medium text-gray-900"
+                >
+                  --
+                </p>
               </div>
             </div>
           </div>
 
-          <!-- Blood & Health Information -->
-          <div class="bg-red-50 rounded-xl p-4">
-            <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <i data-lucide="droplet" class="size-4 text-red-600"></i>
-              Blood & Health Information
-            </h4>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <p class="text-xs text-gray-500 mb-1">Blood Type</p>
-                <span id="modalDonorBloodType"
-                  class="inline-block px-3 py-1 text-sm font-bold border-2 border-red-600 text-red-600 rounded-full">O+</span>
-              </div>
-              <div>
-                <p class="text-xs text-gray-500 mb-1">Health Status</p>
-                <p id="modalDonorHealthStatus" class="text-sm font-medium text-gray-900">Healthy</p>
-              </div>
+          <!-- Modal Footer -->
+          <div
+            class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 rounded-b-2xl"
+          >
+            <div class="flex items-center justify-end gap-3">
+              <button
+                onclick="closeDonorModal()"
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Close
+              </button>
+              <button
+                onclick="window.location.href='/src/pages/admin/chat.html'"
+                class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+              >
+                <i data-lucide="message-square" class="size-4"></i>
+                Contact Donor
+              </button>
             </div>
-          </div>
-
-          <!-- Donation History -->
-          <div class="bg-green-50 rounded-xl p-4">
-            <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <i data-lucide="heart" class="size-4 text-green-600"></i>
-              Donation History
-            </h4>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <p class="text-xs text-gray-500 mb-1">Total Donations</p>
-                <p id="modalDonorTotalDonations" class="text-sm font-medium text-gray-900">12</p>
-              </div>
-              <div>
-                <p class="text-xs text-gray-500 mb-1">Last Donation</p>
-                <p id="modalDonorLastDonation" class="text-sm font-medium text-gray-900">2023-11-15</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Registration Info -->
-          <div class="bg-purple-50 rounded-xl p-4">
-            <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <i data-lucide="calendar" class="size-4 text-purple-600"></i>
-              Registration
-            </h4>
-            <div>
-              <p class="text-xs text-gray-500 mb-1">Registered At</p>
-              <p id="modalDonorRegisteredAt" class="text-sm font-medium text-gray-900">2022-03-15</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Modal Footer -->
-        <div class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 rounded-b-2xl">
-          <div class="flex items-center justify-end gap-3">
-            <button onclick="closeDonorModal()"
-              class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-              Close
-            </button>
-            <button onclick="window.location.href='/src/pages/admin/chat.html'"
-              class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2">
-              <i data-lucide="message-square" class="size-4"></i>
-              Contact Donor
-            </button>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</body>
-
+  </body>
 </html>

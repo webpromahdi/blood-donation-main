@@ -580,69 +580,20 @@
         }
       }
 
-      // Notification System
-      const notifications = [
-        {
-          id: 1,
-          title: "New Donor Registration",
-          message: "John Doe has registered as a new blood donor",
-          time: "2 minutes ago",
-          read: false,
-          icon: "user-plus",
-          iconBg: "bg-green-100",
-          iconColor: "text-green-600",
-        },
-        {
-          id: 2,
-          title: "Hospital Request Approved",
-          message: "City General Hospital blood request approved",
-          time: "15 minutes ago",
-          read: false,
-          icon: "check-circle",
-          iconBg: "bg-blue-100",
-          iconColor: "text-blue-600",
-        },
-        {
-          id: 3,
-          title: "Urgent Blood Request",
-          message: "Emergency O- blood needed at St. Mary Hospital",
-          time: "1 hour ago",
-          read: false,
-          icon: "alert-circle",
-          iconBg: "bg-red-100",
-          iconColor: "text-red-600",
-        },
-        {
-          id: 4,
-          title: "Monthly Report Generated",
-          message: "November 2024 donation report is ready",
-          time: "3 hours ago",
-          read: false,
-          icon: "file-text",
-          iconBg: "bg-purple-100",
-          iconColor: "text-purple-600",
-        },
-        {
-          id: 5,
-          title: "New Hospital Registration",
-          message: "Regional Medical Center pending approval",
-          time: "5 hours ago",
-          read: true,
-          icon: "building-2",
-          iconBg: "bg-orange-100",
-          iconColor: "text-orange-600",
-        },
-        {
-          id: 6,
-          title: "Blood Camp Scheduled",
-          message: "Community blood drive scheduled for Dec 15",
-          time: "1 day ago",
-          read: true,
-          icon: "calendar",
-          iconBg: "bg-teal-100",
-          iconColor: "text-teal-600",
-        },
-      ];
+      // Notification System - Fetch from backend
+      let notifications = [];
+
+      async function loadNotifications() {
+        try {
+          // For now, show empty notification state until backend provides data
+          notifications = [];
+          renderNotifications();
+        } catch (error) {
+          console.error("Error loading notifications:", error);
+          notifications = [];
+          renderNotifications();
+        }
+      }
 
       function renderNotifications() {
         const container = document.getElementById("notificationList");
@@ -721,6 +672,7 @@
         }
       });
       document.addEventListener("DOMContentLoaded", function () {
+        loadNotifications();
         renderNotifications();
       });
     </script>
@@ -728,37 +680,55 @@
     <script type="module">
       import Chart from "chart.js/auto";
 
-      // Chart data from TSX
-      const donationData = [
-        { month: "Jan", donations: 145, requests: 132 },
-        { month: "Feb", donations: 167, requests: 158 },
-        { month: "Mar", donations: 189, requests: 171 },
-        { month: "Apr", donations: 156, requests: 149 },
-        { month: "May", donations: 178, requests: 165 },
-        { month: "Jun", donations: 198, requests: 184 },
-      ];
+      // Chart data - will be populated from backend
+      let donationData = [];
+      let bloodTypeData = [];
+      let lineChartInstance = null;
+      let pieChartInstance = null;
+      let barChartInstance = null;
 
-      const bloodTypeData = [
-        { name: "O+", value: 423, color: "#EF4444" },
-        { name: "A+", value: 342, color: "#F97316" },
-        { name: "B+", value: 289, color: "#F59E0B" },
-        { name: "AB+", value: 156, color: "#10B981" },
-        { name: "O-", value: 185, color: "#3B82F6" },
-        { name: "A-", value: 128, color: "#6366F1" },
-        { name: "B-", value: 94, color: "#8B5CF6" },
-        { name: "AB-", value: 67, color: "#EC4899" },
-      ];
+      // Fetch report data from backend
+      async function loadReportData() {
+        try {
+          const response = await fetch("/api/admin/stats.php", {
+            credentials: "include",
+          });
+          const data = await response.json();
 
-      // Initialize charts after DOM is loaded
-      document.addEventListener("DOMContentLoaded", () => {
+          if (data.success) {
+            // Generate chart data based on stats (or show empty state)
+            // For now, initialize empty charts as there's no historical data API
+            initCharts();
+          } else {
+            initCharts();
+          }
+        } catch (error) {
+          console.error("Error loading report data:", error);
+          initCharts();
+        }
+      }
+
+      function initCharts() {
         initLineChart();
         initPieChart();
         initBarChart();
+      }
+
+      // Initialize charts after DOM is loaded
+      document.addEventListener("DOMContentLoaded", () => {
+        loadReportData();
       });
 
       function initLineChart() {
         const ctx = document.getElementById("lineChart").getContext("2d");
-        new Chart(ctx, {
+
+        // Show empty state if no data
+        if (donationData.length === 0) {
+          showChartEmptyState(ctx, "No donation data available");
+          return;
+        }
+
+        lineChartInstance = new Chart(ctx, {
           type: "line",
           data: {
             labels: donationData.map((d) => d.month),
@@ -808,9 +778,23 @@
         });
       }
 
+      function showChartEmptyState(ctx, message) {
+        ctx.font = "14px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#6B7280";
+        ctx.fillText(message, ctx.canvas.width / 2, ctx.canvas.height / 2);
+      }
+
       function initPieChart() {
         const ctx = document.getElementById("pieChart").getContext("2d");
-        new Chart(ctx, {
+
+        // Show empty state if no data
+        if (bloodTypeData.length === 0) {
+          showChartEmptyState(ctx, "No blood type data available");
+          return;
+        }
+
+        pieChartInstance = new Chart(ctx, {
           type: "pie",
           data: {
             labels: bloodTypeData.map((d) => d.name),
@@ -849,7 +833,14 @@
 
       function initBarChart() {
         const ctx = document.getElementById("barChart").getContext("2d");
-        new Chart(ctx, {
+
+        // Show empty state if no data
+        if (donationData.length === 0) {
+          showChartEmptyState(ctx, "No historical data available");
+          return;
+        }
+
+        barChartInstance = new Chart(ctx, {
           type: "bar",
           data: {
             labels: donationData.map((d) => d.month),
@@ -895,5 +886,3 @@
     </script>
   </body>
 </html>
-
-

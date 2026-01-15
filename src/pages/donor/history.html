@@ -1,378 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donation History - BloodConnect Donor</title>
+    <link rel="stylesheet" href="/src/styles/styles.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Donation History - BloodConnect Donor</title>
-  <link rel="stylesheet" href="/src/styles/styles.css" />
-</head>
-
-<body class="min-h-screen bg-gray-50">
-  <!-- Sidebar -->
-  <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
-    <div class="p-6 border-b border-gray-200">
-      <div class="flex items-center gap-3">
-        <div class="bg-red-600 p-2 rounded-lg">
-          <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Donor Portal</div>
+          </div>
         </div>
-        <div>
-          <div class="font-semibold text-red-600">BloodConnect</div>
-          <div class="text-sm text-gray-500">Donor Portal</div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/src/pages/donor/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/src/pages/donor/health.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="heart" class="size-5"></i><span>Health Info</span></a
+        >
+        <a
+          href="/src/pages/donor/voluntary.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="calendar" class="size-5"></i
+          ><span>Donate Voluntarily</span></a
+        >
+        <a
+          href="/src/pages/donor/history.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="file-text" class="size-5"></i
+          ><span>Donation History</span></a
+        >
+        <a
+          href="/src/pages/donor/certificates.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="award" class="size-5"></i
+          ><span>Certificates</span></a
+        >
+        <a
+          href="/src/pages/donor/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
         </div>
       </div>
     </div>
-    <nav class="flex-1 overflow-y-auto py-4">
-      <a href="/src/pages/donor/dashboard.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="layout-dashboard" class="size-5"></i><span>Dashboard</span></a>
-      <a href="/src/pages/donor/health.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="heart" class="size-5"></i><span>Health Info</span></a>
-      <a href="/src/pages/donor/voluntary.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="calendar" class="size-5"></i><span>Donate Voluntarily</span></a>
-      <a href="/src/pages/donor/history.html"
-        class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"><i
-          data-lucide="file-text" class="size-5"></i><span>Donation History</span></a>
-      <a href="/src/pages/donor/certificates.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="award" class="size-5"></i><span>Certificates</span></a>
-      <a href="/src/pages/donor/chat.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="message-square" class="size-5"></i><span>Chat</span></a>
-    </nav>
-    <div class="p-4 border-t border-gray-200">
-      <div class="text-center text-sm text-gray-500">
-        <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
-      </div>
-    </div>
-  </div>
 
-  <!-- Header -->
-  <header
-    class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8">
-    <div class="flex items-center gap-4 flex-1">
-      <h2 class="text-lg font-semibold text-gray-900">Donation History</h2>
-    </div>
-    <div class="flex items-center gap-4">
-      <button class="relative p-2 hover:bg-gray-100 rounded-lg">
-        <i data-lucide="bell" class="size-5 text-gray-700"></i>
-      </button>
-      <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
-        <div class="text-right">
-          <div class="text-sm font-medium text-gray-900" data-user-name>John Smith</div>
-          <div class="text-xs text-gray-500" data-user-role>Blood Donor</div>
-        </div>
-        <div class="size-10 bg-green-100 rounded-full flex items-center justify-center">
-          <i data-lucide="user" class="size-5 text-green-600"></i>
-        </div>
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">Donation History</h2>
       </div>
-      <a href="/" class="p-2 text-gray-600 hover:text-red-600"><i data-lucide="log-out" class="size-5"></i></a>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="ml-64 pt-16">
-    <div class="p-8 space-y-8">
-      <div class="flex items-center justify-between">
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900 mb-2">
-            Donation History
-          </h1>
-          <p class="text-gray-600">View your complete donation records</p>
-        </div>
-        <button class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium">
-          <i data-lucide="download" class="size-4 inline mr-2"></i>Export
-          History
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
         </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900" data-user-name>
+              John Smith
+            </div>
+            <div class="text-xs text-gray-500" data-user-role>Blood Donor</div>
+          </div>
+          <div
+            class="size-10 bg-green-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="user" class="size-5 text-green-600"></i>
+          </div>
+        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
       </div>
+    </header>
 
-      <!-- Summary Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Total Donations</p>
-              <h2 class="text-3xl font-bold text-gray-900">12</h2>
-            </div>
-            <div class="bg-red-100 p-3 rounded-lg">
-              <i data-lucide="droplet" class="size-6 text-red-600 fill-red-600"></i>
-            </div>
+    <!-- Main Content -->
+    <main class="ml-64 pt-16">
+      <div class="p-8 space-y-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">
+              Donation History
+            </h1>
+            <p class="text-gray-600">View your complete donation records</p>
           </div>
+          <button
+            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+          >
+            <i data-lucide="download" class="size-4 inline mr-2"></i>Export
+            History
+          </button>
         </div>
-        <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Total Volume</p>
-              <h2 class="text-3xl font-bold text-gray-900">6 L</h2>
-            </div>
-            <div class="bg-blue-100 p-3 rounded-lg">
-              <i data-lucide="droplet" class="size-6 text-blue-600"></i>
-            </div>
-          </div>
-        </div>
-        <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">This Year</p>
-              <h2 class="text-3xl font-bold text-gray-900">4</h2>
-            </div>
-            <div class="bg-green-100 p-3 rounded-lg">
-              <i data-lucide="file-text" class="size-6 text-green-600"></i>
-            </div>
-          </div>
-        </div>
-        <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Lives Saved</p>
-              <h2 class="text-3xl font-bold text-gray-900">36+</h2>
-            </div>
-            <div class="bg-purple-100 p-3 rounded-lg">
-              <i data-lucide="heart" class="size-6 text-purple-600 fill-purple-600"></i>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- History Table -->
-      <div class="p-6 bg-white border border-gray-200 rounded-xl">
-        <div class="mb-6">
-          <h2 class="text-lg font-semibold text-gray-900 mb-1">
-            Complete Donation Records
-          </h2>
-          <p class="text-sm text-gray-600">
-            Chronological list of all your donations
-          </p>
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Total Donations</p>
+                <h2 class="text-3xl font-bold text-gray-900">0</h2>
+              </div>
+              <div class="bg-red-100 p-3 rounded-lg">
+                <i
+                  data-lucide="droplet"
+                  class="size-6 text-red-600 fill-red-600"
+                ></i>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Total Volume</p>
+                <h2 class="text-3xl font-bold text-gray-900">0 U</h2>
+              </div>
+              <div class="bg-blue-100 p-3 rounded-lg">
+                <i data-lucide="droplet" class="size-6 text-blue-600"></i>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">This Year</p>
+                <h2 class="text-3xl font-bold text-gray-900">0</h2>
+              </div>
+              <div class="bg-green-100 p-3 rounded-lg">
+                <i data-lucide="file-text" class="size-6 text-green-600"></i>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Lives Saved</p>
+                <h2 class="text-3xl font-bold text-gray-900">0+</h2>
+              </div>
+              <div class="bg-purple-100 p-3 rounded-lg">
+                <i
+                  data-lucide="heart"
+                  class="size-6 text-purple-600 fill-purple-600"
+                ></i>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="overflow-x-auto">
-          <table class="w-full">
-            <thead>
-              <tr class="border-b border-gray-200">
-                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                  Donation ID
-                </th>
-                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                  Date
-                </th>
-                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                  Hospital
-                </th>
-                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                  Quantity
-                </th>
-                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                  Purpose
-                </th>
-                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                  Status
-                </th>
-                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="border-b border-gray-100 hover:bg-gray-50">
-                <td class="py-3 px-4 text-gray-900 font-medium">DON012</td>
-                <td class="py-3 px-4 text-gray-600">2024-11-10</td>
-                <td class="py-3 px-4 text-gray-900">City Hospital</td>
-                <td class="py-3 px-4">
-                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">500
-                    ml</span>
-                </td>
-                <td class="py-3 px-4 text-gray-600">Emergency Request</td>
-                <td class="py-3 px-4">
-                  <span
-                    class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full">Completed</span>
-                </td>
-                <td class="py-3 px-4">
-                  <div class="flex gap-2">
-                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      data-id="DON012" onclick="openDonationModal('DON012')">
-                      View
-                    </button>
-                    <button class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg" data-id="DON012"
-                      onclick="openCertificatePreview('DON012')">
-                      <i data-lucide="award" class="size-4 inline mr-1"></i>Certificate
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="border-b border-gray-100 hover:bg-gray-50">
-                <td class="py-3 px-4 text-gray-900 font-medium">DON011</td>
-                <td class="py-3 px-4 text-gray-600">2024-08-15</td>
-                <td class="py-3 px-4 text-gray-900">St. Mary Medical</td>
-                <td class="py-3 px-4">
-                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">450
-                    ml</span>
-                </td>
-                <td class="py-3 px-4 text-gray-600">Blood Camp</td>
-                <td class="py-3 px-4">
-                  <span
-                    class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full">Completed</span>
-                </td>
-                <td class="py-3 px-4">
-                  <div class="flex gap-2">
-                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      data-id="DON011" onclick="openDonationModal('DON011')">
-                      View
-                    </button>
-                    <button class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg" data-id="DON011"
-                      onclick="openCertificatePreview('DON011')">
-                      <i data-lucide="award" class="size-4 inline mr-1"></i>Certificate
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="border-b border-gray-100 hover:bg-gray-50">
-                <td class="py-3 px-4 text-gray-900 font-medium">DON010</td>
-                <td class="py-3 px-4 text-gray-600">2024-05-20</td>
-                <td class="py-3 px-4 text-gray-900">Regional Hospital</td>
-                <td class="py-3 px-4">
-                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">500
-                    ml</span>
-                </td>
-                <td class="py-3 px-4 text-gray-600">Surgery</td>
-                <td class="py-3 px-4">
-                  <span
-                    class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full">Completed</span>
-                </td>
-                <td class="py-3 px-4">
-                  <div class="flex gap-2">
-                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      data-id="DON010" onclick="openDonationModal('DON010')">
-                      View
-                    </button>
-                    <button class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg" data-id="DON010"
-                      onclick="openCertificatePreview('DON010')">
-                      <i data-lucide="award" class="size-4 inline mr-1"></i>Certificate
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="border-b border-gray-100 hover:bg-gray-50">
-                <td class="py-3 px-4 text-gray-900 font-medium">DON009</td>
-                <td class="py-3 px-4 text-gray-600">2024-02-10</td>
-                <td class="py-3 px-4 text-gray-900">Community Hospital</td>
-                <td class="py-3 px-4">
-                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">450
-                    ml</span>
-                </td>
-                <td class="py-3 px-4 text-gray-600">Regular Donation</td>
-                <td class="py-3 px-4">
-                  <span
-                    class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full">Completed</span>
-                </td>
-                <td class="py-3 px-4">
-                  <div class="flex gap-2">
-                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      data-id="DON009" onclick="openDonationModal('DON009')">
-                      View
-                    </button>
-                    <button class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg" data-id="DON009"
-                      onclick="openCertificatePreview('DON009')">
-                      <i data-lucide="award" class="size-4 inline mr-1"></i>Certificate
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="border-b border-gray-100 hover:bg-gray-50">
-                <td class="py-3 px-4 text-gray-900 font-medium">DON008</td>
-                <td class="py-3 px-4 text-gray-600">2023-11-05</td>
-                <td class="py-3 px-4 text-gray-900">City Hospital</td>
-                <td class="py-3 px-4">
-                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">500
-                    ml</span>
-                </td>
-                <td class="py-3 px-4 text-gray-600">Emergency Request</td>
-                <td class="py-3 px-4">
-                  <span
-                    class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full">Completed</span>
-                </td>
-                <td class="py-3 px-4">
-                  <div class="flex gap-2">
-                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      data-id="DON008" onclick="openDonationModal('DON008')">
-                      View
-                    </button>
-                    <button class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg" data-id="DON008"
-                      onclick="openCertificatePreview('DON008')">
-                      <i data-lucide="award" class="size-4 inline mr-1"></i>Certificate
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </main>
 
-  <!-- Certificate Preview Modal -->
-  <dialog id="certificateModal" class="modal">
-    <div class="modal-box bg-white max-w-2xl w-full p-0">
-      <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-10 bg-white/80 hover:bg-white">
-          <i data-lucide="x" class="size-5"></i>
-        </button>
-      </form>
-      <div id="certificatePreviewContent">
-        <!-- Content will be populated dynamically -->
+        <!-- History Table -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-1">
+              Complete Donation Records
+            </h2>
+            <p class="text-sm text-gray-600">
+              Chronological list of all your donations
+            </p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-gray-200">
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Donation ID
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Date
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Hospital
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Quantity
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Purpose
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Loading state - populated by JavaScript -->
+                <tr>
+                  <td colspan="7" class="py-12 text-center">
+                    <div
+                      class="animate-spin size-8 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-4"
+                    ></div>
+                    <p class="text-gray-600">Loading donation history...</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-      <div class="modal-action px-6 pb-6">
+    </main>
+
+    <!-- Certificate Preview Modal -->
+    <dialog id="certificateModal" class="modal">
+      <div class="modal-box bg-white max-w-2xl w-full p-0">
         <form method="dialog">
-          <button class="btn bg-gray-100 hover:bg-gray-200 text-gray-700 border-0">
-            Close Preview
+          <button
+            class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-10 bg-white/80 hover:bg-white"
+          >
+            <i data-lucide="x" class="size-5"></i>
           </button>
         </form>
+        <div id="certificatePreviewContent">
+          <!-- Content will be populated dynamically -->
+        </div>
+        <div class="modal-action px-6 pb-6">
+          <form method="dialog">
+            <button
+              class="btn bg-gray-100 hover:bg-gray-200 text-gray-700 border-0"
+            >
+              Close Preview
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-    <form method="dialog" class="modal-backdrop">
-      <button>close</button>
-    </form>
-  </dialog>
-
-  <!-- Donation Details Modal -->
-  <dialog id="donationModal" class="modal">
-    <div class="modal-box bg-white max-w-lg">
-      <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4">
-          <i data-lucide="x" class="size-5"></i>
-        </button>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
       </form>
-      <h3 class="font-bold text-xl text-gray-900 mb-6 flex items-center gap-2">
-        <i data-lucide="file-text" class="size-6 text-red-600"></i>
-        Donation Details
-      </h3>
-      <div class="space-y-4" id="donationModalContent">
-        <!-- Content will be populated dynamically -->
-      </div>
-      <div class="modal-action">
+    </dialog>
+
+    <!-- Donation Details Modal -->
+    <dialog id="donationModal" class="modal">
+      <div class="modal-box bg-white max-w-lg">
         <form method="dialog">
-          <button class="btn bg-gray-100 hover:bg-gray-200 text-gray-700 border-0">
-            Close
+          <button
+            class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4"
+          >
+            <i data-lucide="x" class="size-5"></i>
           </button>
         </form>
+        <h3
+          class="font-bold text-xl text-gray-900 mb-6 flex items-center gap-2"
+        >
+          <i data-lucide="file-text" class="size-6 text-red-600"></i>
+          Donation Details
+        </h3>
+        <div class="space-y-4" id="donationModalContent">
+          <!-- Content will be populated dynamically -->
+        </div>
+        <div class="modal-action">
+          <form method="dialog">
+            <button
+              class="btn bg-gray-100 hover:bg-gray-200 text-gray-700 border-0"
+            >
+              Close
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-    <form method="dialog" class="modal-backdrop">
-      <button>close</button>
-    </form>
-  </dialog>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
 
-  <script>
-    // Store donations data fetched from API
-    let donationsData = {};
-    let donorInfo = {};
+    <script>
+      // Store donations data fetched from API
+      let donationsData = {};
+      let donorInfo = {};
 
-    // Show loading state
-    function showLoading() {
-      const tbody = document.querySelector('tbody');
-      if (tbody) {
-        tbody.innerHTML = `
+      // Show loading state
+      function showLoading() {
+        const tbody = document.querySelector("tbody");
+        if (tbody) {
+          tbody.innerHTML = `
           <tr>
             <td colspan="7" class="py-12 text-center">
               <div class="animate-spin size-8 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-4"></div>
@@ -380,14 +316,14 @@
             </td>
           </tr>
         `;
+        }
       }
-    }
 
-    // Show empty state
-    function showEmptyState() {
-      const tbody = document.querySelector('tbody');
-      if (tbody) {
-        tbody.innerHTML = `
+      // Show empty state
+      function showEmptyState() {
+        const tbody = document.querySelector("tbody");
+        if (tbody) {
+          tbody.innerHTML = `
           <tr>
             <td colspan="7" class="py-12 text-center">
               <i data-lucide="droplet" class="size-12 text-gray-300 mx-auto mb-4"></i>
@@ -399,15 +335,15 @@
             </td>
           </tr>
         `;
-        lucide.createIcons();
+          lucide.createIcons();
+        }
       }
-    }
 
-    // Show error state
-    function showError(message) {
-      const tbody = document.querySelector('tbody');
-      if (tbody) {
-        tbody.innerHTML = `
+      // Show error state
+      function showError(message) {
+        const tbody = document.querySelector("tbody");
+        if (tbody) {
+          tbody.innerHTML = `
           <tr>
             <td colspan="7" class="py-12 text-center">
               <i data-lucide="alert-circle" class="size-12 text-red-500 mx-auto mb-4"></i>
@@ -416,63 +352,79 @@
             </td>
           </tr>
         `;
-        lucide.createIcons();
-      }
-    }
-
-    // Format date for display
-    function formatDate(dateStr) {
-      if (!dateStr) return 'N/A';
-      const date = new Date(dateStr);
-      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-    }
-
-    // Get status badge class  
-    function getStatusClass(status) {
-      const classes = {
-        'completed': 'border-green-600 text-green-600',
-        'accepted': 'border-blue-600 text-blue-600',
-        'on_the_way': 'border-purple-600 text-purple-600',
-        'reached': 'border-teal-600 text-teal-600',
-        'cancelled': 'border-red-600 text-red-600'
-      };
-      return classes[status] || 'border-gray-600 text-gray-600';
-    }
-
-    // Capitalize status text
-    function formatStatus(status) {
-      if (!status) return 'Unknown';
-      return status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-    }
-
-    // Render donations table
-    function renderDonations(donations) {
-      const tbody = document.querySelector('tbody');
-      if (!tbody) return;
-
-      if (!donations || donations.length === 0) {
-        showEmptyState();
-        return;
+          lucide.createIcons();
+        }
       }
 
-      // Store donations data for modals
-      donations.forEach(d => {
-        donationsData[d.donation_id] = d;
-      });
+      // Format date for display
+      function formatDate(dateStr) {
+        if (!dateStr) return "N/A";
+        const date = new Date(dateStr);
+        return date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+      }
 
-      tbody.innerHTML = donations.map(donation => `
+      // Get status badge class
+      function getStatusClass(status) {
+        const classes = {
+          completed: "border-green-600 text-green-600",
+          accepted: "border-blue-600 text-blue-600",
+          on_the_way: "border-purple-600 text-purple-600",
+          reached: "border-teal-600 text-teal-600",
+          cancelled: "border-red-600 text-red-600",
+        };
+        return classes[status] || "border-gray-600 text-gray-600";
+      }
+
+      // Capitalize status text
+      function formatStatus(status) {
+        if (!status) return "Unknown";
+        return status
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (l) => l.toUpperCase());
+      }
+
+      // Render donations table
+      function renderDonations(donations) {
+        const tbody = document.querySelector("tbody");
+        if (!tbody) return;
+
+        if (!donations || donations.length === 0) {
+          showEmptyState();
+          return;
+        }
+
+        // Store donations data for modals
+        donations.forEach((d) => {
+          donationsData[d.donation_id] = d;
+        });
+
+        tbody.innerHTML = donations
+          .map(
+            (donation) => `
         <tr class="border-b border-gray-100 hover:bg-gray-50">
-          <td class="py-3 px-4 text-gray-900 font-medium">${donation.donation_id}</td>
+          <td class="py-3 px-4 text-gray-900 font-medium">${
+            donation.donation_id
+          }</td>
           <td class="py-3 px-4 text-gray-600">${formatDate(donation.date)}</td>
-          <td class="py-3 px-4 text-gray-900">${donation.hospital || 'N/A'}</td>
+          <td class="py-3 px-4 text-gray-900">${donation.hospital || "N/A"}</td>
           <td class="py-3 px-4">
             <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">
-              ${donation.quantity || 1} Unit${donation.quantity !== 1 ? 's' : ''}
+              ${donation.quantity || 1} Unit${
+              donation.quantity !== 1 ? "s" : ""
+            }
             </span>
           </td>
-          <td class="py-3 px-4 text-gray-600">${donation.urgency === 'emergency' ? 'Emergency Request' : 'Voluntary'}</td>
+          <td class="py-3 px-4 text-gray-600">${
+            donation.urgency === "emergency" ? "Emergency Request" : "Voluntary"
+          }</td>
           <td class="py-3 px-4">
-            <span class="px-2 py-1 text-xs font-medium border ${getStatusClass(donation.status)} rounded-full">
+            <span class="px-2 py-1 text-xs font-medium border ${getStatusClass(
+              donation.status
+            )} rounded-full">
               ${formatStatus(donation.status)}
             </span>
           </td>
@@ -482,40 +434,57 @@
                 onclick="openDonationModal('${donation.donation_id}')">
                 View
               </button>
-              ${donation.status === 'completed' ? `
+              ${
+                donation.status === "completed"
+                  ? `
               <button class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
                 onclick="openCertificatePreview('${donation.donation_id}')">
                 <i data-lucide="award" class="size-4 inline mr-1"></i>Certificate
               </button>
-              ` : ''}
+              `
+                  : ""
+              }
             </div>
           </td>
         </tr>
-      `).join('');
+      `
+          )
+          .join("");
 
-      lucide.createIcons();
-    }
+        lucide.createIcons();
+      }
 
-    // Update stats cards
-    function updateStats(stats) {
-      const totalEl = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-4 .p-6:nth-child(1) h2');
-      const volumeEl = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-4 .p-6:nth-child(2) h2');
-      const yearEl = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-4 .p-6:nth-child(3) h2');
-      const livesEl = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-4 .p-6:nth-child(4) h2');
+      // Update stats cards
+      function updateStats(stats) {
+        const totalEl = document.querySelector(
+          ".grid.grid-cols-1.md\\:grid-cols-4 .p-6:nth-child(1) h2"
+        );
+        const volumeEl = document.querySelector(
+          ".grid.grid-cols-1.md\\:grid-cols-4 .p-6:nth-child(2) h2"
+        );
+        const yearEl = document.querySelector(
+          ".grid.grid-cols-1.md\\:grid-cols-4 .p-6:nth-child(3) h2"
+        );
+        const livesEl = document.querySelector(
+          ".grid.grid-cols-1.md\\:grid-cols-4 .p-6:nth-child(4) h2"
+        );
 
-      if (totalEl) totalEl.textContent = stats.total_donations || 0;
-      if (volumeEl) volumeEl.textContent = `${stats.total_volume || 0} U`;
-      if (yearEl) yearEl.textContent = stats.this_year || 0;
-      if (livesEl) livesEl.textContent = `${stats.lives_saved || 0}+`;
-    }
+        if (totalEl) totalEl.textContent = stats.total_donations || 0;
+        if (volumeEl) volumeEl.textContent = `${stats.total_volume || 0} U`;
+        if (yearEl) yearEl.textContent = stats.this_year || 0;
+        if (livesEl) livesEl.textContent = `${stats.lives_saved || 0}+`;
+      }
 
-    function openDonationModal(id) {
-      const donation = donationsData[id];
-      if (!donation) return;
+      function openDonationModal(id) {
+        const donation = donationsData[id];
+        if (!donation) return;
 
-      const typeClass = donation.urgency === 'emergency' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700';
+        const typeClass =
+          donation.urgency === "emergency"
+            ? "bg-red-100 text-red-700"
+            : "bg-green-100 text-green-700";
 
-      const content = `
+        const content = `
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-1">
             <p class="text-sm text-gray-500">Donation ID</p>
@@ -523,54 +492,72 @@
           </div>
           <div class="space-y-1">
             <p class="text-sm text-gray-500">Date</p>
-            <p class="font-semibold text-gray-900">${formatDate(donation.date)}</p>
+            <p class="font-semibold text-gray-900">${formatDate(
+              donation.date
+            )}</p>
           </div>
           <div class="space-y-1">
             <p class="text-sm text-gray-500">Hospital Name</p>
-            <p class="font-semibold text-gray-900">${donation.hospital || 'N/A'}</p>
+            <p class="font-semibold text-gray-900">${
+              donation.hospital || "N/A"
+            }</p>
           </div>
           <div class="space-y-1">
             <p class="text-sm text-gray-500">Blood Type</p>
-            <p><span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${donation.blood_type || donorInfo.blood_group || 'N/A'}</span></p>
+            <p><span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${
+              donation.blood_type || donorInfo.blood_group || "N/A"
+            }</span></p>
           </div>
           <div class="space-y-1">
             <p class="text-sm text-gray-500">Quantity</p>
-            <p class="font-semibold text-gray-900">${donation.quantity || 1} Unit(s)</p>
+            <p class="font-semibold text-gray-900">${
+              donation.quantity || 1
+            } Unit(s)</p>
           </div>
           <div class="space-y-1">
             <p class="text-sm text-gray-500">Donation Type</p>
-            <p><span class="px-2 py-1 text-xs font-medium ${typeClass} rounded-full">${donation.urgency === 'emergency' ? 'Emergency' : 'Voluntary'}</span></p>
+            <p><span class="px-2 py-1 text-xs font-medium ${typeClass} rounded-full">${
+          donation.urgency === "emergency" ? "Emergency" : "Voluntary"
+        }</span></p>
           </div>
           <div class="space-y-1">
             <p class="text-sm text-gray-500">Status</p>
-            <p><span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">${formatStatus(donation.status)}</span></p>
+            <p><span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">${formatStatus(
+              donation.status
+            )}</span></p>
           </div>
           <div class="space-y-1">
             <p class="text-sm text-gray-500">Request Code</p>
-            <p class="font-semibold text-gray-900">${donation.request_code || 'N/A'}</p>
+            <p class="font-semibold text-gray-900">${
+              donation.request_code || "N/A"
+            }</p>
           </div>
         </div>
-        ${donation.patient_name ? `
+        ${
+          donation.patient_name
+            ? `
         <div class="mt-4 pt-4 border-t border-gray-200">
           <p class="text-sm text-gray-500 mb-2">Patient Name</p>
           <p class="text-gray-700 text-sm bg-gray-50 p-3 rounded-lg">${donation.patient_name}</p>
         </div>
-        ` : ''}
+        `
+            : ""
+        }
       `;
 
-      document.getElementById('donationModalContent').innerHTML = content;
-      document.getElementById('donationModal').showModal();
-      lucide.createIcons();
-    }
+        document.getElementById("donationModalContent").innerHTML = content;
+        document.getElementById("donationModal").showModal();
+        lucide.createIcons();
+      }
 
-    function openCertificatePreview(id) {
-      const donation = donationsData[id];
-      if (!donation || !donation.certificate) return;
+      function openCertificatePreview(id) {
+        const donation = donationsData[id];
+        if (!donation || !donation.certificate) return;
 
-      const cert = donation.certificate;
-      const formattedDate = formatDate(cert.date);
+        const cert = donation.certificate;
+        const formattedDate = formatDate(cert.date);
 
-      const content = `
+        const content = `
         <div class="bg-gradient-to-br from-red-50 via-white to-red-50 p-8">
           <div class="border-4 border-red-600 rounded-lg p-6 bg-white shadow-lg">
             <div class="text-center border-b-2 border-red-200 pb-6 mb-6">
@@ -620,47 +607,46 @@
         </div>
       `;
 
-      document.getElementById('certificatePreviewContent').innerHTML = content;
-      document.getElementById('certificateModal').showModal();
-      lucide.createIcons();
-    }
-
-    // Fetch donation history from API
-    async function loadDonationHistory() {
-      showLoading();
-
-      try {
-        const response = await fetch('/api/donor/history.php');
-
-        if (response.status === 401) {
-          window.location.href = '/src/pages/auth/login.html';
-          return;
-        }
-
-        const data = await response.json();
-
-        if (!data.success) {
-          showError(data.message || 'Failed to load donation history.');
-          return;
-        }
-
-        donorInfo = data.donor || {};
-        updateStats(data.stats || {});
-        renderDonations(data.donations || []);
-
-      } catch (error) {
-        console.error('Error loading history:', error);
-        showError('Unable to connect to the server. Please try again later.');
+        document.getElementById("certificatePreviewContent").innerHTML =
+          content;
+        document.getElementById("certificateModal").showModal();
+        lucide.createIcons();
       }
-    }
 
-    document.addEventListener('DOMContentLoaded', loadDonationHistory);
-  </script>
-  <script type="module">
-    import { initUserLoader } from '/src/scripts/user-loader.js';
-    initUserLoader();
-  </script>
-  <script type="module" src="/src/scripts/main.js"></script>
-</body>
+      // Fetch donation history from API
+      async function loadDonationHistory() {
+        showLoading();
 
+        try {
+          const response = await fetch("/api/donor/history.php");
+
+          if (response.status === 401) {
+            window.location.href = "/src/pages/auth/login.html";
+            return;
+          }
+
+          const data = await response.json();
+
+          if (!data.success) {
+            showError(data.message || "Failed to load donation history.");
+            return;
+          }
+
+          donorInfo = data.donor || {};
+          updateStats(data.stats || {});
+          renderDonations(data.donations || []);
+        } catch (error) {
+          console.error("Error loading history:", error);
+          showError("Unable to connect to the server. Please try again later.");
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", loadDonationHistory);
+    </script>
+    <script type="module">
+      import { initUserLoader } from "/src/scripts/user-loader.js";
+      initUserLoader();
+    </script>
+    <script type="module" src="/src/scripts/main.js"></script>
+  </body>
 </html>

@@ -101,13 +101,13 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">Weight (kg) *</label>
-                  <input type="number" id="weight" name="weight" placeholder="Your weight" value="70"
+                  <input type="number" id="weight" name="weight" placeholder="Your weight"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
                   <p class="text-red-500 text-sm mt-1 hidden" id="weightError"></p>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">Height (cm) *</label>
-                  <input type="number" id="height" name="height" placeholder="Your height" value="175"
+                  <input type="number" id="height" name="height" placeholder="Your height"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
                   <p class="text-red-500 text-sm mt-1 hidden" id="heightError"></p>
                 </div>
@@ -300,16 +300,16 @@
             </ul>
           </div>
 
-          <div class="p-6 bg-linear-to-br from-green-50 to-white border border-green-200 rounded-xl">
+          <div class="p-6 bg-linear-to-br from-green-50 to-white border border-green-200 rounded-xl" id="statusCard">
             <div class="flex items-center gap-3 mb-3">
-              <i data-lucide="check-circle" class="size-6 text-green-600"></i>
+              <i data-lucide="check-circle" class="size-6 text-green-600" id="statusIcon"></i>
               <h3 class="font-semibold text-gray-900">Your Status</h3>
             </div>
-            <p class="text-sm text-gray-600 mb-3">
+            <p class="text-sm text-gray-600 mb-3" id="statusDescription">
               Based on your current health information:
             </p>
-            <span class="px-3 py-1 text-sm font-medium bg-green-100 text-green-700 rounded-full">Eligible to
-              Donate</span>
+            <span class="px-3 py-1 text-sm font-medium bg-green-100 text-green-700 rounded-full" id="statusBadge">Loading...</span>
+            <ul class="mt-3 space-y-1 hidden" id="eligibilityReasons"></ul>
           </div>
         </div>
       </div>
@@ -323,6 +323,75 @@
   </script>
   <script type="module">
     import { z } from 'https://cdn.jsdelivr.net/npm/zod@3.22.4/+esm';
+
+    // Fetch health data from API
+    async function loadHealthData() {
+      try {
+        const response = await fetch('/api/donor/health.php', { credentials: 'include' });
+        const data = await response.json();
+        
+        if (data.success) {
+          // Populate form fields
+          if (data.health.weight) {
+            document.getElementById('weight').value = data.health.weight;
+          }
+          
+          // Update eligibility status
+          updateEligibilityStatus(data.eligibility);
+        } else {
+          showErrorState('Failed to load health information');
+        }
+      } catch (error) {
+        console.error('Error loading health data:', error);
+        showErrorState('Unable to connect to server');
+      }
+    }
+
+    function updateEligibilityStatus(eligibility) {
+      const statusCard = document.getElementById('statusCard');
+      const statusIcon = document.getElementById('statusIcon');
+      const statusBadge = document.getElementById('statusBadge');
+      const eligibilityReasons = document.getElementById('eligibilityReasons');
+      
+      if (eligibility.is_eligible) {
+        statusCard.className = 'p-6 bg-linear-to-br from-green-50 to-white border border-green-200 rounded-xl';
+        statusIcon.setAttribute('data-lucide', 'check-circle');
+        statusIcon.className = 'size-6 text-green-600';
+        statusBadge.textContent = 'Eligible to Donate';
+        statusBadge.className = 'px-3 py-1 text-sm font-medium bg-green-100 text-green-700 rounded-full';
+        eligibilityReasons.classList.add('hidden');
+      } else {
+        statusCard.className = 'p-6 bg-linear-to-br from-red-50 to-white border border-red-200 rounded-xl';
+        statusIcon.setAttribute('data-lucide', 'alert-circle');
+        statusIcon.className = 'size-6 text-red-600';
+        statusBadge.textContent = 'Not Eligible';
+        statusBadge.className = 'px-3 py-1 text-sm font-medium bg-red-100 text-red-700 rounded-full';
+        
+        if (eligibility.reasons && eligibility.reasons.length > 0) {
+          eligibilityReasons.innerHTML = eligibility.reasons.map(reason => 
+            `<li class="text-sm text-red-600 flex items-start gap-2">
+              <i data-lucide="x-circle" class="size-4 shrink-0 mt-0.5"></i>
+              <span>${reason}</span>
+            </li>`
+          ).join('');
+          eligibilityReasons.classList.remove('hidden');
+        }
+      }
+      
+      // Refresh icons
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    function showErrorState(message) {
+      const statusBadge = document.getElementById('statusBadge');
+      statusBadge.textContent = message;
+      statusBadge.className = 'px-3 py-1 text-sm font-medium bg-gray-100 text-gray-700 rounded-full';
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', loadHealthData);
 
     const healthSchema = z.object({
       weight: z.string().min(1, 'Weight is required').refine(val => !isNaN(Number(val)) && Number(val) >= 45, 'Weight must be at least 45 kg'),
