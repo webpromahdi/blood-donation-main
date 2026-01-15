@@ -561,7 +561,7 @@
     // Form submission
     document
       .getElementById("registerForm")
-      .addEventListener("submit", function (e) {
+      .addEventListener("submit", async function (e) {
         e.preventDefault();
 
         if (validateForm()) {
@@ -571,6 +571,7 @@
             password: document.getElementById("password").value,
             phone: document.getElementById("phone").value,
             role: selectedRole,
+            name: '', // Can be derived from email or added as a field
           };
 
           // Add role-specific data
@@ -578,6 +579,7 @@
             formData.bloodGroup = document.getElementById("bloodGroup").value;
             formData.age = document.getElementById("age").value;
             formData.weight = document.getElementById("weight").value;
+            formData.city = document.getElementById("city").value;
             formData.address = document.getElementById("address").value;
           } else if (selectedRole === "hospital") {
             formData.registrationNumber =
@@ -585,15 +587,49 @@
             formData.hospitalAddress =
               document.getElementById("hospitalAddress").value;
             formData.city = document.getElementById("city").value;
+            formData.website = document.getElementById("website").value;
             formData.contactPerson =
               document.getElementById("contactPerson").value;
           }
 
-          // Demo mode - log data and redirect
-          console.log("Registration data:", formData);
+          // Get submit button and show loading state
+          const submitBtn = document.querySelector('button[type="submit"]');
+          const originalText = submitBtn.textContent;
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Creating Account...';
 
-          const config = roleConfig[selectedRole];
-          window.location.href = config.path;
+          try {
+            // POST to PHP backend
+            const response = await fetch('/api/auth/register.php', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              // Registration successful - redirect based on role
+              const config = roleConfig[data.user.role];
+              window.location.href = config.path;
+            } else {
+              // Show error message
+              if (data.message.toLowerCase().includes('email')) {
+                showError('email', data.message);
+              } else {
+                showError('email', data.message || 'Registration failed');
+              }
+              submitBtn.disabled = false;
+              submitBtn.textContent = originalText;
+            }
+          } catch (error) {
+            console.error('Registration error:', error);
+            showError('email', 'Connection error. Please try again.');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          }
         }
       });
   </script>

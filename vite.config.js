@@ -4,6 +4,16 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [tailwindcss()],
   root: ".",
+  server: {
+    proxy: {
+      // Proxy API requests to Apache (XAMPP)
+      '/api': {
+        target: 'http://localhost/blood-donation-main',
+        changeOrigin: true,
+        rewrite: (path) => path
+      }
+    }
+  },
   build: {
     outDir: "dist",
     rollupOptions: {

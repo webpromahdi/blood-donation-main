@@ -226,7 +226,8 @@
         // Get form values
         const formData = {
           email: document.getElementById('email').value.trim(),
-          password: document.getElementById('password').value
+          password: document.getElementById('password').value,
+          role: selectedRole
         };
 
         // Validate
@@ -241,9 +242,40 @@
           return;
         }
 
-        // Validation passed - redirect to dashboard
-        const config = roleConfig[selectedRole];
-        window.location.href = config.path;
+        // Get submit button and show loading state
+        const submitBtn = document.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Logging in...';
+
+        try {
+          // POST to PHP backend
+          const response = await fetch('/api/auth/login.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            // Login successful - redirect based on role
+            const config = roleConfig[data.user.role];
+            window.location.href = config.path;
+          } else {
+            // Show error message
+            showError('email', data.message || 'Login failed');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          }
+        } catch (error) {
+          console.error('Login error:', error);
+          showError('email', 'Connection error. Please try again.');
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
       });
 
     // Error display helpers

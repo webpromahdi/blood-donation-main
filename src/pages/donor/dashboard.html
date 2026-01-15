@@ -69,7 +69,8 @@
           <i data-lucide="user" class="size-5 text-green-600"></i>
         </div>
       </div>
-      <a href="/" class="p-2 text-gray-600 hover:text-red-600"><i data-lucide="log-out" class="size-5"></i></a>
+      <button data-logout class="p-2 text-gray-600 hover:text-red-600 cursor-pointer"><i data-lucide="log-out"
+          class="size-5"></i></button>
     </div>
   </header>
 
@@ -551,6 +552,11 @@
     </div>
   </div>
 
+  <script type="module">
+    // Initialize auth and logout functionality
+    import { setupLogoutButton } from '/src/scripts/auth.js';
+    setupLogoutButton();
+  </script>
   <script type="module" src="/src/scripts/main.js"></script>
   <script>
     // Donor Dashboard - Interactive State Management

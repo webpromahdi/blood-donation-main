@@ -120,9 +120,9 @@
         </div>
       </div>
 
-      <a href="/" class="p-2 text-gray-600 hover:text-red-600 transition-colors">
+      <button data-logout class="p-2 text-gray-600 hover:text-red-600 transition-colors cursor-pointer">
         <i data-lucide="log-out" class="size-5"></i>
-      </a>
+      </button>
     </div>
   </header>
 
@@ -440,6 +440,10 @@
     </div>
   </div>
 
+  <script type="module">
+    import { setupLogoutButton } from '/src/scripts/auth.js';
+    setupLogoutButton();
+  </script>
   <script>
     // Dummy blood requests data with enhanced details
     const bloodRequests = [

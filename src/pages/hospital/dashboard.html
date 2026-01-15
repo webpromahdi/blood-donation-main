@@ -66,7 +66,8 @@
           <i data-lucide="building-2" class="size-5 text-blue-600"></i>
         </div>
       </div>
-      <a href="/" class="p-2 text-gray-600 hover:text-red-600"><i data-lucide="log-out" class="size-5"></i></a>
+      <button data-logout class="p-2 text-gray-600 hover:text-red-600 cursor-pointer"><i data-lucide="log-out"
+          class="size-5"></i></button>
     </div>
   </header>
 
@@ -359,6 +360,10 @@
     </form>
   </dialog>
 
+  <script type="module">
+    import { setupLogoutButton } from '/src/scripts/auth.js';
+    setupLogoutButton();
+  </script>
   <script>
     // Dummy blood request data with donor journey status
     const requestData = {
@@ -546,4 +551,3 @@
 </body>
 
 </html>
-
