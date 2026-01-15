@@ -328,13 +328,13 @@
         <div class="p-6 bg-white border border-gray-200 rounded-xl">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-600 mb-1">Donors Responded</p>
+              <p class="text-sm text-gray-600 mb-1">Rejected</p>
               <h2 id="donorCount" class="text-3xl font-bold text-gray-900">
-                18
+                0
               </h2>
             </div>
-            <div class="bg-green-100 p-3 rounded-lg">
-              <i data-lucide="users" class="size-6 text-green-600"></i>
+            <div class="bg-red-100 p-3 rounded-lg">
+              <i data-lucide="x-circle" class="size-6 text-red-600"></i>
             </div>
           </div>
         </div>
@@ -561,10 +561,6 @@
         document.getElementById("activeCount").textContent = active;
         document.getElementById("completedCount").textContent = completed;
         document.getElementById("donorCount").textContent = rejected;
-
-        // Update rejected label
-        const donorLabel = document.querySelector('#summaryCards .bg-green-100').previousElementSibling.querySelector('p');
-        if (donorLabel) donorLabel.textContent = 'Rejected';
       }
 
       function renderRequests() {

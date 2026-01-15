@@ -1,1252 +1,1095 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard - BloodConnect Donor</title>
-    <link rel="stylesheet" href="/src/styles/styles.css" />
-  </head>
-  <body class="min-h-screen bg-gray-50">
-    <!-- Sidebar -->
-    <div
-      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
-    >
-      <div class="p-6 border-b border-gray-200">
-        <div class="flex items-center gap-3">
-          <div class="bg-red-600 p-2 rounded-lg">
-            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
-          </div>
-          <div>
-            <div class="font-semibold text-red-600">BloodConnect</div>
-            <div class="text-sm text-gray-500">Donor Portal</div>
-          </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - BloodConnect Donor</title>
+  <link rel="stylesheet" href="/src/styles/styles.css" />
+</head>
+
+<body class="min-h-screen bg-gray-50">
+  <!-- Sidebar -->
+  <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center gap-3">
+        <div class="bg-red-600 p-2 rounded-lg">
+          <i data-lucide="heart" class="size-6 text-white fill-white"></i>
         </div>
-      </div>
-      <nav class="flex-1 overflow-y-auto py-4">
-        <a
-          href="/src/pages/donor/dashboard.html"
-          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
-          ><i data-lucide="layout-dashboard" class="size-5"></i
-          ><span>Dashboard</span></a
-        >
-        <a
-          href="/src/pages/donor/health.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="heart" class="size-5"></i><span>Health Info</span></a
-        >
-        <a
-          href="/src/pages/donor/voluntary.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="calendar" class="size-5"></i
-          ><span>Donate Voluntarily</span></a
-        >
-        <a
-          href="/src/pages/donor/history.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="file-text" class="size-5"></i
-          ><span>Donation History</span></a
-        >
-        <a
-          href="/src/pages/donor/certificates.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="award" class="size-5"></i
-          ><span>Certificates</span></a
-        >
-        <a
-          href="/src/pages/donor/chat.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="message-square" class="size-5"></i
-          ><span>Chat</span></a
-        >
-      </nav>
-      <div class="p-4 border-t border-gray-200">
-        <div class="text-center text-sm text-gray-500">
-          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        <div>
+          <div class="font-semibold text-red-600">BloodConnect</div>
+          <div class="text-sm text-gray-500">Donor Portal</div>
         </div>
       </div>
     </div>
-
-    <!-- Header -->
-    <header
-      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
-    >
-      <div class="flex items-center gap-4 flex-1">
-        <h2 class="text-lg font-semibold text-gray-900">Donor Dashboard</h2>
+    <nav class="flex-1 overflow-y-auto py-4">
+      <a href="/src/pages/donor/dashboard.html"
+        class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"><i
+          data-lucide="layout-dashboard" class="size-5"></i><span>Dashboard</span></a>
+      <a href="/src/pages/donor/health.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="heart" class="size-5"></i><span>Health Info</span></a>
+      <a href="/src/pages/donor/voluntary.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="calendar" class="size-5"></i><span>Donate Voluntarily</span></a>
+      <a href="/src/pages/donor/history.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="file-text" class="size-5"></i><span>Donation History</span></a>
+      <a href="/src/pages/donor/certificates.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="award" class="size-5"></i><span>Certificates</span></a>
+      <a href="/src/pages/donor/chat.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="message-square" class="size-5"></i><span>Chat</span></a>
+    </nav>
+    <div class="p-4 border-t border-gray-200">
+      <div class="text-center text-sm text-gray-500">
+        <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
       </div>
-      <div class="flex items-center gap-4">
-        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
-          <i data-lucide="bell" class="size-5 text-gray-700"></i>
-          <span
-            class="absolute top-1 right-1 size-2 bg-red-600 rounded-full"
-          ></span>
-        </button>
-        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
-          <div class="text-right">
-            <div class="text-sm font-medium text-gray-900">John Smith</div>
-            <div class="text-xs text-gray-500">Blood Donor</div>
-          </div>
-          <div
-            class="size-10 bg-green-100 rounded-full flex items-center justify-center"
-          >
-            <i data-lucide="user" class="size-5 text-green-600"></i>
-          </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header
+    class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8">
+    <div class="flex items-center gap-4 flex-1">
+      <h2 class="text-lg font-semibold text-gray-900">Donor Dashboard</h2>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+        <i data-lucide="bell" class="size-5 text-gray-700"></i>
+        <span class="absolute top-1 right-1 size-2 bg-red-600 rounded-full"></span>
+      </button>
+      <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+        <div class="text-right">
+          <div class="text-sm font-medium text-gray-900">John Smith</div>
+          <div class="text-xs text-gray-500">Blood Donor</div>
         </div>
-        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
-          ><i data-lucide="log-out" class="size-5"></i
-        ></a>
+        <div class="size-10 bg-green-100 rounded-full flex items-center justify-center">
+          <i data-lucide="user" class="size-5 text-green-600"></i>
+        </div>
       </div>
-    </header>
+      <a href="/" class="p-2 text-gray-600 hover:text-red-600"><i data-lucide="log-out" class="size-5"></i></a>
+    </div>
+  </header>
 
-    <!-- Main Content -->
-    <main class="ml-64 pt-16">
-      <div class="p-8 space-y-8">
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900 mb-2">Donor Dashboard</h1>
-          <p class="text-gray-600">
-            Welcome back, John! Thank you for saving lives.
+  <!-- Main Content -->
+  <main class="ml-64 pt-16">
+    <div class="p-8 space-y-8">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Donor Dashboard</h1>
+        <p class="text-gray-600">
+          Welcome back, John! Thank you for saving lives.
+        </p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Total Donations</p>
+              <h2 class="text-3xl font-bold text-gray-900">12</h2>
+            </div>
+            <div class="bg-red-100 p-3 rounded-lg">
+              <i data-lucide="droplet" class="size-6 text-red-600 fill-red-600"></i>
+            </div>
+          </div>
+          <p class="text-sm text-green-600 mt-2">
+            Last donation: 2 weeks ago
           </p>
         </div>
-
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600 mb-1">Total Donations</p>
-                <h2 class="text-3xl font-bold text-gray-900">12</h2>
-              </div>
-              <div class="bg-red-100 p-3 rounded-lg">
-                <i
-                  data-lucide="droplet"
-                  class="size-6 text-red-600 fill-red-600"
-                ></i>
-              </div>
-            </div>
-            <p class="text-sm text-green-600 mt-2">
-              Last donation: 2 weeks ago
-            </p>
-          </div>
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600 mb-1">Lives Saved</p>
-                <h2 class="text-3xl font-bold text-gray-900">36+</h2>
-              </div>
-              <div class="bg-green-100 p-3 rounded-lg">
-                <i
-                  data-lucide="heart"
-                  class="size-6 text-green-600 fill-green-600"
-                ></i>
-              </div>
-            </div>
-            <p class="text-sm text-green-600 mt-2">Impact of your donations</p>
-          </div>
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600 mb-1">Next Eligible</p>
-                <h2 class="text-3xl font-bold text-gray-900">2 weeks</h2>
-              </div>
-              <div class="bg-blue-100 p-3 rounded-lg">
-                <i data-lucide="calendar" class="size-6 text-blue-600"></i>
-              </div>
-            </div>
-            <p class="text-sm text-blue-600 mt-2">You can donate again</p>
-          </div>
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600 mb-1">Blood Type</p>
-                <h2 class="text-3xl font-bold text-gray-900">O+</h2>
-              </div>
-              <div class="bg-purple-100 p-3 rounded-lg">
-                <i data-lucide="droplet" class="size-6 text-purple-600"></i>
-              </div>
-            </div>
-            <p class="text-sm text-purple-600 mt-2">Universal donor</p>
-          </div>
-        </div>
-
-        <!-- Emergency Alerts -->
-        <div
-          class="p-6 bg-linear-to-r from-red-50 to-white border border-gray-200 border-l-4 border-l-red-600 rounded-xl"
-        >
-          <div class="flex items-start gap-4 mb-4">
-            <div class="bg-red-100 p-3 rounded-lg">
-              <i data-lucide="alert-circle" class="size-6 text-red-600"></i>
-            </div>
-            <div class="flex-1">
-              <h2 class="text-lg font-semibold text-gray-900 mb-2">
-                Emergency Requests Matching Your Blood Type
-              </h2>
-              <p class="text-gray-600 mb-4">
-                Hospitals near you need your help urgently
-              </p>
-            </div>
-          </div>
-          <div class="space-y-3">
-            <div
-              class="flex items-center justify-between p-4 bg-white rounded-lg border border-red-200"
-            >
-              <div class="flex items-center gap-4">
-                <div
-                  class="size-12 bg-red-100 rounded-full flex items-center justify-center"
-                >
-                  <i
-                    data-lucide="droplet"
-                    class="size-6 text-red-600 fill-red-600"
-                  ></i>
-                </div>
-                <div>
-                  <div class="flex items-center gap-2 mb-1">
-                    <h3 class="font-medium text-gray-900">Regional Hospital</h3>
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-red-600 text-white rounded-full"
-                      >Critical</span
-                    >
-                  </div>
-                  <p class="text-sm text-gray-600">
-                    Blood Type: <strong>O+</strong> • 2 hours ago
-                  </p>
-                </div>
-              </div>
-              <div class="flex gap-2">
-                <button
-                  class="px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg"
-                >
-                  Later
-                </button>
-                <button
-                  class="px-3 py-1.5 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                >
-                  <i data-lucide="check-circle" class="size-4 inline mr-1"></i
-                  >Accept
-                </button>
-              </div>
-            </div>
-            <div
-              class="flex items-center justify-between p-4 bg-white rounded-lg border border-red-200"
-            >
-              <div class="flex items-center gap-4">
-                <div
-                  class="size-12 bg-red-100 rounded-full flex items-center justify-center"
-                >
-                  <i
-                    data-lucide="droplet"
-                    class="size-6 text-red-600 fill-red-600"
-                  ></i>
-                </div>
-                <div>
-                  <div class="flex items-center gap-2 mb-1">
-                    <h3 class="font-medium text-gray-900">Community Medical</h3>
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-orange-500 text-white rounded-full"
-                      >Urgent</span
-                    >
-                  </div>
-                  <p class="text-sm text-gray-600">
-                    Blood Type: <strong>O+</strong> • 5 hours ago
-                  </p>
-                </div>
-              </div>
-              <div class="flex gap-2">
-                <button
-                  class="px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg"
-                >
-                  Later
-                </button>
-                <button
-                  class="px-3 py-1.5 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                >
-                  <i data-lucide="check-circle" class="size-4 inline mr-1"></i
-                  >Accept
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Non-Emergency Requests -->
-        <div
-          class="p-6 bg-linear-to-r from-blue-50 to-white border border-gray-200 border-l-4 border-l-blue-600 rounded-xl"
-        >
-          <div class="flex items-start gap-4 mb-4">
-            <div class="bg-blue-100 p-3 rounded-lg">
-              <i data-lucide="clock" class="size-6 text-blue-600"></i>
-            </div>
-            <div class="flex-1">
-              <h2 class="text-lg font-semibold text-gray-900 mb-2">
-                Non-Emergency Requests Matching Your Blood Type
-              </h2>
-              <p class="text-gray-600 mb-4">
-                Routine blood requests from hospitals in your area
-              </p>
-            </div>
-          </div>
-          <div class="space-y-3">
-            <div
-              class="flex items-center justify-between p-4 bg-white rounded-lg border border-blue-200"
-            >
-              <div class="flex items-center gap-4">
-                <div
-                  class="size-12 bg-blue-100 rounded-full flex items-center justify-center"
-                >
-                  <i data-lucide="droplet" class="size-6 text-blue-600"></i>
-                </div>
-                <div>
-                  <div class="flex items-center gap-2 mb-1">
-                    <h3 class="font-medium text-gray-900">General Hospital</h3>
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full"
-                      >Routine • 2 units</span
-                    >
-                  </div>
-                  <p class="text-sm text-gray-600">
-                    Blood Type: <strong>O+</strong> • 1 day ago
-                  </p>
-                </div>
-              </div>
-              <button
-                class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-              >
-                View Details
-              </button>
-            </div>
-            <div
-              class="flex items-center justify-between p-4 bg-white rounded-lg border border-blue-200"
-            >
-              <div class="flex items-center gap-4">
-                <div
-                  class="size-12 bg-blue-100 rounded-full flex items-center justify-center"
-                >
-                  <i data-lucide="droplet" class="size-6 text-blue-600"></i>
-                </div>
-                <div>
-                  <div class="flex items-center gap-2 mb-1">
-                    <h3 class="font-medium text-gray-900">
-                      Valley Medical Center
-                    </h3>
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full"
-                      >Scheduled • 1 unit</span
-                    >
-                  </div>
-                  <p class="text-sm text-gray-600">
-                    Blood Type: <strong>O+</strong> • 2 days ago
-                  </p>
-                </div>
-              </div>
-              <button
-                class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-              >
-                View Details
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Upcoming Appointments -->
         <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="mb-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-1">
-              Upcoming Appointments
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Lives Saved</p>
+              <h2 class="text-3xl font-bold text-gray-900">36+</h2>
+            </div>
+            <div class="bg-green-100 p-3 rounded-lg">
+              <i data-lucide="heart" class="size-6 text-green-600 fill-green-600"></i>
+            </div>
+          </div>
+          <p class="text-sm text-green-600 mt-2">Impact of your donations</p>
+        </div>
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Next Eligible</p>
+              <h2 class="text-3xl font-bold text-gray-900">2 weeks</h2>
+            </div>
+            <div class="bg-blue-100 p-3 rounded-lg">
+              <i data-lucide="calendar" class="size-6 text-blue-600"></i>
+            </div>
+          </div>
+          <p class="text-sm text-blue-600 mt-2">You can donate again</p>
+        </div>
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Blood Type</p>
+              <h2 class="text-3xl font-bold text-gray-900">O+</h2>
+            </div>
+            <div class="bg-purple-100 p-3 rounded-lg">
+              <i data-lucide="droplet" class="size-6 text-purple-600"></i>
+            </div>
+          </div>
+          <p class="text-sm text-purple-600 mt-2">Universal donor</p>
+        </div>
+      </div>
+
+      <!-- Emergency Alerts -->
+      <div
+        class="p-6 bg-linear-to-r from-red-50 to-white border border-gray-200 border-l-4 border-l-red-600 rounded-xl">
+        <div class="flex items-start gap-4 mb-4">
+          <div class="bg-red-100 p-3 rounded-lg">
+            <i data-lucide="alert-circle" class="size-6 text-red-600"></i>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">
+              Emergency Requests Matching Your Blood Type
             </h2>
-            <p class="text-sm text-gray-600">
-              Your scheduled donation appointments
+            <p class="text-gray-600 mb-4">
+              Hospitals near you need your help urgently
             </p>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="p-4 border border-gray-200 rounded-lg">
-              <div class="flex items-center gap-3 mb-3">
-                <div class="bg-green-100 p-2 rounded-lg">
-                  <i
-                    data-lucide="check-circle"
-                    class="size-5 text-green-600"
-                  ></i>
-                </div>
-                <span
-                  class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full"
-                  >Confirmed</span
-                >
-              </div>
-              <h4 class="font-medium text-gray-900 mb-1">City Hospital</h4>
-              <p class="text-sm text-gray-600">Nov 25, 2024 • 10:00 AM</p>
-            </div>
-            <div class="p-4 border border-gray-200 rounded-lg">
-              <div class="flex items-center gap-3 mb-3">
-                <div class="bg-yellow-100 p-2 rounded-lg">
-                  <i data-lucide="clock" class="size-5 text-yellow-600"></i>
-                </div>
-                <span
-                  class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full"
-                  >Pending</span
-                >
-              </div>
-              <h4 class="font-medium text-gray-900 mb-1">St. Mary Medical</h4>
-              <p class="text-sm text-gray-600">Dec 1, 2024 • 02:00 PM</p>
-            </div>
-          </div>
         </div>
-
-        <!-- My Active Donation Section (Hidden by default) -->
-        <div
-          id="activeDonationSection"
-          class="hidden p-6 bg-linear-to-r from-green-50 to-white border border-gray-200 border-l-4 border-l-green-600 rounded-xl"
-        >
-          <div class="flex items-start gap-4 mb-6">
-            <div class="bg-green-100 p-3 rounded-lg">
-              <i data-lucide="activity" class="size-6 text-green-600"></i>
-            </div>
-            <div class="flex-1">
-              <h2 class="text-lg font-semibold text-gray-900 mb-2">
-                My Active Donation
-              </h2>
-              <p class="text-gray-600">
-                You have an active donation in progress
-              </p>
-            </div>
-          </div>
-
-          <!-- Request Summary -->
-          <div class="p-4 bg-white rounded-lg border border-green-200 mb-6">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-red-200">
             <div class="flex items-center gap-4">
-              <div
-                class="size-12 bg-green-100 rounded-full flex items-center justify-center"
-              >
-                <i
-                  data-lucide="droplet"
-                  class="size-6 text-green-600 fill-green-600"
-                ></i>
+              <div class="size-12 bg-red-100 rounded-full flex items-center justify-center">
+                <i data-lucide="droplet" class="size-6 text-red-600 fill-red-600"></i>
               </div>
-              <div class="flex-1">
-                <h3 id="activeHospitalName" class="font-medium text-gray-900">
-                  Hospital Name
-                </h3>
-                <p id="activeRequestDetails" class="text-sm text-gray-600">
-                  Blood Type: O+ • Request Info
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <h3 class="font-medium text-gray-900">Regional Hospital</h3>
+                  <span class="px-2 py-1 text-xs font-medium bg-red-600 text-white rounded-full">Critical</span>
+                </div>
+                <p class="text-sm text-gray-600">
+                  Blood Type: <strong>O+</strong> • 2 hours ago
                 </p>
               </div>
-              <span
-                id="activeUrgencyBadge"
-                class="px-3 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full"
-                >Active</span
-              >
+            </div>
+            <div class="flex gap-2">
+              <button class="px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg">
+                Later
+              </button>
+              <button class="px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg">
+                <i data-lucide="eye" class="size-4 inline mr-1"></i>View Details
+              </button>
+              <button class="px-3 py-1.5 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                <i data-lucide="check-circle" class="size-4 inline mr-1"></i>Accept
+              </button>
             </div>
           </div>
-
-          <!-- Status Timeline -->
-          <div class="mb-6">
-            <h4 class="text-sm font-medium text-gray-700 mb-4">
-              Donation Progress
-            </h4>
-            <div class="flex items-center justify-between">
-              <!-- Step 1: Accepted -->
-              <div class="flex flex-col items-center flex-1">
-                <div
-                  id="step1"
-                  class="size-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-500 transition-all duration-300"
-                >
-                  <i data-lucide="check" class="size-5"></i>
-                </div>
-                <span class="text-xs mt-2 text-gray-500 text-center"
-                  >Accepted</span
-                >
+          <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-red-200">
+            <div class="flex items-center gap-4">
+              <div class="size-12 bg-red-100 rounded-full flex items-center justify-center">
+                <i data-lucide="droplet" class="size-6 text-red-600 fill-red-600"></i>
               </div>
-              <div
-                id="line1"
-                class="h-1 flex-1 bg-gray-200 -mt-6 transition-all duration-300"
-              ></div>
-
-              <!-- Step 2: On the Way -->
-              <div class="flex flex-col items-center flex-1">
-                <div
-                  id="step2"
-                  class="size-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-500 transition-all duration-300"
-                >
-                  <i data-lucide="navigation" class="size-5"></i>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <h3 class="font-medium text-gray-900">Community Medical</h3>
+                  <span class="px-2 py-1 text-xs font-medium bg-orange-500 text-white rounded-full">Urgent</span>
                 </div>
-                <span class="text-xs mt-2 text-gray-500 text-center"
-                  >On the Way</span
-                >
-              </div>
-              <div
-                id="line2"
-                class="h-1 flex-1 bg-gray-200 -mt-6 transition-all duration-300"
-              ></div>
-
-              <!-- Step 3: Reached Location -->
-              <div class="flex flex-col items-center flex-1">
-                <div
-                  id="step3"
-                  class="size-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-500 transition-all duration-300"
-                >
-                  <i data-lucide="map-pin" class="size-5"></i>
-                </div>
-                <span class="text-xs mt-2 text-gray-500 text-center"
-                  >Reached Location</span
-                >
-              </div>
-              <div
-                id="line3"
-                class="h-1 flex-1 bg-gray-200 -mt-6 transition-all duration-300"
-              ></div>
-
-              <!-- Step 4: Donation Completed -->
-              <div class="flex flex-col items-center flex-1">
-                <div
-                  id="step4"
-                  class="size-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-500 transition-all duration-300"
-                >
-                  <i data-lucide="heart" class="size-5"></i>
-                </div>
-                <span class="text-xs mt-2 text-gray-500 text-center"
-                  >Completed</span
-                >
+                <p class="text-sm text-gray-600">
+                  Blood Type: <strong>O+</strong> • 5 hours ago
+                </p>
               </div>
             </div>
-          </div>
-
-          <!-- Current Status Message -->
-          <div
-            id="statusMessage"
-            class="p-4 bg-blue-50 border border-blue-200 rounded-lg"
-          >
-            <div class="flex items-center gap-3">
-              <i data-lucide="info" class="size-5 text-blue-600"></i>
-              <p class="text-blue-800 font-medium">
-                Accepted – Please proceed to the hospital
-              </p>
+            <div class="flex gap-2">
+              <button class="px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg">
+                Later
+              </button>
+              <button class="px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg">
+                <i data-lucide="eye" class="size-4 inline mr-1"></i>View Details
+              </button>
+              <button class="px-3 py-1.5 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                <i data-lucide="check-circle" class="size-4 inline mr-1"></i>Accept
+              </button>
             </div>
           </div>
+        </div>
+      </div>
 
-          <!-- Action Buttons -->
-          <div class="mt-4 flex gap-3">
-            <button
-              id="nextStatusBtn"
-              class="px-4 py-2 text-sm bg-green-600 hover:bg-green-700 text-white rounded-lg"
-            >
-              <i data-lucide="navigation" class="size-4 inline mr-1"></i>Start
-              Journey
+      <!-- Non-Emergency Requests -->
+      <div
+        class="p-6 bg-linear-to-r from-blue-50 to-white border border-gray-200 border-l-4 border-l-blue-600 rounded-xl">
+        <div class="flex items-start gap-4 mb-4">
+          <div class="bg-blue-100 p-3 rounded-lg">
+            <i data-lucide="clock" class="size-6 text-blue-600"></i>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">
+              Non-Emergency Requests Matching Your Blood Type
+            </h2>
+            <p class="text-gray-600 mb-4">
+              Routine blood requests from hospitals in your area
+            </p>
+          </div>
+        </div>
+        <div class="space-y-3">
+          <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-blue-200">
+            <div class="flex items-center gap-4">
+              <div class="size-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <i data-lucide="droplet" class="size-6 text-blue-600"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <h3 class="font-medium text-gray-900">General Hospital</h3>
+                  <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">Routine • 2
+                    units</span>
+                </div>
+                <p class="text-sm text-gray-600">
+                  Blood Type: <strong>O+</strong> • 1 day ago
+                </p>
+              </div>
+            </div>
+            <button class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+              View Details
             </button>
-            <button
-              id="cancelDonationBtn"
-              class="px-4 py-2 text-sm border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg"
-            >
-              Cancel Donation
+          </div>
+          <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-blue-200">
+            <div class="flex items-center gap-4">
+              <div class="size-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <i data-lucide="droplet" class="size-6 text-blue-600"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <h3 class="font-medium text-gray-900">
+                    Valley Medical Center
+                  </h3>
+                  <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">Scheduled • 1
+                    unit</span>
+                </div>
+                <p class="text-sm text-gray-600">
+                  Blood Type: <strong>O+</strong> • 2 days ago
+                </p>
+              </div>
+            </div>
+            <button class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+              View Details
             </button>
           </div>
         </div>
       </div>
-    </main>
 
-    <!-- Request Details Modal -->
-    <div id="requestModal" class="fixed inset-0 z-50 hidden">
-      <!-- Backdrop -->
-      <div
-        id="modalBackdrop"
-        class="absolute inset-0 bg-black/50 transition-opacity"
-      ></div>
+      <!-- Upcoming Appointments -->
+      <div class="p-6 bg-white border border-gray-200 rounded-xl">
+        <div class="mb-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-1">
+            Upcoming Appointments
+          </h2>
+          <p class="text-sm text-gray-600">
+            Your scheduled donation appointments
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 border border-gray-200 rounded-lg">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="bg-green-100 p-2 rounded-lg">
+                <i data-lucide="check-circle" class="size-5 text-green-600"></i>
+              </div>
+              <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Confirmed</span>
+            </div>
+            <h4 class="font-medium text-gray-900 mb-1">City Hospital</h4>
+            <p class="text-sm text-gray-600">Nov 25, 2024 • 10:00 AM</p>
+          </div>
+          <div class="p-4 border border-gray-200 rounded-lg">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="bg-yellow-100 p-2 rounded-lg">
+                <i data-lucide="clock" class="size-5 text-yellow-600"></i>
+              </div>
+              <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">Pending</span>
+            </div>
+            <h4 class="font-medium text-gray-900 mb-1">St. Mary Medical</h4>
+            <p class="text-sm text-gray-600">Dec 1, 2024 • 02:00 PM</p>
+          </div>
+        </div>
+      </div>
 
-      <!-- Modal Content -->
-      <div class="absolute inset-0 flex items-center justify-center p-4">
-        <div
-          id="modalContent"
-          class="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col transform transition-all scale-95 opacity-0"
-        >
-          <!-- Modal Header -->
-          <div
-            class="flex items-center justify-between p-6 border-b border-gray-200 shrink-0"
-          >
-            <h3 class="text-lg font-semibold text-gray-900">
-              Blood Request Details
-            </h3>
-            <button
-              id="modalCloseBtn"
-              class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <i data-lucide="x" class="size-5 text-gray-500"></i>
-            </button>
+      <!-- My Active Donation Section (Hidden by default) -->
+      <div id="activeDonationSection"
+        class="hidden p-6 bg-linear-to-r from-green-50 to-white border border-gray-200 border-l-4 border-l-green-600 rounded-xl">
+        <div class="flex items-start gap-4 mb-6">
+          <div class="bg-green-100 p-3 rounded-lg">
+            <i data-lucide="activity" class="size-6 text-green-600"></i>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">
+              My Active Donation
+            </h2>
+            <p class="text-gray-600">
+              You have an active donation in progress
+            </p>
+          </div>
+        </div>
+
+        <!-- Request Summary -->
+        <div class="p-4 bg-white rounded-lg border border-green-200 mb-6">
+          <div class="flex items-center gap-4">
+            <div class="size-12 bg-green-100 rounded-full flex items-center justify-center">
+              <i data-lucide="droplet" class="size-6 text-green-600 fill-green-600"></i>
+            </div>
+            <div class="flex-1">
+              <h3 id="activeHospitalName" class="font-medium text-gray-900">
+                Hospital Name
+              </h3>
+              <p id="activeRequestDetails" class="text-sm text-gray-600">
+                Blood Type: O+ • Request Info
+              </p>
+            </div>
+            <span id="activeUrgencyBadge"
+              class="px-3 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Active</span>
+          </div>
+        </div>
+
+        <!-- Status Timeline -->
+        <div class="mb-6">
+          <h4 class="text-sm font-medium text-gray-700 mb-4">
+            Donation Progress
+          </h4>
+          <div class="flex items-center justify-between">
+            <!-- Step 1: Accepted -->
+            <div class="flex flex-col items-center flex-1">
+              <div id="step1"
+                class="size-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-500 transition-all duration-300">
+                <i data-lucide="check" class="size-5"></i>
+              </div>
+              <span class="text-xs mt-2 text-gray-500 text-center">Accepted</span>
+            </div>
+            <div id="line1" class="h-1 flex-1 bg-gray-200 -mt-6 transition-all duration-300"></div>
+
+            <!-- Step 2: On the Way -->
+            <div class="flex flex-col items-center flex-1">
+              <div id="step2"
+                class="size-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-500 transition-all duration-300">
+                <i data-lucide="navigation" class="size-5"></i>
+              </div>
+              <span class="text-xs mt-2 text-gray-500 text-center">On the Way</span>
+            </div>
+            <div id="line2" class="h-1 flex-1 bg-gray-200 -mt-6 transition-all duration-300"></div>
+
+            <!-- Step 3: Reached Location -->
+            <div class="flex flex-col items-center flex-1">
+              <div id="step3"
+                class="size-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-500 transition-all duration-300">
+                <i data-lucide="map-pin" class="size-5"></i>
+              </div>
+              <span class="text-xs mt-2 text-gray-500 text-center">Reached Location</span>
+            </div>
+            <div id="line3" class="h-1 flex-1 bg-gray-200 -mt-6 transition-all duration-300"></div>
+
+            <!-- Step 4: Donation Completed -->
+            <div class="flex flex-col items-center flex-1">
+              <div id="step4"
+                class="size-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-500 transition-all duration-300">
+                <i data-lucide="heart" class="size-5"></i>
+              </div>
+              <span class="text-xs mt-2 text-gray-500 text-center">Completed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Current Status Message -->
+        <div id="statusMessage" class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div class="flex items-center gap-3">
+            <i data-lucide="info" class="size-5 text-blue-600"></i>
+            <p class="text-blue-800 font-medium">
+              Accepted – Please proceed to the hospital
+            </p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-4 flex gap-3">
+          <button id="nextStatusBtn" class="px-4 py-2 text-sm bg-green-600 hover:bg-green-700 text-white rounded-lg">
+            <i data-lucide="navigation" class="size-4 inline mr-1"></i>Start
+            Journey
+          </button>
+          <button id="cancelDonationBtn"
+            class="px-4 py-2 text-sm border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg">
+            Cancel Donation
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Request Details Modal -->
+  <div id="requestModal" class="fixed inset-0 z-50 hidden">
+    <!-- Backdrop -->
+    <div id="modalBackdrop" class="absolute inset-0 bg-black/50 transition-opacity"></div>
+
+    <!-- Modal Content -->
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div id="modalContent"
+        class="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col transform transition-all scale-95 opacity-0">
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between p-6 border-b border-gray-200 shrink-0">
+          <h3 class="text-lg font-semibold text-gray-900">
+            Blood Request Details
+          </h3>
+          <button id="modalCloseBtn" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+            <i data-lucide="x" class="size-5 text-gray-500"></i>
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6 space-y-5 overflow-y-auto flex-1">
+          <!-- Hospital Info -->
+          <div class="flex items-center gap-4">
+            <div id="modalIcon" class="size-14 bg-red-100 rounded-full flex items-center justify-center">
+              <i data-lucide="building-2" class="size-7 text-red-600"></i>
+            </div>
+            <div>
+              <h4 id="modalHospitalName" class="text-xl font-semibold text-gray-900">
+                Hospital Name
+              </h4>
+              <p id="modalCity" class="text-sm text-gray-600">City</p>
+              <p id="modalUrgency" class="text-sm text-red-600 font-medium">
+                Emergency Request
+              </p>
+            </div>
           </div>
 
-          <!-- Modal Body -->
-          <div class="p-6 space-y-5 overflow-y-auto flex-1">
-            <!-- Hospital Info -->
-            <div class="flex items-center gap-4">
-              <div
-                id="modalIcon"
-                class="size-14 bg-red-100 rounded-full flex items-center justify-center"
-              >
-                <i data-lucide="building-2" class="size-7 text-red-600"></i>
-              </div>
+          <!-- Patient Info Section -->
+          <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <h5 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+              <i data-lucide="user" class="size-4 text-blue-600"></i>
+              Patient Information
+            </h5>
+            <div class="grid grid-cols-2 gap-3">
               <div>
-                <h4
-                  id="modalHospitalName"
-                  class="text-xl font-semibold text-gray-900"
-                >
-                  Hospital Name
-                </h4>
-                <p id="modalCity" class="text-sm text-gray-600">City</p>
-                <p id="modalUrgency" class="text-sm text-red-600 font-medium">
-                  Emergency Request
-                </p>
-              </div>
-            </div>
-
-            <!-- Patient Info Section -->
-            <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h5
-                class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2"
-              >
-                <i data-lucide="user" class="size-4 text-blue-600"></i>
-                Patient Information
-              </h5>
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <p class="text-xs text-gray-500">Patient Name</p>
-                  <p id="modalPatientName" class="font-medium text-gray-900">
-                    -
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500">Age</p>
-                  <p id="modalPatientAge" class="font-medium text-gray-900">
-                    -
-                  </p>
-                </div>
-                <div class="col-span-2">
-                  <p class="text-xs text-gray-500">Contact Phone</p>
-                  <p id="modalContactPhone" class="font-medium text-gray-900">
-                    -
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Request Details Grid -->
-            <div class="grid grid-cols-2 gap-4">
-              <div class="p-3 bg-gray-50 rounded-lg">
-                <p class="text-xs text-gray-500 mb-1">Blood Type Required</p>
-                <p
-                  id="modalBloodType"
-                  class="font-semibold text-gray-900 text-lg"
-                >
-                  O+
-                </p>
-              </div>
-
-              <div class="p-3 bg-gray-50 rounded-lg">
-                <p class="text-xs text-gray-500 mb-1">Units Needed</p>
-                <p id="modalUnits" class="font-semibold text-gray-900 text-lg">
-                  1 unit
-                </p>
-              </div>
-
-              <div class="p-3 bg-gray-50 rounded-lg">
-                <p class="text-xs text-gray-500 mb-1">Required By</p>
-                <p id="modalRequiredDate" class="font-semibold text-gray-900">
+                <p class="text-xs text-gray-500">Patient Name</p>
+                <p id="modalPatientName" class="font-medium text-gray-900">
                   -
                 </p>
               </div>
-
-              <div class="p-3 bg-gray-50 rounded-lg">
-                <p class="text-xs text-gray-500 mb-1">Requested</p>
-                <p id="modalTime" class="font-semibold text-gray-900">
-                  2 hours ago
+              <div>
+                <p class="text-xs text-gray-500">Age</p>
+                <p id="modalPatientAge" class="font-medium text-gray-900">
+                  -
+                </p>
+              </div>
+              <div class="col-span-2">
+                <p class="text-xs text-gray-500">Contact Phone</p>
+                <p id="modalContactPhone" class="font-medium text-gray-900">
+                  -
                 </p>
               </div>
             </div>
+          </div>
 
-            <!-- Medical Reason -->
-            <div class="p-4 bg-gray-50 rounded-lg">
-              <p class="text-xs text-gray-500 mb-2">Medical Reason</p>
-              <p id="modalMedicalReason" class="text-sm text-gray-700">-</p>
+          <!-- Request Details Grid -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-3 bg-gray-50 rounded-lg">
+              <p class="text-xs text-gray-500 mb-1">Blood Type Required</p>
+              <p id="modalBloodType" class="font-semibold text-gray-900 text-lg">
+                O+
+              </p>
             </div>
 
-            <!-- Important Note -->
-            <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <div class="flex items-start gap-3">
-                <i
-                  data-lucide="alert-triangle"
-                  class="size-5 text-yellow-600 mt-0.5"
-                ></i>
-                <div>
-                  <p class="text-sm text-yellow-800 font-medium">
-                    Important Note
-                  </p>
-                  <p class="text-sm text-yellow-700 mt-1">
-                    By accepting this request, you confirm that you are
-                    currently healthy and willing to donate blood at the
-                    specified hospital.
-                  </p>
-                </div>
+            <div class="p-3 bg-gray-50 rounded-lg">
+              <p class="text-xs text-gray-500 mb-1">Units Needed</p>
+              <p id="modalUnits" class="font-semibold text-gray-900 text-lg">
+                1 unit
+              </p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-lg">
+              <p class="text-xs text-gray-500 mb-1">Required By</p>
+              <p id="modalRequiredDate" class="font-semibold text-gray-900">
+                -
+              </p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-lg">
+              <p class="text-xs text-gray-500 mb-1">Requested</p>
+              <p id="modalTime" class="font-semibold text-gray-900">
+                2 hours ago
+              </p>
+            </div>
+          </div>
+
+          <!-- Medical Reason -->
+          <div class="p-4 bg-gray-50 rounded-lg">
+            <p class="text-xs text-gray-500 mb-2">Medical Reason</p>
+            <p id="modalMedicalReason" class="text-sm text-gray-700">-</p>
+          </div>
+
+          <!-- Important Note -->
+          <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <div class="flex items-start gap-3">
+              <i data-lucide="alert-triangle" class="size-5 text-yellow-600 mt-0.5"></i>
+              <div>
+                <p class="text-sm text-yellow-800 font-medium">
+                  Important Note
+                </p>
+                <p class="text-sm text-yellow-700 mt-1">
+                  By accepting this request, you confirm that you are
+                  currently healthy and willing to donate blood at the
+                  specified hospital.
+                </p>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Modal Footer -->
-          <div
-            class="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl shrink-0"
-          >
-            <button
-              id="modalCancelBtn"
-              class="px-4 py-2 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              Close
-            </button>
-            <button
-              id="modalAcceptBtn"
-              class="px-6 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
-            >
-              <i data-lucide="check-circle" class="size-4 inline mr-1"></i>
-              Accept Request
-            </button>
-          </div>
+        <!-- Modal Footer -->
+        <div class="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl shrink-0">
+          <button id="modalCancelBtn"
+            class="px-4 py-2 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg transition-colors">
+            Close
+          </button>
+          <button id="modalAcceptBtn"
+            class="px-6 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+            <i data-lucide="check-circle" class="size-4 inline mr-1"></i>
+            Accept Request
+          </button>
         </div>
       </div>
     </div>
+  </div>
 
-    <script type="module" src="/src/scripts/main.js"></script>
-    <script>
-      // Donor Dashboard - Interactive State Management
-      document.addEventListener("DOMContentLoaded", function () {
-        // ============================================
-        // DONATION WORKFLOW STATES
-        // ============================================
-        const DONATION_STATES = {
-          OPEN: "OPEN",
-          ACCEPTED: "ACCEPTED",
-          ON_THE_WAY: "ON_THE_WAY",
-          REACHED: "REACHED",
-          COMPLETED: "COMPLETED",
+  <script type="module" src="/src/scripts/main.js"></script>
+  <script>
+    // Donor Dashboard - Interactive State Management
+    document.addEventListener("DOMContentLoaded", function () {
+      // ============================================
+      // DONATION WORKFLOW STATES
+      // ============================================
+      const DONATION_STATES = {
+        OPEN: "OPEN",
+        ACCEPTED: "ACCEPTED",
+        ON_THE_WAY: "ON_THE_WAY",
+        REACHED: "REACHED",
+        COMPLETED: "COMPLETED",
+      };
+
+      // Current donation state
+      let currentDonationState = DONATION_STATES.OPEN;
+      let activeDonation = null; // Stores the accepted request
+      let selectedRequest = null; // Stores request being viewed in modal
+
+      // Emergency alerts data
+      let emergencyAlerts = [
+        {
+          id: 1,
+          patientName: "Rahul Sharma",
+          patientAge: 45,
+          contactPhone: "+91 98765 43210",
+          bloodType: "O+",
+          hospital: "Regional Hospital",
+          city: "Mumbai",
+          urgency: "Critical",
+          requiredByDate: "2026-01-14",
+          medicalReason:
+            "Emergency surgery required due to accident. Patient has lost significant blood and needs immediate transfusion.",
+          time: "2 hours ago",
+          units: 2,
+          status: "pending",
+          type: "emergency",
+        },
+        {
+          id: 2,
+          patientName: "Priya Patel",
+          patientAge: 32,
+          contactPhone: "+91 87654 32109",
+          bloodType: "O+",
+          hospital: "Community Medical Center",
+          city: "Mumbai",
+          urgency: "Urgent",
+          requiredByDate: "2026-01-15",
+          medicalReason:
+            "Post-delivery complications. Mother needs blood transfusion urgently.",
+          time: "5 hours ago",
+          units: 1,
+          status: "pending",
+          type: "emergency",
+        },
+      ];
+
+      // Non-emergency requests data
+      let nonEmergencyRequests = [
+        {
+          id: 101,
+          patientName: "Amit Kumar",
+          patientAge: 58,
+          contactPhone: "+91 99887 76655",
+          bloodType: "O+",
+          hospital: "General Hospital",
+          city: "Pune",
+          urgency: "Routine",
+          requiredByDate: "2026-01-20",
+          medicalReason:
+            "Scheduled surgery for knee replacement. Blood required as precautionary measure.",
+          time: "1 day ago",
+          units: 2,
+          status: "pending",
+          type: "normal",
+        },
+        {
+          id: 102,
+          patientName: "Sneha Desai",
+          patientAge: 28,
+          contactPhone: "+91 88776 65544",
+          bloodType: "O+",
+          hospital: "Valley Medical Center",
+          city: "Nashik",
+          urgency: "Scheduled",
+          requiredByDate: "2026-01-25",
+          medicalReason: "Thalassemia patient requiring regular transfusion.",
+          time: "2 days ago",
+          units: 1,
+          status: "pending",
+          type: "normal",
+        },
+      ];
+
+      // Upcoming appointments
+      let appointments = [
+        {
+          id: "APT001",
+          hospital: "City Hospital",
+          date: "Nov 25, 2024",
+          time: "10:00 AM",
+          status: "Confirmed",
+        },
+        {
+          id: "APT002",
+          hospital: "St. Mary Medical",
+          date: "Dec 1, 2024",
+          time: "02:00 PM",
+          status: "Pending",
+        },
+      ];
+
+      // DOM Elements
+      const emergencySection = document.querySelector(".border-l-red-600");
+      const nonEmergencySection =
+        document.querySelector(".border-l-blue-600");
+      const emergencyContainer = document.querySelector(
+        ".border-l-red-600 .space-y-3"
+      );
+      const nonEmergencyContainer = document.querySelector(
+        ".border-l-blue-600 .space-y-3"
+      );
+      const activeDonationSection = document.getElementById(
+        "activeDonationSection"
+      );
+
+      // Modal Elements
+      const modal = document.getElementById("requestModal");
+      const modalBackdrop = document.getElementById("modalBackdrop");
+      const modalContent = document.getElementById("modalContent");
+      const modalCloseBtn = document.getElementById("modalCloseBtn");
+      const modalCancelBtn = document.getElementById("modalCancelBtn");
+      const modalAcceptBtn = document.getElementById("modalAcceptBtn");
+
+      // ============================================
+      // MODAL FUNCTIONS
+      // ============================================
+      function openModal(request) {
+        if (!request) {
+          console.warn("openModal called with no request data");
+          return;
+        }
+
+        selectedRequest = request;
+
+        // Get all modal elements
+        const hospitalEl = document.getElementById("modalHospitalName");
+        const cityEl = document.getElementById("modalCity");
+        const bloodTypeEl = document.getElementById("modalBloodType");
+        const unitsEl = document.getElementById("modalUnits");
+        const timeEl = document.getElementById("modalTime");
+        const modalIcon = document.getElementById("modalIcon");
+        const modalUrgency = document.getElementById("modalUrgency");
+        const patientNameEl = document.getElementById("modalPatientName");
+        const patientAgeEl = document.getElementById("modalPatientAge");
+        const contactPhoneEl = document.getElementById("modalContactPhone");
+        const requiredDateEl = document.getElementById("modalRequiredDate");
+        const medicalReasonEl = document.getElementById("modalMedicalReason");
+
+        // Safe data binding with fallbacks - Hospital Info
+        if (hospitalEl) hospitalEl.textContent = request.hospital || "N/A";
+        if (cityEl) cityEl.textContent = request.city || "N/A";
+        if (bloodTypeEl) bloodTypeEl.textContent = request.bloodType || "N/A";
+        if (unitsEl) {
+          const units = request.units || 1;
+          unitsEl.textContent = units + " unit" + (units > 1 ? "s" : "");
+        }
+        if (timeEl) timeEl.textContent = request.time || "N/A";
+
+        // Patient Information
+        if (patientNameEl)
+          patientNameEl.textContent = request.patientName || "N/A";
+        if (patientAgeEl)
+          patientAgeEl.textContent = request.patientAge
+            ? request.patientAge + " years"
+            : "N/A";
+        if (contactPhoneEl)
+          contactPhoneEl.textContent = request.contactPhone || "N/A";
+
+        // Required Date formatting
+        if (requiredDateEl) {
+          if (request.requiredByDate) {
+            const date = new Date(request.requiredByDate);
+            requiredDateEl.textContent = date.toLocaleDateString("en-IN", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            });
+          } else {
+            requiredDateEl.textContent = "N/A";
+          }
+        }
+
+        // Medical Reason
+        if (medicalReasonEl)
+          medicalReasonEl.textContent =
+            request.medicalReason || "No additional information provided.";
+
+        // Set urgency styling with safe checks
+        const urgencyText = request.urgency || "Standard";
+        const isEmergency = request.type === "emergency";
+
+        if (modalIcon) {
+          modalIcon.className = isEmergency
+            ? "size-14 bg-red-100 rounded-full flex items-center justify-center"
+            : "size-14 bg-blue-100 rounded-full flex items-center justify-center";
+        }
+
+        if (modalUrgency) {
+          modalUrgency.textContent = urgencyText + " Request";
+          modalUrgency.className = isEmergency
+            ? "text-sm text-red-600 font-medium"
+            : "text-sm text-blue-600 font-medium";
+        }
+
+        if (modalAcceptBtn) {
+          modalAcceptBtn.className = isEmergency
+            ? "px-6 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+            : "px-6 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors";
+        }
+
+        // Show modal with animation
+        modal.classList.remove("hidden");
+        document.body.style.overflow = "hidden"; // Disable background scroll
+
+        requestAnimationFrame(() => {
+          modalContent.classList.remove("scale-95", "opacity-0");
+          modalContent.classList.add("scale-100", "opacity-100");
+        });
+
+        lucide.createIcons();
+      }
+
+      function closeModal() {
+        modalContent.classList.remove("scale-100", "opacity-100");
+        modalContent.classList.add("scale-95", "opacity-0");
+
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          document.body.style.overflow = ""; // Re-enable background scroll
+          selectedRequest = null;
+        }, 200);
+      }
+
+      // Modal event listeners
+      modalCloseBtn.addEventListener("click", closeModal);
+      modalCancelBtn.addEventListener("click", closeModal);
+      modalBackdrop.addEventListener("click", closeModal);
+
+      // Close modal on ESC key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+          closeModal();
+        }
+      });
+
+      // Accept request from modal
+      modalAcceptBtn.addEventListener("click", () => {
+        if (selectedRequest) {
+          acceptRequest(selectedRequest);
+        }
+      });
+
+      // ============================================
+      // ACCEPT REQUEST FUNCTION
+      // ============================================
+      function acceptRequest(request) {
+        // Close modal first
+        closeModal();
+
+        // Set active donation
+        activeDonation = { ...request };
+        currentDonationState = DONATION_STATES.ACCEPTED;
+
+        // Update UI
+        updateDashboardForActiveDonation();
+
+        showNotification(
+          `You have accepted the ${request.urgency.toLowerCase()} request from ${request.hospital
+          }. Please proceed to the hospital.`,
+          "success"
+        );
+      }
+
+      // ============================================
+      // UPDATE DASHBOARD FOR ACTIVE DONATION
+      // ============================================
+      function updateDashboardForActiveDonation() {
+        // Hide emergency and normal request sections
+        if (emergencySection) emergencySection.classList.add("hidden");
+        if (nonEmergencySection) nonEmergencySection.classList.add("hidden");
+
+        // Show active donation section
+        activeDonationSection.classList.remove("hidden");
+
+        // Update active donation details (with safe fallbacks)
+        const hospitalNameEl = document.getElementById("activeHospitalName");
+        const requestDetailsEl = document.getElementById(
+          "activeRequestDetails"
+        );
+
+        if (hospitalNameEl) {
+          hospitalNameEl.textContent = activeDonation.hospital || "N/A";
+        }
+        if (requestDetailsEl) {
+          const bloodType = activeDonation.bloodType || "N/A";
+          const units = activeDonation.units || 1;
+          const time = activeDonation.time || "";
+          requestDetailsEl.textContent = `Blood Type: ${bloodType} • ${units} unit(s)${time ? " • " + time : ""
+            }`;
+        }
+
+        const urgencyBadge = document.getElementById("activeUrgencyBadge");
+        if (activeDonation.type === "emergency") {
+          urgencyBadge.textContent = activeDonation.urgency;
+          urgencyBadge.className =
+            "px-3 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-full";
+        } else {
+          urgencyBadge.textContent = activeDonation.urgency;
+          urgencyBadge.className =
+            "px-3 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full";
+        }
+
+        // Update timeline
+        updateTimeline();
+
+        lucide.createIcons();
+      }
+
+      // ============================================
+      // UPDATE DONATION STATUS
+      // ============================================
+      function updateDonationStatus(newState) {
+        currentDonationState = newState;
+        updateTimeline();
+
+        // Show notification based on state
+        const messages = {
+          [DONATION_STATES.ACCEPTED]:
+            "Accepted – Please proceed to the hospital",
+          [DONATION_STATES.ON_THE_WAY]:
+            "On the Way – You are traveling to the hospital",
+          [DONATION_STATES.REACHED]:
+            "Reached Location – Awaiting donation process",
+          [DONATION_STATES.COMPLETED]:
+            "Donation Completed – Thank you for saving a life!",
         };
 
-        // Current donation state
-        let currentDonationState = DONATION_STATES.OPEN;
-        let activeDonation = null; // Stores the accepted request
-        let selectedRequest = null; // Stores request being viewed in modal
+        showNotification(
+          messages[newState],
+          newState === DONATION_STATES.COMPLETED ? "success" : "info"
+        );
+      }
 
-        // Emergency alerts data
-        let emergencyAlerts = [
-          {
-            id: 1,
-            patientName: "Rahul Sharma",
-            patientAge: 45,
-            contactPhone: "+91 98765 43210",
-            bloodType: "O+",
-            hospital: "Regional Hospital",
-            city: "Mumbai",
-            urgency: "Critical",
-            requiredByDate: "2026-01-14",
-            medicalReason:
-              "Emergency surgery required due to accident. Patient has lost significant blood and needs immediate transfusion.",
-            time: "2 hours ago",
-            units: 2,
-            status: "pending",
-            type: "emergency",
-          },
-          {
-            id: 2,
-            patientName: "Priya Patel",
-            patientAge: 32,
-            contactPhone: "+91 87654 32109",
-            bloodType: "O+",
-            hospital: "Community Medical Center",
-            city: "Mumbai",
-            urgency: "Urgent",
-            requiredByDate: "2026-01-15",
-            medicalReason:
-              "Post-delivery complications. Mother needs blood transfusion urgently.",
-            time: "5 hours ago",
-            units: 1,
-            status: "pending",
-            type: "emergency",
-          },
+      // ============================================
+      // UPDATE TIMELINE VISUALIZATION
+      // ============================================
+      function updateTimeline() {
+        const states = [
+          DONATION_STATES.ACCEPTED,
+          DONATION_STATES.ON_THE_WAY,
+          DONATION_STATES.REACHED,
+          DONATION_STATES.COMPLETED,
         ];
 
-        // Non-emergency requests data
-        let nonEmergencyRequests = [
-          {
-            id: 101,
-            patientName: "Amit Kumar",
-            patientAge: 58,
-            contactPhone: "+91 99887 76655",
-            bloodType: "O+",
-            hospital: "General Hospital",
-            city: "Pune",
-            urgency: "Routine",
-            requiredByDate: "2026-01-20",
-            medicalReason:
-              "Scheduled surgery for knee replacement. Blood required as precautionary measure.",
-            time: "1 day ago",
-            units: 2,
-            status: "pending",
-            type: "normal",
-          },
-          {
-            id: 102,
-            patientName: "Sneha Desai",
-            patientAge: 28,
-            contactPhone: "+91 88776 65544",
-            bloodType: "O+",
-            hospital: "Valley Medical Center",
-            city: "Nashik",
-            urgency: "Scheduled",
-            requiredByDate: "2026-01-25",
-            medicalReason: "Thalassemia patient requiring regular transfusion.",
-            time: "2 days ago",
-            units: 1,
-            status: "pending",
-            type: "normal",
-          },
-        ];
+        const currentIndex = states.indexOf(currentDonationState);
 
-        // Upcoming appointments
-        let appointments = [
-          {
-            id: "APT001",
-            hospital: "City Hospital",
-            date: "Nov 25, 2024",
-            time: "10:00 AM",
-            status: "Confirmed",
-          },
-          {
-            id: "APT002",
-            hospital: "St. Mary Medical",
-            date: "Dec 1, 2024",
-            time: "02:00 PM",
-            status: "Pending",
-          },
-        ];
+        // Status messages
+        const statusMessages = {
+          [DONATION_STATES.ACCEPTED]:
+            "Accepted – Please proceed to the hospital",
+          [DONATION_STATES.ON_THE_WAY]:
+            "On the Way – Donor is traveling to location",
+          [DONATION_STATES.REACHED]:
+            "Reached Location – Awaiting donation process",
+          [DONATION_STATES.COMPLETED]:
+            "Donation Completed – Thank you for saving a life!",
+        };
 
-        // DOM Elements
-        const emergencySection = document.querySelector(".border-l-red-600");
-        const nonEmergencySection =
-          document.querySelector(".border-l-blue-600");
-        const emergencyContainer = document.querySelector(
-          ".border-l-red-600 .space-y-3"
-        );
-        const nonEmergencyContainer = document.querySelector(
-          ".border-l-blue-600 .space-y-3"
-        );
-        const activeDonationSection = document.getElementById(
-          "activeDonationSection"
-        );
+        // Update each step
+        for (let i = 0; i < 4; i++) {
+          const step = document.getElementById(`step${i + 1}`);
+          const line = document.getElementById(`line${i + 1}`);
 
-        // Modal Elements
-        const modal = document.getElementById("requestModal");
-        const modalBackdrop = document.getElementById("modalBackdrop");
-        const modalContent = document.getElementById("modalContent");
-        const modalCloseBtn = document.getElementById("modalCloseBtn");
-        const modalCancelBtn = document.getElementById("modalCancelBtn");
-        const modalAcceptBtn = document.getElementById("modalAcceptBtn");
-
-        // ============================================
-        // MODAL FUNCTIONS
-        // ============================================
-        function openModal(request) {
-          if (!request) {
-            console.warn("openModal called with no request data");
-            return;
-          }
-
-          selectedRequest = request;
-
-          // Get all modal elements
-          const hospitalEl = document.getElementById("modalHospitalName");
-          const cityEl = document.getElementById("modalCity");
-          const bloodTypeEl = document.getElementById("modalBloodType");
-          const unitsEl = document.getElementById("modalUnits");
-          const timeEl = document.getElementById("modalTime");
-          const modalIcon = document.getElementById("modalIcon");
-          const modalUrgency = document.getElementById("modalUrgency");
-          const patientNameEl = document.getElementById("modalPatientName");
-          const patientAgeEl = document.getElementById("modalPatientAge");
-          const contactPhoneEl = document.getElementById("modalContactPhone");
-          const requiredDateEl = document.getElementById("modalRequiredDate");
-          const medicalReasonEl = document.getElementById("modalMedicalReason");
-
-          // Safe data binding with fallbacks - Hospital Info
-          if (hospitalEl) hospitalEl.textContent = request.hospital || "N/A";
-          if (cityEl) cityEl.textContent = request.city || "N/A";
-          if (bloodTypeEl) bloodTypeEl.textContent = request.bloodType || "N/A";
-          if (unitsEl) {
-            const units = request.units || 1;
-            unitsEl.textContent = units + " unit" + (units > 1 ? "s" : "");
-          }
-          if (timeEl) timeEl.textContent = request.time || "N/A";
-
-          // Patient Information
-          if (patientNameEl)
-            patientNameEl.textContent = request.patientName || "N/A";
-          if (patientAgeEl)
-            patientAgeEl.textContent = request.patientAge
-              ? request.patientAge + " years"
-              : "N/A";
-          if (contactPhoneEl)
-            contactPhoneEl.textContent = request.contactPhone || "N/A";
-
-          // Required Date formatting
-          if (requiredDateEl) {
-            if (request.requiredByDate) {
-              const date = new Date(request.requiredByDate);
-              requiredDateEl.textContent = date.toLocaleDateString("en-IN", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              });
-            } else {
-              requiredDateEl.textContent = "N/A";
-            }
-          }
-
-          // Medical Reason
-          if (medicalReasonEl)
-            medicalReasonEl.textContent =
-              request.medicalReason || "No additional information provided.";
-
-          // Set urgency styling with safe checks
-          const urgencyText = request.urgency || "Standard";
-          const isEmergency = request.type === "emergency";
-
-          if (modalIcon) {
-            modalIcon.className = isEmergency
-              ? "size-14 bg-red-100 rounded-full flex items-center justify-center"
-              : "size-14 bg-blue-100 rounded-full flex items-center justify-center";
-          }
-
-          if (modalUrgency) {
-            modalUrgency.textContent = urgencyText + " Request";
-            modalUrgency.className = isEmergency
-              ? "text-sm text-red-600 font-medium"
-              : "text-sm text-blue-600 font-medium";
-          }
-
-          if (modalAcceptBtn) {
-            modalAcceptBtn.className = isEmergency
-              ? "px-6 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
-              : "px-6 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors";
-          }
-
-          // Show modal with animation
-          modal.classList.remove("hidden");
-          document.body.style.overflow = "hidden"; // Disable background scroll
-
-          requestAnimationFrame(() => {
-            modalContent.classList.remove("scale-95", "opacity-0");
-            modalContent.classList.add("scale-100", "opacity-100");
-          });
-
-          lucide.createIcons();
-        }
-
-        function closeModal() {
-          modalContent.classList.remove("scale-100", "opacity-100");
-          modalContent.classList.add("scale-95", "opacity-0");
-
-          setTimeout(() => {
-            modal.classList.add("hidden");
-            document.body.style.overflow = ""; // Re-enable background scroll
-            selectedRequest = null;
-          }, 200);
-        }
-
-        // Modal event listeners
-        modalCloseBtn.addEventListener("click", closeModal);
-        modalCancelBtn.addEventListener("click", closeModal);
-        modalBackdrop.addEventListener("click", closeModal);
-
-        // Close modal on ESC key
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-            closeModal();
-          }
-        });
-
-        // Accept request from modal
-        modalAcceptBtn.addEventListener("click", () => {
-          if (selectedRequest) {
-            acceptRequest(selectedRequest);
-          }
-        });
-
-        // ============================================
-        // ACCEPT REQUEST FUNCTION
-        // ============================================
-        function acceptRequest(request) {
-          // Close modal first
-          closeModal();
-
-          // Set active donation
-          activeDonation = { ...request };
-          currentDonationState = DONATION_STATES.ACCEPTED;
-
-          // Update UI
-          updateDashboardForActiveDonation();
-
-          showNotification(
-            `You have accepted the ${request.urgency.toLowerCase()} request from ${
-              request.hospital
-            }. Please proceed to the hospital.`,
-            "success"
-          );
-        }
-
-        // ============================================
-        // UPDATE DASHBOARD FOR ACTIVE DONATION
-        // ============================================
-        function updateDashboardForActiveDonation() {
-          // Hide emergency and normal request sections
-          if (emergencySection) emergencySection.classList.add("hidden");
-          if (nonEmergencySection) nonEmergencySection.classList.add("hidden");
-
-          // Show active donation section
-          activeDonationSection.classList.remove("hidden");
-
-          // Update active donation details (with safe fallbacks)
-          const hospitalNameEl = document.getElementById("activeHospitalName");
-          const requestDetailsEl = document.getElementById(
-            "activeRequestDetails"
-          );
-
-          if (hospitalNameEl) {
-            hospitalNameEl.textContent = activeDonation.hospital || "N/A";
-          }
-          if (requestDetailsEl) {
-            const bloodType = activeDonation.bloodType || "N/A";
-            const units = activeDonation.units || 1;
-            const time = activeDonation.time || "";
-            requestDetailsEl.textContent = `Blood Type: ${bloodType} • ${units} unit(s)${
-              time ? " • " + time : ""
-            }`;
-          }
-
-          const urgencyBadge = document.getElementById("activeUrgencyBadge");
-          if (activeDonation.type === "emergency") {
-            urgencyBadge.textContent = activeDonation.urgency;
-            urgencyBadge.className =
-              "px-3 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-full";
+          if (i < currentIndex) {
+            // Completed step - green
+            step.className =
+              "size-10 rounded-full flex items-center justify-center bg-green-500 text-white transition-all duration-300";
+            if (line)
+              line.className =
+                "h-1 flex-1 bg-green-500 -mt-6 transition-all duration-300";
+          } else if (i === currentIndex) {
+            // Current step - blue
+            step.className =
+              "size-10 rounded-full flex items-center justify-center bg-blue-500 text-white transition-all duration-300 ring-4 ring-blue-200";
+            if (line)
+              line.className =
+                "h-1 flex-1 bg-gray-200 -mt-6 transition-all duration-300";
           } else {
-            urgencyBadge.textContent = activeDonation.urgency;
-            urgencyBadge.className =
-              "px-3 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full";
+            // Future step - gray
+            step.className =
+              "size-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-500 transition-all duration-300";
+            if (line)
+              line.className =
+                "h-1 flex-1 bg-gray-200 -mt-6 transition-all duration-300";
           }
-
-          // Update timeline
-          updateTimeline();
-
-          lucide.createIcons();
         }
 
-        // ============================================
-        // UPDATE DONATION STATUS
-        // ============================================
-        function updateDonationStatus(newState) {
-          currentDonationState = newState;
-          updateTimeline();
+        // Update status message
+        const statusMessage = document.getElementById("statusMessage");
+        const messageText = statusMessages[currentDonationState];
 
-          // Show notification based on state
-          const messages = {
-            [DONATION_STATES.ACCEPTED]:
-              "Accepted – Please proceed to the hospital",
-            [DONATION_STATES.ON_THE_WAY]:
-              "On the Way – You are traveling to the hospital",
-            [DONATION_STATES.REACHED]:
-              "Reached Location – Awaiting donation process",
-            [DONATION_STATES.COMPLETED]:
-              "Donation Completed – Thank you for saving a life!",
-          };
+        // Update next status button text based on current state
+        const nextStatusBtn = document.getElementById("nextStatusBtn");
+        const buttonLabels = {
+          [DONATION_STATES.ACCEPTED]: {
+            icon: "navigation",
+            text: "Start Journey",
+          },
+          [DONATION_STATES.ON_THE_WAY]: {
+            icon: "map-pin",
+            text: "I've Arrived",
+          },
+          [DONATION_STATES.REACHED]: {
+            icon: "heart",
+            text: "Complete Donation",
+          },
+          [DONATION_STATES.COMPLETED]: { icon: "check", text: "Completed" },
+        };
 
-          showNotification(
-            messages[newState],
-            newState === DONATION_STATES.COMPLETED ? "success" : "info"
-          );
+        const btnConfig = buttonLabels[currentDonationState];
+        nextStatusBtn.innerHTML = `<i data-lucide="${btnConfig.icon}" class="size-4 inline mr-1"></i>${btnConfig.text}`;
+
+        if (currentDonationState === DONATION_STATES.COMPLETED) {
+          statusMessage.className =
+            "p-4 bg-green-50 border border-green-200 rounded-lg";
+          statusMessage.innerHTML = `
+              <div class="flex items-center gap-3">
+                <i data-lucide="check-circle" class="size-5 text-green-600"></i>
+                <p class="text-green-800 font-medium">${messageText}</p>
+              </div>
+            `;
+          // Hide action buttons when completed
+          nextStatusBtn.classList.add("hidden");
+          document.getElementById("cancelDonationBtn").textContent =
+            "Back to Dashboard";
+        } else {
+          statusMessage.className =
+            "p-4 bg-blue-50 border border-blue-200 rounded-lg";
+          statusMessage.innerHTML = `
+              <div class="flex items-center gap-3">
+                <i data-lucide="info" class="size-5 text-blue-600"></i>
+                <p class="text-blue-800 font-medium">${messageText}</p>
+              </div>
+            `;
         }
 
-        // ============================================
-        // UPDATE TIMELINE VISUALIZATION
-        // ============================================
-        function updateTimeline() {
-          const states = [
+        lucide.createIcons();
+      }
+
+      // ============================================
+      // NEXT STATUS BUTTON (FOR DEMO)
+      // ============================================
+      document
+        .getElementById("nextStatusBtn")
+        .addEventListener("click", () => {
+          const stateOrder = [
             DONATION_STATES.ACCEPTED,
             DONATION_STATES.ON_THE_WAY,
             DONATION_STATES.REACHED,
             DONATION_STATES.COMPLETED,
           ];
 
-          const currentIndex = states.indexOf(currentDonationState);
-
-          // Status messages
-          const statusMessages = {
-            [DONATION_STATES.ACCEPTED]:
-              "Accepted – Please proceed to the hospital",
-            [DONATION_STATES.ON_THE_WAY]:
-              "On the Way – Donor is traveling to location",
-            [DONATION_STATES.REACHED]:
-              "Reached Location – Awaiting donation process",
-            [DONATION_STATES.COMPLETED]:
-              "Donation Completed – Thank you for saving a life!",
-          };
-
-          // Update each step
-          for (let i = 0; i < 4; i++) {
-            const step = document.getElementById(`step${i + 1}`);
-            const line = document.getElementById(`line${i + 1}`);
-
-            if (i < currentIndex) {
-              // Completed step - green
-              step.className =
-                "size-10 rounded-full flex items-center justify-center bg-green-500 text-white transition-all duration-300";
-              if (line)
-                line.className =
-                  "h-1 flex-1 bg-green-500 -mt-6 transition-all duration-300";
-            } else if (i === currentIndex) {
-              // Current step - blue
-              step.className =
-                "size-10 rounded-full flex items-center justify-center bg-blue-500 text-white transition-all duration-300 ring-4 ring-blue-200";
-              if (line)
-                line.className =
-                  "h-1 flex-1 bg-gray-200 -mt-6 transition-all duration-300";
-            } else {
-              // Future step - gray
-              step.className =
-                "size-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-500 transition-all duration-300";
-              if (line)
-                line.className =
-                  "h-1 flex-1 bg-gray-200 -mt-6 transition-all duration-300";
-            }
+          const currentIndex = stateOrder.indexOf(currentDonationState);
+          if (currentIndex < stateOrder.length - 1) {
+            updateDonationStatus(stateOrder[currentIndex + 1]);
           }
+        });
 
-          // Update status message
-          const statusMessage = document.getElementById("statusMessage");
-          const messageText = statusMessages[currentDonationState];
+      // ============================================
+      // CANCEL DONATION BUTTON
+      // ============================================
+      document
+        .getElementById("cancelDonationBtn")
+        .addEventListener("click", () => {
+          // Reset state
+          currentDonationState = DONATION_STATES.OPEN;
+          activeDonation = null;
 
-          // Update next status button text based on current state
-          const nextStatusBtn = document.getElementById("nextStatusBtn");
-          const buttonLabels = {
-            [DONATION_STATES.ACCEPTED]: {
-              icon: "navigation",
-              text: "Start Journey",
-            },
-            [DONATION_STATES.ON_THE_WAY]: {
-              icon: "map-pin",
-              text: "I've Arrived",
-            },
-            [DONATION_STATES.REACHED]: {
-              icon: "heart",
-              text: "Complete Donation",
-            },
-            [DONATION_STATES.COMPLETED]: { icon: "check", text: "Completed" },
-          };
+          // Show sections again
+          if (emergencySection) emergencySection.classList.remove("hidden");
+          if (nonEmergencySection)
+            nonEmergencySection.classList.remove("hidden");
 
-          const btnConfig = buttonLabels[currentDonationState];
-          nextStatusBtn.innerHTML = `<i data-lucide="${btnConfig.icon}" class="size-4 inline mr-1"></i>${btnConfig.text}`;
+          // Hide active donation section
+          activeDonationSection.classList.add("hidden");
 
-          if (currentDonationState === DONATION_STATES.COMPLETED) {
-            statusMessage.className =
-              "p-4 bg-green-50 border border-green-200 rounded-lg";
-            statusMessage.innerHTML = `
-              <div class="flex items-center gap-3">
-                <i data-lucide="check-circle" class="size-5 text-green-600"></i>
-                <p class="text-green-800 font-medium">${messageText}</p>
-              </div>
-            `;
-            // Hide action buttons when completed
-            nextStatusBtn.classList.add("hidden");
-            document.getElementById("cancelDonationBtn").textContent =
-              "Back to Dashboard";
-          } else {
-            statusMessage.className =
-              "p-4 bg-blue-50 border border-blue-200 rounded-lg";
-            statusMessage.innerHTML = `
-              <div class="flex items-center gap-3">
-                <i data-lucide="info" class="size-5 text-blue-600"></i>
-                <p class="text-blue-800 font-medium">${messageText}</p>
-              </div>
-            `;
-          }
+          // Reset button text
+          const nextBtn = document.getElementById("nextStatusBtn");
+          nextBtn.classList.remove("hidden");
+          nextBtn.innerHTML =
+            '<i data-lucide="navigation" class="size-4 inline mr-1"></i>Start Journey';
+          document.getElementById("cancelDonationBtn").textContent =
+            "Cancel Donation";
 
-          lucide.createIcons();
-        }
-
-        // ============================================
-        // NEXT STATUS BUTTON (FOR DEMO)
-        // ============================================
-        document
-          .getElementById("nextStatusBtn")
-          .addEventListener("click", () => {
-            const stateOrder = [
-              DONATION_STATES.ACCEPTED,
-              DONATION_STATES.ON_THE_WAY,
-              DONATION_STATES.REACHED,
-              DONATION_STATES.COMPLETED,
-            ];
-
-            const currentIndex = stateOrder.indexOf(currentDonationState);
-            if (currentIndex < stateOrder.length - 1) {
-              updateDonationStatus(stateOrder[currentIndex + 1]);
-            }
-          });
-
-        // ============================================
-        // CANCEL DONATION BUTTON
-        // ============================================
-        document
-          .getElementById("cancelDonationBtn")
-          .addEventListener("click", () => {
-            // Reset state
-            currentDonationState = DONATION_STATES.OPEN;
-            activeDonation = null;
-
-            // Show sections again
-            if (emergencySection) emergencySection.classList.remove("hidden");
-            if (nonEmergencySection)
-              nonEmergencySection.classList.remove("hidden");
-
-            // Hide active donation section
-            activeDonationSection.classList.add("hidden");
-
-            // Reset button text
-            const nextBtn = document.getElementById("nextStatusBtn");
-            nextBtn.classList.remove("hidden");
-            nextBtn.innerHTML =
-              '<i data-lucide="navigation" class="size-4 inline mr-1"></i>Start Journey';
-            document.getElementById("cancelDonationBtn").textContent =
-              "Cancel Donation";
-
-            showNotification(
-              "Donation cancelled. You can accept a new request.",
-              "info"
-            );
-
-            // Re-render requests
-            renderEmergencyAlerts();
-            renderNonEmergencyRequests();
-          });
-
-        // ============================================
-        // RENDER EMERGENCY ALERTS
-        // ============================================
-        function renderEmergencyAlerts() {
-          const pendingAlerts = emergencyAlerts.filter(
-            (a) => a.status === "pending"
+          showNotification(
+            "Donation cancelled. You can accept a new request.",
+            "info"
           );
 
-          if (pendingAlerts.length === 0) {
-            emergencyContainer.innerHTML = `
+          // Re-render requests
+          renderEmergencyAlerts();
+          renderNonEmergencyRequests();
+        });
+
+      // ============================================
+      // RENDER EMERGENCY ALERTS
+      // ============================================
+      function renderEmergencyAlerts() {
+        const pendingAlerts = emergencyAlerts.filter(
+          (a) => a.status === "pending"
+        );
+
+        if (pendingAlerts.length === 0) {
+          emergencyContainer.innerHTML = `
               <div class="text-center py-8 text-gray-500">
                 <i data-lucide="check-circle" class="size-12 mx-auto mb-3 text-green-400"></i>
                 <p>No pending emergency requests. Thank you!</p>
               </div>
             `;
-            lucide.createIcons();
-            return;
-          }
+          lucide.createIcons();
+          return;
+        }
 
-          emergencyContainer.innerHTML = pendingAlerts
-            .map(
-              (alert) => `
-              <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-red-200" data-id="${
-                alert.id
+        emergencyContainer.innerHTML = pendingAlerts
+          .map(
+            (alert) => `
+              <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-red-200" data-id="${alert.id
               }">
                 <div class="flex items-center gap-4">
                   <div class="size-12 bg-red-100 rounded-full flex items-center justify-center">
@@ -1254,63 +1097,57 @@
                   </div>
                   <div>
                     <div class="flex items-center gap-2 mb-1">
-                      <h3 class="font-medium text-gray-900">${
-                        alert.hospital
-                      }</h3>
-                      <span class="px-2 py-1 text-xs font-medium ${
-                        alert.urgency === "Critical"
-                          ? "bg-red-600"
-                          : "bg-orange-500"
-                      } text-white rounded-full">${alert.urgency}</span>
+                      <h3 class="font-medium text-gray-900">${alert.hospital
+              }</h3>
+                      <span class="px-2 py-1 text-xs font-medium ${alert.urgency === "Critical"
+                ? "bg-red-600"
+                : "bg-orange-500"
+              } text-white rounded-full">${alert.urgency}</span>
                     </div>
-                    <p class="text-sm text-gray-600">Blood Type: <strong>${
-                      alert.bloodType
-                    }</strong> • ${alert.time}</p>
+                    <p class="text-sm text-gray-600">Blood Type: <strong>${alert.bloodType
+              }</strong> • ${alert.time}</p>
                   </div>
                 </div>
                 <div class="flex gap-2">
-                  <button class="decline-emergency-btn px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg" data-id="${
-                    alert.id
-                  }">Later</button>
-                  <button class="view-details-btn px-3 py-1.5 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg" data-id="${
-                    alert.id
-                  }" data-type="emergency">
+                  <button class="decline-emergency-btn px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg" data-id="${alert.id
+              }">Later</button>
+                  <button class="view-details-btn px-3 py-1.5 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg" data-id="${alert.id
+              }" data-type="emergency">
                     <i data-lucide="eye" class="size-4 inline mr-1"></i>View Details
                   </button>
                 </div>
               </div>
             `
-            )
-            .join("");
+          )
+          .join("");
 
-          lucide.createIcons();
-          attachEventListeners();
-        }
+        lucide.createIcons();
+        attachEventListeners();
+      }
 
-        // ============================================
-        // RENDER NON-EMERGENCY REQUESTS
-        // ============================================
-        function renderNonEmergencyRequests() {
-          const pendingRequests = nonEmergencyRequests.filter(
-            (r) => r.status === "pending"
-          );
+      // ============================================
+      // RENDER NON-EMERGENCY REQUESTS
+      // ============================================
+      function renderNonEmergencyRequests() {
+        const pendingRequests = nonEmergencyRequests.filter(
+          (r) => r.status === "pending"
+        );
 
-          if (pendingRequests.length === 0) {
-            nonEmergencyContainer.innerHTML = `
+        if (pendingRequests.length === 0) {
+          nonEmergencyContainer.innerHTML = `
               <div class="text-center py-8 text-gray-500">
                 <i data-lucide="check-circle" class="size-12 mx-auto mb-3 text-blue-400"></i>
                 <p>No pending routine requests.</p>
               </div>
             `;
-            lucide.createIcons();
-            return;
-          }
+          lucide.createIcons();
+          return;
+        }
 
-          nonEmergencyContainer.innerHTML = pendingRequests
-            .map(
-              (request) => `
-              <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-blue-200" data-id="${
-                request.id
+        nonEmergencyContainer.innerHTML = pendingRequests
+          .map(
+            (request) => `
+              <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-blue-200" data-id="${request.id
               }">
                 <div class="flex items-center gap-4">
                   <div class="size-12 bg-blue-100 rounded-full flex items-center justify-center">
@@ -1318,144 +1155,137 @@
                   </div>
                   <div>
                     <div class="flex items-center gap-2 mb-1">
-                      <h3 class="font-medium text-gray-900">${
-                        request.hospital
-                      }</h3>
-                      <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">${
-                        request.urgency
-                      } • ${request.units} unit${
-                request.units !== 1 ? "s" : ""
+                      <h3 class="font-medium text-gray-900">${request.hospital
+              }</h3>
+                      <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">${request.urgency
+              } • ${request.units} unit${request.units !== 1 ? "s" : ""
               }</span>
                     </div>
-                    <p class="text-sm text-gray-600">Blood Type: <strong>${
-                      request.bloodType
-                    }</strong> • ${request.time}</p>
+                    <p class="text-sm text-gray-600">Blood Type: <strong>${request.bloodType
+              }</strong> • ${request.time}</p>
                   </div>
                 </div>
                 <div class="flex gap-2">
-                  <button class="decline-request-btn px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg" data-id="${
-                    request.id
-                  }">Decline</button>
-                  <button class="view-details-btn px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg" data-id="${
-                    request.id
-                  }" data-type="normal">
+                  <button class="decline-request-btn px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg" data-id="${request.id
+              }">Decline</button>
+                  <button class="view-details-btn px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg" data-id="${request.id
+              }" data-type="normal">
                     <i data-lucide="eye" class="size-4 inline mr-1"></i>View Details
                   </button>
                 </div>
               </div>
             `
-            )
-            .join("");
+          )
+          .join("");
 
-          lucide.createIcons();
-          attachEventListeners();
-        }
+        lucide.createIcons();
+        attachEventListeners();
+      }
 
-        // ============================================
-        // ATTACH EVENT LISTENERS
-        // ============================================
-        function attachEventListeners() {
-          // View Details buttons
-          document.querySelectorAll(".view-details-btn").forEach((btn) => {
-            btn.addEventListener("click", () => {
-              const id = parseInt(btn.dataset.id);
-              const type = btn.dataset.type;
+      // ============================================
+      // ATTACH EVENT LISTENERS
+      // ============================================
+      function attachEventListeners() {
+        // View Details buttons
+        document.querySelectorAll(".view-details-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = parseInt(btn.dataset.id);
+            const type = btn.dataset.type;
 
-              let request;
-              if (type === "emergency") {
-                request = emergencyAlerts.find((a) => a.id === id);
-              } else {
-                request = nonEmergencyRequests.find((r) => r.id === id);
-              }
-
-              if (request) {
-                openModal(request);
-              }
-            });
-          });
-
-          // Decline/Later buttons for emergency
-          document.querySelectorAll(".decline-emergency-btn").forEach((btn) => {
-            btn.addEventListener("click", () => {
-              const id = parseInt(btn.dataset.id);
-              handleDecline(id, "emergency");
-            });
-          });
-
-          // Decline buttons for non-emergency
-          document.querySelectorAll(".decline-request-btn").forEach((btn) => {
-            btn.addEventListener("click", () => {
-              const id = parseInt(btn.dataset.id);
-              handleDecline(id, "normal");
-            });
-          });
-        }
-
-        // ============================================
-        // HANDLE DECLINE
-        // ============================================
-        function handleDecline(id, type) {
-          if (type === "emergency") {
-            const alert = emergencyAlerts.find((a) => a.id === id);
-            if (alert) {
-              showNotification(
-                `Emergency request from ${alert.hospital} has been postponed.`,
-                "info"
-              );
-              setTimeout(() => {
-                emergencyAlerts = emergencyAlerts.filter((a) => a.id !== id);
-                renderEmergencyAlerts();
-              }, 500);
+            let request;
+            if (type === "emergency") {
+              request = emergencyAlerts.find((a) => a.id === id);
+            } else {
+              request = nonEmergencyRequests.find((r) => r.id === id);
             }
-          } else if (type === "normal") {
-            const request = nonEmergencyRequests.find((r) => r.id === id);
+
             if (request) {
-              showNotification(`You have declined this request.`, "info");
-              setTimeout(() => {
-                nonEmergencyRequests = nonEmergencyRequests.filter(
-                  (r) => r.id !== id
-                );
-                renderNonEmergencyRequests();
-              }, 500);
+              openModal(request);
             }
+          });
+        });
+
+        // Decline/Later buttons for emergency
+        document.querySelectorAll(".decline-emergency-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = parseInt(btn.dataset.id);
+            handleDecline(id, "emergency");
+          });
+        });
+
+        // Decline buttons for non-emergency
+        document.querySelectorAll(".decline-request-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = parseInt(btn.dataset.id);
+            handleDecline(id, "normal");
+          });
+        });
+      }
+
+      // ============================================
+      // HANDLE DECLINE
+      // ============================================
+      function handleDecline(id, type) {
+        if (type === "emergency") {
+          const alert = emergencyAlerts.find((a) => a.id === id);
+          if (alert) {
+            showNotification(
+              `Emergency request from ${alert.hospital} has been postponed.`,
+              "info"
+            );
+            setTimeout(() => {
+              emergencyAlerts = emergencyAlerts.filter((a) => a.id !== id);
+              renderEmergencyAlerts();
+            }, 500);
+          }
+        } else if (type === "normal") {
+          const request = nonEmergencyRequests.find((r) => r.id === id);
+          if (request) {
+            showNotification(`You have declined this request.`, "info");
+            setTimeout(() => {
+              nonEmergencyRequests = nonEmergencyRequests.filter(
+                (r) => r.id !== id
+              );
+              renderNonEmergencyRequests();
+            }, 500);
           }
         }
+      }
 
-        // ============================================
-        // NOTIFICATION HELPER
-        // ============================================
-        function showNotification(message, type = "success") {
-          const bgColor =
-            type === "success"
-              ? "bg-green-50 border-green-600"
-              : "bg-gray-50 border-gray-600";
-          const textColor =
-            type === "success" ? "text-green-900" : "text-gray-900";
-          const iconColor =
-            type === "success" ? "text-green-600" : "text-gray-600";
-          const icon = type === "success" ? "check-circle" : "clock";
+      // ============================================
+      // NOTIFICATION HELPER
+      // ============================================
+      function showNotification(message, type = "success") {
+        const bgColor =
+          type === "success"
+            ? "bg-green-50 border-green-600"
+            : "bg-gray-50 border-gray-600";
+        const textColor =
+          type === "success" ? "text-green-900" : "text-gray-900";
+        const iconColor =
+          type === "success" ? "text-green-600" : "text-gray-600";
+        const icon = type === "success" ? "check-circle" : "clock";
 
-          const notification = document.createElement("div");
-          notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50 max-w-md`;
-          notification.innerHTML = `
+        const notification = document.createElement("div");
+        notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50 max-w-md`;
+        notification.innerHTML = `
             <div class="flex items-center gap-3">
               <i data-lucide="${icon}" class="size-5 ${iconColor} flex-shrink-0"></i>
               <p class="${textColor}">${message}</p>
             </div>
           `;
-          document.body.appendChild(notification);
-          lucide.createIcons();
-          setTimeout(() => notification.remove(), 4000);
-        }
+        document.body.appendChild(notification);
+        lucide.createIcons();
+        setTimeout(() => notification.remove(), 4000);
+      }
 
-        // ============================================
-        // INITIAL RENDER
-        // ============================================
-        renderEmergencyAlerts();
-        renderNonEmergencyRequests();
-      });
-    </script>
-  </body>
+      // ============================================
+      // INITIAL RENDER
+      // ============================================
+      renderEmergencyAlerts();
+      renderNonEmergencyRequests();
+    });
+  </script>
+</body>
+
 </html>
-
-
