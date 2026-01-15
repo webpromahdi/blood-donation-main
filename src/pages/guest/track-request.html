@@ -28,15 +28,17 @@
 
       <!-- Search Form -->
       <div class="p-6 bg-white border border-gray-200 rounded-xl">
-        <form id="trackForm" class="flex gap-3">
-          <input type="text" id="searchInput" placeholder="Enter Phone Number or Request ID"
-            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required />
-          <button type="submit"
-            class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
-            <i data-lucide="search" class="size-5 mr-2"></i>
-            Search
-          </button>
+        <form id="trackForm" class="flex flex-col gap-2">
+          <div class="flex gap-3">
+            <input type="text" id="searchInput" placeholder="Enter Phone Number or Request ID"
+              class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <button type="submit"
+              class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+              <i data-lucide="search" class="size-5 mr-2"></i>
+              Search
+            </button>
+          </div>
+          <p class="text-red-500 text-sm hidden" id="searchInputError"></p>
         </form>
       </div>
 
@@ -142,10 +144,42 @@
 
     document.getElementById("trackForm").addEventListener("submit", (e) => {
       e.preventDefault();
-      const query = document.getElementById("searchInput").value.trim();
-      if (query) {
-        performSearch(query);
+      const input = document.getElementById("searchInput");
+      const errorEl = document.getElementById("searchInputError");
+      const query = input.value.trim();
+
+      // Clear previous error
+      input.classList.remove('border-red-500');
+      input.classList.add('border-gray-300');
+      errorEl.classList.add('hidden');
+      errorEl.textContent = '';
+
+      // Validate
+      if (!query) {
+        input.classList.add('border-red-500');
+        input.classList.remove('border-gray-300');
+        errorEl.textContent = 'Please enter a phone number or request ID';
+        errorEl.classList.remove('hidden');
+        return;
       }
+      if (query.length < 3) {
+        input.classList.add('border-red-500');
+        input.classList.remove('border-gray-300');
+        errorEl.textContent = 'Please enter at least 3 characters';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      performSearch(query);
+    });
+
+    // Clear error on input
+    document.getElementById("searchInput").addEventListener("input", () => {
+      const input = document.getElementById("searchInput");
+      const errorEl = document.getElementById("searchInputError");
+      input.classList.remove('border-red-500');
+      input.classList.add('border-gray-300');
+      errorEl.classList.add('hidden');
     });
 
     function performSearch(query) {

@@ -1,367 +1,384 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Submit Blood Request - BloodConnect Seeker</title>
-    <link rel="stylesheet" href="/src/styles/styles.css" />
-  </head>
-  <body class="min-h-screen bg-gray-50">
-    <!-- Sidebar -->
-    <div
-      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
-    >
-      <div class="p-6 border-b border-gray-200">
-        <div class="flex items-center gap-3">
-          <div class="bg-red-600 p-2 rounded-lg">
-            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
-          </div>
-          <div>
-            <div class="font-semibold text-red-600">BloodConnect</div>
-            <div class="text-sm text-gray-500">Seeker Portal</div>
-          </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submit Blood Request - BloodConnect Seeker</title>
+  <link rel="stylesheet" href="/src/styles/styles.css" />
+</head>
+
+<body class="min-h-screen bg-gray-50">
+  <!-- Sidebar -->
+  <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center gap-3">
+        <div class="bg-red-600 p-2 rounded-lg">
+          <i data-lucide="heart" class="size-6 text-white fill-white"></i>
         </div>
-      </div>
-      <nav class="flex-1 overflow-y-auto py-4">
-        <a
-          href="/src/pages/seeker/request.html"
-          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
-          ><i data-lucide="send" class="size-5"></i
-          ><span>Submit Blood Request</span></a
-        >
-        <a
-          href="/src/pages/seeker/tracking.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="clipboard-list" class="size-5"></i
-          ><span>Track Request</span></a
-        >
-        <a
-          href="/src/pages/seeker/chat.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="message-square" class="size-5"></i
-          ><span>Chat with Donor</span></a
-        >
-      </nav>
-      <div class="p-4 border-t border-gray-200">
-        <div class="text-center text-sm text-gray-500">
-          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        <div>
+          <div class="font-semibold text-red-600">BloodConnect</div>
+          <div class="text-sm text-gray-500">Seeker Portal</div>
         </div>
       </div>
     </div>
-
-    <!-- Header -->
-    <header
-      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
-    >
-      <div class="flex items-center gap-4 flex-1">
-        <h2 class="text-lg font-semibold text-gray-900">Request Blood</h2>
+    <nav class="flex-1 overflow-y-auto py-4">
+      <a href="/src/pages/seeker/request.html"
+        class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"><i data-lucide="send"
+          class="size-5"></i><span>Submit Blood Request</span></a>
+      <a href="/src/pages/seeker/tracking.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="clipboard-list" class="size-5"></i><span>Track Request</span></a>
+      <a href="/src/pages/seeker/chat.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="message-square" class="size-5"></i><span>Chat with Donor</span></a>
+    </nav>
+    <div class="p-4 border-t border-gray-200">
+      <div class="text-center text-sm text-gray-500">
+        <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
       </div>
-      <div class="flex items-center gap-4">
-        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
-          <i data-lucide="bell" class="size-5 text-gray-700"></i>
-        </button>
-        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
-          <div class="text-right">
-            <div class="text-sm font-medium text-gray-900">Guest User</div>
-            <div class="text-xs text-gray-500">Blood Seeker</div>
-          </div>
-          <div
-            class="size-10 bg-orange-100 rounded-full flex items-center justify-center"
-          >
-            <i data-lucide="user" class="size-5 text-orange-600"></i>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header
+    class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8">
+    <div class="flex items-center gap-4 flex-1">
+      <h2 class="text-lg font-semibold text-gray-900">Request Blood</h2>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+        <i data-lucide="bell" class="size-5 text-gray-700"></i>
+      </button>
+      <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+        <div class="text-right">
+          <div class="text-sm font-medium text-gray-900">Guest User</div>
+          <div class="text-xs text-gray-500">Blood Seeker</div>
+        </div>
+        <div class="size-10 bg-orange-100 rounded-full flex items-center justify-center">
+          <i data-lucide="user" class="size-5 text-orange-600"></i>
+        </div>
+      </div>
+      <a href="/" class="p-2 text-gray-600 hover:text-red-600"><i data-lucide="log-out" class="size-5"></i></a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="ml-64 pt-16">
+    <div class="p-8 space-y-8">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Request Blood</h1>
+        <p class="text-gray-600">
+          Fill out the form below to request blood from donors in your area
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Form -->
+        <div class="lg:col-span-2">
+          <div class="p-8 bg-white border border-gray-200 rounded-xl">
+            <div class="mb-8">
+              <h2 class="text-lg font-semibold text-gray-900 mb-2">
+                Blood Request Form
+              </h2>
+              <p class="text-sm text-gray-600">
+                All fields marked with * are required
+              </p>
+            </div>
+
+            <form id="seekerRequestForm" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="text-gray-700 mb-2 block font-medium">Patient Name *</label>
+                  <input type="text" id="patientName" name="patientName" placeholder="Enter patient name"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                  <p class="text-red-500 text-sm mt-1 hidden" id="patientNameError"></p>
+                </div>
+
+                <div>
+                  <label class="text-gray-700 mb-2 block font-medium">Age *</label>
+                  <input type="number" id="patientAge" name="patientAge" placeholder="Patient age"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                  <p class="text-red-500 text-sm mt-1 hidden" id="patientAgeError"></p>
+                </div>
+
+                <div>
+                  <label class="text-gray-700 mb-2 block font-medium">Contact Phone *</label>
+                  <input type="tel" id="contactPhone" name="contactPhone" placeholder="Your contact number"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                  <p class="text-red-500 text-sm mt-1 hidden" id="contactPhoneError"></p>
+                </div>
+
+                <div>
+                  <label class="text-gray-700 mb-2 block font-medium">Email</label>
+                  <input type="email" id="email" name="email" placeholder="Your email address"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                  <p class="text-red-500 text-sm mt-1 hidden" id="emailError"></p>
+                </div>
+
+                <div>
+                  <label class="text-gray-700 mb-2 block font-medium">Blood Type Needed *</label>
+                  <select id="bloodType" name="bloodType"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <option value="">Select blood type</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                  </select>
+                  <p class="text-red-500 text-sm mt-1 hidden" id="bloodTypeError"></p>
+                </div>
+
+                <div>
+                  <label class="text-gray-700 mb-2 block font-medium">Quantity (Units) *</label>
+                  <input type="number" id="quantity" name="quantity" placeholder="Number of units needed" min="1"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                  <p class="text-red-500 text-sm mt-1 hidden" id="quantityError"></p>
+                </div>
+
+                <div>
+                  <label class="text-gray-700 mb-2 block font-medium">Hospital *</label>
+                  <input type="text" id="hospital" name="hospital" placeholder="Hospital name"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                  <p class="text-red-500 text-sm mt-1 hidden" id="hospitalError"></p>
+                </div>
+
+                <div>
+                  <label class="text-gray-700 mb-2 block font-medium">City *</label>
+                  <input type="text" id="city" name="city" placeholder="Your city"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                  <p class="text-red-500 text-sm mt-1 hidden" id="cityError"></p>
+                </div>
+
+                <div class="md:col-span-2">
+                  <label class="text-gray-700 mb-2 block font-medium">Required By Date *</label>
+                  <input type="date" id="requiredDate" name="requiredDate"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                  <p class="text-red-500 text-sm mt-1 hidden" id="requiredDateError"></p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-700 mb-2 block font-medium">Medical Reason / Additional Information</label>
+                <textarea id="medicalReason" name="medicalReason"
+                  placeholder="Please provide details about why blood is needed..."
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 min-h-24"
+                  rows="3"></textarea>
+              </div>
+
+              <div class="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-200">
+                <div class="flex items-center gap-3">
+                  <i data-lucide="alert-circle" class="size-6 text-red-600 shrink-0"></i>
+                  <div>
+                    <label for="emergency-toggle" class="text-gray-900 cursor-pointer font-medium">This is an
+                      Emergency</label>
+                    <p class="text-sm text-gray-600">
+                      Emergency requests will be prioritized and sent to all
+                      compatible donors immediately
+                    </p>
+                  </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="emergency-toggle" class="sr-only peer" />
+                  <div
+                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600">
+                  </div>
+                </label>
+              </div>
+
+              <div class="flex gap-4 pt-6">
+                <button type="submit"
+                  class="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium h-12 flex items-center justify-center gap-2">
+                  <i data-lucide="send" class="size-5"></i>
+                  Submit Blood Request
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
-          ><i data-lucide="log-out" class="size-5"></i
-        ></a>
-      </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="ml-64 pt-16">
-      <div class="p-8 space-y-8">
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900 mb-2">Request Blood</h1>
-          <p class="text-gray-600">
-            Fill out the form below to request blood from donors in your area
-          </p>
-        </div>
+        <!-- Side Info -->
+        <div class="space-y-6">
+          <div class="p-6 bg-blue-50 border border-blue-200 rounded-xl">
+            <div class="flex items-start gap-3 mb-4">
+              <i data-lucide="alert-circle" class="size-6 text-blue-600 shrink-0 mt-1"></i>
+              <div>
+                <h3 class="font-semibold text-gray-900 mb-2">How it Works</h3>
+              </div>
+            </div>
+            <ol class="space-y-3 text-gray-700">
+              <li class="flex gap-3">
+                <span class="text-blue-600 font-medium">1.</span><span>Fill out the blood request form</span>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-blue-600 font-medium">2.</span><span>System matches with compatible donors</span>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-blue-600 font-medium">3.</span><span>Donors will be notified immediately</span>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-blue-600 font-medium">4.</span><span>You'll receive confirmation once donors
+                  respond</span>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-blue-600 font-medium">5.</span><span>Track your request status online</span>
+              </li>
+            </ol>
+          </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <!-- Main Form -->
-          <div class="lg:col-span-2">
-            <div class="p-8 bg-white border border-gray-200 rounded-xl">
-              <div class="mb-8">
-                <h2 class="text-lg font-semibold text-gray-900 mb-2">
-                  Blood Request Form
-                </h2>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <h3 class="font-semibold text-gray-900 mb-4">
+              Important Guidelines
+            </h3>
+            <ul class="space-y-3 text-gray-600">
+              <li class="flex items-start gap-2">
+                <span class="text-red-600 mt-1">•</span><span>Provide accurate contact information</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-red-600 mt-1">•</span><span>Specify correct blood type</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-red-600 mt-1">•</span><span>Mention hospital details clearly</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-red-600 mt-1">•</span><span>Use emergency flag only for critical cases</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="p-6 bg-white border border-gray-200 rounded-xl border-l-4 border-l-red-600">
+            <div class="flex items-start gap-3">
+              <i data-lucide="phone" class="size-6 text-red-600 shrink-0 mt-1"></i>
+              <div>
+                <h3 class="font-semibold text-gray-900 mb-2">
+                  Emergency Hotline
+                </h3>
+                <p class="text-red-600 font-bold mb-2">1-800-BLOOD-NOW</p>
                 <p class="text-sm text-gray-600">
-                  All fields marked with * are required
+                  Available 24/7 for urgent requests
                 </p>
               </div>
-
-              <form class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label class="text-gray-700 mb-2 block font-medium"
-                      >Patient Name *</label
-                    >
-                    <input
-                      type="text"
-                      placeholder="Enter patient name"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label class="text-gray-700 mb-2 block font-medium"
-                      >Age *</label
-                    >
-                    <input
-                      type="number"
-                      placeholder="Patient age"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label class="text-gray-700 mb-2 block font-medium"
-                      >Contact Phone *</label
-                    >
-                    <input
-                      type="tel"
-                      placeholder="Your contact number"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label class="text-gray-700 mb-2 block font-medium"
-                      >Email</label
-                    >
-                    <input
-                      type="email"
-                      placeholder="Your email address"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label class="text-gray-700 mb-2 block font-medium"
-                      >Blood Type Needed *</label
-                    >
-                    <select
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                      required
-                    >
-                      <option value="">Select blood type</option>
-                      <option value="O+">O+</option>
-                      <option value="O-">O-</option>
-                      <option value="A+">A+</option>
-                      <option value="A-">A-</option>
-                      <option value="B+">B+</option>
-                      <option value="B-">B-</option>
-                      <option value="AB+">AB+</option>
-                      <option value="AB-">AB-</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label class="text-gray-700 mb-2 block font-medium"
-                      >Quantity (Units) *</label
-                    >
-                    <input
-                      type="number"
-                      placeholder="Number of units needed"
-                      min="1"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label class="text-gray-700 mb-2 block font-medium"
-                      >Hospital *</label
-                    >
-                    <input
-                      type="text"
-                      placeholder="Hospital name"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label class="text-gray-700 mb-2 block font-medium"
-                      >City *</label
-                    >
-                    <input
-                      type="text"
-                      placeholder="Your city"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                      required
-                    />
-                  </div>
-
-                  <div class="md:col-span-2">
-                    <label class="text-gray-700 mb-2 block font-medium"
-                      >Required By Date *</label
-                    >
-                    <input
-                      type="date"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label class="text-gray-700 mb-2 block font-medium"
-                    >Medical Reason / Additional Information</label
-                  >
-                  <textarea
-                    placeholder="Please provide details about why blood is needed..."
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 min-h-24"
-                    rows="3"
-                  ></textarea>
-                </div>
-
-                <div
-                  class="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-200"
-                >
-                  <div class="flex items-center gap-3">
-                    <i
-                      data-lucide="alert-circle"
-                      class="size-6 text-red-600 shrink-0"
-                    ></i>
-                    <div>
-                      <label
-                        for="emergency-toggle"
-                        class="text-gray-900 cursor-pointer font-medium"
-                        >This is an Emergency</label
-                      >
-                      <p class="text-sm text-gray-600">
-                        Emergency requests will be prioritized and sent to all
-                        compatible donors immediately
-                      </p>
-                    </div>
-                  </div>
-                  <label
-                    class="relative inline-flex items-center cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      id="emergency-toggle"
-                      class="sr-only peer"
-                    />
-                    <div
-                      class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
-                    ></div>
-                  </label>
-                </div>
-
-                <div class="flex gap-4 pt-6">
-                  <button
-                    type="submit"
-                    class="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium h-12 flex items-center justify-center gap-2"
-                  >
-                    <i data-lucide="send" class="size-5"></i>
-                    Submit Blood Request
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!-- Side Info -->
-          <div class="space-y-6">
-            <div class="p-6 bg-blue-50 border border-blue-200 rounded-xl">
-              <div class="flex items-start gap-3 mb-4">
-                <i
-                  data-lucide="alert-circle"
-                  class="size-6 text-blue-600 shrink-0 mt-1"
-                ></i>
-                <div>
-                  <h3 class="font-semibold text-gray-900 mb-2">How it Works</h3>
-                </div>
-              </div>
-              <ol class="space-y-3 text-gray-700">
-                <li class="flex gap-3">
-                  <span class="text-blue-600 font-medium">1.</span
-                  ><span>Fill out the blood request form</span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-blue-600 font-medium">2.</span
-                  ><span>System matches with compatible donors</span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-blue-600 font-medium">3.</span
-                  ><span>Donors will be notified immediately</span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-blue-600 font-medium">4.</span
-                  ><span>You'll receive confirmation once donors respond</span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-blue-600 font-medium">5.</span
-                  ><span>Track your request status online</span>
-                </li>
-              </ol>
-            </div>
-
-            <div class="p-6 bg-white border border-gray-200 rounded-xl">
-              <h3 class="font-semibold text-gray-900 mb-4">
-                Important Guidelines
-              </h3>
-              <ul class="space-y-3 text-gray-600">
-                <li class="flex items-start gap-2">
-                  <span class="text-red-600 mt-1">•</span
-                  ><span>Provide accurate contact information</span>
-                </li>
-                <li class="flex items-start gap-2">
-                  <span class="text-red-600 mt-1">•</span
-                  ><span>Specify correct blood type</span>
-                </li>
-                <li class="flex items-start gap-2">
-                  <span class="text-red-600 mt-1">•</span
-                  ><span>Mention hospital details clearly</span>
-                </li>
-                <li class="flex items-start gap-2">
-                  <span class="text-red-600 mt-1">•</span
-                  ><span>Use emergency flag only for critical cases</span>
-                </li>
-              </ul>
-            </div>
-
-            <div
-              class="p-6 bg-white border border-gray-200 rounded-xl border-l-4 border-l-red-600"
-            >
-              <div class="flex items-start gap-3">
-                <i
-                  data-lucide="phone"
-                  class="size-6 text-red-600 shrink-0 mt-1"
-                ></i>
-                <div>
-                  <h3 class="font-semibold text-gray-900 mb-2">
-                    Emergency Hotline
-                  </h3>
-                  <p class="text-red-600 font-bold mb-2">1-800-BLOOD-NOW</p>
-                  <p class="text-sm text-gray-600">
-                    Available 24/7 for urgent requests
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </div>
-    </main>
+    </div>
+  </main>
 
-    <script type="module" src="/src/scripts/main.js"></script>
-  </body>
+  <script type="module" src="/src/scripts/main.js"></script>
+  <script type="module">
+    // Seeker Request Form Validation
+    import { z } from 'https://cdn.jsdelivr.net/npm/zod@3.22.4/+esm';
+
+    const fieldIds = ['patientName', 'patientAge', 'contactPhone', 'email', 'bloodType', 'quantity', 'hospital', 'city', 'requiredDate'];
+
+    // Define schema
+    const seekerRequestSchema = z.object({
+      patientName: z.string().min(1, 'Patient name is required'),
+      patientAge: z.string().min(1, 'Patient age is required').refine(val => !isNaN(Number(val)) && Number(val) > 0, 'Age must be a positive number'),
+      contactPhone: z.string().min(1, 'Contact phone is required').min(7, 'Please enter a valid phone number'),
+      email: z.string().email('Please enter a valid email address').optional().or(z.literal('')),
+      bloodType: z.string().min(1, 'Blood type is required'),
+      quantity: z.string().min(1, 'Quantity is required').refine(val => !isNaN(Number(val)) && Number(val) >= 1, 'Quantity must be at least 1'),
+      hospital: z.string().min(1, 'Hospital name is required'),
+      city: z.string().min(1, 'City is required'),
+      requiredDate: z.string().min(1, 'Required date is required')
+    });
+
+    function showError(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      const errorEl = document.getElementById(fieldId + 'Error');
+      if (field) {
+        field.classList.add('border-red-500');
+        field.classList.remove('border-gray-300');
+      }
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.classList.remove('hidden');
+      }
+    }
+
+    function clearError(fieldId) {
+      const field = document.getElementById(fieldId);
+      const errorEl = document.getElementById(fieldId + 'Error');
+      if (field) {
+        field.classList.remove('border-red-500');
+        field.classList.add('border-gray-300');
+      }
+      if (errorEl) {
+        errorEl.textContent = '';
+        errorEl.classList.add('hidden');
+      }
+    }
+
+    function clearAllErrors() {
+      fieldIds.forEach(id => clearError(id));
+    }
+
+    // Live validation - clear errors on input
+    fieldIds.forEach(id => {
+      const field = document.getElementById(id);
+      if (field) {
+        field.addEventListener('input', () => clearError(id));
+        field.addEventListener('change', () => clearError(id));
+      }
+    });
+
+    // Form submission
+    document.getElementById('seekerRequestForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      clearAllErrors();
+
+      const formData = {
+        patientName: document.getElementById('patientName').value.trim(),
+        patientAge: document.getElementById('patientAge').value,
+        contactPhone: document.getElementById('contactPhone').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        bloodType: document.getElementById('bloodType').value,
+        quantity: document.getElementById('quantity').value,
+        hospital: document.getElementById('hospital').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        requiredDate: document.getElementById('requiredDate').value
+      };
+
+      const result = seekerRequestSchema.safeParse(formData);
+
+      if (!result.success) {
+        result.error.errors.forEach(err => {
+          const field = err.path[0];
+          showError(field, err.message);
+        });
+        return;
+      }
+
+      // Validation passed - show success (demo mode)
+      showNotification('Blood request submitted successfully!', 'success');
+      this.reset();
+    });
+
+    function showNotification(message, type) {
+      const bgColor = type === 'success' ? 'bg-green-50 border-green-600' : 'bg-red-50 border-red-600';
+      const textColor = type === 'success' ? 'text-green-900' : 'text-red-900';
+      const iconColor = type === 'success' ? 'text-green-600' : 'text-red-600';
+      const icon = type === 'success' ? 'check-circle' : 'alert-circle';
+
+      const notification = document.createElement('div');
+      notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50`;
+      notification.innerHTML = `
+        <div class="flex items-center gap-3">
+          <i data-lucide="${icon}" class="size-5 ${iconColor}"></i>
+          <p class="${textColor}">${message}</p>
+        </div>
+      `;
+      document.body.appendChild(notification);
+      lucide.createIcons();
+      setTimeout(() => notification.remove(), 3000);
+    }
+  </script>
+</body>
+
 </html>
-
-
