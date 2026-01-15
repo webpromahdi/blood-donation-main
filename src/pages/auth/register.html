@@ -236,13 +236,13 @@
 
           <!-- City -->
           <div>
-            <label for="city" class="text-gray-700 mb-2 block font-medium">City</label>
+            <label for="hospitalCity" class="text-gray-700 mb-2 block font-medium">City</label>
             <div class="relative">
               <i data-lucide="map-pin" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
-              <input id="city" name="city" type="text" placeholder="Enter city"
+              <input id="hospitalCity" name="hospitalCity" type="text" placeholder="Enter city"
                 class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
             </div>
-            <p class="text-red-500 text-sm mt-1 hidden" id="cityError"></p>
+            <p class="text-red-500 text-sm mt-1 hidden" id="hospitalCityError"></p>
           </div>
 
           <!-- Contact Person -->
@@ -439,6 +439,7 @@
         "registrationNumber",
         "hospitalAddress",
         "city",
+        "hospitalCity",
         "contactPerson",
         "terms",
         "name",
@@ -549,7 +550,7 @@
         const hospitalAddress = document
           .getElementById("hospitalAddress")
           .value.trim();
-        const city = document.getElementById("city").value.trim();
+        const hospitalCity = document.getElementById("hospitalCity").value.trim();
         const contactPerson = document
           .getElementById("contactPerson")
           .value.trim();
@@ -562,8 +563,8 @@
           showError("hospitalAddress", "Hospital address is required");
           isValid = false;
         }
-        if (!city) {
-          showError("city", "City is required");
+        if (!hospitalCity) {
+          showError("hospitalCity", "City is required");
           isValid = false;
         }
         if (!contactPerson) {
@@ -613,7 +614,7 @@
               document.getElementById("registrationNumber").value;
             formData.hospitalAddress =
               document.getElementById("hospitalAddress").value;
-            formData.city = document.getElementById("city").value;
+            formData.city = document.getElementById("hospitalCity").value;
             formData.website = document.getElementById("website").value;
             formData.contactPerson =
               document.getElementById("contactPerson").value;
