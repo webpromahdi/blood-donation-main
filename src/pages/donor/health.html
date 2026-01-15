@@ -61,8 +61,8 @@
       </button>
       <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
         <div class="text-right">
-          <div class="text-sm font-medium text-gray-900">John Smith</div>
-          <div class="text-xs text-gray-500">Blood Donor</div>
+          <div class="text-sm font-medium text-gray-900" data-user-name>John Smith</div>
+          <div class="text-xs text-gray-500" data-user-role>Blood Donor</div>
         </div>
         <div class="size-10 bg-green-100 rounded-full flex items-center justify-center">
           <i data-lucide="user" class="size-5 text-green-600"></i>
@@ -317,6 +317,10 @@
   </main>
 
   <script type="module" src="/src/scripts/main.js"></script>
+  <script type="module">
+    import { initUserLoader } from '/src/scripts/user-loader.js';
+    initUserLoader();
+  </script>
   <script type="module">
     import { z } from 'https://cdn.jsdelivr.net/npm/zod@3.22.4/+esm';
 

@@ -67,64 +67,18 @@ export const statusConfig = {
     }
 };
 
-// Sample requests data
-let requests = [
-    {
-        id: "REQ001",
-        patientName: "John Doe",
-        bloodType: "O+",
-        quantity: 2,
-        hospital: "City Hospital",
-        urgency: "Emergency",
-        status: "on_the_way",
-        requiredBy: "2024-11-25",
-        submittedOn: "2024-11-24 10:30 AM",
-    },
-    {
-        id: "REQ002",
-        patientName: "Jane Smith",
-        bloodType: "A-",
-        quantity: 1,
-        hospital: "General Hospital",
-        urgency: "Normal",
-        status: "approved",
-        requiredBy: "2024-11-28",
-        submittedOn: "2024-11-25 08:15 AM",
-    },
-    {
-        id: "REQ003",
-        patientName: "Bob Johnson",
-        bloodType: "B+",
-        quantity: 3,
-        hospital: "Medical Center",
-        urgency: "Emergency",
-        status: "donor_assigned",
-        requiredBy: "2024-11-24",
-        submittedOn: "2024-11-23 02:45 PM",
-    },
-    {
-        id: "REQ004",
-        patientName: "Alice Williams",
-        bloodType: "AB+",
-        quantity: 1,
-        hospital: "Community Hospital",
-        urgency: "Normal",
-        status: "completed",
-        requiredBy: "2024-11-22",
-        submittedOn: "2024-11-20 11:20 AM",
-    },
-    {
-        id: "REQ005",
-        patientName: "Charlie Brown",
-        bloodType: "O-",
-        quantity: 2,
-        hospital: "Regional Hospital",
-        urgency: "Normal",
-        status: "rejected",
-        requiredBy: "2024-11-26",
-        submittedOn: "2024-11-24 03:00 PM",
-    },
-];
+// Requests array - populated from API, not hardcoded
+let requests = [];
+
+// Function to set requests from API response
+export function setRequests(apiRequests) {
+    requests = apiRequests;
+}
+
+// Function to get current requests
+export function getRequests() {
+    return requests;
+}
 
 export function getStatusInfo(status) {
     return statusConfig[status] || statusConfig['submitted'];

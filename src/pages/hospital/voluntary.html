@@ -1,545 +1,451 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Voluntary Requests - BloodConnect Hospital</title>
-    <link rel="stylesheet" href="/src/styles/styles.css" />
-  </head>
-  <body class="min-h-screen bg-gray-50">
-    <!-- Sidebar -->
-    <div
-      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
-    >
-      <div class="p-6 border-b border-gray-200">
-        <div class="flex items-center gap-3">
-          <div class="bg-red-600 p-2 rounded-lg">
-            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
-          </div>
-          <div>
-            <div class="font-semibold text-red-600">BloodConnect</div>
-            <div class="text-sm text-gray-500">Hospital Portal</div>
-          </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voluntary Requests - BloodConnect Hospital</title>
+  <link rel="stylesheet" href="/src/styles/styles.css" />
+</head>
+
+<body class="min-h-screen bg-gray-50">
+  <!-- Sidebar -->
+  <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center gap-3">
+        <div class="bg-red-600 p-2 rounded-lg">
+          <i data-lucide="heart" class="size-6 text-white fill-white"></i>
         </div>
-      </div>
-      <nav class="flex-1 overflow-y-auto py-4">
-        <a
-          href="/src/pages/hospital/dashboard.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="layout-dashboard" class="size-5"></i
-          ><span>Dashboard</span></a
-        >
-        <a
-          href="/src/pages/hospital/request.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="droplet" class="size-5"></i
-          ><span>Request Blood</span></a
-        >
-        <a
-          href="/src/pages/hospital/donors.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="users" class="size-5"></i><span>Donor List</span></a
-        >
-        <a
-          href="/src/pages/hospital/appointments.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="calendar-check" class="size-5"></i
-          ><span>Appointments</span></a
-        >
-        <a
-          href="/src/pages/hospital/chat.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="message-square" class="size-5"></i
-          ><span>Chat</span></a
-        >
-      </nav>
-      <div class="p-4 border-t border-gray-200">
-        <div class="text-center text-sm text-gray-500">
-          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        <div>
+          <div class="font-semibold text-red-600">BloodConnect</div>
+          <div class="text-sm text-gray-500">Hospital Portal</div>
         </div>
       </div>
     </div>
-
-    <!-- Header -->
-    <header
-      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
-    >
-      <div class="flex items-center gap-4 flex-1">
-        <h2 class="text-lg font-semibold text-gray-900">
-          Voluntary Donation Requests
-        </h2>
+    <nav class="flex-1 overflow-y-auto py-4">
+      <a href="/src/pages/hospital/dashboard.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="layout-dashboard" class="size-5"></i><span>Dashboard</span></a>
+      <a href="/src/pages/hospital/request.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="droplet" class="size-5"></i><span>Request Blood</span></a>
+      <a href="/src/pages/hospital/donors.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="users" class="size-5"></i><span>Donor List</span></a>
+      <a href="/src/pages/hospital/appointments.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="calendar-check" class="size-5"></i><span>Appointments</span></a>
+      <a href="/src/pages/hospital/chat.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="message-square" class="size-5"></i><span>Chat</span></a>
+    </nav>
+    <div class="p-4 border-t border-gray-200">
+      <div class="text-center text-sm text-gray-500">
+        <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
       </div>
-      <div class="flex items-center gap-4">
-        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
-          <i data-lucide="bell" class="size-5 text-gray-700"></i>
-        </button>
-        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
-          <div class="text-right">
-            <div class="text-sm font-medium text-gray-900">City Hospital</div>
-            <div class="text-xs text-gray-500">Hospital Admin</div>
-          </div>
-          <div
-            class="size-10 bg-blue-100 rounded-full flex items-center justify-center"
-          >
-            <i data-lucide="building-2" class="size-5 text-blue-600"></i>
-          </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header
+    class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8">
+    <div class="flex items-center gap-4 flex-1">
+      <h2 class="text-lg font-semibold text-gray-900">
+        Voluntary Donation Requests
+      </h2>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+        <i data-lucide="bell" class="size-5 text-gray-700"></i>
+      </button>
+      <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+        <div class="text-right">
+          <div class="text-sm font-medium text-gray-900" data-user-name>City Hospital</div>
+          <div class="text-xs text-gray-500" data-user-role>Hospital Staff</div>
         </div>
-        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
-          ><i data-lucide="log-out" class="size-5"></i
-        ></a>
+        <div class="size-10 bg-blue-100 rounded-full flex items-center justify-center">
+          <i data-lucide="building-2" class="size-5 text-blue-600"></i>
+        </div>
       </div>
-    </header>
+      <a href="/" class="p-2 text-gray-600 hover:text-red-600"><i data-lucide="log-out" class="size-5"></i></a>
+    </div>
+  </header>
 
-    <!-- Main Content -->
-    <main class="ml-64 pt-16">
-      <div class="p-8 space-y-8">
-        <div class="flex items-center justify-between">
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900 mb-2">
-              Voluntary Donation Requests
-            </h1>
-            <p class="text-gray-600">
-              Review and manage voluntary donation appointments from donors
-            </p>
-          </div>
-          <span
-            class="px-4 py-2 bg-blue-600 text-white rounded-full font-medium"
-            >4 Pending Requests</span
-          >
+  <!-- Main Content -->
+  <main class="ml-64 pt-16">
+    <div class="p-8 space-y-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">
+            Voluntary Donation Requests
+          </h1>
+          <p class="text-gray-600">
+            Review and manage voluntary donation appointments from donors
+          </p>
         </div>
+        <span class="px-4 py-2 bg-blue-600 text-white rounded-full font-medium">4 Pending Requests</span>
+      </div>
 
-        <!-- Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600 mb-1">Total Requests</p>
-                <h2 class="text-3xl font-bold text-gray-900">4</h2>
-              </div>
-              <div class="bg-blue-100 p-3 rounded-lg">
-                <i data-lucide="calendar" class="size-6 text-blue-600"></i>
-              </div>
-            </div>
-            <p class="text-sm text-blue-600 mt-2">This week</p>
-          </div>
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600 mb-1">Pending</p>
-                <h2 class="text-3xl font-bold text-gray-900">4</h2>
-              </div>
-              <div class="bg-yellow-100 p-3 rounded-lg">
-                <i data-lucide="clock" class="size-6 text-yellow-600"></i>
-              </div>
-            </div>
-            <p class="text-sm text-yellow-600 mt-2">Awaiting response</p>
-          </div>
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600 mb-1">Active Donors</p>
-                <h2 class="text-3xl font-bold text-gray-900">4</h2>
-              </div>
-              <div class="bg-green-100 p-3 rounded-lg">
-                <i data-lucide="users" class="size-6 text-green-600"></i>
-              </div>
-            </div>
-            <p class="text-sm text-green-600 mt-2">Unique donors</p>
-          </div>
-        </div>
-
-        <!-- Requests Table -->
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="mb-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-1">
-              Pending Voluntary Requests
-            </h2>
-            <p class="text-sm text-gray-600">
-              Review and respond to donation requests from volunteers
-            </p>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full">
-              <thead>
-                <tr class="border-b border-gray-200">
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Request ID
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Donor Name
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Blood Type
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Contact
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Requested Date
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Requested Time
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Submitted
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Status
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-b border-gray-100 hover:bg-gray-50">
-                  <td class="py-3 px-4 text-gray-900 font-medium">VR001</td>
-                  <td class="py-3 px-4">
-                    <div class="flex items-center gap-3">
-                      <div
-                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
-                      >
-                        <i data-lucide="user" class="size-5 text-red-600"></i>
-                      </div>
-                      <span class="font-medium text-gray-900">John Smith</span>
-                    </div>
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                      >O+</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="text-sm text-gray-600">
-                      <div class="flex items-center gap-1">
-                        <i data-lucide="phone" class="size-4"></i>555-0101
-                      </div>
-                      <div class="flex items-center gap-1">
-                        <i data-lucide="mail" class="size-4"></i>john@email.com
-                      </div>
-                    </div>
-                  </td>
-                  <td class="py-3 px-4 text-gray-900">2024-12-10</td>
-                  <td class="py-3 px-4 text-gray-900">10:00 AM</td>
-                  <td class="py-3 px-4 text-gray-600">2 hours ago</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full"
-                      >Pending</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="flex gap-2">
-                      <button
-                        class="p-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg"
-                      >
-                        <i data-lucide="check" class="size-4"></i>
-                      </button>
-                      <button
-                        class="p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                      >
-                        <i data-lucide="x" class="size-4"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="border-b border-gray-100 hover:bg-gray-50">
-                  <td class="py-3 px-4 text-gray-900 font-medium">VR002</td>
-                  <td class="py-3 px-4">
-                    <div class="flex items-center gap-3">
-                      <div
-                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
-                      >
-                        <i data-lucide="user" class="size-5 text-red-600"></i>
-                      </div>
-                      <span class="font-medium text-gray-900"
-                        >Maria Garcia</span
-                      >
-                    </div>
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                      >A+</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="text-sm text-gray-600">
-                      <div class="flex items-center gap-1">
-                        <i data-lucide="phone" class="size-4"></i>555-0102
-                      </div>
-                      <div class="flex items-center gap-1">
-                        <i data-lucide="mail" class="size-4"></i>maria@email.com
-                      </div>
-                    </div>
-                  </td>
-                  <td class="py-3 px-4 text-gray-900">2024-12-12</td>
-                  <td class="py-3 px-4 text-gray-900">02:00 PM</td>
-                  <td class="py-3 px-4 text-gray-600">5 hours ago</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full"
-                      >Pending</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="flex gap-2">
-                      <button
-                        class="p-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg"
-                      >
-                        <i data-lucide="check" class="size-4"></i>
-                      </button>
-                      <button
-                        class="p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                      >
-                        <i data-lucide="x" class="size-4"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="border-b border-gray-100 hover:bg-gray-50">
-                  <td class="py-3 px-4 text-gray-900 font-medium">VR003</td>
-                  <td class="py-3 px-4">
-                    <div class="flex items-center gap-3">
-                      <div
-                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
-                      >
-                        <i data-lucide="user" class="size-5 text-red-600"></i>
-                      </div>
-                      <span class="font-medium text-gray-900">David Lee</span>
-                    </div>
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                      >B-</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="text-sm text-gray-600">
-                      <div class="flex items-center gap-1">
-                        <i data-lucide="phone" class="size-4"></i>555-0103
-                      </div>
-                      <div class="flex items-center gap-1">
-                        <i data-lucide="mail" class="size-4"></i>david@email.com
-                      </div>
-                    </div>
-                  </td>
-                  <td class="py-3 px-4 text-gray-900">2024-12-08</td>
-                  <td class="py-3 px-4 text-gray-900">11:00 AM</td>
-                  <td class="py-3 px-4 text-gray-600">1 day ago</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full"
-                      >Pending</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="flex gap-2">
-                      <button
-                        class="p-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg"
-                      >
-                        <i data-lucide="check" class="size-4"></i>
-                      </button>
-                      <button
-                        class="p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                      >
-                        <i data-lucide="x" class="size-4"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="border-b border-gray-100 hover:bg-gray-50">
-                  <td class="py-3 px-4 text-gray-900 font-medium">VR004</td>
-                  <td class="py-3 px-4">
-                    <div class="flex items-center gap-3">
-                      <div
-                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
-                      >
-                        <i data-lucide="user" class="size-5 text-red-600"></i>
-                      </div>
-                      <span class="font-medium text-gray-900"
-                        >Sarah Johnson</span
-                      >
-                    </div>
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                      >O-</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="text-sm text-gray-600">
-                      <div class="flex items-center gap-1">
-                        <i data-lucide="phone" class="size-4"></i>555-0104
-                      </div>
-                      <div class="flex items-center gap-1">
-                        <i data-lucide="mail" class="size-4"></i>sarah@email.com
-                      </div>
-                    </div>
-                  </td>
-                  <td class="py-3 px-4 text-gray-900">2024-12-15</td>
-                  <td class="py-3 px-4 text-gray-900">09:00 AM</td>
-                  <td class="py-3 px-4 text-gray-600">3 hours ago</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full"
-                      >Pending</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="flex gap-2">
-                      <button
-                        class="p-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg"
-                      >
-                        <i data-lucide="check" class="size-4"></i>
-                      </button>
-                      <button
-                        class="p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                      >
-                        <i data-lucide="x" class="size-4"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <!-- Empty State (hidden by default) -->
-          <div id="emptyState" class="hidden text-center py-16 px-6">
-            <div
-              class="inline-flex items-center justify-center size-20 rounded-full bg-gray-100 mb-4"
-            >
-              <i data-lucide="calendar" class="size-10 text-gray-400"></i>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Total Requests</p>
+              <h2 class="text-3xl font-bold text-gray-900">4</h2>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">
-              No pending requests
-            </h3>
-            <p class="text-gray-600 mb-6">
-              All voluntary donation requests have been processed
-            </p>
+            <div class="bg-blue-100 p-3 rounded-lg">
+              <i data-lucide="calendar" class="size-6 text-blue-600"></i>
+            </div>
           </div>
+          <p class="text-sm text-blue-600 mt-2">This week</p>
+        </div>
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Pending</p>
+              <h2 class="text-3xl font-bold text-gray-900">4</h2>
+            </div>
+            <div class="bg-yellow-100 p-3 rounded-lg">
+              <i data-lucide="clock" class="size-6 text-yellow-600"></i>
+            </div>
+          </div>
+          <p class="text-sm text-yellow-600 mt-2">Awaiting response</p>
+        </div>
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Active Donors</p>
+              <h2 class="text-3xl font-bold text-gray-900">4</h2>
+            </div>
+            <div class="bg-green-100 p-3 rounded-lg">
+              <i data-lucide="users" class="size-6 text-green-600"></i>
+            </div>
+          </div>
+          <p class="text-sm text-green-600 mt-2">Unique donors</p>
         </div>
       </div>
-    </main>
 
-    <script type="module" src="/src/scripts/main.js"></script>
-    <script>
-      // Hospital Voluntary Requests - Interactive State Management
-      document.addEventListener("DOMContentLoaded", function () {
-        // Request data
-        let requests = [
-          {
-            id: "VR001",
-            donorName: "John Smith",
-            bloodType: "O+",
-            phone: "555-0101",
-            email: "john@email.com",
-            requestedDate: "2024-12-10",
-            requestedTime: "10:00 AM",
-            submittedOn: "2 hours ago",
-            status: "Pending",
-          },
-          {
-            id: "VR002",
-            donorName: "Maria Garcia",
-            bloodType: "A+",
-            phone: "555-0102",
-            email: "maria@email.com",
-            requestedDate: "2024-12-12",
-            requestedTime: "02:00 PM",
-            submittedOn: "5 hours ago",
-            status: "Pending",
-          },
-          {
-            id: "VR003",
-            donorName: "David Lee",
-            bloodType: "B-",
-            phone: "555-0103",
-            email: "david@email.com",
-            requestedDate: "2024-12-08",
-            requestedTime: "11:00 AM",
-            submittedOn: "1 day ago",
-            status: "Pending",
-          },
-          {
-            id: "VR004",
-            donorName: "Sarah Johnson",
-            bloodType: "O-",
-            phone: "555-0104",
-            email: "sarah@email.com",
-            requestedDate: "2024-12-15",
-            requestedTime: "09:00 AM",
-            submittedOn: "3 hours ago",
-            status: "Pending",
-          },
-        ];
+      <!-- Requests Table -->
+      <div class="p-6 bg-white border border-gray-200 rounded-xl">
+        <div class="mb-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-1">
+            Pending Voluntary Requests
+          </h2>
+          <p class="text-sm text-gray-600">
+            Review and respond to donation requests from volunteers
+          </p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200">
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Request ID
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Donor Name
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Blood Type
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Contact
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Requested Date
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Requested Time
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Submitted
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Status
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="py-3 px-4 text-gray-900 font-medium">VR001</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                      <i data-lucide="user" class="size-5 text-red-600"></i>
+                    </div>
+                    <span class="font-medium text-gray-900">John Smith</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">O+</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="text-sm text-gray-600">
+                    <div class="flex items-center gap-1">
+                      <i data-lucide="phone" class="size-4"></i>555-0101
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <i data-lucide="mail" class="size-4"></i>john@email.com
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-gray-900">2024-12-10</td>
+                <td class="py-3 px-4 text-gray-900">10:00 AM</td>
+                <td class="py-3 px-4 text-gray-600">2 hours ago</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">Pending</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex gap-2">
+                    <button class="p-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg">
+                      <i data-lucide="check" class="size-4"></i>
+                    </button>
+                    <button class="p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                      <i data-lucide="x" class="size-4"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="py-3 px-4 text-gray-900 font-medium">VR002</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                      <i data-lucide="user" class="size-5 text-red-600"></i>
+                    </div>
+                    <span class="font-medium text-gray-900">Maria Garcia</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">A+</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="text-sm text-gray-600">
+                    <div class="flex items-center gap-1">
+                      <i data-lucide="phone" class="size-4"></i>555-0102
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <i data-lucide="mail" class="size-4"></i>maria@email.com
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-gray-900">2024-12-12</td>
+                <td class="py-3 px-4 text-gray-900">02:00 PM</td>
+                <td class="py-3 px-4 text-gray-600">5 hours ago</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">Pending</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex gap-2">
+                    <button class="p-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg">
+                      <i data-lucide="check" class="size-4"></i>
+                    </button>
+                    <button class="p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                      <i data-lucide="x" class="size-4"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="py-3 px-4 text-gray-900 font-medium">VR003</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                      <i data-lucide="user" class="size-5 text-red-600"></i>
+                    </div>
+                    <span class="font-medium text-gray-900">David Lee</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">B-</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="text-sm text-gray-600">
+                    <div class="flex items-center gap-1">
+                      <i data-lucide="phone" class="size-4"></i>555-0103
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <i data-lucide="mail" class="size-4"></i>david@email.com
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-gray-900">2024-12-08</td>
+                <td class="py-3 px-4 text-gray-900">11:00 AM</td>
+                <td class="py-3 px-4 text-gray-600">1 day ago</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">Pending</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex gap-2">
+                    <button class="p-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg">
+                      <i data-lucide="check" class="size-4"></i>
+                    </button>
+                    <button class="p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                      <i data-lucide="x" class="size-4"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="py-3 px-4 text-gray-900 font-medium">VR004</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                      <i data-lucide="user" class="size-5 text-red-600"></i>
+                    </div>
+                    <span class="font-medium text-gray-900">Sarah Johnson</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">O-</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="text-sm text-gray-600">
+                    <div class="flex items-center gap-1">
+                      <i data-lucide="phone" class="size-4"></i>555-0104
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <i data-lucide="mail" class="size-4"></i>sarah@email.com
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-gray-900">2024-12-15</td>
+                <td class="py-3 px-4 text-gray-900">09:00 AM</td>
+                <td class="py-3 px-4 text-gray-600">3 hours ago</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">Pending</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex gap-2">
+                    <button class="p-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg">
+                      <i data-lucide="check" class="size-4"></i>
+                    </button>
+                    <button class="p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                      <i data-lucide="x" class="size-4"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Empty State (hidden by default) -->
+        <div id="emptyState" class="hidden text-center py-16 px-6">
+          <div class="inline-flex items-center justify-center size-20 rounded-full bg-gray-100 mb-4">
+            <i data-lucide="calendar" class="size-10 text-gray-400"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">
+            No pending requests
+          </h3>
+          <p class="text-gray-600 mb-6">
+            All voluntary donation requests have been processed
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
 
-        const tableBody = document.querySelector("tbody");
-        const emptyState = document.getElementById("emptyState");
-        const pendingBadge = document.querySelector(
-          ".bg-blue-600.text-white.rounded-full"
-        );
-        const statCards = document.querySelectorAll(
-          ".grid.grid-cols-1.md\\:grid-cols-3 .text-3xl"
-        );
+  <script type="module" src="/src/scripts/main.js"></script>
+  <script>
+    // Hospital Voluntary Requests - Interactive State Management
+    document.addEventListener("DOMContentLoaded", function () {
+      // Request data
+      let requests = [
+        {
+          id: "VR001",
+          donorName: "John Smith",
+          bloodType: "O+",
+          phone: "555-0101",
+          email: "john@email.com",
+          requestedDate: "2024-12-10",
+          requestedTime: "10:00 AM",
+          submittedOn: "2 hours ago",
+          status: "Pending",
+        },
+        {
+          id: "VR002",
+          donorName: "Maria Garcia",
+          bloodType: "A+",
+          phone: "555-0102",
+          email: "maria@email.com",
+          requestedDate: "2024-12-12",
+          requestedTime: "02:00 PM",
+          submittedOn: "5 hours ago",
+          status: "Pending",
+        },
+        {
+          id: "VR003",
+          donorName: "David Lee",
+          bloodType: "B-",
+          phone: "555-0103",
+          email: "david@email.com",
+          requestedDate: "2024-12-08",
+          requestedTime: "11:00 AM",
+          submittedOn: "1 day ago",
+          status: "Pending",
+        },
+        {
+          id: "VR004",
+          donorName: "Sarah Johnson",
+          bloodType: "O-",
+          phone: "555-0104",
+          email: "sarah@email.com",
+          requestedDate: "2024-12-15",
+          requestedTime: "09:00 AM",
+          submittedOn: "3 hours ago",
+          status: "Pending",
+        },
+      ];
 
-        function updateStats() {
-          const pending = requests.filter((r) => r.status === "Pending").length;
-          const approved = requests.filter(
-            (r) => r.status === "Approved"
-          ).length;
-          const uniqueDonors = new Set(
-            requests
-              .filter((r) => r.status === "Pending")
-              .map((r) => r.donorName)
-          ).size;
+      const tableBody = document.querySelector("tbody");
+      const emptyState = document.getElementById("emptyState");
+      const pendingBadge = document.querySelector(
+        ".bg-blue-600.text-white.rounded-full"
+      );
+      const statCards = document.querySelectorAll(
+        ".grid.grid-cols-1.md\\:grid-cols-3 .text-3xl"
+      );
 
-          if (pendingBadge) {
-            pendingBadge.textContent = `${pending} Pending Requests`;
-          }
-          if (statCards.length >= 3) {
-            statCards[0].textContent = requests.length;
-            statCards[1].textContent = pending;
-            statCards[2].textContent = uniqueDonors;
-          }
+      function updateStats() {
+        const pending = requests.filter((r) => r.status === "Pending").length;
+        const approved = requests.filter(
+          (r) => r.status === "Approved"
+        ).length;
+        const uniqueDonors = new Set(
+          requests
+            .filter((r) => r.status === "Pending")
+            .map((r) => r.donorName)
+        ).size;
+
+        if (pendingBadge) {
+          pendingBadge.textContent = `${pending} Pending Requests`;
         }
+        if (statCards.length >= 3) {
+          statCards[0].textContent = requests.length;
+          statCards[1].textContent = pending;
+          statCards[2].textContent = uniqueDonors;
+        }
+      }
 
-        function renderRequests() {
-          const pendingRequests = requests.filter(
-            (r) => r.status === "Pending"
-          );
+      function renderRequests() {
+        const pendingRequests = requests.filter(
+          (r) => r.status === "Pending"
+        );
 
-          if (pendingRequests.length === 0) {
-            tableBody.parentElement.classList.add("hidden");
-            emptyState.classList.remove("hidden");
-          } else {
-            tableBody.parentElement.classList.remove("hidden");
-            emptyState.classList.add("hidden");
+        if (pendingRequests.length === 0) {
+          tableBody.parentElement.classList.add("hidden");
+          emptyState.classList.remove("hidden");
+        } else {
+          tableBody.parentElement.classList.remove("hidden");
+          emptyState.classList.add("hidden");
 
-            tableBody.innerHTML = pendingRequests
-              .map(
-                (req) => `
+          tableBody.innerHTML = pendingRequests
+            .map(
+              (req) => `
               <tr class="border-b border-gray-100 hover:bg-gray-50" data-id="${req.id}">
                 <td class="py-3 px-4 text-gray-900 font-medium">${req.id}</td>
                 <td class="py-3 px-4">
@@ -577,81 +483,84 @@
                 </td>
               </tr>
             `
-              )
-              .join("");
+            )
+            .join("");
 
-            lucide.createIcons();
-            attachEventListeners();
-          }
-          updateStats();
+          lucide.createIcons();
+          attachEventListeners();
         }
+        updateStats();
+      }
 
-        function attachEventListeners() {
-          document.querySelectorAll(".approve-btn").forEach((btn) => {
-            btn.addEventListener("click", function () {
-              approveRequest(this.dataset.id);
-            });
+      function attachEventListeners() {
+        document.querySelectorAll(".approve-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            approveRequest(this.dataset.id);
           });
-          document.querySelectorAll(".reject-btn").forEach((btn) => {
-            btn.addEventListener("click", function () {
-              rejectRequest(this.dataset.id);
-            });
+        });
+        document.querySelectorAll(".reject-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            rejectRequest(this.dataset.id);
           });
+        });
+      }
+
+      function approveRequest(id) {
+        const request = requests.find((r) => r.id === id);
+        if (request) {
+          request.status = "Approved";
+          showNotification(
+            `Request from ${request.donorName} has been approved! Appointment scheduled.`,
+            "success"
+          );
+          renderRequests();
         }
+      }
 
-        function approveRequest(id) {
-          const request = requests.find((r) => r.id === id);
-          if (request) {
-            request.status = "Approved";
-            showNotification(
-              `Request from ${request.donorName} has been approved! Appointment scheduled.`,
-              "success"
-            );
-            renderRequests();
-          }
+      function rejectRequest(id) {
+        const request = requests.find((r) => r.id === id);
+        if (request) {
+          request.status = "Rejected";
+          showNotification(
+            `Request from ${request.donorName} has been declined.`,
+            "info"
+          );
+          renderRequests();
         }
+      }
 
-        function rejectRequest(id) {
-          const request = requests.find((r) => r.id === id);
-          if (request) {
-            request.status = "Rejected";
-            showNotification(
-              `Request from ${request.donorName} has been declined.`,
-              "info"
-            );
-            renderRequests();
-          }
-        }
+      function showNotification(message, type = "success") {
+        const bgColor =
+          type === "success"
+            ? "bg-green-50 border-green-600"
+            : "bg-gray-50 border-gray-600";
+        const textColor =
+          type === "success" ? "text-green-900" : "text-gray-900";
+        const iconColor =
+          type === "success" ? "text-green-600" : "text-gray-600";
+        const icon = type === "success" ? "check-circle" : "info";
 
-        function showNotification(message, type = "success") {
-          const bgColor =
-            type === "success"
-              ? "bg-green-50 border-green-600"
-              : "bg-gray-50 border-gray-600";
-          const textColor =
-            type === "success" ? "text-green-900" : "text-gray-900";
-          const iconColor =
-            type === "success" ? "text-green-600" : "text-gray-600";
-          const icon = type === "success" ? "check-circle" : "info";
-
-          const notification = document.createElement("div");
-          notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50`;
-          notification.innerHTML = `
+        const notification = document.createElement("div");
+        notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50`;
+        notification.innerHTML = `
             <div class="flex items-center gap-3">
               <i data-lucide="${icon}" class="size-5 ${iconColor}"></i>
               <p class="${textColor}">${message}</p>
             </div>
           `;
-          document.body.appendChild(notification);
-          lucide.createIcons();
-          setTimeout(() => notification.remove(), 3000);
-        }
+        document.body.appendChild(notification);
+        lucide.createIcons();
+        setTimeout(() => notification.remove(), 3000);
+      }
 
-        // Initial render
-        renderRequests();
-      });
-    </script>
-  </body>
+      // Initial render
+      renderRequests();
+    });
+  </script>
+  <script type="module">
+    import { initUserLoader } from '/src/scripts/user-loader.js';
+    initUserLoader();
+  </script>
+</body>
+
 </html>
-
-

@@ -58,8 +58,8 @@
       </button>
       <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
         <div class="text-right">
-          <div class="text-sm font-medium text-gray-900">City Hospital</div>
-          <div class="text-xs text-gray-500">Hospital Admin</div>
+          <div class="text-sm font-medium text-gray-900" data-user-name>City Hospital</div>
+          <div class="text-xs text-gray-500" data-user-role>Hospital Staff</div>
         </div>
         <div class="size-10 bg-blue-100 rounded-full flex items-center justify-center">
           <i data-lucide="building-2" class="size-5 text-blue-600"></i>
@@ -220,247 +220,120 @@
 
   <script type="module" src="/src/scripts/main.js"></script>
   <script>
-    // Hospital Appointments - Interactive State Management with Tabs
+    // Hospital Appointments - Dynamic Data from API
+    let appointments = [];
+    let currentTab = "pending";
+
+    // Show loading state in table
+    function showTableLoading() {
+      const tableBody = document.getElementById("appointmentsTableBody");
+      if (tableBody) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-12 text-center">
+              <div class="animate-spin size-8 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+              <p class="text-gray-600">Loading appointments...</p>
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    // Show error state
+    function showTableError(message) {
+      const tableBody = document.getElementById("appointmentsTableBody");
+      if (tableBody) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-12 text-center">
+              <i data-lucide="alert-circle" class="size-12 text-red-500 mx-auto mb-4"></i>
+              <h3 class="text-lg font-semibold text-gray-900 mb-2">Error Loading Appointments</h3>
+              <p class="text-gray-600">${message}</p>
+            </td>
+          </tr>
+        `;
+        lucide.createIcons();
+      }
+    }
+
+    // Format date for display
+    function formatDate(dateStr) {
+      if (!dateStr) return 'N/A';
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    // Fetch appointments from API
+    async function loadAppointments() {
+      showTableLoading();
+
+      try {
+        const response = await fetch('/api/hospital/appointments.php');
+
+        if (response.status === 401) {
+          window.location.href = '/src/pages/auth/login.html';
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+          showTableError(data.message || 'Failed to load appointments.');
+          return;
+        }
+
+        // Transform appointments data to match expected format
+        appointments = (data.appointments || []).map(apt => ({
+          id: apt.id ? `APT${String(apt.id).padStart(3, '0')}` : apt.appointment_id,
+          donor: apt.donor_name || 'Unknown Donor',
+          bloodType: apt.blood_type || 'N/A',
+          date: apt.appointment_date || apt.created_at,
+          time: apt.appointment_time || '10:00 AM',
+          type: apt.urgency === 'emergency' ? 'Emergency' : 'Request',
+          status: capitalizeStatus(apt.donation_status || apt.status),
+          age: apt.donor_age || 'N/A',
+          gender: apt.donor_gender || 'N/A',
+          weight: apt.donor_weight || 'N/A',
+          email: apt.donor_email || 'N/A',
+          phone: apt.donor_phone || 'N/A',
+          address: apt.donor_address || 'N/A',
+          city: apt.donor_city || 'N/A',
+          healthStatus: 'Healthy',
+          medicalConditions: 'None reported',
+          hemoglobin: 'N/A',
+          bloodPressure: 'N/A',
+          lastDonation: apt.last_donation_date || 'N/A',
+          totalDonations: apt.total_donations || 0,
+          registeredAt: apt.donor_registered || 'N/A',
+          request_code: apt.request_code,
+          patient_name: apt.patient_name,
+          quantity: apt.quantity
+        }));
+
+        window.renderAppointments();
+
+      } catch (error) {
+        console.error('Error loading appointments:', error);
+        showTableError('Unable to connect to the server. Please try again later.');
+      }
+    }
+
+    function capitalizeStatus(status) {
+      if (!status) return 'Pending';
+      // Map API statuses to display statuses
+      const statusMap = {
+        'accepted': 'Confirmed',
+        'on_the_way': 'Confirmed',
+        'reached': 'Confirmed',
+        'completed': 'Completed',
+        'cancelled': 'Cancelled',
+        'pending': 'Pending'
+      };
+      return statusMap[status.toLowerCase()] || status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+
+    // Initialize on DOM ready
     document.addEventListener("DOMContentLoaded", function () {
-      // Combined appointment data (regular + voluntary donations) with donor health info
-      let appointments = [
-        // Regular appointments
-        {
-          id: "APT001",
-          donor: "John Smith",
-          bloodType: "O+",
-          date: "2024-11-25",
-          time: "10:00 AM",
-          type: "Request",
-          status: "Confirmed",
-          // Donor health details
-          age: 32,
-          gender: "Male",
-          weight: 78,
-          email: "john.smith@email.com",
-          phone: "+1 555-0101",
-          address: "123 Oak Street, Downtown",
-          city: "New York",
-          healthStatus: "Healthy",
-          medicalConditions: "None",
-          hemoglobin: "15.2 g/dL",
-          bloodPressure: "120/80 mmHg",
-          lastDonation: "2024-08-15",
-          totalDonations: 8,
-          registeredAt: "2022-05-10"
-        },
-        {
-          id: "APT002",
-          donor: "Maria Garcia",
-          bloodType: "A+",
-          date: "2024-11-25",
-          time: "11:30 AM",
-          type: "Request",
-          status: "Confirmed",
-          age: 28,
-          gender: "Female",
-          weight: 62,
-          email: "maria.garcia@email.com",
-          phone: "+1 555-0102",
-          address: "456 Pine Avenue, Midtown",
-          city: "New York",
-          healthStatus: "Healthy",
-          medicalConditions: "None",
-          hemoglobin: "13.8 g/dL",
-          bloodPressure: "115/75 mmHg",
-          lastDonation: "2024-07-20",
-          totalDonations: 5,
-          registeredAt: "2023-01-15"
-        },
-        {
-          id: "APT003",
-          donor: "David Lee",
-          bloodType: "B-",
-          date: "2024-11-26",
-          time: "09:00 AM",
-          type: "Request",
-          status: "Pending",
-          age: 45,
-          gender: "Male",
-          weight: 85,
-          email: "david.lee@email.com",
-          phone: "+1 555-0103",
-          address: "789 Elm Road, Uptown",
-          city: "Brooklyn",
-          healthStatus: "Healthy",
-          medicalConditions: "Mild allergies (seasonal)",
-          hemoglobin: "14.5 g/dL",
-          bloodPressure: "125/82 mmHg",
-          lastDonation: "2024-06-10",
-          totalDonations: 12,
-          registeredAt: "2020-03-22"
-        },
-        {
-          id: "APT004",
-          donor: "Sarah Johnson",
-          bloodType: "O-",
-          date: "2024-11-26",
-          time: "02:00 PM",
-          type: "Request",
-          status: "Confirmed",
-          age: 35,
-          gender: "Female",
-          weight: 68,
-          email: "sarah.johnson@email.com",
-          phone: "+1 555-0104",
-          address: "321 Maple Lane, West Side",
-          city: "Manhattan",
-          healthStatus: "Healthy",
-          medicalConditions: "None",
-          hemoglobin: "14.0 g/dL",
-          bloodPressure: "118/76 mmHg",
-          lastDonation: "2024-09-05",
-          totalDonations: 15,
-          registeredAt: "2019-08-14"
-        },
-        {
-          id: "APT005",
-          donor: "Michael Brown",
-          bloodType: "AB+",
-          date: "2024-11-27",
-          time: "03:30 PM",
-          type: "Request",
-          status: "Pending",
-          age: 29,
-          gender: "Male",
-          weight: 75,
-          email: "michael.brown@email.com",
-          phone: "+1 555-0105",
-          address: "654 Cedar Street, East Village",
-          city: "New York",
-          healthStatus: "Healthy",
-          medicalConditions: "None",
-          hemoglobin: "15.0 g/dL",
-          bloodPressure: "122/78 mmHg",
-          lastDonation: "2024-05-18",
-          totalDonations: 3,
-          registeredAt: "2023-11-01"
-        },
-        {
-          id: "APT006",
-          donor: "Emma Wilson",
-          bloodType: "A-",
-          date: "2024-11-23",
-          time: "01:00 PM",
-          type: "Request",
-          status: "Completed",
-          age: 26,
-          gender: "Female",
-          weight: 58,
-          email: "emma.wilson@email.com",
-          phone: "+1 555-0106",
-          address: "987 Birch Boulevard, SoHo",
-          city: "New York",
-          healthStatus: "Healthy",
-          medicalConditions: "None",
-          hemoglobin: "13.5 g/dL",
-          bloodPressure: "110/70 mmHg",
-          lastDonation: "2024-11-23",
-          totalDonations: 6,
-          registeredAt: "2022-09-30"
-        },
-        // Voluntary donation requests
-        {
-          id: "VR001",
-          donor: "Robert Chen",
-          bloodType: "O+",
-          date: "2024-12-10",
-          time: "10:00 AM",
-          type: "Voluntary",
-          status: "Pending",
-          age: 38,
-          gender: "Male",
-          weight: 82,
-          email: "robert.chen@email.com",
-          phone: "+1 555-0107",
-          address: "147 Spruce Way, Tribeca",
-          city: "New York",
-          healthStatus: "Healthy",
-          medicalConditions: "None",
-          hemoglobin: "15.5 g/dL",
-          bloodPressure: "120/78 mmHg",
-          lastDonation: "2024-09-20",
-          totalDonations: 10,
-          registeredAt: "2021-04-18"
-        },
-        {
-          id: "VR002",
-          donor: "Jennifer White",
-          bloodType: "A+",
-          date: "2024-12-12",
-          time: "02:00 PM",
-          type: "Voluntary",
-          status: "Pending",
-          age: 31,
-          gender: "Female",
-          weight: 65,
-          email: "jennifer.white@email.com",
-          phone: "+1 555-0108",
-          address: "258 Willow Drive, Chelsea",
-          city: "New York",
-          healthStatus: "Healthy",
-          medicalConditions: "None",
-          hemoglobin: "13.9 g/dL",
-          bloodPressure: "116/74 mmHg",
-          lastDonation: "2024-08-28",
-          totalDonations: 4,
-          registeredAt: "2023-03-10"
-        },
-        {
-          id: "VR003",
-          donor: "Kevin Park",
-          bloodType: "B-",
-          date: "2024-12-08",
-          time: "11:00 AM",
-          type: "Voluntary",
-          status: "Pending",
-          age: 42,
-          gender: "Male",
-          weight: 88,
-          email: "kevin.park@email.com",
-          phone: "+1 555-0109",
-          address: "369 Ash Court, Harlem",
-          city: "New York",
-          healthStatus: "Healthy",
-          medicalConditions: "Controlled hypertension",
-          hemoglobin: "14.8 g/dL",
-          bloodPressure: "130/85 mmHg",
-          lastDonation: "2024-07-05",
-          totalDonations: 9,
-          registeredAt: "2020-11-22"
-        },
-        {
-          id: "VR004",
-          donor: "Amanda Miller",
-          bloodType: "O-",
-          date: "2024-12-15",
-          time: "09:00 AM",
-          type: "Voluntary",
-          status: "Pending",
-          age: 27,
-          gender: "Female",
-          weight: 60,
-          email: "amanda.miller@email.com",
-          phone: "+1 555-0110",
-          address: "741 Poplar Street, Greenwich",
-          city: "New York",
-          healthStatus: "Healthy",
-          medicalConditions: "None",
-          hemoglobin: "13.6 g/dL",
-          bloodPressure: "112/72 mmHg",
-          lastDonation: "2024-10-01",
-          totalDonations: 2,
-          registeredAt: "2024-02-14"
-        },
-      ];
-
-      let currentTab = "pending";
-
       const tableBody = document.getElementById("appointmentsTableBody");
       const emptyState = document.getElementById("emptyState");
       const emptyStateMessage = document.getElementById("emptyStateMessage");
@@ -474,9 +347,23 @@
         btn.addEventListener("click", function () {
           currentTab = this.dataset.tab;
           updateTabStyles();
-          renderAppointments();
+          window.renderAppointments();
         });
       });
+
+      // Load from API
+      loadAppointments();
+    });
+
+    // Helper functions (need to be in global scope for existing code)
+    document.addEventListener("DOMContentLoaded", function () {
+      const tableBody = document.getElementById("appointmentsTableBody");
+      const emptyState = document.getElementById("emptyState");
+      const emptyStateMessage = document.getElementById("emptyStateMessage");
+      const statCards = document.querySelectorAll(
+        ".grid.grid-cols-1.md\\:grid-cols-4 .text-3xl"
+      );
+      const tabButtons = document.querySelectorAll(".tab-btn");
 
       function updateTabStyles() {
         tabButtons.forEach((btn) => {
@@ -572,7 +459,8 @@
         return '<span class="text-sm text-gray-500">—</span>';
       }
 
-      function renderAppointments() {
+      // Assign to window to be callable from loadAppointments()
+      window.renderAppointments = function () {
         const filtered = getFilteredAppointments();
 
         if (filtered.length === 0) {
@@ -675,7 +563,7 @@
           }
 
           showNotification(message, type);
-          renderAppointments();
+          window.renderAppointments();
         }
       }
 
@@ -830,8 +718,7 @@
         }
       });
 
-      // Initial render
-      renderAppointments();
+      // Note: Initial render happens in loadAppointments() after API data is fetched
     });
   </script>
 
@@ -1027,6 +914,10 @@
       </div>
     </div>
   </div>
+  <script type="module">
+    import { initUserLoader } from '/src/scripts/user-loader.js';
+    initUserLoader();
+  </script>
 </body>
 
 </html>

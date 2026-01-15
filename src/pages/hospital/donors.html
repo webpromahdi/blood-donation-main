@@ -1,1042 +1,773 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Donor List - BloodConnect Hospital</title>
-    <link rel="stylesheet" href="/src/styles/styles.css" />
-  </head>
-  <body class="min-h-screen bg-gray-50">
-    <!-- Sidebar -->
-    <div
-      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
-    >
-      <div class="p-6 border-b border-gray-200">
-        <div class="flex items-center gap-3">
-          <div class="bg-red-600 p-2 rounded-lg">
-            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
-          </div>
-          <div>
-            <div class="font-semibold text-red-600">BloodConnect</div>
-            <div class="text-sm text-gray-500">Hospital Portal</div>
-          </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donor List - BloodConnect Hospital</title>
+  <link rel="stylesheet" href="/src/styles/styles.css" />
+</head>
+
+<body class="min-h-screen bg-gray-50">
+  <!-- Sidebar -->
+  <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center gap-3">
+        <div class="bg-red-600 p-2 rounded-lg">
+          <i data-lucide="heart" class="size-6 text-white fill-white"></i>
         </div>
-      </div>
-      <nav class="flex-1 overflow-y-auto py-4">
-        <a
-          href="/src/pages/hospital/dashboard.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="layout-dashboard" class="size-5"></i
-          ><span>Dashboard</span></a
-        >
-        <a
-          href="/src/pages/hospital/request.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="droplet" class="size-5"></i
-          ><span>Request Blood</span></a
-        >
-        <a
-          href="/src/pages/hospital/donors.html"
-          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
-          ><i data-lucide="users" class="size-5"></i><span>Donor List</span></a
-        >
-        <a
-          href="/src/pages/hospital/appointments.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="calendar-check" class="size-5"></i
-          ><span>Appointments</span></a
-        >
-        <a
-          href="/src/pages/hospital/chat.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="message-square" class="size-5"></i
-          ><span>Chat</span></a
-        >
-      </nav>
-      <div class="p-4 border-t border-gray-200">
-        <div class="text-center text-sm text-gray-500">
-          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        <div>
+          <div class="font-semibold text-red-600">BloodConnect</div>
+          <div class="text-sm text-gray-500">Hospital Portal</div>
         </div>
       </div>
     </div>
-
-    <!-- Header -->
-    <header
-      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
-    >
-      <div class="flex items-center gap-4 flex-1">
-        <h2 class="text-lg font-semibold text-gray-900">Donor List</h2>
+    <nav class="flex-1 overflow-y-auto py-4">
+      <a href="/src/pages/hospital/dashboard.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="layout-dashboard" class="size-5"></i><span>Dashboard</span></a>
+      <a href="/src/pages/hospital/request.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="droplet" class="size-5"></i><span>Request Blood</span></a>
+      <a href="/src/pages/hospital/donors.html"
+        class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"><i
+          data-lucide="users" class="size-5"></i><span>Donor List</span></a>
+      <a href="/src/pages/hospital/appointments.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="calendar-check" class="size-5"></i><span>Appointments</span></a>
+      <a href="/src/pages/hospital/chat.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="message-square" class="size-5"></i><span>Chat</span></a>
+    </nav>
+    <div class="p-4 border-t border-gray-200">
+      <div class="text-center text-sm text-gray-500">
+        <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
       </div>
-      <div class="flex items-center gap-4">
-        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
-          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header
+    class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8">
+    <div class="flex items-center gap-4 flex-1">
+      <h2 class="text-lg font-semibold text-gray-900">Donor List</h2>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+        <i data-lucide="bell" class="size-5 text-gray-700"></i>
+      </button>
+      <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+        <div class="text-right">
+          <div class="text-sm font-medium text-gray-900" data-user-name>City Hospital</div>
+          <div class="text-xs text-gray-500" data-user-role>Hospital Staff</div>
+        </div>
+        <div class="size-10 bg-blue-100 rounded-full flex items-center justify-center">
+          <i data-lucide="building-2" class="size-5 text-blue-600"></i>
+        </div>
+      </div>
+      <a href="/" class="p-2 text-gray-600 hover:text-red-600"><i data-lucide="log-out" class="size-5"></i></a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="ml-64 pt-16">
+    <div class="p-8 space-y-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">Donor List</h1>
+          <p class="text-gray-600">
+            Browse and contact registered blood donors
+          </p>
+        </div>
+        <button class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium">
+          <i data-lucide="filter" class="size-4 inline mr-2"></i>Filter by
+          Location
         </button>
-        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
-          <div class="text-right">
-            <div class="text-sm font-medium text-gray-900">City Hospital</div>
-            <div class="text-xs text-gray-500">Hospital Admin</div>
-          </div>
-          <div
-            class="size-10 bg-blue-100 rounded-full flex items-center justify-center"
-          >
-            <i data-lucide="building-2" class="size-5 text-blue-600"></i>
-          </div>
-        </div>
-        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
-          ><i data-lucide="log-out" class="size-5"></i
-        ></a>
       </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="ml-64 pt-16">
-      <div class="p-8 space-y-8">
-        <div class="flex items-center justify-between">
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900 mb-2">Donor List</h1>
-            <p class="text-gray-600">
-              Browse and contact registered blood donors
-            </p>
-          </div>
-          <button
-            class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
-          >
-            <i data-lucide="filter" class="size-4 inline mr-2"></i>Filter by
-            Location
+      <!-- Quick Filter -->
+      <div class="p-6 bg-white border border-gray-200 rounded-xl">
+        <div class="flex flex-wrap gap-3">
+          <button class="px-4 py-2 border border-red-600 text-red-600 hover:bg-red-50 rounded-lg font-medium">
+            All Donors
           </button>
-        </div>
-
-        <!-- Quick Filter -->
-        <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="flex flex-wrap gap-3">
-            <button
-              class="px-4 py-2 border border-red-600 text-red-600 hover:bg-red-50 rounded-lg font-medium"
-            >
-              All Donors
-            </button>
-            <button
-              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
-            >
-              O+
-            </button>
-            <button
-              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
-            >
-              O-
-            </button>
-            <button
-              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
-            >
-              A+
-            </button>
-            <button
-              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
-            >
-              A-
-            </button>
-            <button
-              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
-            >
-              B+
-            </button>
-            <button
-              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
-            >
-              B-
-            </button>
-            <button
-              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
-            >
-              AB+
-            </button>
-            <button
-              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
-            >
-              AB-
-            </button>
-            <div class="flex-1"></div>
-            <button
-              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
-            >
-              Available Only
-            </button>
-          </div>
-        </div>
-
-        <!-- Donors Table -->
-        <div class="p-6 bg-white border border-gray-200 rounded-xl">
-          <div class="mb-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-1">
-              Registered Donors
-            </h2>
-            <p class="text-sm text-gray-600">Total 6 donors in your network</p>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full">
-              <thead>
-                <tr class="border-b border-gray-200">
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Donor ID
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Name
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Blood Type
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Location
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Last Donation
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Total
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Availability
-                  </th>
-                  <th
-                    class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                  >
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-b border-gray-100 hover:bg-gray-50">
-                  <td class="py-3 px-4 text-gray-900">DON001</td>
-                  <td class="py-3 px-4">
-                    <div class="flex items-center gap-3">
-                      <div
-                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
-                      >
-                        <i data-lucide="user" class="size-5 text-red-600"></i>
-                      </div>
-                      <div>
-                        <div class="font-medium text-gray-900">John Smith</div>
-                        <div class="text-sm text-gray-500">28 years</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                      >O+</span
-                    >
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">
-                    <i data-lucide="map-pin" class="size-4 inline mr-1"></i
-                    >Downtown
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">2 weeks ago</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
-                      >12 times</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full"
-                      >Available</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="flex gap-2">
-                      <button
-                        class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      >
-                        <i data-lucide="phone" class="size-4 inline mr-1"></i
-                        >Call
-                      </button>
-                      <button
-                        class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                      >
-                        <i
-                          data-lucide="message-square"
-                          class="size-4 inline mr-1"
-                        ></i
-                        >Chat
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="border-b border-gray-100 hover:bg-gray-50">
-                  <td class="py-3 px-4 text-gray-900">DON002</td>
-                  <td class="py-3 px-4">
-                    <div class="flex items-center gap-3">
-                      <div
-                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
-                      >
-                        <i data-lucide="user" class="size-5 text-red-600"></i>
-                      </div>
-                      <div>
-                        <div class="font-medium text-gray-900">
-                          Maria Garcia
-                        </div>
-                        <div class="text-sm text-gray-500">32 years</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                      >A+</span
-                    >
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">
-                    <i data-lucide="map-pin" class="size-4 inline mr-1"></i
-                    >Uptown
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">1 month ago</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
-                      >8 times</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full"
-                      >Available</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="flex gap-2">
-                      <button
-                        class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      >
-                        <i data-lucide="phone" class="size-4 inline mr-1"></i
-                        >Call
-                      </button>
-                      <button
-                        class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                      >
-                        <i
-                          data-lucide="message-square"
-                          class="size-4 inline mr-1"
-                        ></i
-                        >Chat
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="border-b border-gray-100 hover:bg-gray-50">
-                  <td class="py-3 px-4 text-gray-900">DON003</td>
-                  <td class="py-3 px-4">
-                    <div class="flex items-center gap-3">
-                      <div
-                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
-                      >
-                        <i data-lucide="user" class="size-5 text-red-600"></i>
-                      </div>
-                      <div>
-                        <div class="font-medium text-gray-900">David Lee</div>
-                        <div class="text-sm text-gray-500">25 years</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                      >B-</span
-                    >
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">
-                    <i data-lucide="map-pin" class="size-4 inline mr-1"></i
-                    >Westside
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">3 weeks ago</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
-                      >5 times</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-gray-600 text-gray-600 rounded-full"
-                      >Not Available</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="flex gap-2">
-                      <button
-                        class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      >
-                        <i data-lucide="phone" class="size-4 inline mr-1"></i
-                        >Call
-                      </button>
-                      <button
-                        class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                      >
-                        <i
-                          data-lucide="message-square"
-                          class="size-4 inline mr-1"
-                        ></i
-                        >Chat
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="border-b border-gray-100 hover:bg-gray-50">
-                  <td class="py-3 px-4 text-gray-900">DON004</td>
-                  <td class="py-3 px-4">
-                    <div class="flex items-center gap-3">
-                      <div
-                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
-                      >
-                        <i data-lucide="user" class="size-5 text-red-600"></i>
-                      </div>
-                      <div>
-                        <div class="font-medium text-gray-900">
-                          Sarah Johnson
-                        </div>
-                        <div class="text-sm text-gray-500">30 years</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                      >O-</span
-                    >
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">
-                    <i data-lucide="map-pin" class="size-4 inline mr-1"></i
-                    >Eastside
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">1 week ago</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
-                      >15 times</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full"
-                      >Available</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="flex gap-2">
-                      <button
-                        class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      >
-                        <i data-lucide="phone" class="size-4 inline mr-1"></i
-                        >Call
-                      </button>
-                      <button
-                        class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                      >
-                        <i
-                          data-lucide="message-square"
-                          class="size-4 inline mr-1"
-                        ></i
-                        >Chat
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="border-b border-gray-100 hover:bg-gray-50">
-                  <td class="py-3 px-4 text-gray-900">DON005</td>
-                  <td class="py-3 px-4">
-                    <div class="flex items-center gap-3">
-                      <div
-                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
-                      >
-                        <i data-lucide="user" class="size-5 text-red-600"></i>
-                      </div>
-                      <div>
-                        <div class="font-medium text-gray-900">
-                          Michael Brown
-                        </div>
-                        <div class="text-sm text-gray-500">35 years</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                      >AB+</span
-                    >
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">
-                    <i data-lucide="map-pin" class="size-4 inline mr-1"></i
-                    >Central
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">2 months ago</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
-                      >20 times</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full"
-                      >Available</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="flex gap-2">
-                      <button
-                        class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      >
-                        <i data-lucide="phone" class="size-4 inline mr-1"></i
-                        >Call
-                      </button>
-                      <button
-                        class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                      >
-                        <i
-                          data-lucide="message-square"
-                          class="size-4 inline mr-1"
-                        ></i
-                        >Chat
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="border-b border-gray-100 hover:bg-gray-50">
-                  <td class="py-3 px-4 text-gray-900">DON006</td>
-                  <td class="py-3 px-4">
-                    <div class="flex items-center gap-3">
-                      <div
-                        class="size-10 bg-red-100 rounded-full flex items-center justify-center"
-                      >
-                        <i data-lucide="user" class="size-5 text-red-600"></i>
-                      </div>
-                      <div>
-                        <div class="font-medium text-gray-900">Emma Wilson</div>
-                        <div class="text-sm text-gray-500">27 years</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                      >A-</span
-                    >
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">
-                    <i data-lucide="map-pin" class="size-4 inline mr-1"></i
-                    >Northside
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">3 months ago</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
-                      >6 times</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full"
-                      >Available</span
-                    >
-                  </td>
-                  <td class="py-3 px-4">
-                    <div class="flex gap-2">
-                      <button
-                        class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      >
-                        <i data-lucide="phone" class="size-4 inline mr-1"></i
-                        >Call
-                      </button>
-                      <button
-                        class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                      >
-                        <i
-                          data-lucide="message-square"
-                          class="size-4 inline mr-1"
-                        ></i
-                        >Chat
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <!-- Empty State (hidden by default) -->
-          <div id="emptyState" class="hidden text-center py-16 px-6">
-            <div
-              class="inline-flex items-center justify-center size-20 rounded-full bg-gray-100 mb-4"
-            >
-              <i data-lucide="droplet" class="size-10 text-gray-400"></i>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">
-              No donors found
-            </h3>
-            <p id="emptyStateMessage" class="text-gray-600 mb-6">
-              No donors match your current filters
-            </p>
-            <button
-              id="clearFiltersBtn"
-              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
-            >
-              Clear Filters
-            </button>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <!-- Donor Details Modal -->
-    <div
-      id="donorModal"
-      class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center"
-    >
-      <div class="bg-white rounded-xl max-w-md w-full mx-4 shadow-xl">
-        <div
-          class="p-6 border-b border-gray-200 flex items-center justify-between"
-        >
-          <h3
-            class="text-lg font-semibold text-gray-900 flex items-center gap-2"
-          >
-            <i data-lucide="user" class="size-5 text-red-600"></i>
-            Donor Details
-          </h3>
-          <button id="closeModalBtn" class="p-2 hover:bg-gray-100 rounded-lg">
-            <i data-lucide="x" class="size-5 text-gray-500"></i>
+          <button class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium">
+            O+
           </button>
-        </div>
-        <div class="p-6 space-y-4" id="donorModalContent">
-          <!-- Content will be populated dynamically -->
-        </div>
-        <div class="p-4 border-t border-gray-200 flex justify-end">
-          <button
-            id="closeModalFooterBtn"
-            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium"
-          >
-            Close
+          <button class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium">
+            O-
+          </button>
+          <button class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium">
+            A+
+          </button>
+          <button class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium">
+            A-
+          </button>
+          <button class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium">
+            B+
+          </button>
+          <button class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium">
+            B-
+          </button>
+          <button class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium">
+            AB+
+          </button>
+          <button class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium">
+            AB-
+          </button>
+          <div class="flex-1"></div>
+          <button class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium">
+            Available Only
           </button>
         </div>
       </div>
-    </div>
 
-    <script type="module" src="/src/scripts/main.js"></script>
-    <script>
-      // Hospital Donor List - Interactive State Management
-      document.addEventListener("DOMContentLoaded", function () {
-        // Donor data with contact info
-        const donors = [
-          {
-            id: "DON001",
-            name: "John Smith",
-            age: 28,
-            bloodType: "O+",
-            location: "Downtown",
-            lastDonation: "2 weeks ago",
-            totalDonations: 12,
-            isAvailable: true,
-            phone: "555-0101",
-            email: "john.smith@email.com",
-          },
-          {
-            id: "DON002",
-            name: "Maria Garcia",
-            age: 32,
-            bloodType: "A+",
-            location: "Uptown",
-            lastDonation: "1 month ago",
-            totalDonations: 8,
-            isAvailable: true,
-            phone: "555-0102",
-            email: "maria.garcia@email.com",
-          },
-          {
-            id: "DON003",
-            name: "David Lee",
-            age: 25,
-            bloodType: "B-",
-            location: "Westside",
-            lastDonation: "3 weeks ago",
-            totalDonations: 5,
-            isAvailable: false,
-            phone: "555-0103",
-            email: "david.lee@email.com",
-          },
-          {
-            id: "DON004",
-            name: "Sarah Johnson",
-            age: 30,
-            bloodType: "O-",
-            location: "Eastside",
-            lastDonation: "1 week ago",
-            totalDonations: 15,
-            isAvailable: true,
-            phone: "555-0104",
-            email: "sarah.johnson@email.com",
-          },
-          {
-            id: "DON005",
-            name: "Michael Brown",
-            age: 35,
-            bloodType: "AB+",
-            location: "Central",
-            lastDonation: "2 months ago",
-            totalDonations: 20,
-            isAvailable: true,
-            phone: "555-0105",
-            email: "michael.brown@email.com",
-          },
-          {
-            id: "DON006",
-            name: "Emma Wilson",
-            age: 27,
-            bloodType: "A-",
-            location: "Northside",
-            lastDonation: "3 months ago",
-            totalDonations: 6,
-            isAvailable: true,
-            phone: "555-0106",
-            email: "emma.wilson@email.com",
-          },
-          {
-            id: "DON007",
-            name: "James Taylor",
-            age: 29,
-            bloodType: "B+",
-            location: "Southside",
-            lastDonation: "5 months ago",
-            totalDonations: 10,
-            isAvailable: true,
-            phone: "555-0107",
-            email: "james.taylor@email.com",
-          },
-          {
-            id: "DON008",
-            name: "Lisa Anderson",
-            age: 31,
-            bloodType: "AB-",
-            location: "Downtown",
-            lastDonation: "3 months ago",
-            totalDonations: 7,
-            isAvailable: false,
-            phone: "555-0108",
-            email: "lisa.anderson@email.com",
-          },
-        ];
-
-        let selectedBloodGroup = "All Donors";
-        let availableOnly = false;
-
-        const filterContainer = document.querySelector(".flex.flex-wrap.gap-3");
-        const filterButtons = filterContainer.querySelectorAll("button");
-        const tableBody = document.querySelector("tbody");
-        const donorCountText = document.querySelector(".text-sm.text-gray-600");
-        const emptyState = document.getElementById("emptyState");
-        const emptyStateMessage = document.getElementById("emptyStateMessage");
-        const clearFiltersBtn = document.getElementById("clearFiltersBtn");
-
-        // Modal elements
-        const donorModal = document.getElementById("donorModal");
-        const donorModalContent = document.getElementById("donorModalContent");
-        const closeModalBtn = document.getElementById("closeModalBtn");
-        const closeModalFooterBtn = document.getElementById(
-          "closeModalFooterBtn"
-        );
-
-        // Modal functions
-        function openDonorModal(donorId) {
-          const donor = donors.find((d) => d.id === donorId);
-          if (!donor) return;
-
-          const availabilityClass = donor.isAvailable
-            ? "border-green-600 text-green-600"
-            : "border-gray-600 text-gray-600";
-
-          donorModalContent.innerHTML = `
-            <div class="grid grid-cols-2 gap-4">
-              <div class="space-y-1">
-                <p class="text-sm text-gray-500">Name</p>
-                <p class="font-semibold text-gray-900">${donor.name}</p>
-              </div>
-              <div class="space-y-1">
-                <p class="text-sm text-gray-500">Age</p>
-                <p class="font-semibold text-gray-900">${donor.age} years</p>
-              </div>
-              <div class="space-y-1">
-                <p class="text-sm text-gray-500">Blood Type</p>
-                <p><span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${
-                  donor.bloodType
-                }</span></p>
-              </div>
-              <div class="space-y-1">
-                <p class="text-sm text-gray-500">Availability</p>
-                <p><span class="px-2 py-1 text-xs font-medium border ${availabilityClass} rounded-full">${
-            donor.isAvailable ? "Available" : "Not Available"
-          }</span></p>
-              </div>
-              <div class="space-y-1">
-                <p class="text-sm text-gray-500">Last Donation</p>
-                <p class="font-semibold text-gray-900">${donor.lastDonation}</p>
-              </div>
-              <div class="space-y-1">
-                <p class="text-sm text-gray-500">Total Donations</p>
-                <p class="font-semibold text-gray-900">${
-                  donor.totalDonations
-                } times</p>
-              </div>
-            </div>
-            <div class="mt-4 pt-4 border-t border-gray-200 space-y-3">
-              <p class="text-sm font-medium text-gray-700">Contact Information</p>
-              <div class="flex items-center gap-2 text-gray-600">
-                <i data-lucide="phone" class="size-4"></i>
-                <span>${donor.phone}</span>
-              </div>
-              <div class="flex items-center gap-2 text-gray-600">
-                <i data-lucide="mail" class="size-4"></i>
-                <span>${donor.email}</span>
-              </div>
-              <div class="flex items-center gap-2 text-gray-600">
-                <i data-lucide="map-pin" class="size-4"></i>
-                <span>${donor.location}</span>
-              </div>
-            </div>
-          `;
-
-          donorModal.classList.remove("hidden");
-          donorModal.classList.add("flex");
-          lucide.createIcons();
-        }
-
-        function closeDonorModal() {
-          donorModal.classList.add("hidden");
-          donorModal.classList.remove("flex");
-        }
-
-        // Modal event listeners
-        closeModalBtn.addEventListener("click", closeDonorModal);
-        closeModalFooterBtn.addEventListener("click", closeDonorModal);
-
-        // Close on outside click
-        donorModal.addEventListener("click", function (e) {
-          if (e.target === donorModal) {
-            closeDonorModal();
-          }
-        });
-
-        // Close on ESC key
-        document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape" && !donorModal.classList.contains("hidden")) {
-            closeDonorModal();
-          }
-        });
-
-        // Set up filter button event listeners
-        filterButtons.forEach((btn, index) => {
-          btn.addEventListener("click", function () {
-            const btnText = btn.textContent.trim();
-
-            if (btnText === "Available Only") {
-              availableOnly = !availableOnly;
-              btn.classList.toggle("border-green-600", availableOnly);
-              btn.classList.toggle("text-green-600", availableOnly);
-              btn.classList.toggle("bg-green-50", availableOnly);
-              btn.classList.toggle("border-gray-300", !availableOnly);
-              btn.classList.toggle("text-gray-700", !availableOnly);
-            } else {
-              selectedBloodGroup = btnText;
-              // Update active state on all blood group buttons
-              filterButtons.forEach((b) => {
-                const bText = b.textContent.trim();
-                if (bText !== "Available Only") {
-                  const isActive = bText === selectedBloodGroup;
-                  b.classList.toggle("border-red-600", isActive);
-                  b.classList.toggle("text-red-600", isActive);
-                  b.classList.toggle("bg-red-50", isActive);
-                  b.classList.toggle("border-gray-300", !isActive);
-                  b.classList.toggle("text-gray-700", !isActive);
-                }
-              });
-            }
-            renderDonors();
-          });
-        });
-
-        // Clear filters button
-        clearFiltersBtn.addEventListener("click", function () {
-          selectedBloodGroup = "All Donors";
-          availableOnly = false;
-          filterButtons.forEach((btn) => {
-            const btnText = btn.textContent.trim();
-            if (btnText === "All Donors") {
-              btn.classList.add("border-red-600", "text-red-600");
-              btn.classList.remove("border-gray-300", "text-gray-700");
-            } else if (btnText === "Available Only") {
-              btn.classList.remove(
-                "border-green-600",
-                "text-green-600",
-                "bg-green-50"
-              );
-              btn.classList.add("border-gray-300", "text-gray-700");
-            } else {
-              btn.classList.remove(
-                "border-red-600",
-                "text-red-600",
-                "bg-red-50"
-              );
-              btn.classList.add("border-gray-300", "text-gray-700");
-            }
-          });
-          renderDonors();
-        });
-
-        function renderDonors() {
-          const filtered = donors.filter((donor) => {
-            const matchesBlood =
-              selectedBloodGroup === "All Donors" ||
-              donor.bloodType === selectedBloodGroup;
-            const matchesAvailable = !availableOnly || donor.isAvailable;
-            return matchesBlood && matchesAvailable;
-          });
-
-          if (filtered.length === 0) {
-            tableBody.parentElement.classList.add("hidden");
-            emptyState.classList.remove("hidden");
-            emptyStateMessage.textContent =
-              selectedBloodGroup !== "All Donors"
-                ? `No donors found for ${selectedBloodGroup} blood type`
-                : "No donors match your current filters";
-            donorCountText.textContent = "Total 0 donors in your network";
-          } else {
-            tableBody.parentElement.classList.remove("hidden");
-            emptyState.classList.add("hidden");
-            donorCountText.textContent = `Total ${filtered.length} donor${
-              filtered.length !== 1 ? "s" : ""
-            } ${
-              selectedBloodGroup !== "All Donors"
-                ? `with ${selectedBloodGroup} blood type `
-                : ""
-            }in your network`;
-
-            tableBody.innerHTML = filtered
-              .map(
-                (donor) => `
-              <tr class="border-b border-gray-100 hover:bg-gray-50" data-id="${
-                donor.id
-              }">
-                <td class="py-3 px-4 text-gray-900">${donor.id}</td>
+      <!-- Donors Table -->
+      <div class="p-6 bg-white border border-gray-200 rounded-xl">
+        <div class="mb-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-1">
+            Registered Donors
+          </h2>
+          <p class="text-sm text-gray-600">Total 6 donors in your network</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200">
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Donor ID
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Name
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Blood Type
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Location
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Last Donation
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Total
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Availability
+                </th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="py-3 px-4 text-gray-900">DON001</td>
                 <td class="py-3 px-4">
                   <div class="flex items-center gap-3">
                     <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
                       <i data-lucide="user" class="size-5 text-red-600"></i>
                     </div>
                     <div>
-                      <div class="font-medium text-gray-900">${donor.name}</div>
-                      <div class="text-sm text-gray-500">${
-                        donor.age
-                      } years</div>
+                      <div class="font-medium text-gray-900">John Smith</div>
+                      <div class="text-sm text-gray-500">28 years</div>
                     </div>
                   </div>
                 </td>
                 <td class="py-3 px-4">
-                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${
-                    donor.bloodType
-                  }</span>
+                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">O+</span>
                 </td>
                 <td class="py-3 px-4 text-gray-600">
-                  <i data-lucide="map-pin" class="size-4 inline mr-1"></i>${
-                    donor.location
-                  }
+                  <i data-lucide="map-pin" class="size-4 inline mr-1"></i>Downtown
                 </td>
-                <td class="py-3 px-4 text-gray-600">${donor.lastDonation}</td>
+                <td class="py-3 px-4 text-gray-600">2 weeks ago</td>
                 <td class="py-3 px-4">
-                  <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">${
-                    donor.totalDonations
-                  } times</span>
+                  <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">12 times</span>
                 </td>
                 <td class="py-3 px-4">
-                  <span class="px-2 py-1 text-xs font-medium border ${
-                    donor.isAvailable
-                      ? "border-green-600 text-green-600"
-                      : "border-gray-600 text-gray-600"
-                  } rounded-full">
-                    ${donor.isAvailable ? "Available" : "Not Available"}
-                  </span>
+                  <span
+                    class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full">Available</span>
                 </td>
                 <td class="py-3 px-4">
                   <div class="flex gap-2">
-                    <button class="view-details-btn px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg" data-id="${
-                      donor.id
-                    }">
-                      <i data-lucide="eye" class="size-4 inline mr-1"></i>View Details
+                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg">
+                      <i data-lucide="phone" class="size-4 inline mr-1"></i>Call
                     </button>
-                    <button class="chat-btn px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg" data-id="${
-                      donor.id
-                    }">
+                    <button class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg">
                       <i data-lucide="message-square" class="size-4 inline mr-1"></i>Chat
                     </button>
                   </div>
                 </td>
               </tr>
-            `
-              )
-              .join("");
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="py-3 px-4 text-gray-900">DON002</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                      <i data-lucide="user" class="size-5 text-red-600"></i>
+                    </div>
+                    <div>
+                      <div class="font-medium text-gray-900">
+                        Maria Garcia
+                      </div>
+                      <div class="text-sm text-gray-500">32 years</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">A+</span>
+                </td>
+                <td class="py-3 px-4 text-gray-600">
+                  <i data-lucide="map-pin" class="size-4 inline mr-1"></i>Uptown
+                </td>
+                <td class="py-3 px-4 text-gray-600">1 month ago</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">8 times</span>
+                </td>
+                <td class="py-3 px-4">
+                  <span
+                    class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full">Available</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex gap-2">
+                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg">
+                      <i data-lucide="phone" class="size-4 inline mr-1"></i>Call
+                    </button>
+                    <button class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                      <i data-lucide="message-square" class="size-4 inline mr-1"></i>Chat
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="py-3 px-4 text-gray-900">DON003</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                      <i data-lucide="user" class="size-5 text-red-600"></i>
+                    </div>
+                    <div>
+                      <div class="font-medium text-gray-900">David Lee</div>
+                      <div class="text-sm text-gray-500">25 years</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">B-</span>
+                </td>
+                <td class="py-3 px-4 text-gray-600">
+                  <i data-lucide="map-pin" class="size-4 inline mr-1"></i>Westside
+                </td>
+                <td class="py-3 px-4 text-gray-600">3 weeks ago</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">5 times</span>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border border-gray-600 text-gray-600 rounded-full">Not
+                    Available</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex gap-2">
+                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg">
+                      <i data-lucide="phone" class="size-4 inline mr-1"></i>Call
+                    </button>
+                    <button class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                      <i data-lucide="message-square" class="size-4 inline mr-1"></i>Chat
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="py-3 px-4 text-gray-900">DON004</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                      <i data-lucide="user" class="size-5 text-red-600"></i>
+                    </div>
+                    <div>
+                      <div class="font-medium text-gray-900">
+                        Sarah Johnson
+                      </div>
+                      <div class="text-sm text-gray-500">30 years</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">O-</span>
+                </td>
+                <td class="py-3 px-4 text-gray-600">
+                  <i data-lucide="map-pin" class="size-4 inline mr-1"></i>Eastside
+                </td>
+                <td class="py-3 px-4 text-gray-600">1 week ago</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">15 times</span>
+                </td>
+                <td class="py-3 px-4">
+                  <span
+                    class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full">Available</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex gap-2">
+                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg">
+                      <i data-lucide="phone" class="size-4 inline mr-1"></i>Call
+                    </button>
+                    <button class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                      <i data-lucide="message-square" class="size-4 inline mr-1"></i>Chat
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="py-3 px-4 text-gray-900">DON005</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                      <i data-lucide="user" class="size-5 text-red-600"></i>
+                    </div>
+                    <div>
+                      <div class="font-medium text-gray-900">
+                        Michael Brown
+                      </div>
+                      <div class="text-sm text-gray-500">35 years</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">AB+</span>
+                </td>
+                <td class="py-3 px-4 text-gray-600">
+                  <i data-lucide="map-pin" class="size-4 inline mr-1"></i>Central
+                </td>
+                <td class="py-3 px-4 text-gray-600">2 months ago</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">20 times</span>
+                </td>
+                <td class="py-3 px-4">
+                  <span
+                    class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full">Available</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex gap-2">
+                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg">
+                      <i data-lucide="phone" class="size-4 inline mr-1"></i>Call
+                    </button>
+                    <button class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                      <i data-lucide="message-square" class="size-4 inline mr-1"></i>Chat
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="py-3 px-4 text-gray-900">DON006</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                      <i data-lucide="user" class="size-5 text-red-600"></i>
+                    </div>
+                    <div>
+                      <div class="font-medium text-gray-900">Emma Wilson</div>
+                      <div class="text-sm text-gray-500">27 years</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">A-</span>
+                </td>
+                <td class="py-3 px-4 text-gray-600">
+                  <i data-lucide="map-pin" class="size-4 inline mr-1"></i>Northside
+                </td>
+                <td class="py-3 px-4 text-gray-600">3 months ago</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">6 times</span>
+                </td>
+                <td class="py-3 px-4">
+                  <span
+                    class="px-2 py-1 text-xs font-medium border border-green-600 text-green-600 rounded-full">Available</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex gap-2">
+                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg">
+                      <i data-lucide="phone" class="size-4 inline mr-1"></i>Call
+                    </button>
+                    <button class="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                      <i data-lucide="message-square" class="size-4 inline mr-1"></i>Chat
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Empty State (hidden by default) -->
+        <div id="emptyState" class="hidden text-center py-16 px-6">
+          <div class="inline-flex items-center justify-center size-20 rounded-full bg-gray-100 mb-4">
+            <i data-lucide="droplet" class="size-10 text-gray-400"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">
+            No donors found
+          </h3>
+          <p id="emptyStateMessage" class="text-gray-600 mb-6">
+            No donors match your current filters
+          </p>
+          <button id="clearFiltersBtn" class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium">
+            Clear Filters
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
 
-            // Re-init lucide icons
-            lucide.createIcons();
+  <!-- Donor Details Modal -->
+  <div id="donorModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center">
+    <div class="bg-white rounded-xl max-w-md w-full mx-4 shadow-xl">
+      <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+          <i data-lucide="user" class="size-5 text-red-600"></i>
+          Donor Details
+        </h3>
+        <button id="closeModalBtn" class="p-2 hover:bg-gray-100 rounded-lg">
+          <i data-lucide="x" class="size-5 text-gray-500"></i>
+        </button>
+      </div>
+      <div class="p-6 space-y-4" id="donorModalContent">
+        <!-- Content will be populated dynamically -->
+      </div>
+      <div class="p-4 border-t border-gray-200 flex justify-end">
+        <button id="closeModalFooterBtn"
+          class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
 
-            // Attach event listeners for View Details/Chat buttons
-            document.querySelectorAll(".view-details-btn").forEach((btn) => {
-              btn.addEventListener("click", function () {
-                const donorId = this.dataset.id;
-                openDonorModal(donorId);
-              });
-            });
-            document.querySelectorAll(".chat-btn").forEach((btn) => {
-              btn.addEventListener("click", function () {
-                const donorId = this.dataset.id;
-                const donor = donors.find((d) => d.id === donorId);
-                if (donor) {
-                  showNotification(`Opening chat with ${donor.name}...`);
-                  // Navigate to chat page (in real app)
-                  // window.location.href = '/src/pages/hospital/chat.html';
-                }
-              });
+  <script type="module" src="/src/scripts/main.js"></script>
+  <script>
+    // Hospital Donor List - Dynamic Data from API
+    let donors = [];
+    let selectedBloodGroup = "All Donors";
+    let availableOnly = false;
+
+    // Show loading state
+    function showLoading() {
+      const tableBody = document.querySelector("tbody");
+      if (tableBody) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-12 text-center">
+              <div class="animate-spin size-8 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+              <p class="text-gray-600">Loading donors...</p>
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    // Show error state
+    function showError(message) {
+      const tableBody = document.querySelector("tbody");
+      if (tableBody) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-12 text-center">
+              <i data-lucide="alert-circle" class="size-12 text-red-500 mx-auto mb-4"></i>
+              <h3 class="text-lg font-semibold text-gray-900 mb-2">Error Loading Donors</h3>
+              <p class="text-gray-600">${message}</p>
+            </td>
+          </tr>
+        `;
+        lucide.createIcons();
+      }
+    }
+
+    // Format date for display
+    function formatDate(dateStr) {
+      if (!dateStr) return 'N/A';
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 0) return 'Today';
+      if (diffDays === 1) return 'Yesterday';
+      if (diffDays < 7) return `${diffDays} days ago`;
+      if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? 's' : ''} ago`;
+      if (diffDays < 365) return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) > 1 ? 's' : ''} ago`;
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function renderDonors() {
+      const tableBody = document.querySelector("tbody");
+      const donorCountText = document.querySelector(".text-sm.text-gray-600");
+      const emptyState = document.getElementById("emptyState");
+      const emptyStateMessage = document.getElementById("emptyStateMessage");
+
+      const filtered = donors.filter((donor) => {
+        const matchesBlood =
+          selectedBloodGroup === "All Donors" ||
+          donor.blood_group === selectedBloodGroup;
+        const matchesAvailable = !availableOnly || donor.is_available;
+        return matchesBlood && matchesAvailable;
+      });
+
+      if (filtered.length === 0) {
+        tableBody.parentElement.classList.add("hidden");
+        emptyState.classList.remove("hidden");
+        emptyStateMessage.textContent =
+          selectedBloodGroup !== "All Donors"
+            ? `No donors found for ${selectedBloodGroup} blood type`
+            : donors.length === 0
+              ? "No donors registered in the system yet"
+              : "No donors match your current filters";
+        donorCountText.textContent = "Total 0 donors in your network";
+      } else {
+        tableBody.parentElement.classList.remove("hidden");
+        emptyState.classList.add("hidden");
+        donorCountText.textContent = `Total ${filtered.length} donor${filtered.length !== 1 ? "s" : ""
+          } ${selectedBloodGroup !== "All Donors"
+            ? `with ${selectedBloodGroup} blood type `
+            : ""
+          }in your network`;
+
+        tableBody.innerHTML = filtered
+          .map(
+            (donor) => `
+            <tr class="border-b border-gray-100 hover:bg-gray-50" data-id="${donor.id}">
+              <td class="py-3 px-4 text-gray-900">DON${String(donor.id).padStart(3, '0')}</td>
+              <td class="py-3 px-4">
+                <div class="flex items-center gap-3">
+                  <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+                    <i data-lucide="user" class="size-5 text-red-600"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-gray-900">${donor.name}</div>
+                    <div class="text-sm text-gray-500">${donor.age || 'N/A'} years</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3 px-4">
+                <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${donor.blood_group || 'N/A'}</span>
+              </td>
+              <td class="py-3 px-4 text-gray-600">
+                <i data-lucide="map-pin" class="size-4 inline mr-1"></i>${donor.city || 'N/A'}
+              </td>
+              <td class="py-3 px-4 text-gray-600">${donor.last_donation ? formatDate(donor.last_donation) : 'Never'}</td>
+              <td class="py-3 px-4">
+                <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">${donor.total_donations} times</span>
+              </td>
+              <td class="py-3 px-4">
+                <span class="px-2 py-1 text-xs font-medium border ${donor.is_available
+                ? "border-green-600 text-green-600"
+                : "border-gray-600 text-gray-600"
+              } rounded-full">
+                  ${donor.is_available ? "Available" : "Not Available"}
+                </span>
+              </td>
+              <td class="py-3 px-4">
+                <div class="flex gap-2">
+                  <button class="view-details-btn px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg" data-id="${donor.id}">
+                    <i data-lucide="eye" class="size-4 inline mr-1"></i>View Details
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `
+          )
+          .join("");
+
+        // Re-init lucide icons
+        lucide.createIcons();
+
+        // Attach event listeners for View Details buttons
+        document.querySelectorAll(".view-details-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const donorId = parseInt(this.dataset.id);
+            openDonorModal(donorId);
+          });
+        });
+      }
+    }
+
+    // Modal functions
+    function openDonorModal(donorId) {
+      const donor = donors.find((d) => d.id === donorId);
+      if (!donor) return;
+
+      const donorModal = document.getElementById("donorModal");
+      const donorModalContent = document.getElementById("donorModalContent");
+
+      const availabilityClass = donor.is_available
+        ? "border-green-600 text-green-600"
+        : "border-gray-600 text-gray-600";
+
+      donorModalContent.innerHTML = `
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <p class="text-sm text-gray-500">Name</p>
+            <p class="font-semibold text-gray-900">${donor.name}</p>
+          </div>
+          <div class="space-y-1">
+            <p class="text-sm text-gray-500">Age</p>
+            <p class="font-semibold text-gray-900">${donor.age || 'N/A'} years</p>
+          </div>
+          <div class="space-y-1">
+            <p class="text-sm text-gray-500">Blood Type</p>
+            <p><span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${donor.blood_group || 'N/A'}</span></p>
+          </div>
+          <div class="space-y-1">
+            <p class="text-sm text-gray-500">Availability</p>
+            <p><span class="px-2 py-1 text-xs font-medium border ${availabilityClass} rounded-full">${donor.is_available ? "Available" : "Not Available"}</span></p>
+          </div>
+          <div class="space-y-1">
+            <p class="text-sm text-gray-500">Last Donation</p>
+            <p class="font-semibold text-gray-900">${donor.last_donation ? formatDate(donor.last_donation) : 'Never'}</p>
+          </div>
+          <div class="space-y-1">
+            <p class="text-sm text-gray-500">Total Donations</p>
+            <p class="font-semibold text-gray-900">${donor.total_donations} times</p>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-gray-200 space-y-3">
+          <p class="text-sm font-medium text-gray-700">Contact Information</p>
+          <div class="flex items-center gap-2 text-gray-600">
+            <i data-lucide="phone" class="size-4"></i>
+            <span>${donor.phone || 'Not available'}</span>
+          </div>
+          <div class="flex items-center gap-2 text-gray-600">
+            <i data-lucide="mail" class="size-4"></i>
+            <span>${donor.email || 'Not available'}</span>
+          </div>
+          <div class="flex items-center gap-2 text-gray-600">
+            <i data-lucide="map-pin" class="size-4"></i>
+            <span>${donor.city || 'Not available'}</span>
+          </div>
+        </div>
+      `;
+
+      donorModal.classList.remove("hidden");
+      donorModal.classList.add("flex");
+      lucide.createIcons();
+    }
+
+    function closeDonorModal() {
+      const donorModal = document.getElementById("donorModal");
+      donorModal.classList.add("hidden");
+      donorModal.classList.remove("flex");
+    }
+
+    // Fetch donors from API
+    async function loadDonors() {
+      showLoading();
+
+      try {
+        const response = await fetch('/api/hospital/donors.php');
+
+        if (response.status === 401) {
+          window.location.href = '/src/pages/auth/login.html';
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+          showError(data.message || 'Failed to load donors.');
+          return;
+        }
+
+        donors = data.donors || [];
+        renderDonors();
+
+      } catch (error) {
+        console.error('Error loading donors:', error);
+        showError('Unable to connect to the server. Please try again later.');
+      }
+    }
+
+    // Initialize page
+    document.addEventListener("DOMContentLoaded", function () {
+      // Modal event listeners
+      const donorModal = document.getElementById("donorModal");
+      const closeModalBtn = document.getElementById("closeModalBtn");
+      const closeModalFooterBtn = document.getElementById("closeModalFooterBtn");
+      const clearFiltersBtn = document.getElementById("clearFiltersBtn");
+      const filterContainer = document.querySelector(".flex.flex-wrap.gap-3");
+      const filterButtons = filterContainer.querySelectorAll("button");
+
+      closeModalBtn.addEventListener("click", closeDonorModal);
+      closeModalFooterBtn.addEventListener("click", closeDonorModal);
+
+      // Close on outside click
+      donorModal.addEventListener("click", function (e) {
+        if (e.target === donorModal) {
+          closeDonorModal();
+        }
+      });
+
+      // Close on ESC key
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !donorModal.classList.contains("hidden")) {
+          closeDonorModal();
+        }
+      });
+
+      // Set up filter button event listeners
+      filterButtons.forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const btnText = btn.textContent.trim();
+
+          if (btnText === "Available Only") {
+            availableOnly = !availableOnly;
+            btn.classList.toggle("border-green-600", availableOnly);
+            btn.classList.toggle("text-green-600", availableOnly);
+            btn.classList.toggle("bg-green-50", availableOnly);
+            btn.classList.toggle("border-gray-300", !availableOnly);
+            btn.classList.toggle("text-gray-700", !availableOnly);
+          } else {
+            selectedBloodGroup = btnText;
+            // Update active state on all blood group buttons
+            filterButtons.forEach((b) => {
+              const bText = b.textContent.trim();
+              if (bText !== "Available Only") {
+                const isActive = bText === selectedBloodGroup;
+                b.classList.toggle("border-red-600", isActive);
+                b.classList.toggle("text-red-600", isActive);
+                b.classList.toggle("bg-red-50", isActive);
+                b.classList.toggle("border-gray-300", !isActive);
+                b.classList.toggle("text-gray-700", !isActive);
+              }
             });
           }
-        }
+          renderDonors();
+        });
+      });
 
-        function showNotification(message) {
-          const notification = document.createElement("div");
-          notification.className =
-            "fixed top-20 right-8 p-4 bg-green-50 border-l-4 border-green-600 rounded-lg shadow-lg z-50 animate-slide-in";
-          notification.innerHTML = `
-            <div class="flex items-center gap-3">
-              <i data-lucide="check-circle" class="size-5 text-green-600"></i>
-              <p class="text-green-900">${message}</p>
-            </div>
-          `;
-          document.body.appendChild(notification);
-          lucide.createIcons();
-          setTimeout(() => notification.remove(), 3000);
-        }
-
-        // Initial render
+      // Clear filters button
+      clearFiltersBtn.addEventListener("click", function () {
+        selectedBloodGroup = "All Donors";
+        availableOnly = false;
+        filterButtons.forEach((btn) => {
+          const btnText = btn.textContent.trim();
+          if (btnText === "All Donors") {
+            btn.classList.add("border-red-600", "text-red-600");
+            btn.classList.remove("border-gray-300", "text-gray-700");
+          } else if (btnText === "Available Only") {
+            btn.classList.remove("border-green-600", "text-green-600", "bg-green-50");
+            btn.classList.add("border-gray-300", "text-gray-700");
+          } else {
+            btn.classList.remove("border-red-600", "text-red-600", "bg-red-50");
+            btn.classList.add("border-gray-300", "text-gray-700");
+          }
+        });
         renderDonors();
       });
-    </script>
-  </body>
+
+      // Load donors from API
+      loadDonors();
+    });
+  </script>
+  <script type="module">
+    import { initUserLoader } from '/src/scripts/user-loader.js';
+    initUserLoader();
+  </script>
+</body>
+
 </html>
-
-

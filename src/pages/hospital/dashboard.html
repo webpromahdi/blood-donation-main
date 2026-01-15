@@ -59,8 +59,8 @@
       </button>
       <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
         <div class="text-right">
-          <div class="text-sm font-medium text-gray-900">City Hospital</div>
-          <div class="text-xs text-gray-500">Hospital Admin</div>
+          <div class="text-sm font-medium text-gray-900" data-user-name>City Hospital</div>
+          <div class="text-xs text-gray-500" data-user-role>Hospital Staff</div>
         </div>
         <div class="size-10 bg-blue-100 rounded-full flex items-center justify-center">
           <i data-lucide="building-2" class="size-5 text-blue-600"></i>
@@ -202,50 +202,13 @@
                 </tr>
               </thead>
               <tbody id="emergencyRequestsBody">
-                <tr class="border-b border-gray-100 hover:bg-red-50">
-                  <td class="py-3 px-4 text-gray-900 font-medium">REQ001</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">O+</span>
-                  </td>
-                  <td class="py-3 px-4 text-gray-900">2 Units</td>
-                  <td class="py-3 px-4">
-                    <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">Processing</span>
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
-                      <i data-lucide="navigation" class="size-3"></i>On the Way
-                    </span>
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">2 hours ago</td>
-                  <td class="py-3 px-4">
-                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      onclick="openRequestModal('REQ001')">
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-                <tr class="border-b border-gray-100 hover:bg-red-50">
-                  <td class="py-3 px-4 text-gray-900 font-medium">REQ003</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">B-</span>
-                  </td>
-                  <td class="py-3 px-4 text-gray-900">1 Unit</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">Pending</span>
-                  </td>
-                  <td class="py-3 px-4">
-                    <span class="text-xs text-gray-400 italic">Awaiting Donor</span>
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">1 day ago</td>
-                  <td class="py-3 px-4">
-                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      onclick="openRequestModal('REQ003')">
-                      View Details
-                    </button>
+                <!-- Populated dynamically by JavaScript -->
+                <tr>
+                  <td colspan="7" class="py-8 text-center">
+                    <div
+                      class="animate-spin size-6 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-2">
+                    </div>
+                    <p class="text-gray-500 text-sm">Loading requests...</p>
                   </td>
                 </tr>
               </tbody>
@@ -300,28 +263,13 @@
                 </tr>
               </thead>
               <tbody id="normalRequestsBody">
-                <tr class="border-b border-gray-100 hover:bg-gray-50">
-                  <td class="py-3 px-4 text-gray-900 font-medium">REQ002</td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">A+</span>
-                  </td>
-                  <td class="py-3 px-4 text-gray-900">3 Units</td>
-                  <td class="py-3 px-4">
-                    <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Approved</span>
-                  </td>
-                  <td class="py-3 px-4">
-                    <span
-                      class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
-                      <i data-lucide="check" class="size-3"></i>Accepted
-                    </span>
-                  </td>
-                  <td class="py-3 px-4 text-gray-600">5 hours ago</td>
-                  <td class="py-3 px-4">
-                    <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
-                      onclick="openRequestModal('REQ002')">
-                      View Details
-                    </button>
+                <!-- Populated dynamically by JavaScript -->
+                <tr>
+                  <td colspan="7" class="py-8 text-center">
+                    <div
+                      class="animate-spin size-6 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-2">
+                    </div>
+                    <p class="text-gray-500 text-sm">Loading requests...</p>
                   </td>
                 </tr>
               </tbody>
@@ -362,61 +310,211 @@
 
   <script type="module">
     import { setupLogoutButton } from '/src/scripts/auth.js';
+    import { initUserLoader } from '/src/scripts/user-loader.js';
     setupLogoutButton();
+    initUserLoader();
   </script>
   <script>
-    // Dummy blood request data with donor journey status
-    const requestData = {
-      REQ001: {
-        id: "REQ001",
-        patientName: "Michael Johnson",
-        bloodGroup: "O+",
-        quantity: "2 Units",
-        urgency: "Emergency",
-        requestedDate: "2024-11-10",
-        requiredByDate: "2024-11-10",
-        status: "Processing",
-        notes:
-          "Critical patient in ICU. Road accident victim requiring immediate transfusion. Cross-matching in progress.",
-        // Donor Journey Status (read-only for hospital)
-        donorName: "John Smith",
-        donorStatus: "On the Way",
-        donorStatusUpdatedAt: "5 minutes ago",
-      },
-      REQ002: {
-        id: "REQ002",
-        patientName: "Sarah Williams",
-        bloodGroup: "A+",
-        quantity: "3 Units",
-        urgency: "Normal",
-        requestedDate: "2024-11-10",
-        requiredByDate: "2024-11-15",
-        status: "Approved",
-        notes:
-          "Scheduled surgery on Nov 15. Pre-operative blood arrangement. Patient consent obtained.",
-        // Donor Journey Status (read-only for hospital)
-        donorName: "Maria Garcia",
-        donorStatus: "Accepted",
-        donorStatusUpdatedAt: "2 hours ago",
-      },
-      REQ003: {
-        id: "REQ003",
-        patientName: "Robert Chen",
-        bloodGroup: "B-",
-        quantity: "1 Unit",
-        urgency: "Emergency",
-        requestedDate: "2024-11-09",
-        requiredByDate: "2024-11-10",
-        status: "Pending",
-        notes:
-          "Rare blood type needed. Searching for compatible donors in the network. Please expedite.",
-        // No donor assigned yet
-        donorName: null,
-        donorStatus: null,
-        donorStatusUpdatedAt: null,
-      },
-    };
+    // Hospital Dashboard - Dynamic Data from API
+    let requests = [];
+    let requestData = {};
 
+    // Format date for display
+    function formatDate(dateStr) {
+      if (!dateStr) return 'N/A';
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    // Format relative time
+    function formatRelativeTime(dateStr) {
+      if (!dateStr) return 'N/A';
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diff = now - date;
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      if (hours < 1) return 'Just now';
+      if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+      if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+      return formatDate(dateStr);
+    }
+
+    // Get status badge HTML
+    function getStatusBadge(status) {
+      const config = {
+        pending: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: 'Pending' },
+        approved: { bg: 'bg-green-100', text: 'text-green-700', label: 'Approved' },
+        in_progress: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Processing' },
+        completed: { bg: 'bg-green-100', text: 'text-green-700', label: 'Completed' },
+        rejected: { bg: 'bg-red-100', text: 'text-red-700', label: 'Rejected' }
+      };
+      const c = config[status] || { bg: 'bg-gray-100', text: 'text-gray-700', label: status };
+      return `<span class="px-2 py-1 text-xs font-medium ${c.bg} ${c.text} rounded-full">${c.label}</span>`;
+    }
+
+    // Get donor status badge HTML
+    function getDonorStatusBadge(donation) {
+      if (!donation) {
+        return '<span class="text-xs text-gray-400 italic">Awaiting Donor</span>';
+      }
+      const statusConfig = {
+        accepted: { bg: 'bg-gray-100', text: 'text-gray-700', icon: 'check', label: 'Accepted' },
+        on_the_way: { bg: 'bg-blue-100', text: 'text-blue-700', icon: 'navigation', label: 'On the Way' },
+        reached: { bg: 'bg-blue-100', text: 'text-blue-700', icon: 'map-pin', label: 'Reached' },
+        completed: { bg: 'bg-green-100', text: 'text-green-700', icon: 'check-circle', label: 'Completed' }
+      };
+      const config = statusConfig[donation.status] || { bg: 'bg-gray-100', text: 'text-gray-700', icon: 'clock', label: donation.status };
+      return `<span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium ${config.bg} ${config.text} rounded-full">
+        <i data-lucide="${config.icon}" class="size-3"></i>${config.label}
+      </span>`;
+    }
+
+    // Show loading state
+    function showLoading(tableId) {
+      const tbody = document.getElementById(tableId);
+      if (tbody) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-8 text-center">
+              <div class="animate-spin size-6 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-2"></div>
+              <p class="text-gray-500 text-sm">Loading requests...</p>
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    // Show empty state
+    function showEmptyState(tableId, message) {
+      const tbody = document.getElementById(tableId);
+      if (tbody) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-8 text-center">
+              <i data-lucide="inbox" class="size-8 text-gray-300 mx-auto mb-2"></i>
+              <p class="text-gray-500 text-sm">${message}</p>
+            </td>
+          </tr>
+        `;
+        lucide.createIcons();
+      }
+    }
+
+    // Render request row
+    function renderRequestRow(req, isEmergency) {
+      const requestCode = req.request_code || `REQ${String(req.id).padStart(3, '0')}`;
+      return `
+        <tr class="border-b border-gray-100 hover:bg-${isEmergency ? 'red' : 'gray'}-50">
+          <td class="py-3 px-4 text-gray-900 font-medium">${requestCode}</td>
+          <td class="py-3 px-4">
+            <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${req.blood_type}</span>
+          </td>
+          <td class="py-3 px-4 text-gray-900">${req.quantity} Unit${req.quantity > 1 ? 's' : ''}</td>
+          <td class="py-3 px-4">${getStatusBadge(req.status)}</td>
+          <td class="py-3 px-4">${getDonorStatusBadge(req.donation)}</td>
+          <td class="py-3 px-4 text-gray-600">${formatRelativeTime(req.created_at)}</td>
+          <td class="py-3 px-4">
+            <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
+              onclick="openRequestModal('${req.id}')">
+              View Details
+            </button>
+          </td>
+        </tr>
+      `;
+    }
+
+    // Render tables
+    function renderTables() {
+      const emergencyRequests = requests.filter(r => r.urgency === 'emergency' && r.status !== 'completed' && r.status !== 'rejected');
+      const normalRequests = requests.filter(r => r.urgency !== 'emergency' && r.status !== 'completed' && r.status !== 'rejected');
+
+      // Update counts
+      document.getElementById('emergencyCount').textContent = `${emergencyRequests.length} Active`;
+      document.getElementById('normalCount').textContent = `${normalRequests.length} Active`;
+
+      // Render emergency table
+      const emergencyBody = document.getElementById('emergencyRequestsBody');
+      if (emergencyRequests.length === 0) {
+        showEmptyState('emergencyRequestsBody', 'No emergency requests at the moment');
+      } else {
+        emergencyBody.innerHTML = emergencyRequests.map(req => renderRequestRow(req, true)).join('');
+        lucide.createIcons();
+      }
+
+      // Render normal table
+      const normalBody = document.getElementById('normalRequestsBody');
+      if (normalRequests.length === 0) {
+        showEmptyState('normalRequestsBody', 'No normal requests at the moment');
+      } else {
+        normalBody.innerHTML = normalRequests.map(req => renderRequestRow(req, false)).join('');
+        lucide.createIcons();
+      }
+    }
+
+    // Update stats cards
+    function updateStats(stats) {
+      const statCards = document.querySelectorAll('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 .text-3xl');
+      if (statCards.length >= 4) {
+        statCards[0].textContent = stats.active || 0;  // Active Requests
+        statCards[1].textContent = stats.completed || 0;  // Completed Requests
+        statCards[2].textContent = stats.emergency || 0;  // Urgent Alerts
+        // Keep Available Donors static for now (would need a donors API)
+      }
+    }
+
+    // Fetch requests from API
+    async function loadDashboardData() {
+      showLoading('emergencyRequestsBody');
+      showLoading('normalRequestsBody');
+
+      try {
+        const response = await fetch('/api/hospital/requests.php');
+
+        if (response.status === 401) {
+          window.location.href = '/src/pages/auth/login.html';
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+          showEmptyState('emergencyRequestsBody', data.message || 'Failed to load requests');
+          showEmptyState('normalRequestsBody', data.message || 'Failed to load requests');
+          return;
+        }
+
+        requests = data.requests || [];
+
+        // Build requestData lookup for modal
+        requests.forEach(req => {
+          const id = req.id;
+          requestData[id] = {
+            id: req.request_code || `REQ${String(req.id).padStart(3, '0')}`,
+            patientName: req.patient_name || 'Unknown Patient',
+            bloodGroup: req.blood_type,
+            quantity: `${req.quantity} Unit${req.quantity > 1 ? 's' : ''}`,
+            urgency: req.urgency === 'emergency' ? 'Emergency' : 'Normal',
+            requestedDate: formatDate(req.created_at),
+            requiredByDate: formatDate(req.required_date),
+            status: req.status.charAt(0).toUpperCase() + req.status.slice(1).replace(/_/g, ' '),
+            notes: req.medical_reason || 'No additional notes provided.',
+            donorName: req.donation?.donor_name || null,
+            donorStatus: req.donation?.status ? req.donation.status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : null,
+            donorStatusUpdatedAt: req.donation?.reached_at || req.donation?.started_at || req.donation?.accepted_at || null
+          };
+        });
+
+        renderTables();
+        updateStats(data.stats || {});
+
+      } catch (error) {
+        console.error('Error loading dashboard:', error);
+        showEmptyState('emergencyRequestsBody', 'Unable to connect to server');
+        showEmptyState('normalRequestsBody', 'Unable to connect to server');
+      }
+    }
 
     function openRequestModal(id) {
       const request = requestData[id];
@@ -433,18 +531,17 @@
           Approved: "bg-green-100 text-green-700",
           Pending: "bg-yellow-100 text-yellow-700",
           Completed: "bg-green-100 text-green-700",
+          'In progress': "bg-blue-100 text-blue-700",
         }[request.status] || "bg-gray-100 text-gray-700";
 
       // Donor journey status badge colors
-      const getDonorStatusBadge = (status) => {
+      const getDonorStatusModalBadge = (status) => {
         if (!status) return '';
         const statusConfig = {
           'Accepted': { bg: 'bg-gray-100', text: 'text-gray-700', icon: 'check' },
-          'On the Way': { bg: 'bg-blue-100', text: 'text-blue-700', icon: 'navigation' },
+          'On The Way': { bg: 'bg-blue-100', text: 'text-blue-700', icon: 'navigation' },
           'Reached': { bg: 'bg-blue-100', text: 'text-blue-700', icon: 'map-pin' },
-          'Reached Location': { bg: 'bg-blue-100', text: 'text-blue-700', icon: 'map-pin' },
           'Completed': { bg: 'bg-green-100', text: 'text-green-700', icon: 'check-circle' },
-          'Donation Completed': { bg: 'bg-green-100', text: 'text-green-700', icon: 'check-circle' },
         };
         const config = statusConfig[status] || { bg: 'bg-gray-100', text: 'text-gray-700', icon: 'clock' };
         return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium ${config.bg} ${config.text} rounded-full">
@@ -470,11 +567,11 @@
                   </div>
                   <div class="space-y-1">
                     <p class="text-xs text-gray-500">Donor Status</p>
-                    ${getDonorStatusBadge(request.donorStatus)}
+                    ${getDonorStatusModalBadge(request.donorStatus)}
                   </div>
                   <div class="col-span-2 space-y-1">
                     <p class="text-xs text-gray-500">Last Updated</p>
-                    <p class="text-sm text-gray-600">${request.donorStatusUpdatedAt}</p>
+                    <p class="text-sm text-gray-600">${request.donorStatusUpdatedAt ? formatRelativeTime(request.donorStatusUpdatedAt) : 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -546,6 +643,9 @@
         window.lucide.createIcons();
       }
     }
+
+    // Load on page ready
+    document.addEventListener('DOMContentLoaded', loadDashboardData);
   </script>
   <script type="module" src="/src/scripts/main.js"></script>
 </body>

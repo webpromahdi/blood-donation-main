@@ -112,8 +112,8 @@
 
       <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
         <div class="text-right">
-          <div class="text-sm font-medium text-gray-900">Admin User</div>
-          <div class="text-xs text-gray-500">System Administrator</div>
+          <div class="text-sm font-medium text-gray-900" data-user-name>Admin User</div>
+          <div class="text-xs text-gray-500" data-user-role>System Administrator</div>
         </div>
         <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
           <i data-lucide="user" class="size-5 text-red-600"></i>
@@ -442,7 +442,9 @@
 
   <script type="module">
     import { setupLogoutButton } from '/src/scripts/auth.js';
+    import { initUserLoader } from '/src/scripts/user-loader.js';
     setupLogoutButton();
+    initUserLoader();
   </script>
   <script>
     // Blood requests data - loaded from API

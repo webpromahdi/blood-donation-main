@@ -52,8 +52,8 @@
       </button>
       <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
         <div class="text-right">
-          <div class="text-sm font-medium text-gray-900">Guest User</div>
-          <div class="text-xs text-gray-500">Blood Seeker</div>
+          <div class="text-sm font-medium text-gray-900" data-user-name>Guest User</div>
+          <div class="text-xs text-gray-500" data-user-role>Blood Seeker</div>
         </div>
         <div class="size-10 bg-orange-100 rounded-full flex items-center justify-center">
           <i data-lucide="user" class="size-5 text-orange-600"></i>
@@ -413,6 +413,10 @@
       lucide.createIcons();
       setTimeout(() => notification.remove(), 5000);
     }
+  </script>
+  <script type="module">
+    import { initUserLoader } from '/src/scripts/user-loader.js';
+    initUserLoader();
   </script>
 </body>
 

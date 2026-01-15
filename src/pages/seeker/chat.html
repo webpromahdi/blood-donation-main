@@ -1,379 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat with Donor - BloodConnect Seeker</title>
-    <link rel="stylesheet" href="/src/styles/styles.css" />
-  </head>
-  <body class="min-h-screen bg-gray-50">
-    <!-- Sidebar -->
-    <div
-      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
-    >
-      <div class="p-6 border-b border-gray-200">
-        <div class="flex items-center gap-3">
-          <div class="bg-red-600 p-2 rounded-lg">
-            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
-          </div>
-          <div>
-            <div class="font-semibold text-red-600">BloodConnect</div>
-            <div class="text-sm text-gray-500">Seeker Portal</div>
-          </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat with Donor - BloodConnect Seeker</title>
+  <link rel="stylesheet" href="/src/styles/styles.css" />
+</head>
+
+<body class="min-h-screen bg-gray-50">
+  <!-- Sidebar -->
+  <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center gap-3">
+        <div class="bg-red-600 p-2 rounded-lg">
+          <i data-lucide="heart" class="size-6 text-white fill-white"></i>
         </div>
-      </div>
-      <nav class="flex-1 overflow-y-auto py-4">
-        <a
-          href="/src/pages/seeker/request.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="send" class="size-5"></i
-          ><span>Submit Blood Request</span></a
-        >
-        <a
-          href="/src/pages/seeker/tracking.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
-          ><i data-lucide="clipboard-list" class="size-5"></i
-          ><span>Track Request</span></a
-        >
-        <a
-          href="/src/pages/seeker/chat.html"
-          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
-          ><i data-lucide="message-square" class="size-5"></i
-          ><span>Chat with Donor</span></a
-        >
-      </nav>
-      <div class="p-4 border-t border-gray-200">
-        <div class="text-center text-sm text-gray-500">
-          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        <div>
+          <div class="font-semibold text-red-600">BloodConnect</div>
+          <div class="text-sm text-gray-500">Seeker Portal</div>
         </div>
       </div>
     </div>
-
-    <!-- Header -->
-    <header
-      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
-    >
-      <div class="flex items-center gap-4 flex-1">
-        <h2 class="text-lg font-semibold text-gray-900">Chat with Donors</h2>
+    <nav class="flex-1 overflow-y-auto py-4">
+      <a href="/src/pages/seeker/request.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i data-lucide="send"
+          class="size-5"></i><span>Submit Blood Request</span></a>
+      <a href="/src/pages/seeker/tracking.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="clipboard-list" class="size-5"></i><span>Track Request</span></a>
+      <a href="/src/pages/seeker/chat.html"
+        class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"><i
+          data-lucide="message-square" class="size-5"></i><span>Chat with Donor</span></a>
+    </nav>
+    <div class="p-4 border-t border-gray-200">
+      <div class="text-center text-sm text-gray-500">
+        <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
       </div>
-      <div class="flex items-center gap-4">
-        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
-          <i data-lucide="bell" class="size-5 text-gray-700"></i>
-        </button>
-        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
-          <div class="text-right">
-            <div class="text-sm font-medium text-gray-900">Guest User</div>
-            <div class="text-xs text-gray-500">Blood Seeker</div>
-          </div>
-          <div
-            class="size-10 bg-orange-100 rounded-full flex items-center justify-center"
-          >
-            <i data-lucide="user" class="size-5 text-orange-600"></i>
-          </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header
+    class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8">
+    <div class="flex items-center gap-4 flex-1">
+      <h2 class="text-lg font-semibold text-gray-900">Chat with Donors</h2>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+        <i data-lucide="bell" class="size-5 text-gray-700"></i>
+      </button>
+      <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+        <div class="text-right">
+          <div class="text-sm font-medium text-gray-900" data-user-name>Guest User</div>
+          <div class="text-xs text-gray-500" data-user-role>Blood Seeker</div>
         </div>
-        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
-          ><i data-lucide="log-out" class="size-5"></i
-        ></a>
-      </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="ml-64 pt-16 h-screen">
-      <div class="flex h-[calc(100vh-64px)]">
-        <!-- Donor List -->
-        <div class="w-80 bg-white border-r border-gray-200 flex flex-col">
-          <div class="p-4 border-b border-gray-200">
-            <div class="relative">
-              <i
-                data-lucide="search"
-                class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400"
-              ></i>
-              <input
-                type="text"
-                placeholder="Search donors..."
-                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              />
-            </div>
-          </div>
-          <div class="flex-1 overflow-y-auto">
-            <!-- Active Donor -->
-            <div class="p-4 bg-red-50 border-l-4 border-red-600 cursor-pointer">
-              <div class="flex items-center gap-3">
-                <div class="relative">
-                  <div
-                    class="size-10 bg-green-100 rounded-full flex items-center justify-center"
-                  >
-                    <i data-lucide="user" class="size-5 text-green-600"></i>
-                  </div>
-                  <div
-                    class="absolute -bottom-0.5 -right-0.5 size-3 bg-green-500 rounded-full border-2 border-white"
-                  ></div>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <h4 class="font-medium text-gray-900 truncate">
-                      John Smith
-                    </h4>
-                    <span class="text-xs text-gray-500">10:30 AM</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span
-                      class="px-1.5 py-0.5 text-xs bg-red-100 text-red-700 rounded"
-                      >O+</span
-                    >
-                    <p class="text-sm text-gray-600 truncate">
-                      I can help with your request
-                    </p>
-                  </div>
-                </div>
-                <span
-                  class="size-5 bg-red-600 text-white text-xs rounded-full flex items-center justify-center"
-                  >2</span
-                >
-              </div>
-            </div>
-
-            <!-- Donor 2 -->
-            <div
-              class="p-4 hover:bg-gray-50 cursor-pointer border-b border-gray-100"
-            >
-              <div class="flex items-center gap-3">
-                <div class="relative">
-                  <div
-                    class="size-10 bg-green-100 rounded-full flex items-center justify-center"
-                  >
-                    <i data-lucide="user" class="size-5 text-green-600"></i>
-                  </div>
-                  <div
-                    class="absolute -bottom-0.5 -right-0.5 size-3 bg-green-500 rounded-full border-2 border-white"
-                  ></div>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <h4 class="font-medium text-gray-900 truncate">
-                      Maria Garcia
-                    </h4>
-                    <span class="text-xs text-gray-500">9:45 AM</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span
-                      class="px-1.5 py-0.5 text-xs bg-red-100 text-red-700 rounded"
-                      >O+</span
-                    >
-                    <p class="text-sm text-gray-600 truncate">
-                      When do you need the donation?
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Donor 3 -->
-            <div
-              class="p-4 hover:bg-gray-50 cursor-pointer border-b border-gray-100"
-            >
-              <div class="flex items-center gap-3">
-                <div
-                  class="size-10 bg-gray-100 rounded-full flex items-center justify-center"
-                >
-                  <i data-lucide="user" class="size-5 text-gray-600"></i>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <h4 class="font-medium text-gray-900 truncate">
-                      David Lee
-                    </h4>
-                    <span class="text-xs text-gray-500">Yesterday</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span
-                      class="px-1.5 py-0.5 text-xs bg-red-100 text-red-700 rounded"
-                      >O+</span
-                    >
-                    <p class="text-sm text-gray-600 truncate">
-                      Available this weekend
-                    </p>
-                  </div>
-                </div>
-                <span
-                  class="size-5 bg-red-600 text-white text-xs rounded-full flex items-center justify-center"
-                  >1</span
-                >
-              </div>
-            </div>
-
-            <!-- Donor 4 -->
-            <div
-              class="p-4 hover:bg-gray-50 cursor-pointer border-b border-gray-100"
-            >
-              <div class="flex items-center gap-3">
-                <div
-                  class="size-10 bg-gray-100 rounded-full flex items-center justify-center"
-                >
-                  <i data-lucide="user" class="size-5 text-gray-600"></i>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <h4 class="font-medium text-gray-900 truncate">
-                      Sarah Johnson
-                    </h4>
-                    <span class="text-xs text-gray-500">Yesterday</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span
-                      class="px-1.5 py-0.5 text-xs bg-red-100 text-red-700 rounded"
-                      >A-</span
-                    >
-                    <p class="text-sm text-gray-600 truncate">
-                      Let me check my schedule
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Chat Area -->
-        <div class="flex-1 flex flex-col bg-gray-50">
-          <!-- Chat Header -->
-          <div
-            class="p-4 bg-white border-b border-gray-200 flex items-center justify-between"
-          >
-            <div class="flex items-center gap-3">
-              <div class="relative">
-                <div
-                  class="size-10 bg-green-100 rounded-full flex items-center justify-center"
-                >
-                  <i data-lucide="user" class="size-5 text-green-600"></i>
-                </div>
-                <div
-                  class="absolute -bottom-0.5 -right-0.5 size-3 bg-green-500 rounded-full border-2 border-white"
-                ></div>
-              </div>
-              <div>
-                <h3 class="font-semibold text-gray-900">John Smith</h3>
-                <div class="flex items-center gap-2 text-sm">
-                  <span class="text-green-600">Online</span>
-                  <span class="text-gray-300">•</span>
-                  <span
-                    class="px-1.5 py-0.5 text-xs bg-red-100 text-red-700 rounded"
-                    >O+</span
-                  >
-                  <span class="text-gray-600 flex items-center gap-1"
-                    ><i data-lucide="map-pin" class="size-3"></i>Downtown</span
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="flex items-center gap-2">
-              <button class="p-2 hover:bg-gray-100 rounded-lg">
-                <i data-lucide="phone" class="size-5 text-gray-600"></i>
-              </button>
-              <button class="p-2 hover:bg-gray-100 rounded-lg">
-                <i data-lucide="more-vertical" class="size-5 text-gray-600"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- Request Context -->
-          <div
-            class="p-3 bg-blue-50 border-b border-blue-200 flex items-center justify-between"
-          >
-            <div class="flex items-center gap-3">
-              <i data-lucide="droplet" class="size-5 text-red-600"></i>
-              <span class="text-sm text-gray-700"
-                >Request: <span class="font-medium">REQ001</span> -
-                <span class="text-red-600 font-medium">O+</span> - 2 Units -
-                City Hospital</span
-              >
-            </div>
-            <a
-              href="/src/pages/seeker/request-details.html?id=REQ001"
-              class="text-sm text-blue-600 hover:underline"
-              >View Details</a
-            >
-          </div>
-
-          <!-- Messages -->
-          <div class="flex-1 overflow-y-auto p-6 space-y-4">
-            <div class="flex justify-start">
-              <div class="max-w-md">
-                <div class="bg-white p-4 rounded-lg shadow-sm">
-                  <p class="text-gray-900">Hello, I saw your blood request</p>
-                </div>
-                <span class="text-xs text-gray-500 mt-1 block">10:25 AM</span>
-              </div>
-            </div>
-            <div class="flex justify-start">
-              <div class="max-w-md">
-                <div class="bg-white p-4 rounded-lg shadow-sm">
-                  <p class="text-gray-900">I can help with your request</p>
-                </div>
-                <span class="text-xs text-gray-500 mt-1 block">10:30 AM</span>
-              </div>
-            </div>
-            <div class="flex justify-end">
-              <div class="max-w-md">
-                <div class="bg-red-600 p-4 rounded-lg">
-                  <p class="text-white">
-                    Thank you so much! When are you available?
-                  </p>
-                </div>
-                <span class="text-xs text-gray-500 mt-1 block text-right"
-                  >10:32 AM</span
-                >
-              </div>
-            </div>
-            <div class="flex justify-start">
-              <div class="max-w-md">
-                <div class="bg-white p-4 rounded-lg shadow-sm">
-                  <p class="text-gray-900">
-                    I can donate this Friday afternoon
-                  </p>
-                </div>
-                <span class="text-xs text-gray-500 mt-1 block">10:35 AM</span>
-              </div>
-            </div>
-            <div class="flex justify-end">
-              <div class="max-w-md">
-                <div class="bg-red-600 p-4 rounded-lg">
-                  <p class="text-white">
-                    That works perfectly! Should we meet at City Hospital?
-                  </p>
-                </div>
-                <span class="text-xs text-gray-500 mt-1 block text-right"
-                  >10:37 AM</span
-                >
-              </div>
-            </div>
-          </div>
-
-          <!-- Message Input -->
-          <div class="p-4 bg-white border-t border-gray-200">
-            <form class="flex items-center gap-3">
-              <button type="button" class="p-2 hover:bg-gray-100 rounded-lg">
-                <i data-lucide="paperclip" class="size-5 text-gray-600"></i>
-              </button>
-              <input
-                type="text"
-                placeholder="Type your message..."
-                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              />
-              <button
-                type="submit"
-                class="p-2 bg-red-600 hover:bg-red-700 rounded-lg"
-              >
-                <i data-lucide="send" class="size-5 text-white"></i>
-              </button>
-            </form>
-          </div>
+        <div class="size-10 bg-orange-100 rounded-full flex items-center justify-center">
+          <i data-lucide="user" class="size-5 text-orange-600"></i>
         </div>
       </div>
-    </main>
+      <a href="/" class="p-2 text-gray-600 hover:text-red-600"><i data-lucide="log-out" class="size-5"></i></a>
+    </div>
+  </header>
 
-    <script type="module" src="/src/scripts/main.js"></script>
-  </body>
+  <!-- Main Content -->
+  <main class="ml-64 pt-16 h-screen">
+    <div class="flex h-[calc(100vh-64px)] items-center justify-center">
+      <!-- Coming Soon State -->
+      <div class="text-center max-w-md px-8">
+        <div class="bg-gray-100 size-24 rounded-full flex items-center justify-center mx-auto mb-6">
+          <i data-lucide="message-square" class="size-12 text-gray-400"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">Chat Feature Coming Soon</h2>
+        <p class="text-gray-600 mb-6">
+          Real-time messaging with donors will be available in a future update.
+          For now, you can view donor contact information on the request details page.
+        </p>
+        <div class="flex flex-col gap-3">
+          <a href="/src/pages/seeker/tracking.html"
+            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium">
+            <i data-lucide="clipboard-list" class="size-5"></i>
+            Track Your Requests
+          </a>
+          <a href="/src/pages/seeker/request.html"
+            class="inline-flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium">
+            <i data-lucide="send" class="size-5"></i>
+            Submit New Request
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="/src/scripts/main.js"></script>
+  <script type="module">
+    import { initUserLoader } from '/src/scripts/user-loader.js';
+    initUserLoader();
+  </script>
+</body>
+
 </html>
-
-

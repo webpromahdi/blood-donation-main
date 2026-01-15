@@ -1,1148 +1,860 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Donor Approval - BloodConnect Admin</title>
-    <link rel="stylesheet" href="/src/styles/styles.css" />
-  </head>
-  <body class="min-h-screen bg-gray-50">
-    <!-- Sidebar -->
-    <div
-      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
-    >
-      <div class="p-6 border-b border-gray-200">
-        <div class="flex items-center gap-3">
-          <div class="bg-red-600 p-2 rounded-lg">
-            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
-          </div>
-          <div>
-            <div class="font-semibold text-red-600">BloodConnect</div>
-            <div class="text-sm text-gray-500">Admin Panel</div>
-          </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donor Approval - BloodConnect Admin</title>
+  <link rel="stylesheet" href="/src/styles/styles.css" />
+</head>
+
+<body class="min-h-screen bg-gray-50">
+  <!-- Sidebar -->
+  <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center gap-3">
+        <div class="bg-red-600 p-2 rounded-lg">
+          <i data-lucide="heart" class="size-6 text-white fill-white"></i>
         </div>
-      </div>
-      <nav class="flex-1 overflow-y-auto py-4">
-        <a
-          href="/src/pages/admin/dashboard.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-        >
-          <i data-lucide="layout-dashboard" class="size-5"></i>
-          <span>Dashboard</span>
-        </a>
-        <a
-          href="/src/pages/admin/donors.html"
-          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
-        >
-          <i data-lucide="users" class="size-5"></i>
-          <span>Donors</span>
-        </a>
-        <a
-          href="/src/pages/admin/hospitals.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-        >
-          <i data-lucide="building-2" class="size-5"></i>
-          <span>Hospitals</span>
-        </a>
-        <a
-          href="/src/pages/admin/blood-groups.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-        >
-          <i data-lucide="droplet" class="size-5"></i>
-          <span>Blood Groups</span>
-        </a>
-        <a
-          href="/src/pages/admin/reports.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-        >
-          <i data-lucide="file-text" class="size-5"></i>
-          <span>Reports</span>
-        </a>
-        <a
-          href="/src/pages/admin/announcements.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-        >
-          <i data-lucide="megaphone" class="size-5"></i>
-          <span>Announcements</span>
-        </a>
-        <a
-          href="/src/pages/admin/chat.html"
-          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-        >
-          <i data-lucide="message-square" class="size-5"></i>
-          <span>Chat</span>
-        </a>
-      </nav>
-      <div class="p-4 border-t border-gray-200">
-        <div class="text-center text-sm text-gray-500">
-          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        <div>
+          <div class="font-semibold text-red-600">BloodConnect</div>
+          <div class="text-sm text-gray-500">Admin Panel</div>
         </div>
       </div>
     </div>
+    <nav class="flex-1 overflow-y-auto py-4">
+      <a href="/src/pages/admin/dashboard.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
+        <i data-lucide="layout-dashboard" class="size-5"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="/src/pages/admin/donors.html"
+        class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600">
+        <i data-lucide="users" class="size-5"></i>
+        <span>Donors</span>
+      </a>
+      <a href="/src/pages/admin/hospitals.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
+        <i data-lucide="building-2" class="size-5"></i>
+        <span>Hospitals</span>
+      </a>
+      <a href="/src/pages/admin/blood-groups.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
+        <i data-lucide="droplet" class="size-5"></i>
+        <span>Blood Groups</span>
+      </a>
+      <a href="/src/pages/admin/reports.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
+        <i data-lucide="file-text" class="size-5"></i>
+        <span>Reports</span>
+      </a>
+      <a href="/src/pages/admin/announcements.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
+        <i data-lucide="megaphone" class="size-5"></i>
+        <span>Announcements</span>
+      </a>
+      <a href="/src/pages/admin/chat.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
+        <i data-lucide="message-square" class="size-5"></i>
+        <span>Chat</span>
+      </a>
+    </nav>
+    <div class="p-4 border-t border-gray-200">
+      <div class="text-center text-sm text-gray-500">
+        <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+      </div>
+    </div>
+  </div>
 
-    <!-- Header -->
-    <header
-      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
-    >
-      <div class="flex items-center gap-4 flex-1">
-        <div class="relative flex-1 max-w-md">
-          <i
-            data-lucide="search"
-            class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
-          ></i>
-          <input
-            type="text"
-            placeholder="Search donors..."
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-          />
+  <!-- Header -->
+  <header
+    class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8">
+    <div class="flex items-center gap-4 flex-1">
+      <div class="relative flex-1 max-w-md">
+        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
+        <input type="text" placeholder="Search donors..."
+          class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <!-- Notification Dropdown -->
+      <div class="relative" id="notificationDropdown">
+        <button class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="toggleNotifications()"
+          id="notificationBell">
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+          <span
+            class="absolute -top-1 -right-1 size-5 flex items-center justify-center p-0 bg-red-600 text-white text-xs rounded-full"
+            id="notificationBadge">4</span>
+        </button>
+
+        <!-- Notification Panel -->
+        <div id="notificationPanel"
+          class="hidden absolute right-0 top-12 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50">
+          <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+            <h3 class="font-semibold text-gray-900">Notifications</h3>
+            <button onclick="markAllAsRead()" class="text-xs text-red-600 hover:text-red-700 font-medium">
+              Mark all as read
+            </button>
+          </div>
+          <div class="max-h-80 overflow-y-auto" id="notificationList">
+            <!-- Notifications will be populated by JS -->
+          </div>
+          <div class="p-3 border-t border-gray-200 text-center">
+            <button class="text-sm text-red-600 hover:text-red-700 font-medium">
+              View all notifications
+            </button>
+          </div>
         </div>
       </div>
-      <div class="flex items-center gap-4">
-        <!-- Notification Dropdown -->
-        <div class="relative" id="notificationDropdown">
-          <button
-            class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            onclick="toggleNotifications()"
-            id="notificationBell"
-          >
-            <i data-lucide="bell" class="size-5 text-gray-700"></i>
-            <span
-              class="absolute -top-1 -right-1 size-5 flex items-center justify-center p-0 bg-red-600 text-white text-xs rounded-full"
-              id="notificationBadge"
-              >4</span
-            >
-          </button>
-
-          <!-- Notification Panel -->
-          <div
-            id="notificationPanel"
-            class="hidden absolute right-0 top-12 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50"
-          >
-            <div
-              class="p-4 border-b border-gray-200 flex items-center justify-between"
-            >
-              <h3 class="font-semibold text-gray-900">Notifications</h3>
-              <button
-                onclick="markAllAsRead()"
-                class="text-xs text-red-600 hover:text-red-700 font-medium"
-              >
-                Mark all as read
-              </button>
-            </div>
-            <div class="max-h-80 overflow-y-auto" id="notificationList">
-              <!-- Notifications will be populated by JS -->
-            </div>
-            <div class="p-3 border-t border-gray-200 text-center">
-              <button
-                class="text-sm text-red-600 hover:text-red-700 font-medium"
-              >
-                View all notifications
-              </button>
-            </div>
-          </div>
+      <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+        <div class="text-right">
+          <div class="text-sm font-medium text-gray-900">Admin User</div>
+          <div class="text-xs text-gray-500">System Administrator</div>
         </div>
-        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
-          <div class="text-right">
-            <div class="text-sm font-medium text-gray-900">Admin User</div>
-            <div class="text-xs text-gray-500">System Administrator</div>
-          </div>
-          <div
-            class="size-10 bg-red-100 rounded-full flex items-center justify-center"
-          >
-            <i data-lucide="user" class="size-5 text-red-600"></i>
-          </div>
+        <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
+          <i data-lucide="user" class="size-5 text-red-600"></i>
         </div>
-        <a
-          href="/"
-          class="p-2 text-gray-600 hover:text-red-600 transition-colors"
-        >
-          <i data-lucide="log-out" class="size-5"></i>
-        </a>
       </div>
-    </header>
+      <a href="/" class="p-2 text-gray-600 hover:text-red-600 transition-colors">
+        <i data-lucide="log-out" class="size-5"></i>
+      </a>
+    </div>
+  </header>
 
-    <!-- Main Content -->
-    <main class="ml-64 pt-16">
-      <div class="p-8">
-        <div class="space-y-8">
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900 mb-2">
-              Donor Approval
-            </h1>
-            <p class="text-gray-600">
-              Review and approve pending donor registrations
+  <!-- Main Content -->
+  <main class="ml-64 pt-16">
+    <div class="p-8">
+      <div class="space-y-8">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">
+            Donor Approval
+          </h1>
+          <p class="text-gray-600">
+            Review and approve pending donor registrations
+          </p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Pending Approvals</p>
+                <h2 class="text-3xl font-bold text-gray-900">5</h2>
+              </div>
+              <div class="bg-yellow-100 p-3 rounded-lg">
+                <i data-lucide="users" class="size-6 text-yellow-600"></i>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Approved Today</p>
+                <h2 class="text-3xl font-bold text-gray-900">12</h2>
+              </div>
+              <div class="bg-green-100 p-3 rounded-lg">
+                <i data-lucide="check-circle" class="size-6 text-green-600"></i>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Rejected Today</p>
+                <h2 class="text-3xl font-bold text-gray-900">3</h2>
+              </div>
+              <div class="bg-red-100 p-3 rounded-lg">
+                <i data-lucide="x-circle" class="size-6 text-red-600"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending Donors Table -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-1">
+              Pending Donor Accounts
+            </h2>
+            <p class="text-sm text-gray-600">
+              Review donor information and approve or reject applications
             </p>
           </div>
-
-          <!-- Summary Cards -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="p-6 bg-white border border-gray-200 rounded-xl">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-sm text-gray-600 mb-1">Pending Approvals</p>
-                  <h2 class="text-3xl font-bold text-gray-900">5</h2>
-                </div>
-                <div class="bg-yellow-100 p-3 rounded-lg">
-                  <i data-lucide="users" class="size-6 text-yellow-600"></i>
-                </div>
-              </div>
-            </div>
-            <div class="p-6 bg-white border border-gray-200 rounded-xl">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-sm text-gray-600 mb-1">Approved Today</p>
-                  <h2 class="text-3xl font-bold text-gray-900">12</h2>
-                </div>
-                <div class="bg-green-100 p-3 rounded-lg">
-                  <i
-                    data-lucide="check-circle"
-                    class="size-6 text-green-600"
-                  ></i>
-                </div>
-              </div>
-            </div>
-            <div class="p-6 bg-white border border-gray-200 rounded-xl">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-sm text-gray-600 mb-1">Rejected Today</p>
-                  <h2 class="text-3xl font-bold text-gray-900">3</h2>
-                </div>
-                <div class="bg-red-100 p-3 rounded-lg">
-                  <i data-lucide="x-circle" class="size-6 text-red-600"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pending Donors Table -->
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="mb-6">
-              <h2 class="text-lg font-semibold text-gray-900 mb-1">
-                Pending Donor Accounts
-              </h2>
-              <p class="text-sm text-gray-600">
-                Review donor information and approve or reject applications
-              </p>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="w-full">
-                <thead>
-                  <tr class="border-b border-gray-200">
-                    <th
-                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                    >
-                      Donor ID
-                    </th>
-                    <th
-                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                    >
-                      Name
-                    </th>
-                    <th
-                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                    >
-                      Email
-                    </th>
-                    <th
-                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                    >
-                      Phone
-                    </th>
-                    <th
-                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                    >
-                      Blood Type
-                    </th>
-                    <th
-                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                    >
-                      Age
-                    </th>
-                    <th
-                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                    >
-                      Status
-                    </th>
-                    <th
-                      class="text-left py-3 px-4 text-sm font-medium text-gray-600"
-                    >
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="border-b border-gray-100 hover:bg-gray-50">
-                    <td class="py-3 px-4 text-sm text-gray-900">DON001</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      Alex Thompson
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      alex@email.com
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">555-0101</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                        >O+</span
-                      >
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">28</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full"
-                        >Pending</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <div class="flex gap-2">
-                        <button
-                          class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                          <i data-lucide="eye" class="size-3 inline mr-1"></i
-                          >View
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700"
-                        >
-                          <i
-                            data-lucide="check-circle"
-                            class="size-3 inline mr-1"
-                          ></i
-                          >Approve
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          <i
-                            data-lucide="x-circle"
-                            class="size-3 inline mr-1"
-                          ></i
-                          >Reject
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="border-b border-gray-100 hover:bg-gray-50">
-                    <td class="py-3 px-4 text-sm text-gray-900">DON002</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      Maria Garcia
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      maria@email.com
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">555-0102</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                        >A+</span
-                      >
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">32</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full"
-                        >Pending</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <div class="flex gap-2">
-                        <button
-                          class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                          <i data-lucide="eye" class="size-3 inline mr-1"></i
-                          >View
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700"
-                        >
-                          <i
-                            data-lucide="check-circle"
-                            class="size-3 inline mr-1"
-                          ></i
-                          >Approve
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          <i
-                            data-lucide="x-circle"
-                            class="size-3 inline mr-1"
-                          ></i
-                          >Reject
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="border-b border-gray-100 hover:bg-gray-50">
-                    <td class="py-3 px-4 text-sm text-gray-900">DON003</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">David Lee</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      david@email.com
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">555-0103</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                        >B+</span
-                      >
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">25</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full"
-                        >Pending</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <div class="flex gap-2">
-                        <button
-                          class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                          <i data-lucide="eye" class="size-3 inline mr-1"></i
-                          >View
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700"
-                        >
-                          <i
-                            data-lucide="check-circle"
-                            class="size-3 inline mr-1"
-                          ></i
-                          >Approve
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          <i
-                            data-lucide="x-circle"
-                            class="size-3 inline mr-1"
-                          ></i
-                          >Reject
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="border-b border-gray-100 hover:bg-gray-50">
-                    <td class="py-3 px-4 text-sm text-gray-900">DON004</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      Jennifer Brown
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      jennifer@email.com
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">555-0104</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                        >AB-</span
-                      >
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">30</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full"
-                        >Pending</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <div class="flex gap-2">
-                        <button
-                          class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                          <i data-lucide="eye" class="size-3 inline mr-1"></i
-                          >View
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700"
-                        >
-                          <i
-                            data-lucide="check-circle"
-                            class="size-3 inline mr-1"
-                          ></i
-                          >Approve
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          <i
-                            data-lucide="x-circle"
-                            class="size-3 inline mr-1"
-                          ></i
-                          >Reject
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-gray-50">
-                    <td class="py-3 px-4 text-sm text-gray-900">DON005</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      Robert Wilson
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">
-                      robert@email.com
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">555-0105</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full"
-                        >O-</span
-                      >
-                    </td>
-                    <td class="py-3 px-4 text-sm text-gray-900">35</td>
-                    <td class="py-3 px-4">
-                      <span
-                        class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full"
-                        >Pending</span
-                      >
-                    </td>
-                    <td class="py-3 px-4">
-                      <div class="flex gap-2">
-                        <button
-                          class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                          <i data-lucide="eye" class="size-3 inline mr-1"></i
-                          >View
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700"
-                        >
-                          <i
-                            data-lucide="check-circle"
-                            class="size-3 inline mr-1"
-                          ></i
-                          >Approve
-                        </button>
-                        <button
-                          class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          <i
-                            data-lucide="x-circle"
-                            class="size-3 inline mr-1"
-                          ></i
-                          >Reject
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-gray-200">
+                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                    Donor ID
+                  </th>
+                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                    Name
+                  </th>
+                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                    Email
+                  </th>
+                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                    Phone
+                  </th>
+                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                    Blood Type
+                  </th>
+                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                    Age
+                  </th>
+                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                    Status
+                  </th>
+                  <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-sm text-gray-900">DON001</td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    Alex Thompson
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    alex@email.com
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">555-0101</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">O+</span>
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">28</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full">Pending</span>
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <i data-lucide="eye" class="size-3 inline mr-1"></i>View
+                      </button>
+                      <button class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700">
+                        <i data-lucide="check-circle" class="size-3 inline mr-1"></i>Approve
+                      </button>
+                      <button class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        <i data-lucide="x-circle" class="size-3 inline mr-1"></i>Reject
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-sm text-gray-900">DON002</td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    Maria Garcia
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    maria@email.com
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">555-0102</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">A+</span>
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">32</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full">Pending</span>
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <i data-lucide="eye" class="size-3 inline mr-1"></i>View
+                      </button>
+                      <button class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700">
+                        <i data-lucide="check-circle" class="size-3 inline mr-1"></i>Approve
+                      </button>
+                      <button class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        <i data-lucide="x-circle" class="size-3 inline mr-1"></i>Reject
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-sm text-gray-900">DON003</td>
+                  <td class="py-3 px-4 text-sm text-gray-900">David Lee</td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    david@email.com
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">555-0103</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">B+</span>
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">25</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full">Pending</span>
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <i data-lucide="eye" class="size-3 inline mr-1"></i>View
+                      </button>
+                      <button class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700">
+                        <i data-lucide="check-circle" class="size-3 inline mr-1"></i>Approve
+                      </button>
+                      <button class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        <i data-lucide="x-circle" class="size-3 inline mr-1"></i>Reject
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-3 px-4 text-sm text-gray-900">DON004</td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    Jennifer Brown
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    jennifer@email.com
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">555-0104</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">AB-</span>
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">30</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full">Pending</span>
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <i data-lucide="eye" class="size-3 inline mr-1"></i>View
+                      </button>
+                      <button class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700">
+                        <i data-lucide="check-circle" class="size-3 inline mr-1"></i>Approve
+                      </button>
+                      <button class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        <i data-lucide="x-circle" class="size-3 inline mr-1"></i>Reject
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="hover:bg-gray-50">
+                  <td class="py-3 px-4 text-sm text-gray-900">DON005</td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    Robert Wilson
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">
+                    robert@email.com
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">555-0105</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">O-</span>
+                  </td>
+                  <td class="py-3 px-4 text-sm text-gray-900">35</td>
+                  <td class="py-3 px-4">
+                    <span
+                      class="px-2 py-1 text-xs font-medium border border-yellow-600 text-yellow-600 rounded-full">Pending</span>
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex gap-2">
+                      <button class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <i data-lucide="eye" class="size-3 inline mr-1"></i>View
+                      </button>
+                      <button class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700">
+                        <i data-lucide="check-circle" class="size-3 inline mr-1"></i>Approve
+                      </button>
+                      <button class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        <i data-lucide="x-circle" class="size-3 inline mr-1"></i>Reject
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </main>
+    </div>
+  </main>
 
-    <!-- Donor Details Modal -->
-    <div id="donorModal" class="fixed inset-0 z-50 hidden">
-      <div
-        class="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onclick="closeDonorModal()"
-      ></div>
-      <div class="flex items-center justify-center min-h-screen p-4">
-        <div
-          class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-        >
-          <!-- Modal Header -->
-          <div
-            class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl"
-          >
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div class="p-2 rounded-lg bg-red-100">
-                  <i data-lucide="user" class="size-5 text-red-600"></i>
-                </div>
-                <div>
-                  <h3 class="text-lg font-semibold text-gray-900">
-                    Donor Details
-                  </h3>
-                  <p id="modalDonorId" class="text-sm text-gray-500">DON001</p>
-                </div>
+  <!-- Donor Details Modal -->
+  <div id="donorModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDonorModal()"></div>
+    <div class="flex items-center justify-center min-h-screen p-4">
+      <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <!-- Modal Header -->
+        <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="p-2 rounded-lg bg-red-100">
+                <i data-lucide="user" class="size-5 text-red-600"></i>
               </div>
-              <button
-                onclick="closeDonorModal()"
-                class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <i data-lucide="x" class="size-5 text-gray-500"></i>
-              </button>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">
+                  Donor Details
+                </h3>
+                <p id="modalDonorId" class="text-sm text-gray-500">DON001</p>
+              </div>
             </div>
+            <button onclick="closeDonorModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <i data-lucide="x" class="size-5 text-gray-500"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Modal Content -->
+        <div class="p-6 space-y-6">
+          <!-- Status Badge -->
+          <div class="flex items-center gap-3">
+            <span id="modalDonorStatus"
+              class="px-3 py-1.5 text-sm font-medium border border-yellow-600 text-yellow-600 rounded-full">Pending</span>
+            <span id="modalIdVerified"
+              class="inline-flex items-center px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">
+              <i data-lucide="shield-alert" class="size-4 mr-1"></i>Not
+              Verified
+            </span>
           </div>
 
-          <!-- Modal Content -->
-          <div class="p-6 space-y-6">
-            <!-- Status Badge -->
-            <div class="flex items-center gap-3">
-              <span
-                id="modalDonorStatus"
-                class="px-3 py-1.5 text-sm font-medium border border-yellow-600 text-yellow-600 rounded-full"
-                >Pending</span
-              >
-              <span
-                id="modalIdVerified"
-                class="inline-flex items-center px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full"
-              >
-                <i data-lucide="shield-alert" class="size-4 mr-1"></i>Not
-                Verified
-              </span>
-            </div>
-
-            <!-- Personal Information -->
-            <div class="bg-gray-50 rounded-xl p-4">
-              <h4
-                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
-              >
-                <i data-lucide="user" class="size-4 text-gray-600"></i>
-                Personal Information
-              </h4>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <p class="text-xs text-gray-500 mb-1">Full Name</p>
-                  <p
-                    id="modalDonorName"
-                    class="text-sm font-medium text-gray-900"
-                  >
-                    Alex Thompson
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 mb-1">Age</p>
-                  <p
-                    id="modalDonorAge"
-                    class="text-sm font-medium text-gray-900"
-                  >
-                    28 years
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 mb-1">Gender</p>
-                  <p
-                    id="modalDonorGender"
-                    class="text-sm font-medium text-gray-900"
-                  >
-                    Male
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 mb-1">Weight</p>
-                  <p
-                    id="modalDonorWeight"
-                    class="text-sm font-medium text-gray-900"
-                  >
-                    75 kg
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Contact Information -->
-            <div class="bg-blue-50 rounded-xl p-4">
-              <h4
-                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
-              >
-                <i data-lucide="phone" class="size-4 text-blue-600"></i>
-                Contact Information
-              </h4>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <p class="text-xs text-gray-500 mb-1">Email</p>
-                  <p
-                    id="modalDonorEmail"
-                    class="text-sm font-medium text-gray-900"
-                  >
-                    alex@email.com
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 mb-1">Phone</p>
-                  <p
-                    id="modalDonorPhone"
-                    class="text-sm font-medium text-gray-900"
-                  >
-                    555-0101
-                  </p>
-                </div>
-                <div class="col-span-2">
-                  <p class="text-xs text-gray-500 mb-1">Address</p>
-                  <p
-                    id="modalDonorAddress"
-                    class="text-sm font-medium text-gray-900"
-                  >
-                    123 Main Street, Downtown
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 mb-1">City</p>
-                  <p
-                    id="modalDonorCity"
-                    class="text-sm font-medium text-gray-900"
-                  >
-                    New York
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Blood & Health Information -->
-            <div class="bg-red-50 rounded-xl p-4">
-              <h4
-                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
-              >
-                <i data-lucide="droplet" class="size-4 text-red-600"></i>
-                Blood & Health Information
-              </h4>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <p class="text-xs text-gray-500 mb-1">Blood Type</p>
-                  <span
-                    id="modalDonorBloodType"
-                    class="inline-block px-3 py-1 text-sm font-bold border-2 border-red-600 text-red-600 rounded-full"
-                    >O+</span
-                  >
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 mb-1">Health Status</p>
-                  <p
-                    id="modalDonorHealthStatus"
-                    class="text-sm font-medium text-gray-900"
-                  >
-                    Healthy
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Donation History -->
-            <div class="bg-green-50 rounded-xl p-4">
-              <h4
-                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
-              >
-                <i data-lucide="heart" class="size-4 text-green-600"></i>
-                Donation History
-              </h4>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <p class="text-xs text-gray-500 mb-1">Total Donations</p>
-                  <p
-                    id="modalDonorTotalDonations"
-                    class="text-sm font-medium text-gray-900"
-                  >
-                    5
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 mb-1">Last Donation</p>
-                  <p
-                    id="modalDonorLastDonation"
-                    class="text-sm font-medium text-gray-900"
-                  >
-                    2024-09-15
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Registration Info -->
-            <div class="bg-purple-50 rounded-xl p-4">
-              <h4
-                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
-              >
-                <i data-lucide="calendar" class="size-4 text-purple-600"></i>
-                Registration
-              </h4>
+          <!-- Personal Information -->
+          <div class="bg-gray-50 rounded-xl p-4">
+            <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <i data-lucide="user" class="size-4 text-gray-600"></i>
+              Personal Information
+            </h4>
+            <div class="grid grid-cols-2 gap-4">
               <div>
-                <p class="text-xs text-gray-500 mb-1">Registered At</p>
-                <p
-                  id="modalDonorRegisteredAt"
-                  class="text-sm font-medium text-gray-900"
-                >
-                  2024-12-10
+                <p class="text-xs text-gray-500 mb-1">Full Name</p>
+                <p id="modalDonorName" class="text-sm font-medium text-gray-900">
+                  Alex Thompson
+                </p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500 mb-1">Age</p>
+                <p id="modalDonorAge" class="text-sm font-medium text-gray-900">
+                  28 years
+                </p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500 mb-1">Gender</p>
+                <p id="modalDonorGender" class="text-sm font-medium text-gray-900">
+                  Male
+                </p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500 mb-1">Weight</p>
+                <p id="modalDonorWeight" class="text-sm font-medium text-gray-900">
+                  75 kg
                 </p>
               </div>
             </div>
+          </div>
 
-            <!-- Rejection Reason (if rejected) -->
-            <div
-              id="modalRejectionSection"
-              class="hidden bg-red-50 border border-red-200 rounded-xl p-4"
-            >
-              <h4
-                class="text-sm font-semibold text-red-900 mb-2 flex items-center gap-2"
-              >
-                <i data-lucide="alert-triangle" class="size-4 text-red-600"></i>
-                Rejection Reason
-              </h4>
-              <p id="modalRejectionReason" class="text-sm text-red-700">
-                Incomplete documentation
+          <!-- Contact Information -->
+          <div class="bg-blue-50 rounded-xl p-4">
+            <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <i data-lucide="phone" class="size-4 text-blue-600"></i>
+              Contact Information
+            </h4>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-xs text-gray-500 mb-1">Email</p>
+                <p id="modalDonorEmail" class="text-sm font-medium text-gray-900">
+                  alex@email.com
+                </p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500 mb-1">Phone</p>
+                <p id="modalDonorPhone" class="text-sm font-medium text-gray-900">
+                  555-0101
+                </p>
+              </div>
+              <div class="col-span-2">
+                <p class="text-xs text-gray-500 mb-1">Address</p>
+                <p id="modalDonorAddress" class="text-sm font-medium text-gray-900">
+                  123 Main Street, Downtown
+                </p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500 mb-1">City</p>
+                <p id="modalDonorCity" class="text-sm font-medium text-gray-900">
+                  New York
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blood & Health Information -->
+          <div class="bg-red-50 rounded-xl p-4">
+            <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <i data-lucide="droplet" class="size-4 text-red-600"></i>
+              Blood & Health Information
+            </h4>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-xs text-gray-500 mb-1">Blood Type</p>
+                <span id="modalDonorBloodType"
+                  class="inline-block px-3 py-1 text-sm font-bold border-2 border-red-600 text-red-600 rounded-full">O+</span>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500 mb-1">Health Status</p>
+                <p id="modalDonorHealthStatus" class="text-sm font-medium text-gray-900">
+                  Healthy
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Donation History -->
+          <div class="bg-green-50 rounded-xl p-4">
+            <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <i data-lucide="heart" class="size-4 text-green-600"></i>
+              Donation History
+            </h4>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-xs text-gray-500 mb-1">Total Donations</p>
+                <p id="modalDonorTotalDonations" class="text-sm font-medium text-gray-900">
+                  5
+                </p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500 mb-1">Last Donation</p>
+                <p id="modalDonorLastDonation" class="text-sm font-medium text-gray-900">
+                  2024-09-15
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Registration Info -->
+          <div class="bg-purple-50 rounded-xl p-4">
+            <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <i data-lucide="calendar" class="size-4 text-purple-600"></i>
+              Registration
+            </h4>
+            <div>
+              <p class="text-xs text-gray-500 mb-1">Registered At</p>
+              <p id="modalDonorRegisteredAt" class="text-sm font-medium text-gray-900">
+                2024-12-10
               </p>
             </div>
           </div>
 
-          <!-- Modal Footer -->
-          <div
-            class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 rounded-b-2xl"
-          >
-            <div class="flex items-center justify-end gap-3">
-              <button
-                onclick="closeDonorModal()"
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Close
-              </button>
-              <button
-                id="modalRejectBtn"
-                onclick="rejectFromModal()"
-                class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
-              >
-                <i data-lucide="x-circle" class="size-4 inline mr-1.5"></i
-                >Reject
-              </button>
-              <button
-                id="modalApproveBtn"
-                onclick="approveFromModal()"
-                class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
-              >
-                <i data-lucide="check-circle" class="size-4 inline mr-1.5"></i
-                >Approve
-              </button>
-            </div>
+          <!-- Rejection Reason (if rejected) -->
+          <div id="modalRejectionSection" class="hidden bg-red-50 border border-red-200 rounded-xl p-4">
+            <h4 class="text-sm font-semibold text-red-900 mb-2 flex items-center gap-2">
+              <i data-lucide="alert-triangle" class="size-4 text-red-600"></i>
+              Rejection Reason
+            </h4>
+            <p id="modalRejectionReason" class="text-sm text-red-700">
+              Incomplete documentation
+            </p>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 rounded-b-2xl">
+          <div class="flex items-center justify-end gap-3">
+            <button onclick="closeDonorModal()"
+              class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+              Close
+            </button>
+            <button id="modalRejectBtn" onclick="rejectFromModal()"
+              class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors">
+              <i data-lucide="x-circle" class="size-4 inline mr-1.5"></i>Reject
+            </button>
+            <button id="modalApproveBtn" onclick="approveFromModal()"
+              class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors">
+              <i data-lucide="check-circle" class="size-4 inline mr-1.5"></i>Approve
+            </button>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <script>
-      // Notification System
-      const notifications = [
-        {
-          id: 1,
-          title: "New Donor Registration",
-          message: "John Doe has registered as a new blood donor",
-          time: "2 minutes ago",
-          read: false,
-          icon: "user-plus",
-          iconBg: "bg-green-100",
-          iconColor: "text-green-600",
-        },
-        {
-          id: 2,
-          title: "Hospital Request Approved",
-          message: "City General Hospital blood request approved",
-          time: "15 minutes ago",
-          read: false,
-          icon: "check-circle",
-          iconBg: "bg-blue-100",
-          iconColor: "text-blue-600",
-        },
-        {
-          id: 3,
-          title: "Urgent Blood Request",
-          message: "Emergency O- blood needed at St. Mary Hospital",
-          time: "1 hour ago",
-          read: false,
-          icon: "alert-circle",
-          iconBg: "bg-red-100",
-          iconColor: "text-red-600",
-        },
-        {
-          id: 4,
-          title: "Monthly Report Generated",
-          message: "November 2024 donation report is ready",
-          time: "3 hours ago",
-          read: false,
-          icon: "file-text",
-          iconBg: "bg-purple-100",
-          iconColor: "text-purple-600",
-        },
-        {
-          id: 5,
-          title: "New Hospital Registration",
-          message: "Regional Medical Center pending approval",
-          time: "5 hours ago",
-          read: true,
-          icon: "building-2",
-          iconBg: "bg-orange-100",
-          iconColor: "text-orange-600",
-        },
-        {
-          id: 6,
-          title: "Blood Camp Scheduled",
-          message: "Community blood drive scheduled for Dec 15",
-          time: "1 day ago",
-          read: true,
-          icon: "calendar",
-          iconBg: "bg-teal-100",
-          iconColor: "text-teal-600",
-        },
-      ];
+  <script>
+    // Notification System
+    const notifications = [
+      {
+        id: 1,
+        title: "New Donor Registration",
+        message: "John Doe has registered as a new blood donor",
+        time: "2 minutes ago",
+        read: false,
+        icon: "user-plus",
+        iconBg: "bg-green-100",
+        iconColor: "text-green-600",
+      },
+      {
+        id: 2,
+        title: "Hospital Request Approved",
+        message: "City General Hospital blood request approved",
+        time: "15 minutes ago",
+        read: false,
+        icon: "check-circle",
+        iconBg: "bg-blue-100",
+        iconColor: "text-blue-600",
+      },
+      {
+        id: 3,
+        title: "Urgent Blood Request",
+        message: "Emergency O- blood needed at St. Mary Hospital",
+        time: "1 hour ago",
+        read: false,
+        icon: "alert-circle",
+        iconBg: "bg-red-100",
+        iconColor: "text-red-600",
+      },
+      {
+        id: 4,
+        title: "Monthly Report Generated",
+        message: "November 2024 donation report is ready",
+        time: "3 hours ago",
+        read: false,
+        icon: "file-text",
+        iconBg: "bg-purple-100",
+        iconColor: "text-purple-600",
+      },
+      {
+        id: 5,
+        title: "New Hospital Registration",
+        message: "Regional Medical Center pending approval",
+        time: "5 hours ago",
+        read: true,
+        icon: "building-2",
+        iconBg: "bg-orange-100",
+        iconColor: "text-orange-600",
+      },
+      {
+        id: 6,
+        title: "Blood Camp Scheduled",
+        message: "Community blood drive scheduled for Dec 15",
+        time: "1 day ago",
+        read: true,
+        icon: "calendar",
+        iconBg: "bg-teal-100",
+        iconColor: "text-teal-600",
+      },
+    ];
 
-      function renderNotifications() {
-        const container = document.getElementById("notificationList");
-        const unreadCount = notifications.filter((n) => !n.read).length;
-        const badge = document.getElementById("notificationBadge");
-        if (unreadCount > 0) {
-          badge.textContent = unreadCount;
-          badge.classList.remove("hidden");
-        } else {
-          badge.classList.add("hidden");
-        }
-        container.innerHTML = notifications
-          .map(
-            (n) => `
-          <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
-            n.read ? "opacity-70" : ""
-          }" data-id="${n.id}" onclick="markAsRead(${n.id})">
+    function renderNotifications() {
+      const container = document.getElementById("notificationList");
+      const unreadCount = notifications.filter((n) => !n.read).length;
+      const badge = document.getElementById("notificationBadge");
+      if (unreadCount > 0) {
+        badge.textContent = unreadCount;
+        badge.classList.remove("hidden");
+      } else {
+        badge.classList.add("hidden");
+      }
+      container.innerHTML = notifications
+        .map(
+          (n) => `
+          <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${n.read ? "opacity-70" : ""
+            }" data-id="${n.id}" onclick="markAsRead(${n.id})">
             <div class="flex gap-3">
-              <div class="${n.iconBg} p-2 rounded-lg h-fit"><i data-lucide="${
-              n.icon
+              <div class="${n.iconBg} p-2 rounded-lg h-fit"><i data-lucide="${n.icon
             }" class="size-4 ${n.iconColor}"></i></div>
               <div class="flex-1 min-w-0">
                 <div class="flex items-start justify-between gap-2">
-                  <p class="text-sm ${
-                    n.read
-                      ? "font-normal text-gray-700"
-                      : "font-semibold text-gray-900"
-                  } truncate">${n.title}</p>
-                  ${
-                    !n.read
-                      ? '<span class="size-2 bg-red-600 rounded-full flex-shrink-0 mt-1.5"></span>'
-                      : ""
-                  }
+                  <p class="text-sm ${n.read
+              ? "font-normal text-gray-700"
+              : "font-semibold text-gray-900"
+            } truncate">${n.title}</p>
+                  ${!n.read
+              ? '<span class="size-2 bg-red-600 rounded-full flex-shrink-0 mt-1.5"></span>'
+              : ""
+            }
                 </div>
-                <p class="text-xs text-gray-500 mt-0.5 line-clamp-1">${
-                  n.message
-                }</p>
+                <p class="text-xs text-gray-500 mt-0.5 line-clamp-1">${n.message
+            }</p>
                 <p class="text-xs text-gray-400 mt-1">${n.time}</p>
               </div>
             </div>
           </div>
         `
-          )
-          .join("");
-        if (window.lucide) {
-          window.lucide.createIcons();
-        }
+        )
+        .join("");
+      if (window.lucide) {
+        window.lucide.createIcons();
       }
+    }
 
-      function toggleNotifications() {
-        const panel = document.getElementById("notificationPanel");
-        panel.classList.toggle("hidden");
-        if (!panel.classList.contains("hidden")) {
-          renderNotifications();
-        }
-      }
-      function markAsRead(id) {
-        const n = notifications.find((x) => x.id === id);
-        if (n) {
-          n.read = true;
-          renderNotifications();
-        }
-      }
-      function markAllAsRead() {
-        notifications.forEach((n) => (n.read = true));
+    function toggleNotifications() {
+      const panel = document.getElementById("notificationPanel");
+      panel.classList.toggle("hidden");
+      if (!panel.classList.contains("hidden")) {
         renderNotifications();
       }
-      document.addEventListener("click", function (e) {
-        const dropdown = document.getElementById("notificationDropdown");
-        const panel = document.getElementById("notificationPanel");
-        if (
-          !dropdown.contains(e.target) &&
-          !panel.classList.contains("hidden")
-        ) {
-          panel.classList.add("hidden");
-        }
-      });
-      document.addEventListener("DOMContentLoaded", function () {
+    }
+    function markAsRead(id) {
+      const n = notifications.find((x) => x.id === id);
+      if (n) {
+        n.read = true;
         renderNotifications();
-      });
-    </script>
-    <script type="module" src="/src/scripts/main.js"></script>
-    <script>
-      // Admin Donor Approval - Interactive State Management
-      document.addEventListener("DOMContentLoaded", function () {
-        // Donor data with enhanced details
-        let donors = [
-          {
-            id: "DON001",
-            name: "Alex Thompson",
-            email: "alex@email.com",
-            phone: "555-0101",
-            bloodType: "O+",
-            age: 28,
-            status: "Pending",
-            gender: "Male",
-            address: "123 Main Street, Downtown",
-            city: "New York",
-            weight: "75 kg",
-            lastDonation: "2024-09-15",
-            totalDonations: 5,
-            registeredAt: "2024-12-10",
-            healthStatus: "Healthy",
-            idVerified: false,
-          },
-          {
-            id: "DON002",
-            name: "Maria Garcia",
-            email: "maria@email.com",
-            phone: "555-0102",
-            bloodType: "A+",
-            age: 32,
-            status: "Pending",
-            gender: "Female",
-            address: "456 Oak Avenue, Midtown",
-            city: "New York",
-            weight: "62 kg",
-            lastDonation: "2024-10-20",
-            totalDonations: 8,
-            registeredAt: "2024-12-11",
-            healthStatus: "Healthy",
-            idVerified: true,
-          },
-          {
-            id: "DON003",
-            name: "David Lee",
-            email: "david@email.com",
-            phone: "555-0103",
-            bloodType: "B+",
-            age: 25,
-            status: "Pending",
-            gender: "Male",
-            address: "789 Pine Road, Uptown",
-            city: "Brooklyn",
-            weight: "80 kg",
-            lastDonation: null,
-            totalDonations: 0,
-            registeredAt: "2024-12-12",
-            healthStatus: "Healthy",
-            idVerified: false,
-          },
-          {
-            id: "DON004",
-            name: "Jennifer Brown",
-            email: "jennifer@email.com",
-            phone: "555-0104",
-            bloodType: "AB-",
-            age: 30,
-            status: "Pending",
-            gender: "Female",
-            address: "321 Elm Street, Eastside",
-            city: "Queens",
-            weight: "58 kg",
-            lastDonation: "2024-08-05",
-            totalDonations: 12,
-            registeredAt: "2024-12-13",
-            healthStatus: "Healthy",
-            idVerified: true,
-          },
-          {
-            id: "DON005",
-            name: "Robert Wilson",
-            email: "robert@email.com",
-            phone: "555-0105",
-            bloodType: "O-",
-            age: 35,
-            status: "Pending",
-            gender: "Male",
-            address: "654 Maple Drive, Westside",
-            city: "Manhattan",
-            weight: "85 kg",
-            lastDonation: "2024-11-01",
-            totalDonations: 20,
-            registeredAt: "2024-12-14",
-            healthStatus: "Healthy",
-            idVerified: true,
-          },
-          {
-            id: "DON006",
-            name: "Lisa Anderson",
-            email: "lisa@email.com",
-            phone: "555-0106",
-            bloodType: "A-",
-            age: 27,
-            status: "Approved",
-            gender: "Female",
-            address: "987 Cedar Lane, Northside",
-            city: "Bronx",
-            weight: "55 kg",
-            lastDonation: "2024-12-01",
-            totalDonations: 6,
-            registeredAt: "2024-11-20",
-            healthStatus: "Healthy",
-            idVerified: true,
-          },
-          {
-            id: "DON007",
-            name: "James Martin",
-            email: "james@email.com",
-            phone: "555-0107",
-            bloodType: "B-",
-            age: 29,
-            status: "Rejected",
-            gender: "Male",
-            address: "246 Birch Court, Southside",
-            city: "Staten Island",
-            weight: "70 kg",
-            lastDonation: null,
-            totalDonations: 0,
-            registeredAt: "2024-12-05",
-            healthStatus: "Under Review",
-            idVerified: false,
-            rejectionReason: "Incomplete health documentation",
-          },
-        ];
+      }
+    }
+    function markAllAsRead() {
+      notifications.forEach((n) => (n.read = true));
+      renderNotifications();
+    }
+    document.addEventListener("click", function (e) {
+      const dropdown = document.getElementById("notificationDropdown");
+      const panel = document.getElementById("notificationPanel");
+      if (
+        !dropdown.contains(e.target) &&
+        !panel.classList.contains("hidden")
+      ) {
+        panel.classList.add("hidden");
+      }
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+      renderNotifications();
+    });
+  </script>
+  <script type="module" src="/src/scripts/main.js"></script>
+  <script>
+    // Admin Donor Approval - Dynamic Data from API
+    let donors = [];
+    let filterStatus = "Pending";
 
-        let filterStatus = "Pending";
-        const tableBody = document.querySelector("tbody");
-        const statCards = document.querySelectorAll(
-          ".grid.grid-cols-1.md\\:grid-cols-3 .text-3xl"
-        );
+    // Show loading state
+    function showTableLoading() {
+      const tableBody = document.querySelector("tbody");
+      if (tableBody) {
+        tableBody.innerHTML = `
+            <tr>
+              <td colspan="8" class="py-12 text-center">
+                <div class="animate-spin size-8 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+                <p class="text-gray-600">Loading donors...</p>
+              </td>
+            </tr>
+          `;
+      }
+    }
 
-        // Create filter tabs
-        const tableCard =
-          document.querySelector(".overflow-x-auto").parentElement;
-        const filterContainer = document.createElement("div");
-        filterContainer.className = "flex items-center gap-2 mb-6";
-        filterContainer.innerHTML = `
+    // Show error state
+    function showTableError(message) {
+      const tableBody = document.querySelector("tbody");
+      if (tableBody) {
+        tableBody.innerHTML = `
+            <tr>
+              <td colspan="8" class="py-12 text-center">
+                <i data-lucide="alert-circle" class="size-12 text-red-500 mx-auto mb-4"></i>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Error Loading Donors</h3>
+                <p class="text-gray-600">${message}</p>
+              </td>
+            </tr>
+          `;
+        lucide.createIcons();
+      }
+    }
+
+    // Fetch donors from API
+    async function loadDonors() {
+      showTableLoading();
+
+      try {
+        const response = await fetch('/api/admin/donors.php');
+
+        if (response.status === 401) {
+          window.location.href = '/src/pages/auth/login.html';
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+          showTableError(data.message || 'Failed to load donors.');
+          return;
+        }
+
+        // Transform donors data to match expected format
+        donors = (data.donors || []).map(d => ({
+          id: `DON${String(d.id).padStart(3, '0')}`,
+          name: d.name || 'Unknown',
+          email: d.email || 'N/A',
+          phone: d.phone || 'N/A',
+          bloodType: d.blood_group || 'N/A',
+          age: d.age || 'N/A',
+          status: d.is_available ? 'Approved' : 'Pending', // Map availability to status for display
+          gender: d.gender || 'N/A',
+          address: d.address || 'N/A',
+          city: d.city || 'N/A',
+          weight: d.weight ? `${d.weight} kg` : 'N/A',
+          lastDonation: d.last_donation,
+          totalDonations: d.total_donations || 0,
+          registeredAt: d.created_at,
+          healthStatus: 'Healthy',
+          idVerified: true
+        }));
+
+        window.renderDonors();
+        updateStats();
+
+      } catch (error) {
+        console.error('Error loading donors:', error);
+        showTableError('Unable to connect to the server. Please try again later.');
+      }
+    }
+
+    // Initialize on DOM ready
+    document.addEventListener("DOMContentLoaded", function () {
+      const tableBody = document.querySelector("tbody");
+      const statCards = document.querySelectorAll(
+        ".grid.grid-cols-1.md\\:grid-cols-3 .text-3xl"
+      );
+
+      // Create filter tabs
+      const tableCard =
+        document.querySelector(".overflow-x-auto").parentElement;
+      const filterContainer = document.createElement("div");
+      filterContainer.className = "flex items-center gap-2 mb-6";
+      filterContainer.innerHTML = `
           <button class="filter-btn px-4 py-2 rounded-lg border text-sm bg-red-50 border-red-600 text-red-600" data-status="Pending">Pending</button>
           <button class="filter-btn px-4 py-2 rounded-lg border text-sm border-gray-300 text-gray-700" data-status="Approved">Approved</button>
           <button class="filter-btn px-4 py-2 rounded-lg border text-sm border-gray-300 text-gray-700" data-status="Rejected">Rejected</button>
           <button class="filter-btn px-4 py-2 rounded-lg border text-sm border-gray-300 text-gray-700" data-status="All">All</button>
         `;
-        tableCard.querySelector(".mb-6").after(filterContainer);
+      tableCard.querySelector(".mb-6").after(filterContainer);
 
-        filterContainer.querySelectorAll(".filter-btn").forEach((btn) => {
-          btn.addEventListener("click", function () {
-            filterStatus = this.dataset.status;
-            filterContainer.querySelectorAll(".filter-btn").forEach((b) => {
-              b.classList.remove("bg-red-50", "border-red-600", "text-red-600");
-              b.classList.add("border-gray-300", "text-gray-700");
-            });
-            this.classList.remove("border-gray-300", "text-gray-700");
-            this.classList.add("bg-red-50", "border-red-600", "text-red-600");
-            renderDonors();
+      filterContainer.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          filterStatus = this.dataset.status;
+          filterContainer.querySelectorAll(".filter-btn").forEach((b) => {
+            b.classList.remove("bg-red-50", "border-red-600", "text-red-600");
+            b.classList.add("border-gray-300", "text-gray-700");
           });
+          this.classList.remove("border-gray-300", "text-gray-700");
+          this.classList.add("bg-red-50", "border-red-600", "text-red-600");
+          window.renderDonors();
         });
+      });
 
-        function updateStats() {
-          const pending = donors.filter((d) => d.status === "Pending").length;
-          const approved = donors.filter((d) => d.status === "Approved").length;
-          const rejected = donors.filter((d) => d.status === "Rejected").length;
+      function updateStats() {
+        const pending = donors.filter((d) => d.status === "Pending").length;
+        const approved = donors.filter((d) => d.status === "Approved").length;
+        const rejected = donors.filter((d) => d.status === "Rejected").length;
 
-          if (statCards.length >= 3) {
-            statCards[0].textContent = pending;
-            statCards[1].textContent = approved;
-            statCards[2].textContent = rejected;
-          }
+        if (statCards.length >= 3) {
+          statCards[0].textContent = pending;
+          statCards[1].textContent = approved;
+          statCards[2].textContent = rejected;
         }
+      }
 
-        function getStatusBadge(status) {
-          if (status === "Pending") return "border-yellow-600 text-yellow-600";
-          if (status === "Approved") return "border-green-600 text-green-600";
-          if (status === "Rejected") return "border-red-600 text-red-600";
-          return "border-gray-600 text-gray-600";
-        }
+      function getStatusBadge(status) {
+        if (status === "Pending") return "border-yellow-600 text-yellow-600";
+        if (status === "Approved") return "border-green-600 text-green-600";
+        if (status === "Rejected") return "border-red-600 text-red-600";
+        return "border-gray-600 text-gray-600";
+      }
 
-        function getActionButtons(donor) {
-          if (donor.status === "Pending") {
-            return `
+      function getActionButtons(donor) {
+        if (donor.status === "Pending") {
+          return `
               <div class="flex gap-2">
                 <button class="view-btn px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50" data-id="${donor.id}">
                   <i data-lucide="eye" class="size-3 inline mr-1"></i>View
@@ -1155,22 +867,23 @@
                 </button>
               </div>
             `;
-          }
-          return `
+        }
+        return `
             <button class="view-btn px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50" data-id="${donor.id}">
               <i data-lucide="eye" class="size-3 inline mr-1"></i>View
             </button>
           `;
-        }
+      }
 
-        function renderDonors() {
-          const filtered =
-            filterStatus === "All"
-              ? donors
-              : donors.filter((d) => d.status === filterStatus);
+      // Assign to window for cross-scope access
+      window.renderDonors = function () {
+        const filtered =
+          filterStatus === "All"
+            ? donors
+            : donors.filter((d) => d.status === filterStatus);
 
-          if (filtered.length === 0) {
-            tableBody.innerHTML = `
+        if (filtered.length === 0) {
+          tableBody.innerHTML = `
               <tr>
                 <td colspan="8" class="py-12 text-center">
                   <div class="inline-flex items-center justify-center size-16 rounded-full bg-gray-100 mb-4">
@@ -1180,222 +893,222 @@
                 </td>
               </tr>
             `;
-            lucide.createIcons();
-            return;
-          }
+          lucide.createIcons();
+          return;
+        }
 
-          tableBody.innerHTML = filtered
-            .map(
-              (donor) => `
-            <tr class="border-b border-gray-100 hover:bg-gray-50" data-id="${
-              donor.id
-            }">
+        tableBody.innerHTML = filtered
+          .map(
+            (donor) => `
+            <tr class="border-b border-gray-100 hover:bg-gray-50" data-id="${donor.id
+              }">
               <td class="py-3 px-4 text-sm text-gray-900">${donor.id}</td>
               <td class="py-3 px-4 text-sm text-gray-900">${donor.name}</td>
               <td class="py-3 px-4 text-sm text-gray-900">${donor.email}</td>
               <td class="py-3 px-4 text-sm text-gray-900">${donor.phone}</td>
               <td class="py-3 px-4">
-                <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${
-                  donor.bloodType
-                }</span>
+                <span class="px-2 py-1 text-xs font-medium border border-red-600 text-red-600 rounded-full">${donor.bloodType
+              }</span>
               </td>
               <td class="py-3 px-4 text-sm text-gray-900">${donor.age}</td>
               <td class="py-3 px-4">
                 <span class="px-2 py-1 text-xs font-medium border ${getStatusBadge(
-                  donor.status
-                )} rounded-full">${donor.status}</span>
+                donor.status
+              )} rounded-full">${donor.status}</span>
               </td>
               <td class="py-3 px-4">${getActionButtons(donor)}</td>
             </tr>
           `
-            )
-            .join("");
+          )
+          .join("");
 
-          lucide.createIcons();
-          attachEventListeners();
-          updateStats();
-        }
+        lucide.createIcons();
+        attachEventListeners();
+        updateStats();
+      }
 
-        function attachEventListeners() {
-          document.querySelectorAll(".approve-btn").forEach((btn) => {
-            btn.addEventListener("click", () =>
-              updateDonorStatus(btn.dataset.id, "Approved")
-            );
-          });
-          document.querySelectorAll(".reject-btn").forEach((btn) => {
-            btn.addEventListener("click", () =>
-              updateDonorStatus(btn.dataset.id, "Rejected")
-            );
-          });
-          document.querySelectorAll(".view-btn").forEach((btn) => {
-            btn.addEventListener("click", () => openDonorModal(btn.dataset.id));
-          });
-        }
-
-        // Modal state
-        let currentModalDonorId = null;
-
-        // Open donor modal
-        function openDonorModal(donorId) {
-          const donor = donors.find((d) => d.id === donorId);
-          if (!donor) return;
-
-          currentModalDonorId = donorId;
-
-          // Update modal content
-          document.getElementById("modalDonorId").textContent = donor.id;
-          document.getElementById("modalDonorName").textContent = donor.name;
-          document.getElementById("modalDonorEmail").textContent = donor.email;
-          document.getElementById("modalDonorPhone").textContent = donor.phone;
-          document.getElementById("modalDonorAge").textContent =
-            donor.age + " years";
-          document.getElementById("modalDonorGender").textContent =
-            donor.gender;
-          document.getElementById("modalDonorAddress").textContent =
-            donor.address;
-          document.getElementById("modalDonorCity").textContent = donor.city;
-          document.getElementById("modalDonorBloodType").textContent =
-            donor.bloodType;
-          document.getElementById("modalDonorWeight").textContent =
-            donor.weight;
-          document.getElementById("modalDonorHealthStatus").textContent =
-            donor.healthStatus;
-          document.getElementById("modalDonorLastDonation").textContent =
-            donor.lastDonation || "First-time donor";
-          document.getElementById("modalDonorTotalDonations").textContent =
-            donor.totalDonations;
-          document.getElementById("modalDonorRegisteredAt").textContent =
-            donor.registeredAt;
-
-          // Update ID verification badge
-          const idBadge = document.getElementById("modalIdVerified");
-          if (donor.idVerified) {
-            idBadge.innerHTML =
-              '<i data-lucide="shield-check" class="size-4 mr-1"></i>Verified';
-            idBadge.className =
-              "inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full";
-          } else {
-            idBadge.innerHTML =
-              '<i data-lucide="shield-alert" class="size-4 mr-1"></i>Not Verified';
-            idBadge.className =
-              "inline-flex items-center px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full";
-          }
-
-          // Update status badge
-          const statusBadge = document.getElementById("modalDonorStatus");
-          if (donor.status === "Pending") {
-            statusBadge.className =
-              "px-3 py-1.5 text-sm font-medium border border-yellow-600 text-yellow-600 rounded-full";
-          } else if (donor.status === "Approved") {
-            statusBadge.className =
-              "px-3 py-1.5 text-sm font-medium border border-green-600 text-green-600 rounded-full";
-          } else {
-            statusBadge.className =
-              "px-3 py-1.5 text-sm font-medium border border-red-600 text-red-600 rounded-full";
-          }
-          statusBadge.textContent = donor.status;
-
-          // Show/hide rejection reason
-          const rejectionSection = document.getElementById(
-            "modalRejectionSection"
+      function attachEventListeners() {
+        document.querySelectorAll(".approve-btn").forEach((btn) => {
+          btn.addEventListener("click", () =>
+            updateDonorStatus(btn.dataset.id, "Approved")
           );
-          if (donor.status === "Rejected" && donor.rejectionReason) {
-            rejectionSection.classList.remove("hidden");
-            document.getElementById("modalRejectionReason").textContent =
-              donor.rejectionReason;
-          } else {
-            rejectionSection.classList.add("hidden");
-          }
-
-          // Show/hide action buttons
-          const approveBtn = document.getElementById("modalApproveBtn");
-          const rejectBtn = document.getElementById("modalRejectBtn");
-          if (donor.status === "Pending") {
-            approveBtn.classList.remove("hidden");
-            rejectBtn.classList.remove("hidden");
-          } else {
-            approveBtn.classList.add("hidden");
-            rejectBtn.classList.add("hidden");
-          }
-
-          // Show modal
-          document.getElementById("donorModal").classList.remove("hidden");
-          document.body.style.overflow = "hidden";
-
-          lucide.createIcons();
-        }
-
-        // Expose functions to global scope for onclick handlers
-        window.closeDonorModal = function () {
-          document.getElementById("donorModal").classList.add("hidden");
-          document.body.style.overflow = "";
-          currentModalDonorId = null;
-        };
-
-        window.approveFromModal = function () {
-          if (currentModalDonorId) {
-            updateDonorStatus(currentModalDonorId, "Approved");
-            window.closeDonorModal();
-          }
-        };
-
-        window.rejectFromModal = function () {
-          if (currentModalDonorId) {
-            updateDonorStatus(currentModalDonorId, "Rejected");
-            window.closeDonorModal();
-          }
-        };
-
-        // Close modal on ESC key
-        document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape") {
-            window.closeDonorModal();
-          }
         });
+        document.querySelectorAll(".reject-btn").forEach((btn) => {
+          btn.addEventListener("click", () =>
+            updateDonorStatus(btn.dataset.id, "Rejected")
+          );
+        });
+        document.querySelectorAll(".view-btn").forEach((btn) => {
+          btn.addEventListener("click", () => openDonorModal(btn.dataset.id));
+        });
+      }
 
-        function updateDonorStatus(id, newStatus) {
-          const donor = donors.find((d) => d.id === id);
-          if (donor) {
-            donor.status = newStatus;
-            showNotification(
-              `<strong>${
-                donor.name
-              }</strong> has been ${newStatus.toLowerCase()} successfully!`,
-              newStatus === "Approved" ? "success" : "error"
-            );
-            renderDonors();
-          }
+      // Modal state
+      let currentModalDonorId = null;
+
+      // Open donor modal
+      function openDonorModal(donorId) {
+        const donor = donors.find((d) => d.id === donorId);
+        if (!donor) return;
+
+        currentModalDonorId = donorId;
+
+        // Update modal content
+        document.getElementById("modalDonorId").textContent = donor.id;
+        document.getElementById("modalDonorName").textContent = donor.name;
+        document.getElementById("modalDonorEmail").textContent = donor.email;
+        document.getElementById("modalDonorPhone").textContent = donor.phone;
+        document.getElementById("modalDonorAge").textContent =
+          donor.age + " years";
+        document.getElementById("modalDonorGender").textContent =
+          donor.gender;
+        document.getElementById("modalDonorAddress").textContent =
+          donor.address;
+        document.getElementById("modalDonorCity").textContent = donor.city;
+        document.getElementById("modalDonorBloodType").textContent =
+          donor.bloodType;
+        document.getElementById("modalDonorWeight").textContent =
+          donor.weight;
+        document.getElementById("modalDonorHealthStatus").textContent =
+          donor.healthStatus;
+        document.getElementById("modalDonorLastDonation").textContent =
+          donor.lastDonation || "First-time donor";
+        document.getElementById("modalDonorTotalDonations").textContent =
+          donor.totalDonations;
+        document.getElementById("modalDonorRegisteredAt").textContent =
+          donor.registeredAt;
+
+        // Update ID verification badge
+        const idBadge = document.getElementById("modalIdVerified");
+        if (donor.idVerified) {
+          idBadge.innerHTML =
+            '<i data-lucide="shield-check" class="size-4 mr-1"></i>Verified';
+          idBadge.className =
+            "inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full";
+        } else {
+          idBadge.innerHTML =
+            '<i data-lucide="shield-alert" class="size-4 mr-1"></i>Not Verified';
+          idBadge.className =
+            "inline-flex items-center px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full";
         }
 
-        function showNotification(message, type = "success") {
-          const bgColor =
-            type === "success"
-              ? "bg-green-50 border-green-600"
-              : "bg-red-50 border-red-600";
-          const textColor =
-            type === "success" ? "text-green-900" : "text-red-900";
-          const iconColor =
-            type === "success" ? "text-green-600" : "text-red-600";
-          const icon = type === "success" ? "check-circle" : "x-circle";
+        // Update status badge
+        const statusBadge = document.getElementById("modalDonorStatus");
+        if (donor.status === "Pending") {
+          statusBadge.className =
+            "px-3 py-1.5 text-sm font-medium border border-yellow-600 text-yellow-600 rounded-full";
+        } else if (donor.status === "Approved") {
+          statusBadge.className =
+            "px-3 py-1.5 text-sm font-medium border border-green-600 text-green-600 rounded-full";
+        } else {
+          statusBadge.className =
+            "px-3 py-1.5 text-sm font-medium border border-red-600 text-red-600 rounded-full";
+        }
+        statusBadge.textContent = donor.status;
 
-          const notification = document.createElement("div");
-          notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50`;
-          notification.innerHTML = `
+        // Show/hide rejection reason
+        const rejectionSection = document.getElementById(
+          "modalRejectionSection"
+        );
+        if (donor.status === "Rejected" && donor.rejectionReason) {
+          rejectionSection.classList.remove("hidden");
+          document.getElementById("modalRejectionReason").textContent =
+            donor.rejectionReason;
+        } else {
+          rejectionSection.classList.add("hidden");
+        }
+
+        // Show/hide action buttons
+        const approveBtn = document.getElementById("modalApproveBtn");
+        const rejectBtn = document.getElementById("modalRejectBtn");
+        if (donor.status === "Pending") {
+          approveBtn.classList.remove("hidden");
+          rejectBtn.classList.remove("hidden");
+        } else {
+          approveBtn.classList.add("hidden");
+          rejectBtn.classList.add("hidden");
+        }
+
+        // Show modal
+        document.getElementById("donorModal").classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+
+        lucide.createIcons();
+      }
+
+      // Expose functions to global scope for onclick handlers
+      window.closeDonorModal = function () {
+        document.getElementById("donorModal").classList.add("hidden");
+        document.body.style.overflow = "";
+        currentModalDonorId = null;
+      };
+
+      window.approveFromModal = function () {
+        if (currentModalDonorId) {
+          updateDonorStatus(currentModalDonorId, "Approved");
+          window.closeDonorModal();
+        }
+      };
+
+      window.rejectFromModal = function () {
+        if (currentModalDonorId) {
+          updateDonorStatus(currentModalDonorId, "Rejected");
+          window.closeDonorModal();
+        }
+      };
+
+      // Close modal on ESC key
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          window.closeDonorModal();
+        }
+      });
+
+      function updateDonorStatus(id, newStatus) {
+        const donor = donors.find((d) => d.id === id);
+        if (donor) {
+          donor.status = newStatus;
+          showNotification(
+            `<strong>${donor.name
+            }</strong> has been ${newStatus.toLowerCase()} successfully!`,
+            newStatus === "Approved" ? "success" : "error"
+          );
+          window.renderDonors();
+        }
+      }
+
+      function showNotification(message, type = "success") {
+        const bgColor =
+          type === "success"
+            ? "bg-green-50 border-green-600"
+            : "bg-red-50 border-red-600";
+        const textColor =
+          type === "success" ? "text-green-900" : "text-red-900";
+        const iconColor =
+          type === "success" ? "text-green-600" : "text-red-600";
+        const icon = type === "success" ? "check-circle" : "x-circle";
+
+        const notification = document.createElement("div");
+        notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50`;
+        notification.innerHTML = `
             <div class="flex items-center gap-3">
               <i data-lucide="${icon}" class="size-5 ${iconColor}"></i>
               <p class="${textColor}">${message}</p>
             </div>
           `;
-          document.body.appendChild(notification);
-          lucide.createIcons();
-          setTimeout(() => notification.remove(), 3000);
-        }
+        document.body.appendChild(notification);
+        lucide.createIcons();
+        setTimeout(() => notification.remove(), 3000);
+      }
 
-        // Initial render
-        renderDonors();
-      });
-    </script>
-  </body>
+      // Load donors from API (replaces initial render)
+      loadDonors();
+    });
+  </script>
+  <script type="module">
+    import { initUserLoader } from '/src/scripts/user-loader.js';
+    initUserLoader();
+  </script>
+</body>
+
 </html>
-
-
