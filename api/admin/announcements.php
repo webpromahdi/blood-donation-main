@@ -1,0 +1,180 @@
+<?php
+/**
+ * Admin Announcements Endpoint
+ * GET /api/admin/announcements.php - List all announcements
+ * POST /api/admin/announcements.php - Create new announcement
+ * DELETE /api/admin/announcements.php?id=X - Delete announcement
+ */
+
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+session_start();
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../middleware/auth.php';
+
+requireAuth(['admin']);
+
+$database = new Database();
+$conn = $database->getConnection();
+
+if (!$conn) {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Database connection failed']);
+    exit;
+}
+
+$method = $_SERVER['REQUEST_METHOD'];
+
+try {
+    switch ($method) {
+        case 'GET':
+            handleGet($conn);
+            break;
+        case 'POST':
+            handlePost($conn);
+            break;
+        case 'DELETE':
+            handleDelete($conn);
+            break;
+        default:
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+    }
+} catch (PDOException $e) {
+    error_log("Announcements Error: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Database error occurred']);
+}
+
+/**
+ * GET - List all announcements
+ */
+function handleGet($conn) {
+    $sql = "SELECT a.*, u.name as admin_name 
+            FROM announcements a 
+            LEFT JOIN users u ON a.admin_id = u.id 
+            ORDER BY a.created_at DESC";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $announcements = $stmt->fetchAll();
+    
+    // Format response
+    $formatted = array_map(function($a) {
+        return [
+            'id' => $a['id'],
+            'title' => $a['title'],
+            'message' => $a['message'],
+            'target_audience' => $a['target_audience'],
+            'priority' => $a['priority'],
+            'status' => $a['status'],
+            'scheduled_at' => $a['scheduled_at'],
+            'admin_name' => $a['admin_name'] ?? 'System',
+            'created_at' => $a['created_at'],
+            'updated_at' => $a['updated_at']
+        ];
+    }, $announcements);
+    
+    echo json_encode([
+        'success' => true,
+        'announcements' => $formatted,
+        'total' => count($formatted)
+    ]);
+}
+
+/**
+ * POST - Create new announcement
+ */
+function handlePost($conn) {
+    $input = json_decode(file_get_contents('php://input'), true);
+    
+    // Validate required fields
+    if (empty($input['title']) || empty($input['message'])) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Title and message are required']);
+        return;
+    }
+    
+    $title = trim($input['title']);
+    $message = trim($input['message']);
+    $targetAudience = $input['target_audience'] ?? 'all';
+    $priority = $input['priority'] ?? 'normal';
+    $scheduledAt = !empty($input['scheduled_at']) ? $input['scheduled_at'] : null;
+    $status = $scheduledAt ? 'scheduled' : 'published';
+    $adminId = $_SESSION['user_id'];
+    
+    // Validate enums
+    $validAudiences = ['all', 'donors', 'hospitals', 'seekers'];
+    $validPriorities = ['normal', 'high', 'urgent'];
+    
+    if (!in_array($targetAudience, $validAudiences)) {
+        $targetAudience = 'all';
+    }
+    if (!in_array($priority, $validPriorities)) {
+        $priority = 'normal';
+    }
+    
+    $sql = "INSERT INTO announcements (title, message, target_audience, priority, scheduled_at, status, admin_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$title, $message, $targetAudience, $priority, $scheduledAt, $status, $adminId]);
+    
+    $newId = $conn->lastInsertId();
+    
+    echo json_encode([
+        'success' => true,
+        'message' => 'Announcement created successfully',
+        'announcement' => [
+            'id' => $newId,
+            'title' => $title,
+            'message' => $message,
+            'target_audience' => $targetAudience,
+            'priority' => $priority,
+            'status' => $status,
+            'scheduled_at' => $scheduledAt
+        ]
+    ]);
+}
+
+/**
+ * DELETE - Delete announcement by ID
+ */
+function handleDelete($conn) {
+    if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Valid announcement ID is required']);
+        return;
+    }
+    
+    $id = (int) $_GET['id'];
+    
+    // Check if announcement exists
+    $checkSql = "SELECT id FROM announcements WHERE id = ?";
+    $checkStmt = $conn->prepare($checkSql);
+    $checkStmt->execute([$id]);
+    
+    if (!$checkStmt->fetch()) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Announcement not found']);
+        return;
+    }
+    
+    // Delete
+    $sql = "DELETE FROM announcements WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$id]);
+    
+    echo json_encode([
+        'success' => true,
+        'message' => 'Announcement deleted successfully'
+    ]);
+}

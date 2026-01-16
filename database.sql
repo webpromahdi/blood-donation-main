@@ -119,3 +119,40 @@ CREATE TABLE IF NOT EXISTS donations (
 CREATE INDEX idx_donations_request ON donations(request_id);
 CREATE INDEX idx_donations_donor ON donations(donor_id);
 CREATE INDEX idx_donations_status ON donations(status);
+
+-- =====================================================
+-- ANNOUNCEMENTS TABLE
+-- Stores system announcements created by admins
+-- =====================================================
+CREATE TABLE IF NOT EXISTS announcements (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    
+    -- Target audience: 'all', 'donors', 'hospitals', 'seekers'
+    target_audience ENUM('all', 'donors', 'hospitals', 'seekers') DEFAULT 'all',
+    
+    -- Priority level
+    priority ENUM('normal', 'high', 'urgent') DEFAULT 'normal',
+    
+    -- Scheduling
+    scheduled_at TIMESTAMP NULL,
+    
+    -- Status
+    status ENUM('draft', 'scheduled', 'published', 'archived') DEFAULT 'published',
+    
+    -- Admin who created it
+    admin_id INT NOT NULL,
+    
+    -- Timestamps
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Announcements indexes
+CREATE INDEX idx_announcements_status ON announcements(status);
+CREATE INDEX idx_announcements_target ON announcements(target_audience);
+CREATE INDEX idx_announcements_priority ON announcements(priority);
+CREATE INDEX idx_announcements_scheduled ON announcements(scheduled_at);
