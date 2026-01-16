@@ -687,6 +687,22 @@
         }
       }
 
+      // Define updateStats function at module level to avoid ReferenceError
+      window.updateStats = function () {
+        const statCards = document.querySelectorAll(
+          ".grid.grid-cols-1.md\\:grid-cols-3 .text-3xl"
+        );
+        const pending = donors.filter((d) => d.status === "Pending").length;
+        const approved = donors.filter((d) => d.status === "Approved").length;
+        const rejected = donors.filter((d) => d.status === "Rejected").length;
+
+        if (statCards.length >= 3) {
+          statCards[0].textContent = pending;
+          statCards[1].textContent = approved;
+          statCards[2].textContent = rejected;
+        }
+      };
+
       // Fetch donors from API
       async function loadDonors() {
         showTableLoading();
@@ -714,14 +730,20 @@
             phone: d.phone || "N/A",
             bloodType: d.blood_group || "N/A",
             age: d.age || "N/A",
-            status: d.is_available ? "Approved" : "Pending", // Map availability to status for display
+            status:
+              d.display_status ||
+              (d.status === "approved"
+                ? "Approved"
+                : d.status === "rejected"
+                ? "Rejected"
+                : "Pending"),
             gender: d.gender || "N/A",
             address: d.address || "N/A",
             city: d.city || "N/A",
             weight: d.weight ? `${d.weight} kg` : "N/A",
             lastDonation: d.last_donation,
             totalDonations: d.total_donations || 0,
-            registeredAt: d.created_at,
+            registeredAt: d.registered_at,
             healthStatus: "Healthy",
             idVerified: true,
           }));
@@ -768,18 +790,6 @@
             window.renderDonors();
           });
         });
-
-        function updateStats() {
-          const pending = donors.filter((d) => d.status === "Pending").length;
-          const approved = donors.filter((d) => d.status === "Approved").length;
-          const rejected = donors.filter((d) => d.status === "Rejected").length;
-
-          if (statCards.length >= 3) {
-            statCards[0].textContent = pending;
-            statCards[1].textContent = approved;
-            statCards[2].textContent = rejected;
-          }
-        }
 
         function getStatusBadge(status) {
           if (status === "Pending") return "border-yellow-600 text-yellow-600";
@@ -1004,16 +1014,53 @@
 
         function updateDonorStatus(id, newStatus) {
           const donor = donors.find((d) => d.id === id);
-          if (donor) {
-            donor.status = newStatus;
-            showNotification(
-              `<strong>${
-                donor.name
-              }</strong> has been ${newStatus.toLowerCase()} successfully!`,
-              newStatus === "Approved" ? "success" : "error"
-            );
-            window.renderDonors();
-          }
+          if (!donor) return;
+
+          // Extract numeric ID from the formatted ID (e.g., "DON001" -> 1)
+          const numericId = parseInt(id.replace("DON", ""), 10);
+
+          // Determine API endpoint based on new status
+          const endpoint =
+            newStatus === "Approved"
+              ? "/api/admin/donors/approve.php"
+              : "/api/admin/donors/reject.php";
+
+          // Call API to persist the status change
+          fetch(endpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              donor_id: numericId,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                // Update frontend state
+                donor.status = newStatus;
+                showNotification(
+                  `<strong>${
+                    donor.name
+                  }</strong> has been ${newStatus.toLowerCase()} successfully!`,
+                  newStatus === "Approved" ? "success" : "error"
+                );
+                window.renderDonors();
+              } else {
+                showNotification(
+                  `Failed to ${newStatus.toLowerCase()} donor: ${data.message}`,
+                  "error"
+                );
+              }
+            })
+            .catch((error) => {
+              console.error("Error updating donor status:", error);
+              showNotification(
+                `Error updating donor status: ${error.message}`,
+                "error"
+              );
+            });
         }
 
         function showNotification(message, type = "success") {

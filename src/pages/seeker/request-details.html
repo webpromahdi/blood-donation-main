@@ -765,11 +765,85 @@
           </div>
         `;
         lucide.createIcons();
+
+        // Re-initialize modal handler for dynamically created button
+        if (window.initModal) {
+          window.initModal('donorDetailsModal', 'viewDonorDetailsBtn', ['closeModalBtn', 'closeModalBtn2']);
+        }
+
+        // Populate donor modal with actual data
+        const donorNameContactEl = document.getElementById('donorNameContact');
+        if (donorNameContactEl) {
+          donorNameContactEl.textContent = donor.donor_name || 'Assigned Donor';
+        }
+
+        const donorBloodTypeEl = document.getElementById('donorBloodType');
+        if (donorBloodTypeEl) {
+          donorBloodTypeEl.textContent = donor.donor_blood_group || request.blood_type || 'N/A';
+        }
+
+        const donorDonationsEl = document.getElementById('donorDonations');
+        if (donorDonationsEl) {
+          donorDonationsEl.textContent = 'Verified Donor';
+        }
       }
 
       // Hide appointment section for non-active statuses
       if (!config.showAppointment && appointmentSection) {
         appointmentSection.style.display = "none";
+      } else if (config.showAppointment && appointmentSection) {
+        appointmentSection.style.display = "";
+      }
+
+      // *** UPDATE SIDE PANEL - Contact Info ***
+      const contactPhoneEl = document.getElementById("contactPhone");
+      if (contactPhoneEl) {
+        contactPhoneEl.textContent = request.contact_phone || "N/A";
+      }
+
+      const contactEmailEl = document.getElementById("contactEmail");
+      if (contactEmailEl) {
+        contactEmailEl.textContent = request.contact_email || "N/A";
+      }
+
+      // *** UPDATE SIDE PANEL - Hospital Info ***
+      const hospitalNameEl = document.getElementById("hospitalName");
+      if (hospitalNameEl) {
+        hospitalNameEl.textContent = request.hospital_name || "N/A";
+      }
+
+      const hospitalAddressEl = document.getElementById("hospitalAddress");
+      if (hospitalAddressEl) {
+        hospitalAddressEl.textContent = request.city || "N/A";
+      }
+
+      const hospitalPhoneEl = document.getElementById("hospitalPhone");
+      if (hospitalPhoneEl) {
+        // Use contact phone if no hospital-specific phone available
+        hospitalPhoneEl.textContent = request.contact_phone || "N/A";
+      }
+
+      // *** UPDATE SIDE PANEL - Appointment Info (when donor is assigned) ***
+      if (config.showAppointment && request.donation) {
+        const appointmentDateEl = document.getElementById("appointmentDate");
+        if (appointmentDateEl) {
+          appointmentDateEl.textContent = request.required_date || "TBD";
+        }
+
+        const appointmentTimeEl = document.getElementById("appointmentTime");
+        if (appointmentTimeEl) {
+          appointmentTimeEl.textContent = "As scheduled";
+        }
+
+        const appointmentDonorEl = document.getElementById("appointmentDonor");
+        if (appointmentDonorEl) {
+          appointmentDonorEl.textContent = request.donation.donor_name || "Assigned Donor";
+        }
+
+        const appointmentLocationEl = document.getElementById("appointmentLocation");
+        if (appointmentLocationEl) {
+          appointmentLocationEl.textContent = request.hospital_name || "N/A";
+        }
       }
     }
 

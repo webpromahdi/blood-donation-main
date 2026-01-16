@@ -106,8 +106,8 @@ try {
         $city = isset($input['city']) ? trim($input['city']) : null;
         $address = isset($input['address']) ? trim($input['address']) : null;
 
-        $sql .= ', blood_group, age, weight, city, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        $params = array_merge($params, [$bloodGroup, $age, $weight, $city, $address]);
+        $sql .= ', blood_group, age, weight, city, address, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        $params = array_merge($params, [$bloodGroup, $age, $weight, $city, $address, 'pending']);
     }
     // Add hospital-specific fields
     else if ($role === 'hospital') {
@@ -117,8 +117,8 @@ try {
         $website = isset($input['website']) ? trim($input['website']) : null;
         $contactPerson = isset($input['contactPerson']) ? trim($input['contactPerson']) : null;
 
-        $sql .= ', registration_number, hospital_address, city, website, contact_person) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        $params = array_merge($params, [$registrationNumber, $hospitalAddress, $city, $website, $contactPerson]);
+        $sql .= ', registration_number, hospital_address, city, website, contact_person, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        $params = array_merge($params, [$registrationNumber, $hospitalAddress, $city, $website, $contactPerson, 'pending']);
     } else {
         $sql .= ') VALUES (?, ?, ?, ?, ?)';
     }

@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS users (
     weight INT,
     city VARCHAR(100),
     address TEXT,
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
     
     -- Hospital-specific fields
     registration_number VARCHAR(100),

@@ -37,43 +37,47 @@ if (!$conn) {
 }
 
 try {
-    $sql = "SELECT u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address, u.created_at,
+    $sql = "SELECT u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address, u.status, u.created_at,
                    COUNT(DISTINCT d.id) as total_donations,
                    MAX(d.completed_at) as last_donation_date
             FROM users u
             LEFT JOIN donations d ON u.id = d.donor_id AND d.status = 'completed'
             WHERE u.role = 'donor'";
-    
+
     $params = [];
-    
+
     // Filter by blood type
     if (isset($_GET['blood_type']) && !empty($_GET['blood_type'])) {
         $sql .= " AND u.blood_group = ?";
         $params[] = $_GET['blood_type'];
     }
-    
+
     // Filter by city
     if (isset($_GET['city']) && !empty($_GET['city'])) {
         $sql .= " AND u.city LIKE ?";
         $params[] = '%' . $_GET['city'] . '%';
     }
-    
+
+    // Filter by approval status (pending, approved, rejected)
+    if (isset($_GET['approval_status']) && !empty($_GET['approval_status'])) {
+        $sql .= " AND u.status = ?";
+        $params[] = $_GET['approval_status'];
+    }
+
     $sql .= " GROUP BY u.id ORDER BY u.created_at DESC";
-    
+
     $stmt = $conn->prepare($sql);
     $stmt->execute($params);
     $donors = $stmt->fetchAll();
-    
-    // Format response with availability status
-    $formattedDonors = array_map(function($donor) {
-        // Calculate if donor is available (56 days since last donation)
-        $isAvailable = true;
-        if ($donor['last_donation_date']) {
-            $lastDonation = new DateTime($donor['last_donation_date']);
-            $nextEligible = $lastDonation->modify('+56 days');
-            $isAvailable = $nextEligible <= new DateTime();
-        }
+
+    // Format response with approval status
+    $formattedDonors = array_map(function ($donor) {
+        // Get donor approval status from database
+        $approvalStatus = $donor['status'] ?? 'pending';
         
+        // Map status to display format for backward compatibility
+        $displayStatus = $approvalStatus === 'approved' ? 'Approved' : ($approvalStatus === 'rejected' ? 'Rejected' : 'Pending');
+
         return [
             'id' => $donor['id'],
             'name' => $donor['name'],
@@ -83,25 +87,28 @@ try {
             'age' => $donor['age'],
             'city' => $donor['city'],
             'address' => $donor['address'],
+            'status' => $approvalStatus,
+            'display_status' => $displayStatus,
             'total_donations' => (int) $donor['total_donations'],
             'last_donation' => $donor['last_donation_date'],
-            'is_available' => $isAvailable,
             'registered_at' => $donor['created_at']
         ];
     }, $donors);
-    
-    // Filter by availability if requested
-    if (isset($_GET['status']) && $_GET['status'] === 'available') {
-        $formattedDonors = array_values(array_filter($formattedDonors, fn($d) => $d['is_available']));
+
+    // Filter by approval status if specified in params
+    if (isset($_GET['approval_status'])) {
+        $formattedDonors = array_values(array_filter($formattedDonors, fn($d) => $d['status'] === $_GET['approval_status']));
     }
-    
-    // Calculate stats
+
+    // Calculate stats by approval status
     $stats = [
         'total' => count($formattedDonors),
-        'available' => count(array_filter($formattedDonors, fn($d) => $d['is_available'])),
+        'pending' => count(array_filter($formattedDonors, function($d) { return $d['status'] === 'pending'; })),
+        'approved' => count(array_filter($formattedDonors, function($d) { return $d['status'] === 'approved'; })),
+        'rejected' => count(array_filter($formattedDonors, function($d) { return $d['status'] === 'rejected'; })),
         'by_blood_type' => []
     ];
-    
+
     foreach ($formattedDonors as $donor) {
         $bg = $donor['blood_group'] ?? 'Unknown';
         if (!isset($stats['by_blood_type'][$bg])) {
@@ -109,7 +116,7 @@ try {
         }
         $stats['by_blood_type'][$bg]++;
     }
-    
+
     echo json_encode([
         'success' => true,
         'donors' => $formattedDonors,
