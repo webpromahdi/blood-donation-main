@@ -1,499 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blood Donation</title>
-    <link rel="stylesheet" href="/src/styles/styles.css" />
-  </head>
 
-  <body>
-    <!-- Nav -->
-    <nav
-      class="bg-base-100 border-b border-gray-200 sticky top-0 z-50 shadow-sm"
-    >
-      <div class="navbar w-[85%] m-auto">
-        <div class="navbar-start">
-          <div class="flex items-center gap-1">
-            <img
-              src="https://i.ibb.co.com/8LCPRHx3/nav-Love.png"
-              alt=""
-              class="w-14 h-14"
-            />
-            <div>
-              <p class="text-[#E70110] font-medium">BloodConnect</p>
-              <p class="text-gray-500 font-medium">Save Lives Today</p>
-            </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blood Donation</title>
+  <link rel="stylesheet" href="/src/styles/styles.css" />
+</head>
+
+<body>
+  <!-- Nav -->
+  <nav class="bg-base-100 border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <div class="navbar w-[85%] m-auto">
+      <div class="navbar-start">
+        <div class="flex items-center gap-1">
+          <img src="https://i.ibb.co.com/8LCPRHx3/nav-Love.png" alt="" class="w-14 h-14" />
+          <div>
+            <p class="text-[#E70110] font-medium">BloodConnect</p>
+            <p class="text-gray-500 font-medium">Save Lives Today</p>
           </div>
-        </div>
-
-        <div class="navbar-end">
-          <a
-            class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-[#E70110] text-white hover:bg-[#c90310]"
-            href="/src/pages/seeker/request.html"
-          >
-            <i data-lucide="heart" class="size-4.5"></i>
-            <span>Request Blood</span>
-          </a>
         </div>
       </div>
-    </nav>
-    <!-- Nav -->
 
-    <main>
-      <!-- Hero -->
-      <section
-        class="hero bg-linear-to-br from-red-50 via-white to-red-50 py-20"
-      >
-        <div
-          class="hero-content w-[85%] m-auto max-w-full flex-row-reverse gap-x-10 rounded-2xl"
-        >
-          <img
-            src="https://i.ibb.co.com/cXRPC5YK/hero-right-image.png"
-            class="rounded-2xl"
-          />
+      <div class="navbar-end">
+        <a class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-[#E70110] text-white hover:bg-[#c90310]"
+          href="/src/pages/seeker/request.html">
+          <i data-lucide="heart" class="size-4.5"></i>
+          <span>Request Blood</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+  <!-- Nav -->
 
-          <div>
-            <div
-              class="inline-flex items-center gap-2 bg-red-100 text-red-600 px-4 py-2 rounded-full mb-6"
-            >
-              <i data-lucide="droplet" class="w-5 h-5"></i>
-              Every 2 Seconds Someone Needs Blood
-            </div>
+  <main>
+    <!-- Hero -->
+    <section class="hero bg-linear-to-br from-red-50 via-white to-red-50 py-20">
+      <div class="hero-content w-[85%] m-auto max-w-full flex-row-reverse gap-x-10 rounded-2xl">
+        <img src="https://i.ibb.co.com/cXRPC5YK/hero-right-image.png" class="rounded-2xl" />
 
-            <h1 class="text-5xl font-bold">Donate Blood, Save Lives</h1>
-
-            <p class="py-6">
-              Join our community of heroes. Your single donation can save up to
-              three lives. Register today and make a difference in someone's
-              life.
-            </p>
-
-            <div class="flex items-center gap-3">
-              <a
-                class="inline-flex items-center justify-end gap-3 rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-[#E70110] text-white hover:bg-[#c90310]"
-                href="/src/pages/donor/dashboard.html"
-              >
-                <span>Become a Donor</span>
-                <i data-lucide="move-right" class="w-4 h-5"></i>
-              </a>
-
-              <a
-                href="/src/pages/auth/login.html"
-                class="inline-flex items-center justify-end gap-3 rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-white text-[#E70110] hover:bg-red-50 border-[#E70110] border"
-              >
-                <i data-lucide="log-in" class="w-4 h-5"></i>
-                <span>Access Portal</span>
-              </a>
-            </div>
-
-            <div class="mt-8 flex items-center gap-8 text-gray-600">
-              <div>
-                <div class="text-red-600">50K+</div>
-                <div>Donors Registered</div>
-              </div>
-
-              <div>
-                <div class="text-red-600">100K+</div>
-                <div>Lives Saved</div>
-              </div>
-
-              <div>
-                <div class="text-red-600">24/7</div>
-                <div>Emergency Support</div>
-              </div>
-            </div>
+        <div>
+          <div class="inline-flex items-center gap-2 bg-red-100 text-red-600 px-4 py-2 rounded-full mb-6">
+            <i data-lucide="droplet" class="w-5 h-5"></i>
+            Every 2 Seconds Someone Needs Blood
           </div>
-        </div>
-      </section>
-      <!-- Hero -->
 
-      <!-- Why Donate -->
-      <section class="py-20 w-[85%] m-auto">
-        <div class="text-center">
-          <h2 class="text-2xl mb-4">Why Donate Blood?</h2>
-          <p class="text-gray-600 max-w-2xl mx-auto">
-            Blood donation is a simple act that can make a profound difference.
-            Here's why your contribution matters.
+          <h1 class="text-5xl font-bold">Donate Blood, Save Lives</h1>
+
+          <p class="py-6">
+            Join our community of heroes. Your single donation can save up to
+            three lives. Register today and make a difference in someone's
+            life.
           </p>
-        </div>
 
-        <div class="grid grid-cols-4 gap-x-4 mt-10">
-          <!-- Card 1 -->
-          <div
-            class="card px-4 py-8 text-center hover:shadow-lg transition-all border border-gray-200"
-          >
-            <div
-              class="bg-red-100 size-16 rounded-full flex items-center justify-center mx-auto mb-4"
-            >
-              <i data-lucide="heart" class="size-8"></i>
-            </div>
-            <div class="card-body items-center text-center">
-              <h2 class="card-title mb-2">Save Lives</h2>
-              <p>One donation can save up to 3 lives</p>
-            </div>
+          <div class="flex items-center gap-3">
+            <a class="inline-flex items-center justify-end gap-3 rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-[#E70110] text-white hover:bg-[#c90310]"
+              href="/src/pages/donor/dashboard.html">
+              <span>Become a Donor</span>
+              <i data-lucide="move-right" class="w-4 h-5"></i>
+            </a>
+
+            <a href="/src/pages/auth/login.html"
+              class="inline-flex items-center justify-end gap-3 rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-white text-[#E70110] hover:bg-red-50 border-[#E70110] border">
+              <i data-lucide="log-in" class="w-4 h-5"></i>
+              <span>Access Portal</span>
+            </a>
           </div>
 
-          <!-- Card 2 -->
-          <div
-            class="card px-4 py-8 text-center hover:shadow-lg transition-all border border-gray-200"
-          >
-            <div
-              class="bg-red-100 size-16 rounded-full flex items-center justify-center mx-auto mb-4"
-            >
-              <i data-lucide="users" class="size-8"></i>
+          <div class="mt-8 flex items-center gap-8 text-gray-600">
+            <div>
+              <div class="text-red-600">50K+</div>
+              <div>Donors Registered</div>
             </div>
-            <div class="card-body items-center text-center">
-              <h2 class="card-title mb-2">Help Community</h2>
-              <p>Support patients in your local area</p>
-            </div>
-          </div>
 
-          <!-- Card 3 -->
-          <div
-            class="card px-4 py-8 text-center hover:shadow-lg transition-all border border-gray-200"
-          >
-            <div
-              class="bg-red-100 size-16 rounded-full flex items-center justify-center mx-auto mb-4"
-            >
-              <i data-lucide="award" class="size-8"></i>
+            <div>
+              <div class="text-red-600">100K+</div>
+              <div>Lives Saved</div>
             </div>
-            <div class="card-body items-center text-center">
-              <h2 class="card-title mb-2">Health Benefits</h2>
-              <p>Regular donation improves your health</p>
-            </div>
-          </div>
 
-          <!-- Card 4 -->
-          <div
-            class="card px-4 py-8 text-center hover:shadow-lg transition-all border border-gray-200"
-          >
-            <div
-              class="bg-red-100 size-16 rounded-full flex items-center justify-center mx-auto mb-4"
-            >
-              <i data-lucide="clock" class="size-8"></i>
-            </div>
-            <div class="card-body items-center text-center">
-              <h2 class="card-title mb-2">Quick Process</h2>
-              <p>Takes only 10-15 minutes to donate</p>
+            <div>
+              <div class="text-red-600">24/7</div>
+              <div>Emergency Support</div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
+    <!-- Hero -->
 
-      <!-- Eligibility Section -->
-      <section class="py-16 px-6 bg-gray-50">
-        <div class="max-w-7xl mx-auto">
-          <div class="max-w-3xl mx-auto">
-            <!-- Title -->
-            <div class="text-center mb-8">
-              <h2 class="text-2xl mb-4">Are You Eligible to Donate?</h2>
-              <p class="text-gray-600 max-w-2xl mx-auto">
-                Most healthy adults can donate blood. Check these basic
-                eligibility criteria to see if you qualify to become a blood
-                donor.
-              </p>
-            </div>
+    <!-- Why Donate -->
+    <section class="py-20 w-[85%] m-auto">
+      <div class="text-center">
+        <h2 class="text-2xl mb-4">Why Donate Blood?</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          Blood donation is a simple act that can make a profound difference.
+          Here's why your contribution matters.
+        </p>
+      </div>
 
-            <!-- Eligibility Rules -->
-            <div class="space-y-4 mb-8">
-              <!-- Rule 1 -->
-              <div class="flex items-start gap-3">
-                <i
-                  data-lucide="check-circle"
-                  class="size-6 text-green-600 shrink-0 mt-0.5"
-                ></i>
-                <p class="text-gray-700">Age between 18-65 years</p>
-              </div>
-
-              <!-- Rule 2 -->
-              <div class="flex items-start gap-3">
-                <i
-                  data-lucide="check-circle"
-                  class="size-6 text-green-600 shrink-0 mt-0.5"
-                ></i>
-                <p class="text-gray-700">Weight at least 50 kg (110 lbs)</p>
-              </div>
-
-              <!-- Rule 3 -->
-              <div class="flex items-start gap-3">
-                <i
-                  data-lucide="check-circle"
-                  class="size-6 text-green-600 shrink-0 mt-0.5"
-                ></i>
-                <p class="text-gray-700">Healthy and feeling well</p>
-              </div>
-
-              <!-- Rule 4 -->
-              <div class="flex items-start gap-3">
-                <i
-                  data-lucide="alert-circle"
-                  class="size-6 text-amber-600 shrink-0 mt-0.5"
-                ></i>
-                <p class="text-gray-700">No recent illness or infection</p>
-              </div>
-            </div>
-
-            <!-- Button -->
-            <div class="text-center">
-              <a
-                href="/src/pages/guest/eligibility.html"
-                class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-[#E70110] text-white hover:bg-[#c90310]"
-              >
-                View Full Eligibility Criteria
-                <i data-lucide="chevron-right" class="size-4 ml-2"></i>
-              </a>
-            </div>
+      <div class="grid grid-cols-4 gap-x-4 mt-10">
+        <!-- Card 1 -->
+        <div class="card px-4 py-8 text-center hover:shadow-lg transition-all border border-gray-200">
+          <div class="bg-red-100 size-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="heart" class="size-8"></i>
+          </div>
+          <div class="card-body items-center text-center">
+            <h2 class="card-title mb-2">Save Lives</h2>
+            <p>One donation can save up to 3 lives</p>
           </div>
         </div>
-      </section>
-      <!-- End Eligibility Section -->
 
-      <!-- FAQ Section -->
-      <section class="py-16 px-6">
-        <div class="max-w-7xl mx-auto">
+        <!-- Card 2 -->
+        <div class="card px-4 py-8 text-center hover:shadow-lg transition-all border border-gray-200">
+          <div class="bg-red-100 size-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="users" class="size-8"></i>
+          </div>
+          <div class="card-body items-center text-center">
+            <h2 class="card-title mb-2">Help Community</h2>
+            <p>Support patients in your local area</p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card px-4 py-8 text-center hover:shadow-lg transition-all border border-gray-200">
+          <div class="bg-red-100 size-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="award" class="size-8"></i>
+          </div>
+          <div class="card-body items-center text-center">
+            <h2 class="card-title mb-2">Health Benefits</h2>
+            <p>Regular donation improves your health</p>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card px-4 py-8 text-center hover:shadow-lg transition-all border border-gray-200">
+          <div class="bg-red-100 size-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="clock" class="size-8"></i>
+          </div>
+          <div class="card-body items-center text-center">
+            <h2 class="card-title mb-2">Quick Process</h2>
+            <p>Takes only 10-15 minutes to donate</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Eligibility Section -->
+    <section class="py-16 px-6 bg-gray-50">
+      <div class="max-w-7xl mx-auto">
+        <div class="max-w-3xl mx-auto">
           <!-- Title -->
           <div class="text-center mb-8">
-            <h2 class="text-2xl mb-4">Frequently Asked Questions</h2>
+            <h2 class="text-2xl mb-4">Are You Eligible to Donate?</h2>
             <p class="text-gray-600 max-w-2xl mx-auto">
-              Get answers to common questions about blood donation
+              Most healthy adults can donate blood. Check these basic
+              eligibility criteria to see if you qualify to become a blood
+              donor.
             </p>
           </div>
 
-          <!-- FAQ List -->
-          <div class="max-w-3xl mx-auto space-y-4">
-            <!-- FAQ 1 -->
-            <div
-              class="p-6 border border-gray-200 rounded-lg hover:shadow-md transition-all"
-            >
-              <div class="flex items-start gap-4">
-                <i
-                  data-lucide="help-circle"
-                  class="size-6 text-red-600 shrink-0 mt-1"
-                ></i>
-                <div class="flex-1">
-                  <h4 class="text-gray-900 mb-2">Is blood donation safe?</h4>
-                  <p class="text-gray-600">
-                    Yes, blood donation is completely safe. Sterile, single-use
-                    equipment is used.
-                  </p>
-                </div>
-              </div>
+          <!-- Eligibility Rules -->
+          <div class="space-y-4 mb-8">
+            <!-- Rule 1 -->
+            <div class="flex items-start gap-3">
+              <i data-lucide="check-circle" class="size-6 text-green-600 shrink-0 mt-0.5"></i>
+              <p class="text-gray-700">Age between 18-65 years</p>
             </div>
 
-            <!-- FAQ 2 -->
-            <div
-              class="p-6 border border-gray-200 rounded-lg hover:shadow-md transition-all"
-            >
-              <div class="flex items-start gap-4">
-                <i
-                  data-lucide="help-circle"
-                  class="size-6 text-red-600 shrink-0 mt-1"
-                ></i>
-                <div class="flex-1">
-                  <h4 class="text-gray-900 mb-2">How often can I donate?</h4>
-                  <p class="text-gray-600">
-                    Healthy adults can donate every 3 months (whole blood
-                    donation).
-                  </p>
-                </div>
-              </div>
+            <!-- Rule 2 -->
+            <div class="flex items-start gap-3">
+              <i data-lucide="check-circle" class="size-6 text-green-600 shrink-0 mt-0.5"></i>
+              <p class="text-gray-700">Weight at least 50 kg (110 lbs)</p>
             </div>
 
-            <!-- FAQ 3 -->
-            <div
-              class="p-6 border border-gray-200 rounded-lg hover:shadow-md transition-all"
-            >
-              <div class="flex items-start gap-4">
-                <i
-                  data-lucide="help-circle"
-                  class="size-6 text-red-600 shrink-0 mt-1"
-                ></i>
-                <div class="flex-1">
-                  <h4 class="text-gray-900 mb-2">Will it hurt?</h4>
-                  <p class="text-gray-600">
-                    You may feel a slight pinch, but most donors report minimal
-                    discomfort.
-                  </p>
-                </div>
-              </div>
+            <!-- Rule 3 -->
+            <div class="flex items-start gap-3">
+              <i data-lucide="check-circle" class="size-6 text-green-600 shrink-0 mt-0.5"></i>
+              <p class="text-gray-700">Healthy and feeling well</p>
+            </div>
+
+            <!-- Rule 4 -->
+            <div class="flex items-start gap-3">
+              <i data-lucide="alert-circle" class="size-6 text-amber-600 shrink-0 mt-0.5"></i>
+              <p class="text-gray-700">No recent illness or infection</p>
             </div>
           </div>
 
           <!-- Button -->
-          <div class="text-center mt-8">
-            <a
-              href="/src/pages/guest/faq.html"
-              class="inline-flex items-center justify-end gap-3 rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-white text-[#E70110] hover:bg-red-50 border-[#E70110] border"
-            >
-              View All FAQs
+          <div class="text-center">
+            <a href="/src/pages/guest/eligibility.html"
+              class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-[#E70110] text-white hover:bg-[#c90310]">
+              View Full Eligibility Criteria
               <i data-lucide="chevron-right" class="size-4 ml-2"></i>
             </a>
           </div>
         </div>
-      </section>
-      <!-- End FAQ Section -->
+      </div>
+    </section>
+    <!-- End Eligibility Section -->
 
-      <!-- Track Section -->
-      <section class="py-16 px-6 bg-white">
-        <div class="max-w-7xl mx-auto">
-          <div
-            class="p-8 bg-linear-to-r from-blue-50 to-white border border-blue-200 rounded-xl"
-          >
-            <div class="max-w-2xl mx-auto">
-              <!-- Title -->
-              <div class="text-center mb-6">
-                <h2 class="text-gray-900 mb-2">Track Your Blood Request</h2>
+    <!-- FAQ Section -->
+    <section class="py-16 px-6">
+      <div class="max-w-7xl mx-auto">
+        <!-- Title -->
+        <div class="text-center mb-8">
+          <h2 class="text-2xl mb-4">Frequently Asked Questions</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">
+            Get answers to common questions about blood donation
+          </p>
+        </div>
+
+        <!-- FAQ List -->
+        <div class="max-w-3xl mx-auto space-y-4">
+          <!-- FAQ 1 -->
+          <div class="p-6 border border-gray-200 rounded-lg hover:shadow-md transition-all">
+            <div class="flex items-start gap-4">
+              <i data-lucide="help-circle" class="size-6 text-red-600 shrink-0 mt-1"></i>
+              <div class="flex-1">
+                <h4 class="text-gray-900 mb-2">Is blood donation safe?</h4>
                 <p class="text-gray-600">
-                  Enter your phone number or request ID to check the status of
-                  your blood request
+                  Yes, blood donation is completely safe. Sterile, single-use
+                  equipment is used.
                 </p>
               </div>
+            </div>
+          </div>
 
-              <!-- Form -->
-              <form
-                action="/src/pages/guest/track-request.html"
-                method="GET"
-                class="flex items-center gap-3"
-              >
-                <!-- Input -->
-                <input
-                  type="text"
-                  name="query"
-                  placeholder="Enter Phone Number or Request ID"
-                  class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
+          <!-- FAQ 2 -->
+          <div class="p-6 border border-gray-200 rounded-lg hover:shadow-md transition-all">
+            <div class="flex items-start gap-4">
+              <i data-lucide="help-circle" class="size-6 text-red-600 shrink-0 mt-1"></i>
+              <div class="flex-1">
+                <h4 class="text-gray-900 mb-2">How often can I donate?</h4>
+                <p class="text-gray-600">
+                  Healthy adults can donate every 3 months (whole blood
+                  donation).
+                </p>
+              </div>
+            </div>
+          </div>
 
-                <!-- Button -->
-                <button
-                  type="submit"
-                  class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all h-9 px-4 py-6 bg-blue-600 text-white hover:bg-blue-700"
-                >
-                  <i data-lucide="search" class="size-5"></i>
-                  Track Request
-                </button>
-              </form>
-
-              <!-- Helper text -->
-              <p class="text-gray-500 text-center mt-4">
-                Enter your request ID or contact phone number
-              </p>
+          <!-- FAQ 3 -->
+          <div class="p-6 border border-gray-200 rounded-lg hover:shadow-md transition-all">
+            <div class="flex items-start gap-4">
+              <i data-lucide="help-circle" class="size-6 text-red-600 shrink-0 mt-1"></i>
+              <div class="flex-1">
+                <h4 class="text-gray-900 mb-2">Will it hurt?</h4>
+                <p class="text-gray-600">
+                  You may feel a slight pinch, but most donors report minimal
+                  discomfort.
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </section>
-      <!-- End Track Section -->
 
-      <!-- Footer -->
-      <footer class="bg-gray-900 text-white py-12 px-6">
-        <div class="max-w-[85%] mx-auto">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <!-- Logo + Text -->
-            <div>
-              <div class="flex items-center gap-2 mb-4">
-                <i
-                  data-lucide="heart"
-                  class="size-6 text-red-600 fill-red-600"
-                ></i>
-                <span>BloodConnect</span>
-              </div>
-              <p class="text-gray-400">
-                Connecting donors with those in need, saving lives every day.
+        <!-- Button -->
+        <div class="text-center mt-8">
+          <a href="/src/pages/guest/faq.html"
+            class="inline-flex items-center justify-end gap-3 rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-white text-[#E70110] hover:bg-red-50 border-[#E70110] border">
+            View All FAQs
+            <i data-lucide="chevron-right" class="size-4 ml-2"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+    <!-- End FAQ Section -->
+
+    <!-- Track Section -->
+    <section class="py-16 px-6 bg-white">
+      <div class="max-w-7xl mx-auto">
+        <div class="p-8 bg-linear-to-r from-blue-50 to-white border border-blue-200 rounded-xl">
+          <div class="max-w-2xl mx-auto">
+            <!-- Title -->
+            <div class="text-center mb-6">
+              <h2 class="text-gray-900 mb-2">Track Your Blood Request</h2>
+              <p class="text-gray-600">
+                Enter your phone number or request ID to check the status of
+                your blood request
               </p>
             </div>
 
-            <!-- Quick Links -->
-            <div>
-              <h4 class="text-white mb-4">Quick Links</h4>
-              <ul class="space-y-2 text-gray-400">
-                <li>
-                  <a href="/src/pages/guest/home.html" class="hover:text-white"
-                    >Home</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="/src/pages/guest/why-donate.html"
-                    class="hover:text-white"
-                    >Why Donate</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="/src/pages/guest/eligibility.html"
-                    class="hover:text-white"
-                    >Eligibility</a
-                  >
-                </li>
-                <li>
-                  <a href="/src/pages/guest/faq.html" class="hover:text-white"
-                    >FAQs</a
-                  >
-                </li>
-              </ul>
-            </div>
+            <!-- Form -->
+            <form action="/src/pages/guest/track-request.html" method="GET" class="flex items-center gap-3">
+              <!-- Input -->
+              <input type="text" name="query" placeholder="Enter Phone Number or Request ID"
+                class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required />
 
-            <!-- Portals -->
-            <div>
-              <h4 class="text-white mb-4">Portals</h4>
-              <ul class="space-y-2 text-gray-400">
-                <li>
-                  <a
-                    href="/src/pages/portal-login.html"
-                    class="hover:text-white"
-                    >Portal Login</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="/src/pages/admin/dashboard.html"
-                    class="hover:text-white"
-                    >Admin</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="/src/pages/hospital/dashboard.html"
-                    class="hover:text-white"
-                    >Hospital</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="/src/pages/donor/dashboard.html"
-                    class="hover:text-white"
-                    >Donor</a
-                  >
-                </li>
-              </ul>
-            </div>
+              <!-- Button -->
+              <button type="submit"
+                class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all h-9 px-4 py-6 bg-blue-600 text-white hover:bg-blue-700">
+                <i data-lucide="search" class="size-5"></i>
+                Track Request
+              </button>
+            </form>
 
-            <!-- Contact -->
-            <div>
-              <h4 class="text-white mb-4">Contact</h4>
-              <ul class="space-y-2 text-gray-400">
-                <li>Email: info@bloodconnect.org</li>
-                <li>Phone: 1-800-BLOOD-NOW</li>
-                <li>Emergency: 24/7 Available</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Bottom -->
-          <div
-            class="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400"
-          >
-            <p>
-              &copy; 2025 BloodConnect. All rights reserved. Saving lives
-              together.
+            <!-- Helper text -->
+            <p class="text-gray-500 text-center mt-4">
+              Enter your request ID or contact phone number
             </p>
           </div>
         </div>
-      </footer>
-    </main>
+      </div>
+    </section>
+    <!-- End Track Section -->
 
-    <script type="module" src="/src/scripts/main.js"></script>
-  </body>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-6">
+      <div class="max-w-[85%] mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <!-- Logo + Text -->
+          <div>
+            <div class="flex items-center gap-2 mb-4">
+              <i data-lucide="heart" class="size-6 text-red-600 fill-red-600"></i>
+              <span>BloodConnect</span>
+            </div>
+            <p class="text-gray-400">
+              Connecting donors with those in need, saving lives every day.
+            </p>
+          </div>
+
+          <!-- Quick Links -->
+          <div>
+            <h4 class="text-white mb-4">Quick Links</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li>
+                <a href="/src/pages/guest/home.html" class="hover:text-white">Home</a>
+              </li>
+              <li>
+                <a href="/src/pages/guest/why-donate.html" class="hover:text-white">Why Donate</a>
+              </li>
+              <li>
+                <a href="/src/pages/guest/eligibility.html" class="hover:text-white">Eligibility</a>
+              </li>
+              <li>
+                <a href="/src/pages/guest/faq.html" class="hover:text-white">FAQs</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Portals -->
+          <div>
+            <h4 class="text-white mb-4">Portals</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li>
+                <a href="/src/pages/portal-login.html" class="hover:text-white">Portal Login</a>
+              </li>
+              <li>
+                <a href="/src/pages/admin/dashboard.html" class="hover:text-white">Admin</a>
+              </li>
+              <li>
+                <a href="/src/pages/hospital/dashboard.html" class="hover:text-white">Hospital</a>
+              </li>
+              <li>
+                <a href="/src/pages/donor/dashboard.html" class="hover:text-white">Donor</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Contact -->
+          <div>
+            <h4 class="text-white mb-4">Contact</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li>Email: info@bloodconnect.org</li>
+              <li>Phone: 1-800-BLOOD-NOW</li>
+              <li>Emergency: 24/7 Available</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Bottom -->
+        <div class="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
+          <p>
+            &copy; 2025 BloodConnect. All rights reserved. Saving lives
+            together.
+          </p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script type="module" src="/src/scripts/main.js"></script>
+</body>
+
 </html>

@@ -54,7 +54,8 @@ try {
     $lastDonation = $stmt->fetch();
 
     // Active donation (if any)
-    $stmt = $conn->prepare("SELECT d.*, r.request_code, r.hospital_name, r.city, r.blood_type 
+    $stmt = $conn->prepare("SELECT d.*, r.request_code, r.hospital_name, r.city, r.blood_type,
+                                   r.urgency, r.quantity, r.patient_name, r.required_date, r.id as request_id
                             FROM donations d 
                             JOIN blood_requests r ON d.request_id = r.id 
                             WHERE d.donor_id = ? AND d.status NOT IN ('completed', 'cancelled')
@@ -95,11 +96,17 @@ try {
         ],
         'active_donation' => $activeDonation ? [
             'id' => $activeDonation['id'],
+            'request_id' => $activeDonation['request_id'],
             'request_code' => $activeDonation['request_code'],
             'status' => $activeDonation['status'],
             'hospital_name' => $activeDonation['hospital_name'],
             'city' => $activeDonation['city'],
-            'blood_type' => $activeDonation['blood_type']
+            'blood_type' => $activeDonation['blood_type'],
+            'urgency' => $activeDonation['urgency'],
+            'quantity' => (int) $activeDonation['quantity'],
+            'patient_name' => $activeDonation['patient_name'],
+            'required_date' => $activeDonation['required_date'],
+            'accepted_at' => $activeDonation['accepted_at']
         ] : null
     ]);
 

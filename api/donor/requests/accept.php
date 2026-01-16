@@ -88,6 +88,28 @@ try {
         exit;
     }
 
+    // Check donor eligibility (must wait 56 days between donations)
+    $stmt = $conn->prepare("SELECT completed_at FROM donations WHERE donor_id = ? AND status = 'completed' ORDER BY completed_at DESC LIMIT 1");
+    $stmt->execute([$donorId]);
+    $lastDonation = $stmt->fetch();
+
+    if ($lastDonation && $lastDonation['completed_at']) {
+        $lastDonationDate = new DateTime($lastDonation['completed_at']);
+        $nextEligibleDate = (clone $lastDonationDate)->modify('+56 days');
+        $today = new DateTime();
+
+        if ($today < $nextEligibleDate) {
+            $conn->rollBack();
+            http_response_code(403);
+            echo json_encode([
+                'success' => false,
+                'message' => 'You are not eligible to donate yet. Next eligible date: ' . $nextEligibleDate->format('Y-m-d'),
+                'next_eligible_date' => $nextEligibleDate->format('Y-m-d')
+            ]);
+            exit;
+        }
+    }
+
     // Create donation record
     $stmt = $conn->prepare("INSERT INTO donations (request_id, donor_id, status, accepted_at) VALUES (?, ?, 'accepted', NOW())");
     $stmt->execute([$requestId, $donorId]);
