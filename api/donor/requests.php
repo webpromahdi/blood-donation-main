@@ -25,7 +25,10 @@ session_start();
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../middleware/auth.php';
 
-requireAuth(['donor']);
+$user = requireAuth(['donor']);
+
+// Require approved status to view/accept blood requests
+requireApprovedStatus($_SESSION['user_id'], 'donor');
 
 $donorId = $_SESSION['user_id'];
 

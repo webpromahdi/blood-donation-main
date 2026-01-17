@@ -1,324 +1,399 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - BloodConnect</title>
+    <link rel="stylesheet" href="/src/styles/styles.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - BloodConnect</title>
-  <link rel="stylesheet" href="/src/styles/styles.css" />
-</head>
-
-<body class="min-h-screen bg-linear-to-br from-red-50 via-white to-red-50 flex items-center justify-center p-6">
-  <div class="w-full max-w-md">
-    <!-- Back Button -->
-    <div class="mb-8">
-      <a href="/"
-        class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors">
-        <i data-lucide="arrow-left" class="size-4 mr-2"></i>
-        Back to Home
-      </a>
-    </div>
-
-    <!-- Login Card -->
-    <div class="p-8 bg-white shadow-xl border-2 border-gray-100 rounded-xl">
-      <!-- Role Icon -->
-      <div class="text-center mb-6">
-        <div class="bg-red-600 size-16 rounded-lg flex items-center justify-center mx-auto mb-4" id="roleIconContainer">
-          <i data-lucide="heart" class="size-8 text-white" id="roleIcon"></i>
-        </div>
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">
-          Login to Your Account
-        </h3>
-        <p class="text-gray-600">
-          Logging in as
-          <span class="text-red-600 font-medium" id="roleTitle">Donor</span>
-        </p>
+  <body
+    class="min-h-screen bg-linear-to-br from-red-50 via-white to-red-50 flex items-center justify-center p-6"
+  >
+    <div class="w-full max-w-md">
+      <!-- Back Button -->
+      <div class="mb-8">
+        <a
+          href="/"
+          class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors"
+        >
+          <i data-lucide="arrow-left" class="size-4 mr-2"></i>
+          Back to Home
+        </a>
       </div>
 
-      <!-- Role Selector -->
-      <div class="mb-6">
-        <label class="text-gray-700 mb-3 block font-medium">Select Your Role</label>
-        <div class="grid grid-cols-4 gap-2 p-1 bg-gray-100 rounded-lg" id="roleSelector">
-          <button type="button" onclick="selectRole('donor')" data-role="donor"
-            class="role-btn px-3 py-2 rounded-md transition-all bg-white text-red-600 shadow-sm">
-            <i data-lucide="heart" class="size-5 mx-auto mb-1"></i>
-            <div class="text-xs">Donor</div>
-          </button>
-          <button type="button" onclick="selectRole('admin')" data-role="admin"
-            class="role-btn px-3 py-2 rounded-md transition-all text-gray-600 hover:text-gray-900">
-            <i data-lucide="shield" class="size-5 mx-auto mb-1"></i>
-            <div class="text-xs">Admin</div>
-          </button>
-          <button type="button" onclick="selectRole('hospital')" data-role="hospital"
-            class="role-btn px-3 py-2 rounded-md transition-all text-gray-600 hover:text-gray-900">
-            <i data-lucide="building-2" class="size-5 mx-auto mb-1"></i>
-            <div class="text-xs">Hospital</div>
-          </button>
-          <button type="button" onclick="selectRole('seeker')" data-role="seeker"
-            class="role-btn px-3 py-2 rounded-md transition-all text-gray-600 hover:text-gray-900">
-            <i data-lucide="search" class="size-5 mx-auto mb-1"></i>
-            <div class="text-xs">Seeker</div>
-          </button>
-        </div>
-      </div>
-
-      <!-- Login Form -->
-      <form id="loginForm" class="space-y-5">
-        <!-- Email Field -->
-        <div>
-          <label for="email" class="text-gray-700 mb-2 block font-medium">Email Address</label>
-          <input id="email" name="email" type="email" placeholder="Enter your email"
-            class="w-full h-12 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
-          <p class="text-red-500 text-sm mt-1 hidden" id="emailError"></p>
+      <!-- Login Card -->
+      <div class="p-8 bg-white shadow-xl border-2 border-gray-100 rounded-xl">
+        <!-- Role Icon -->
+        <div class="text-center mb-6">
+          <div
+            class="bg-red-600 size-16 rounded-lg flex items-center justify-center mx-auto mb-4"
+            id="roleIconContainer"
+          >
+            <i data-lucide="heart" class="size-8 text-white" id="roleIcon"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            Login to Your Account
+          </h3>
+          <p class="text-gray-600">
+            Logging in as
+            <span class="text-red-600 font-medium" id="roleTitle">Donor</span>
+          </p>
         </div>
 
-        <!-- Password Field -->
-        <div>
-          <label for="password" class="text-gray-700 mb-2 block font-medium">Password</label>
-          <div class="relative">
-            <input id="password" name="password" type="password" placeholder="Enter your password"
-              class="w-full h-12 px-4 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
-            <button type="button" onclick="togglePassword('password')"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
-              <i data-lucide="eye" class="size-5" id="passwordToggleIcon"></i>
+        <!-- Role Selector -->
+        <div class="mb-6">
+          <label class="text-gray-700 mb-3 block font-medium"
+            >Select Your Role</label
+          >
+          <div
+            class="grid grid-cols-4 gap-2 p-1 bg-gray-100 rounded-lg"
+            id="roleSelector"
+          >
+            <button
+              type="button"
+              onclick="selectRole('donor')"
+              data-role="donor"
+              class="role-btn px-3 py-2 rounded-md transition-all bg-white text-red-600 shadow-sm"
+            >
+              <i data-lucide="heart" class="size-5 mx-auto mb-1"></i>
+              <div class="text-xs">Donor</div>
+            </button>
+            <button
+              type="button"
+              onclick="selectRole('admin')"
+              data-role="admin"
+              class="role-btn px-3 py-2 rounded-md transition-all text-gray-600 hover:text-gray-900"
+            >
+              <i data-lucide="shield" class="size-5 mx-auto mb-1"></i>
+              <div class="text-xs">Admin</div>
+            </button>
+            <button
+              type="button"
+              onclick="selectRole('hospital')"
+              data-role="hospital"
+              class="role-btn px-3 py-2 rounded-md transition-all text-gray-600 hover:text-gray-900"
+            >
+              <i data-lucide="building-2" class="size-5 mx-auto mb-1"></i>
+              <div class="text-xs">Hospital</div>
+            </button>
+            <button
+              type="button"
+              onclick="selectRole('seeker')"
+              data-role="seeker"
+              class="role-btn px-3 py-2 rounded-md transition-all text-gray-600 hover:text-gray-900"
+            >
+              <i data-lucide="search" class="size-5 mx-auto mb-1"></i>
+              <div class="text-xs">Seeker</div>
             </button>
           </div>
-          <p class="text-red-500 text-sm mt-1 hidden" id="passwordError"></p>
         </div>
 
-        <!-- Remember Me & Forgot Password -->
-        <div class="flex items-center justify-between text-sm">
-          <label class="flex items-center gap-2 text-gray-600 cursor-pointer">
-            <input type="checkbox" id="rememberMe" class="rounded border-gray-300 text-red-600 focus:ring-red-500" />
-            <span>Remember me</span>
-          </label>
-          <button type="button" class="text-red-600 hover:underline">
-            Forgot password?
+        <!-- Login Form -->
+        <form id="loginForm" class="space-y-5">
+          <!-- Email Field -->
+          <div>
+            <label for="email" class="text-gray-700 mb-2 block font-medium"
+              >Email Address</label
+            >
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              class="w-full h-12 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+            />
+            <p class="text-red-500 text-sm mt-1 hidden" id="emailError"></p>
+          </div>
+
+          <!-- Password Field -->
+          <div>
+            <label for="password" class="text-gray-700 mb-2 block font-medium"
+              >Password</label
+            >
+            <div class="relative">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+                class="w-full h-12 px-4 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+              />
+              <button
+                type="button"
+                onclick="togglePassword('password')"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                <i data-lucide="eye" class="size-5" id="passwordToggleIcon"></i>
+              </button>
+            </div>
+            <p class="text-red-500 text-sm mt-1 hidden" id="passwordError"></p>
+          </div>
+
+          <!-- Remember Me & Forgot Password -->
+          <div class="flex items-center justify-between text-sm">
+            <label class="flex items-center gap-2 text-gray-600 cursor-pointer">
+              <input
+                type="checkbox"
+                id="rememberMe"
+                class="rounded border-gray-300 text-red-600 focus:ring-red-500"
+              />
+              <span>Remember me</span>
+            </label>
+            <button type="button" class="text-red-600 hover:underline">
+              Forgot password?
+            </button>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            class="w-full h-12 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+          >
+            Login to Dashboard
           </button>
+        </form>
+
+        <!-- Sign Up Link -->
+        <div class="mt-6 text-center">
+          <p class="text-gray-600">
+            Don't have an account?
+            <a
+              href="/src/pages/auth/register.html"
+              id="registerLink"
+              class="text-red-600 hover:underline ml-1"
+            >
+              Create an account
+            </a>
+          </p>
         </div>
-
-        <!-- Submit Button -->
-        <button type="submit"
-          class="w-full h-12 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
-          Login to Dashboard
-        </button>
-      </form>
-
-      <!-- Sign Up Link -->
-      <div class="mt-6 text-center">
-        <p class="text-gray-600">
-          Don't have an account?
-          <a href="/src/pages/auth/register.html" id="registerLink" class="text-red-600 hover:underline ml-1">
-            Create an account
-          </a>
-        </p>
       </div>
     </div>
-  </div>
 
-  <script type="module" src="/src/scripts/main.js"></script>
-  <script>
-    let selectedRole = "donor";
+    <script type="module" src="/src/scripts/main.js"></script>
+    <script>
+      let selectedRole = "donor";
 
-    const roleConfig = {
-      donor: {
-        title: "Donor",
-        icon: "heart",
-        path: "/src/pages/donor/dashboard.html",
-      },
-      admin: {
-        title: "Admin",
-        icon: "shield",
-        path: "/src/pages/admin/dashboard.html",
-      },
-      hospital: {
-        title: "Hospital",
-        icon: "building-2",
-        path: "/src/pages/hospital/dashboard.html",
-      },
-      seeker: {
-        title: "Blood Seeker",
-        icon: "search",
-        path: "/src/pages/seeker/request.html",
-      },
-    };
-
-    // Check URL params for role
-    const urlParams = new URLSearchParams(window.location.search);
-    const roleParam = urlParams.get("role");
-    if (roleParam && roleConfig[roleParam]) {
-      selectedRole = roleParam;
-      // Update UI on page load
-      document.addEventListener("DOMContentLoaded", () => {
-        selectRole(roleParam);
-      });
-    }
-
-    function selectRole(role) {
-      selectedRole = role;
-      const config = roleConfig[role];
-
-      // Update button styles
-      document.querySelectorAll(".role-btn").forEach((btn) => {
-        btn.classList.remove("bg-white", "text-red-600", "shadow-sm");
-        btn.classList.add("text-gray-600");
-      });
-
-      const selectedBtn = document.querySelector(`[data-role="${role}"]`);
-      selectedBtn.classList.add("bg-white", "text-red-600", "shadow-sm");
-      selectedBtn.classList.remove("text-gray-600");
-
-      // Update role title
-      document.getElementById("roleTitle").textContent = config.title;
-
-      // Update role icon
-      const iconContainer = document.getElementById("roleIconContainer");
-      iconContainer.innerHTML = `<i data-lucide="${config.icon}" class="size-8 text-white"></i>`;
-
-      // Re-initialize Lucide icons
-      if (window.lucide) {
-        window.lucide.createIcons();
-      }
-
-      // Update register link with role param
-      document.getElementById(
-        "registerLink"
-      ).href = `/src/pages/auth/register.html?role=${role}`;
-
-      // DEV: Pre-fill test credentials based on role
-      const testCredentials = {
-        donor: 'donor@test.com',
-        admin: 'admin@test.com',
-        hospital: 'hospital@test.com',
-        seeker: 'seeker@test.com'
+      const roleConfig = {
+        donor: {
+          title: "Donor",
+          icon: "heart",
+          path: "/src/pages/donor/dashboard.html",
+        },
+        admin: {
+          title: "Admin",
+          icon: "shield",
+          path: "/src/pages/admin/dashboard.html",
+        },
+        hospital: {
+          title: "Hospital",
+          icon: "building-2",
+          path: "/src/pages/hospital/dashboard.html",
+        },
+        seeker: {
+          title: "Blood Seeker",
+          icon: "search",
+          path: "/src/pages/seeker/request.html",
+        },
       };
-      document.getElementById('email').value = testCredentials[role];
-      document.getElementById('password').value = 'Test123!';
-    }
 
-    function togglePassword(fieldId) {
-      const field = document.getElementById(fieldId);
-      const icon = document.getElementById("passwordToggleIcon");
-
-      if (field.type === "password") {
-        field.type = "text";
-        icon.setAttribute("data-lucide", "eye-off");
-      } else {
-        field.type = "password";
-        icon.setAttribute("data-lucide", "eye");
+      // Check URL params for role
+      const urlParams = new URLSearchParams(window.location.search);
+      const roleParam = urlParams.get("role");
+      if (roleParam && roleConfig[roleParam]) {
+        selectedRole = roleParam;
+        // Update UI on page load
+        document.addEventListener("DOMContentLoaded", () => {
+          selectRole(roleParam);
+        });
       }
 
-      // Re-initialize Lucide icons
-      if (window.lucide) {
-        window.lucide.createIcons();
+      // Check for error parameter (e.g., from rejected account redirect)
+      const errorParam = urlParams.get("error");
+      if (errorParam === "rejected") {
+        document.addEventListener("DOMContentLoaded", () => {
+          // Show rejection error message
+          showError("email", "Your account has been rejected by the admin.");
+          // Clear the URL parameter without reload
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname,
+          );
+        });
       }
-    }
 
-    // Form submission with Zod validation
-    document
-      .getElementById("loginForm")
-      .addEventListener("submit", async function (e) {
-        e.preventDefault();
+      function selectRole(role) {
+        selectedRole = role;
+        const config = roleConfig[role];
 
-        // Import Zod dynamically
-        const { z } = await import('https://cdn.jsdelivr.net/npm/zod@3.22.4/+esm');
-
-        // Clear previous errors
-        clearError('email');
-        clearError('password');
-
-        // Define login schema
-        const loginSchema = z.object({
-          email: z.string().min(1, 'Email is required').email('Please enter a valid email address'),
-          password: z.string().min(1, 'Password is required')
+        // Update button styles
+        document.querySelectorAll(".role-btn").forEach((btn) => {
+          btn.classList.remove("bg-white", "text-red-600", "shadow-sm");
+          btn.classList.add("text-gray-600");
         });
 
-        // Get form values
-        const formData = {
-          email: document.getElementById('email').value.trim(),
-          password: document.getElementById('password').value,
-          role: selectedRole
-        };
+        const selectedBtn = document.querySelector(`[data-role="${role}"]`);
+        selectedBtn.classList.add("bg-white", "text-red-600", "shadow-sm");
+        selectedBtn.classList.remove("text-gray-600");
 
-        // Validate
-        const result = loginSchema.safeParse(formData);
+        // Update role title
+        document.getElementById("roleTitle").textContent = config.title;
 
-        if (!result.success) {
-          // Show errors
-          result.error.errors.forEach(err => {
-            const field = err.path[0];
-            showError(field, err.message);
-          });
-          return;
+        // Update role icon
+        const iconContainer = document.getElementById("roleIconContainer");
+        iconContainer.innerHTML = `<i data-lucide="${config.icon}" class="size-8 text-white"></i>`;
+
+        // Re-initialize Lucide icons
+        if (window.lucide) {
+          window.lucide.createIcons();
         }
 
-        // Get submit button and show loading state
-        const submitBtn = document.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Logging in...';
+        // Update register link with role param
+        document.getElementById("registerLink").href =
+          `/src/pages/auth/register.html?role=${role}`;
 
-        try {
-          // POST to PHP backend
-          const response = await fetch('/api/auth/login.php', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
+        // DEV: Pre-fill test credentials based on role
+        const testCredentials = {
+          donor: "donor@test.com",
+          admin: "admin@test.com",
+          hospital: "hospital@test.com",
+          seeker: "seeker@test.com",
+        };
+        document.getElementById("email").value = testCredentials[role];
+        document.getElementById("password").value = "Test123!";
+      }
+
+      function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        const icon = document.getElementById("passwordToggleIcon");
+
+        if (field.type === "password") {
+          field.type = "text";
+          icon.setAttribute("data-lucide", "eye-off");
+        } else {
+          field.type = "password";
+          icon.setAttribute("data-lucide", "eye");
+        }
+
+        // Re-initialize Lucide icons
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }
+
+      // Form submission with Zod validation
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          // Import Zod dynamically
+          const { z } =
+            await import("https://cdn.jsdelivr.net/npm/zod@3.22.4/+esm");
+
+          // Clear previous errors
+          clearError("email");
+          clearError("password");
+
+          // Define login schema
+          const loginSchema = z.object({
+            email: z
+              .string()
+              .min(1, "Email is required")
+              .email("Please enter a valid email address"),
+            password: z.string().min(1, "Password is required"),
           });
 
-          const data = await response.json();
+          // Get form values
+          const formData = {
+            email: document.getElementById("email").value.trim(),
+            password: document.getElementById("password").value,
+            role: selectedRole,
+          };
 
-          if (data.success) {
-            // Login successful - redirect based on role
-            const config = roleConfig[data.user.role];
-            window.location.href = config.path;
-          } else {
-            // Show error message
-            showError('email', data.message || 'Login failed');
+          // Validate
+          const result = loginSchema.safeParse(formData);
+
+          if (!result.success) {
+            // Show errors
+            result.error.errors.forEach((err) => {
+              const field = err.path[0];
+              showError(field, err.message);
+            });
+            return;
+          }
+
+          // Get submit button and show loading state
+          const submitBtn = document.querySelector('button[type="submit"]');
+          const originalText = submitBtn.textContent;
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Logging in...";
+
+          try {
+            // POST to PHP backend
+            const response = await fetch("/api/auth/login.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              // Login successful - redirect based on role
+              const config = roleConfig[data.user.role];
+              window.location.href = config.path;
+            } else {
+              // Show error message
+              showError("email", data.message || "Login failed");
+              submitBtn.disabled = false;
+              submitBtn.textContent = originalText;
+            }
+          } catch (error) {
+            console.error("Login error:", error);
+            showError("email", "Connection error. Please try again.");
             submitBtn.disabled = false;
             submitBtn.textContent = originalText;
           }
-        } catch (error) {
-          console.error('Login error:', error);
-          showError('email', 'Connection error. Please try again.');
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalText;
+        });
+
+      // Error display helpers
+      function showError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        const errorEl = document.getElementById(fieldId + "Error");
+        if (field) {
+          field.classList.add("border-red-500");
+          field.classList.remove("border-gray-300");
         }
-      });
-
-    // Error display helpers
-    function showError(fieldId, message) {
-      const field = document.getElementById(fieldId);
-      const errorEl = document.getElementById(fieldId + 'Error');
-      if (field) {
-        field.classList.add('border-red-500');
-        field.classList.remove('border-gray-300');
+        if (errorEl) {
+          errorEl.textContent = message;
+          errorEl.classList.remove("hidden");
+        }
       }
-      if (errorEl) {
-        errorEl.textContent = message;
-        errorEl.classList.remove('hidden');
-      }
-    }
 
-    function clearError(fieldId) {
-      const field = document.getElementById(fieldId);
-      const errorEl = document.getElementById(fieldId + 'Error');
-      if (field) {
-        field.classList.remove('border-red-500');
-        field.classList.add('border-gray-300');
+      function clearError(fieldId) {
+        const field = document.getElementById(fieldId);
+        const errorEl = document.getElementById(fieldId + "Error");
+        if (field) {
+          field.classList.remove("border-red-500");
+          field.classList.add("border-gray-300");
+        }
+        if (errorEl) {
+          errorEl.textContent = "";
+          errorEl.classList.add("hidden");
+        }
       }
-      if (errorEl) {
-        errorEl.textContent = '';
-        errorEl.classList.add('hidden');
-      }
-    }
 
-    // Clear errors on input
-    document.getElementById('email').addEventListener('input', () => clearError('email'));
-    document.getElementById('password').addEventListener('input', () => clearError('password'));
-  </script>
-</body>
-
+      // Clear errors on input
+      document
+        .getElementById("email")
+        .addEventListener("input", () => clearError("email"));
+      document
+        .getElementById("password")
+        .addEventListener("input", () => clearError("password"));
+    </script>
+  </body>
 </html>

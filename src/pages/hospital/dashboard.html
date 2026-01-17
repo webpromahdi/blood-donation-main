@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -101,7 +101,38 @@
 
     <!-- Main Content -->
     <main class="ml-64 pt-16">
-      <div class="p-8 space-y-8">
+      <!-- Pending Approval Message (Hidden by default) -->
+      <div id="pendingApprovalMessage" class="hidden p-8">
+        <div class="max-w-2xl mx-auto mt-16">
+          <div
+            class="p-8 bg-white border border-gray-200 rounded-xl text-center"
+          >
+            <div
+              class="bg-yellow-100 p-4 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center"
+            >
+              <i data-lucide="clock" class="size-10 text-yellow-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+              Account Under Review
+            </h2>
+            <p class="text-gray-600 mb-6">
+              Your hospital account is currently pending approval. Please wait
+              for admin review before you can access the full dashboard and
+              create blood requests.
+            </p>
+            <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p class="text-sm text-yellow-800">
+                <i data-lucide="info" class="size-4 inline mr-1"></i>
+                This usually takes 24-48 hours. You will be notified once your
+                account is approved.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Content (Shown when approved) -->
+      <div id="dashboardContent" class="p-8 space-y-8">
         <div>
           <h1 class="text-2xl font-bold text-gray-900 mb-2">
             Hospital Dashboard
@@ -363,6 +394,7 @@
           </div>
         </div>
       </div>
+    </div>
     </main>
 
     <!-- Blood Request Details Modal -->
@@ -561,12 +593,12 @@
             }</span>
           </td>
           <td class="py-3 px-4 text-gray-900">${req.quantity} Unit${
-          req.quantity > 1 ? "s" : ""
-        }</td>
+            req.quantity > 1 ? "s" : ""
+          }</td>
           <td class="py-3 px-4">${getStatusBadge(req.status)}</td>
           <td class="py-3 px-4">${getDonorStatusBadge(req.donation)}</td>
           <td class="py-3 px-4 text-gray-600">${formatRelativeTime(
-            req.created_at
+            req.created_at,
           )}</td>
           <td class="py-3 px-4">
             <button class="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg"
@@ -584,29 +616,27 @@
           (r) =>
             r.urgency === "emergency" &&
             r.status !== "completed" &&
-            r.status !== "rejected"
+            r.status !== "rejected",
         );
         const normalRequests = requests.filter(
           (r) =>
             r.urgency !== "emergency" &&
             r.status !== "completed" &&
-            r.status !== "rejected"
+            r.status !== "rejected",
         );
 
         // Update counts
-        document.getElementById(
-          "emergencyCount"
-        ).textContent = `${emergencyRequests.length} Active`;
-        document.getElementById(
-          "normalCount"
-        ).textContent = `${normalRequests.length} Active`;
+        document.getElementById("emergencyCount").textContent =
+          `${emergencyRequests.length} Active`;
+        document.getElementById("normalCount").textContent =
+          `${normalRequests.length} Active`;
 
         // Render emergency table
         const emergencyBody = document.getElementById("emergencyRequestsBody");
         if (emergencyRequests.length === 0) {
           showEmptyState(
             "emergencyRequestsBody",
-            "No emergency requests at the moment"
+            "No emergency requests at the moment",
           );
         } else {
           emergencyBody.innerHTML = emergencyRequests
@@ -620,7 +650,7 @@
         if (normalRequests.length === 0) {
           showEmptyState(
             "normalRequestsBody",
-            "No normal requests at the moment"
+            "No normal requests at the moment",
           );
         } else {
           normalBody.innerHTML = normalRequests
@@ -633,7 +663,7 @@
       // Update stats cards
       function updateStats(stats) {
         const statCards = document.querySelectorAll(
-          ".grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 .text-3xl"
+          ".grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 .text-3xl",
         );
         if (statCards.length >= 4) {
           statCards[0].textContent = stats.active || 0; // Active Requests
@@ -661,11 +691,11 @@
           if (!data.success) {
             showEmptyState(
               "emergencyRequestsBody",
-              data.message || "Failed to load requests"
+              data.message || "Failed to load requests",
             );
             showEmptyState(
               "normalRequestsBody",
-              data.message || "Failed to load requests"
+              data.message || "Failed to load requests",
             );
             return;
           }
@@ -707,7 +737,7 @@
           console.error("Error loading dashboard:", error);
           showEmptyState(
             "emergencyRequestsBody",
-            "Unable to connect to server"
+            "Unable to connect to server",
           );
           showEmptyState("normalRequestsBody", "Unable to connect to server");
         }
@@ -866,8 +896,57 @@
         }
       }
 
-      // Load on page ready
-      document.addEventListener("DOMContentLoaded", loadDashboardData);
+      // ============================================
+      // ACCOUNT STATUS CHECK
+      // ============================================
+      async function checkAccountStatus() {
+        try {
+          const response = await fetch("/api/auth/check.php");
+          const data = await response.json();
+          
+          if (!data.success || !data.logged_in) {
+            window.location.href = "/src/pages/auth/login.html";
+            return false;
+          }
+          
+          const status = data.user.status || 'pending';
+          const dashboardContent = document.getElementById("dashboardContent");
+          const pendingMessage = document.getElementById("pendingApprovalMessage");
+          
+          // Handle rejected status - logout and redirect to login
+          if (status === 'rejected') {
+            await fetch('/api/auth/logout.php', { method: 'POST' });
+            window.location.href = '/src/pages/auth/login.html?error=rejected';
+            return false;
+          }
+          
+          if (status !== 'approved') {
+            // Show pending message, hide dashboard
+            if (dashboardContent) dashboardContent.classList.add("hidden");
+            if (pendingMessage) {
+              pendingMessage.classList.remove("hidden");
+              lucide.createIcons();
+            }
+            return false;
+          }
+          
+          // Show dashboard, hide pending message
+          if (dashboardContent) dashboardContent.classList.remove("hidden");
+          if (pendingMessage) pendingMessage.classList.add("hidden");
+          return true;
+        } catch (error) {
+          console.error("Failed to check account status:", error);
+          return false;
+        }
+      }
+
+      // Load on page ready - check status first
+      document.addEventListener("DOMContentLoaded", async function() {
+        const isApproved = await checkAccountStatus();
+        if (isApproved) {
+          loadDashboardData();
+        }
+      });
     </script>
     <script type="module" src="/src/scripts/main.js"></script>
   </body>

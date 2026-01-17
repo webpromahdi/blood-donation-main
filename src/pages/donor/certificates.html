@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -101,7 +101,38 @@
 
     <!-- Main Content -->
     <main class="ml-64 pt-16">
-      <div class="p-8 space-y-8">
+      <!-- Pending Approval Message (Hidden by default) -->
+      <div id="pendingApprovalMessage" class="hidden p-8">
+        <div class="max-w-2xl mx-auto mt-16">
+          <div
+            class="p-8 bg-white border border-gray-200 rounded-xl text-center"
+          >
+            <div
+              class="bg-yellow-100 p-4 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center"
+            >
+              <i data-lucide="clock" class="size-10 text-yellow-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+              Account Under Review
+            </h2>
+            <p class="text-gray-600 mb-6">
+              Your account is currently pending approval. Please wait for admin
+              review before you can access the full dashboard and start donating
+              blood.
+            </p>
+            <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p class="text-sm text-yellow-800">
+                <i data-lucide="info" class="size-4 inline mr-1"></i>This
+                usually takes 24-48 hours. You will be notified once your
+                account is approved.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Content (Shown when approved) -->
+      <div id="dashboardContent" class="p-8 space-y-8">
         <div>
           <h1 class="text-2xl font-bold text-gray-900 mb-2">
             Certificates & Awards
@@ -207,6 +238,48 @@
       import { initUserLoader } from "/src/scripts/user-loader.js";
       initUserLoader();
 
+      // Account status check
+      async function checkAccountStatus() {
+        try {
+          const response = await fetch("/api/auth/check.php");
+          const data = await response.json();
+
+          if (!data.success || !data.logged_in) {
+            window.location.href = "/src/pages/auth/login.html";
+            return false;
+          }
+
+          const status = data.user.status || "pending";
+          const dashboardContent = document.getElementById("dashboardContent");
+          const pendingMessage = document.getElementById(
+            "pendingApprovalMessage",
+          );
+
+          // Handle rejected status - logout and redirect to login
+          if (status === "rejected") {
+            await fetch("/api/auth/logout.php", { method: "POST" });
+            window.location.href = "/src/pages/auth/login.html?error=rejected";
+            return false;
+          }
+
+          if (status !== "approved") {
+            if (dashboardContent) dashboardContent.classList.add("hidden");
+            if (pendingMessage) {
+              pendingMessage.classList.remove("hidden");
+              if (window.lucide) window.lucide.createIcons();
+            }
+            return false;
+          }
+
+          if (dashboardContent) dashboardContent.classList.remove("hidden");
+          if (pendingMessage) pendingMessage.classList.add("hidden");
+          return true;
+        } catch (error) {
+          console.error("Failed to check account status:", error);
+          return false;
+        }
+      }
+
       // Certificate thresholds
       const CERTIFICATE_TIERS = [
         {
@@ -275,7 +348,7 @@
 
           // Show unlocked tier badges
           const unlockedTiers = CERTIFICATE_TIERS.filter(
-            (tier) => stats.total_donations >= tier.required
+            (tier) => stats.total_donations >= tier.required,
           );
           achievementBadges.innerHTML = unlockedTiers
             .map(
@@ -283,7 +356,7 @@
           <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 border border-green-300 rounded-full">
             <i data-lucide="check-circle" class="size-3 inline mr-1"></i>${tier.name} Unlocked
           </span>
-        `
+        `,
             )
             .join("");
         }
@@ -363,7 +436,7 @@
 
         // Filter only completed donations with certificates
         const completedDonations = donations.filter(
-          (d) => d.status === "completed" && d.certificate
+          (d) => d.status === "completed" && d.certificate,
         );
 
         if (completedDonations.length === 0) {
@@ -384,7 +457,7 @@
                     year: "numeric",
                     month: "short",
                     day: "numeric",
-                  }
+                  },
                 )
               : "N/A";
 
@@ -426,7 +499,13 @@
       }
 
       // Initialize on page load
-      document.addEventListener("DOMContentLoaded", loadCertificates);
+      document.addEventListener("DOMContentLoaded", () => {
+        checkAccountStatus().then((isApproved) => {
+          if (isApproved) {
+            loadCertificates();
+          }
+        });
+      });
     </script>
   </body>
 </html>

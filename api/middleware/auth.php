@@ -100,3 +100,72 @@ function getCurrentUser()
 {
     return checkAuth();
 }
+
+/**
+ * Get user status from database
+ * @param int $userId - User ID
+ * @return string|null - Returns status or null if not found
+ */
+function getUserStatus($userId)
+{
+    require_once __DIR__ . '/../config/database.php';
+    
+    $database = new Database();
+    $conn = $database->getConnection();
+    
+    if (!$conn) {
+        return null;
+    }
+    
+    try {
+        $stmt = $conn->prepare("SELECT status FROM users WHERE id = ?");
+        $stmt->execute([$userId]);
+        $result = $stmt->fetch();
+        return $result ? $result['status'] : null;
+    } catch (PDOException $e) {
+        error_log("Get User Status Error: " . $e->getMessage());
+        return null;
+    }
+}
+
+/**
+ * Require approved status - returns 403 if user is not approved
+ * Use this in protected API endpoints for donors and hospitals
+ * @param int $userId - User ID
+ * @param string $role - User role (donor/hospital)
+ */
+function requireApprovedStatus($userId, $role)
+{
+    // Admin and seeker roles don't need approval check
+    if (!in_array($role, ['donor', 'hospital'])) {
+        return true;
+    }
+    
+    $status = getUserStatus($userId);
+    
+    if ($status === 'rejected') {
+        header('Content-Type: application/json');
+        http_response_code(403);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Your account has been rejected by the admin.',
+            'status' => 'rejected',
+            'rejected' => true
+        ]);
+        exit;
+    }
+    
+    if ($status !== 'approved') {
+        header('Content-Type: application/json');
+        http_response_code(403);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Your account is under review. Please wait for admin approval.',
+            'status' => $status ?? 'pending',
+            'requires_approval' => true
+        ]);
+        exit;
+    }
+    
+    return true;
+}

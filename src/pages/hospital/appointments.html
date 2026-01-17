@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -95,7 +95,38 @@
 
     <!-- Main Content -->
     <main class="ml-64 pt-16">
-      <div class="p-8 space-y-8">
+      <!-- Pending Approval Message (Hidden by default) -->
+      <div id="pendingApprovalMessage" class="hidden p-8">
+        <div class="max-w-2xl mx-auto mt-16">
+          <div
+            class="p-8 bg-white border border-gray-200 rounded-xl text-center"
+          >
+            <div
+              class="bg-yellow-100 p-4 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center"
+            >
+              <i data-lucide="clock" class="size-10 text-yellow-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+              Account Under Review
+            </h2>
+            <p class="text-gray-600 mb-6">
+              Your hospital account is currently pending approval. Please wait
+              for admin review before you can access the full dashboard and
+              create blood requests.
+            </p>
+            <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p class="text-sm text-yellow-800">
+                <i data-lucide="info" class="size-4 inline mr-1"></i>This
+                usually takes 24-48 hours. You will be notified once your
+                account is approved.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Content (Shown when approved) -->
+      <div id="dashboardContent" class="p-8 space-y-8">
         <div>
           <h1 class="text-2xl font-bold text-gray-900 mb-2">Appointments</h1>
           <p class="text-gray-600">
@@ -285,6 +316,52 @@
     </main>
 
     <script type="module" src="/src/scripts/main.js"></script>
+    <script type="module">
+      // Account status check
+      async function checkAccountStatus() {
+        try {
+          const response = await fetch("/api/auth/check.php");
+          const data = await response.json();
+
+          if (!data.success || !data.logged_in) {
+            window.location.href = "/src/pages/auth/login.html";
+            return false;
+          }
+
+          const status = data.user.status || "pending";
+          const dashboardContent = document.getElementById("dashboardContent");
+          const pendingMessage = document.getElementById(
+            "pendingApprovalMessage",
+          );
+
+          // Handle rejected status - logout and redirect to login
+          if (status === "rejected") {
+            await fetch("/api/auth/logout.php", { method: "POST" });
+            window.location.href = "/src/pages/auth/login.html?error=rejected";
+            return false;
+          }
+
+          if (status !== "approved") {
+            if (dashboardContent) dashboardContent.classList.add("hidden");
+            if (pendingMessage) {
+              pendingMessage.classList.remove("hidden");
+              if (window.lucide) window.lucide.createIcons();
+            }
+            return false;
+          }
+
+          if (dashboardContent) dashboardContent.classList.remove("hidden");
+          if (pendingMessage) pendingMessage.classList.add("hidden");
+          return true;
+        } catch (error) {
+          console.error("Failed to check account status:", error);
+          return false;
+        }
+      }
+
+      // Initialize status check
+      document.addEventListener("DOMContentLoaded", checkAccountStatus);
+    </script>
     <script>
       // Hospital Appointments - Dynamic Data from API
       let appointments = [];
@@ -386,7 +463,7 @@
         } catch (error) {
           console.error("Error loading appointments:", error);
           showTableError(
-            "Unable to connect to the server. Please try again later."
+            "Unable to connect to the server. Please try again later.",
           );
         }
       }
@@ -414,7 +491,7 @@
         const emptyState = document.getElementById("emptyState");
         const emptyStateMessage = document.getElementById("emptyStateMessage");
         const statCards = document.querySelectorAll(
-          ".grid.grid-cols-1.md\\:grid-cols-4 .text-3xl"
+          ".grid.grid-cols-1.md\\:grid-cols-4 .text-3xl",
         );
         const tabButtons = document.querySelectorAll(".tab-btn");
 
@@ -437,7 +514,7 @@
         const emptyState = document.getElementById("emptyState");
         const emptyStateMessage = document.getElementById("emptyStateMessage");
         const statCards = document.querySelectorAll(
-          ".grid.grid-cols-1.md\\:grid-cols-4 .text-3xl"
+          ".grid.grid-cols-1.md\\:grid-cols-4 .text-3xl",
         );
         const tabButtons = document.querySelectorAll(".tab-btn");
 
@@ -464,13 +541,13 @@
         function updateStats() {
           const total = appointments.length;
           const confirmed = appointments.filter(
-            (a) => a.status === "Confirmed"
+            (a) => a.status === "Confirmed",
           ).length;
           const pending = appointments.filter(
-            (a) => a.status === "Pending"
+            (a) => a.status === "Pending",
           ).length;
           const completed = appointments.filter(
-            (a) => a.status === "Completed"
+            (a) => a.status === "Completed",
           ).length;
 
           if (statCards.length >= 4) {
@@ -546,8 +623,8 @@
               currentTab === "pending"
                 ? "pending"
                 : currentTab === "scheduled"
-                ? "accepted/scheduled"
-                : "";
+                  ? "accepted/scheduled"
+                  : "";
             emptyStateMessage.textContent = tabName
               ? `No ${tabName} appointments at this time`
               : "No appointments found";
@@ -579,19 +656,19 @@
                 <td class="py-3 px-4 text-gray-900">${apt.time}</td>
                 <td class="py-3 px-4">
                   <span class="px-2 py-1 text-xs font-medium ${getTypeBadge(
-                    apt.type
+                    apt.type,
                   )} rounded-full">${apt.type}</span>
                 </td>
                 <td class="py-3 px-4">
                   <span class="px-2 py-1 text-xs font-medium ${getStatusBadge(
-                    apt.status
+                    apt.status,
                   )} rounded-full">${apt.status}</span>
                 </td>
                 <td class="py-3 px-4">
                   ${getActionButtons(apt)}
                 </td>
               </tr>
-            `
+            `,
               )
               .join("");
 
@@ -673,7 +750,7 @@
         function showScheduleNotification() {
           showNotification(
             "Scheduling will be available in the full system.",
-            "info"
+            "info",
           );
         }
 
@@ -690,13 +767,11 @@
           // Populate modal with donor data
           document.getElementById("modalAptId").textContent = apt.id;
           document.getElementById("modalDonorName").textContent = apt.donor;
-          document.getElementById(
-            "modalDonorAge"
-          ).textContent = `${apt.age} years`;
+          document.getElementById("modalDonorAge").textContent =
+            `${apt.age} years`;
           document.getElementById("modalDonorGender").textContent = apt.gender;
-          document.getElementById(
-            "modalDonorWeight"
-          ).textContent = `${apt.weight} kg`;
+          document.getElementById("modalDonorWeight").textContent =
+            `${apt.weight} kg`;
           document.getElementById("modalDonorEmail").textContent = apt.email;
           document.getElementById("modalDonorPhone").textContent = apt.phone;
           document.getElementById("modalDonorAddress").textContent =

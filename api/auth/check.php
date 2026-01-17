@@ -43,6 +43,27 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
         }
     }
 
+    // Get user status from database for donors and hospitals
+    $status = null;
+    if (in_array($_SESSION['role'], ['donor', 'hospital'])) {
+        require_once __DIR__ . '/../config/database.php';
+        
+        $database = new Database();
+        $conn = $database->getConnection();
+        
+        if ($conn) {
+            try {
+                $stmt = $conn->prepare("SELECT status FROM users WHERE id = ?");
+                $stmt->execute([$_SESSION['user_id']]);
+                $result = $stmt->fetch();
+                $status = $result ? $result['status'] : 'pending';
+            } catch (PDOException $e) {
+                error_log("Auth Check - Get Status Error: " . $e->getMessage());
+                $status = 'pending';
+            }
+        }
+    }
+
     // User is logged in
     echo json_encode([
         'success' => true,
@@ -51,7 +72,8 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
             'id' => $_SESSION['user_id'],
             'email' => $_SESSION['email'],
             'role' => $_SESSION['role'],
-            'name' => $_SESSION['name']
+            'name' => $_SESSION['name'],
+            'status' => $status
         ]
     ]);
 

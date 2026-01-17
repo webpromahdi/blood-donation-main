@@ -25,7 +25,10 @@ require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
 
 // Require hospital role
-requireAuth(['hospital']);
+$user = requireAuth(['hospital']);
+
+// Require approved status to create blood requests
+requireApprovedStatus($_SESSION['user_id'], 'hospital');
 
 $input = json_decode(file_get_contents('php://input'), true);
 

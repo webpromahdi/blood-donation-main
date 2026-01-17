@@ -1,446 +1,700 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Health Info - BloodConnect Donor</title>
+    <link rel="stylesheet" href="/src/styles/styles.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Health Info - BloodConnect Donor</title>
-  <link rel="stylesheet" href="/src/styles/styles.css" />
-</head>
-
-<body class="min-h-screen bg-gray-50">
-  <!-- Sidebar -->
-  <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
-    <div class="p-6 border-b border-gray-200">
-      <div class="flex items-center gap-3">
-        <div class="bg-red-600 p-2 rounded-lg">
-          <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Donor Portal</div>
+          </div>
         </div>
-        <div>
-          <div class="font-semibold text-red-600">BloodConnect</div>
-          <div class="text-sm text-gray-500">Donor Portal</div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/src/pages/donor/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/src/pages/donor/health.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="heart" class="size-5"></i><span>Health Info</span></a
+        >
+        <a
+          href="/src/pages/donor/voluntary.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="calendar" class="size-5"></i
+          ><span>Donate Voluntarily</span></a
+        >
+        <a
+          href="/src/pages/donor/history.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="file-text" class="size-5"></i
+          ><span>Donation History</span></a
+        >
+        <a
+          href="/src/pages/donor/certificates.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="award" class="size-5"></i
+          ><span>Certificates</span></a
+        >
+        <a
+          href="/src/pages/donor/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
         </div>
       </div>
     </div>
-    <nav class="flex-1 overflow-y-auto py-4">
-      <a href="/src/pages/donor/dashboard.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="layout-dashboard" class="size-5"></i><span>Dashboard</span></a>
-      <a href="/src/pages/donor/health.html"
-        class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"><i
-          data-lucide="heart" class="size-5"></i><span>Health Info</span></a>
-      <a href="/src/pages/donor/voluntary.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="calendar" class="size-5"></i><span>Donate Voluntarily</span></a>
-      <a href="/src/pages/donor/history.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="file-text" class="size-5"></i><span>Donation History</span></a>
-      <a href="/src/pages/donor/certificates.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="award" class="size-5"></i><span>Certificates</span></a>
-      <a href="/src/pages/donor/chat.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="message-square" class="size-5"></i><span>Chat</span></a>
-    </nav>
-    <div class="p-4 border-t border-gray-200">
-      <div class="text-center text-sm text-gray-500">
-        <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
-      </div>
-    </div>
-  </div>
 
-  <!-- Header -->
-  <header
-    class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8">
-    <div class="flex items-center gap-4 flex-1">
-      <h2 class="text-lg font-semibold text-gray-900">Health Information</h2>
-    </div>
-    <div class="flex items-center gap-4">
-      <button class="relative p-2 hover:bg-gray-100 rounded-lg">
-        <i data-lucide="bell" class="size-5 text-gray-700"></i>
-      </button>
-      <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
-        <div class="text-right">
-          <div class="text-sm font-medium text-gray-900" data-user-name>John Smith</div>
-          <div class="text-xs text-gray-500" data-user-role>Blood Donor</div>
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">Health Information</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900" data-user-name>
+              John Smith
+            </div>
+            <div class="text-xs text-gray-500" data-user-role>Blood Donor</div>
+          </div>
+          <div
+            class="size-10 bg-green-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="user" class="size-5 text-green-600"></i>
+          </div>
         </div>
-        <div class="size-10 bg-green-100 rounded-full flex items-center justify-center">
-          <i data-lucide="user" class="size-5 text-green-600"></i>
-        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
       </div>
-      <a href="/" class="p-2 text-gray-600 hover:text-red-600"><i data-lucide="log-out" class="size-5"></i></a>
-    </div>
-  </header>
+    </header>
 
-  <!-- Main Content -->
-  <main class="ml-64 pt-16">
-    <div class="p-8 space-y-8">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900 mb-2">
-          Health Information
-        </h1>
-        <p class="text-gray-600">
-          Keep your health information up to date for safe donations
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Main Form -->
-        <div class="lg:col-span-2">
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="mb-6">
-              <h2 class="text-lg font-semibold text-gray-900 mb-1">
-                Personal Health Details
-              </h2>
-              <p class="text-sm text-gray-600">
-                Please provide accurate health information
+    <!-- Main Content -->
+    <main class="ml-64 pt-16">
+      <!-- Pending Approval Message (Hidden by default) -->
+      <div id="pendingApprovalMessage" class="hidden p-8">
+        <div class="max-w-2xl mx-auto mt-16">
+          <div
+            class="p-8 bg-white border border-gray-200 rounded-xl text-center"
+          >
+            <div
+              class="bg-yellow-100 p-4 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center"
+            >
+              <i data-lucide="clock" class="size-10 text-yellow-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+              Account Under Review
+            </h2>
+            <p class="text-gray-600 mb-6">
+              Your account is currently pending approval. Please wait for admin
+              review before you can access the full dashboard and start donating
+              blood.
+            </p>
+            <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p class="text-sm text-yellow-800">
+                <i data-lucide="info" class="size-4 inline mr-1"></i>This
+                usually takes 24-48 hours. You will be notified once your
+                account is approved.
               </p>
             </div>
-
-            <form id="healthForm" class="space-y-6">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Weight (kg) *</label>
-                  <input type="number" id="weight" name="weight" placeholder="Your weight"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                  <p class="text-red-500 text-sm mt-1 hidden" id="weightError"></p>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Height (cm) *</label>
-                  <input type="number" id="height" name="height" placeholder="Your height"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                  <p class="text-red-500 text-sm mt-1 hidden" id="heightError"></p>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Blood Pressure (Systolic)</label>
-                  <input type="number" placeholder="e.g., 120"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Blood Pressure (Diastolic)</label>
-                  <input type="number" placeholder="e.g., 80"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Hemoglobin Level</label>
-                  <input type="text" placeholder="e.g., 14.5 g/dL"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Last Medical Checkup</label>
-                  <input type="date"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                </div>
-              </div>
-
-              <div class="border-t border-gray-200 pt-6">
-                <h3 class="font-semibold text-gray-900 mb-4">
-                  Medical Conditions
-                </h3>
-                <p class="text-sm text-gray-600 mb-4">
-                  Please indicate if you have any of the following conditions:
-                </p>
-                <div class="space-y-3">
-                  <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-                    <label class="cursor-pointer">Diabetes</label>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" class="sr-only peer" />
-                      <div
-                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600">
-                      </div>
-                    </label>
-                  </div>
-                  <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-                    <label class="cursor-pointer">Hypertension</label>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" class="sr-only peer" />
-                      <div
-                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600">
-                      </div>
-                    </label>
-                  </div>
-                  <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-                    <label class="cursor-pointer">Heart Disease</label>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" class="sr-only peer" />
-                      <div
-                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600">
-                      </div>
-                    </label>
-                  </div>
-                  <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-                    <label class="cursor-pointer">Asthma</label>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" class="sr-only peer" />
-                      <div
-                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600">
-                      </div>
-                    </label>
-                  </div>
-                  <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-                    <label class="cursor-pointer">Allergies</label>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" class="sr-only peer" />
-                      <div
-                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600">
-                      </div>
-                    </label>
-                  </div>
-                  <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-                    <label class="cursor-pointer">Recent Surgery (within 6 months)</label>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" class="sr-only peer" />
-                      <div
-                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600">
-                      </div>
-                    </label>
-                  </div>
-                  <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-                    <label class="cursor-pointer">Currently on Medication</label>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" class="sr-only peer" />
-                      <div
-                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600">
-                      </div>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <div class="border-t border-gray-200 pt-6">
-                <h3 class="font-semibold text-gray-900 mb-4">
-                  Lifestyle Information
-                </h3>
-                <div class="space-y-4">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Do you smoke?</label>
-                    <select
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                      <option>No</option>
-                      <option>Yes, occasionally</option>
-                      <option>Yes, regularly</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Alcohol Consumption</label>
-                    <select
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                      <option>None</option>
-                      <option>Occasional</option>
-                      <option>Regular</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Exercise Frequency</label>
-                    <select
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                      <option>Rarely</option>
-                      <option>1-2 times per week</option>
-                      <option>3-4 times per week</option>
-                      <option>Daily</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div class="border-t border-gray-200 pt-6">
-                <h3 class="font-semibold text-gray-900 mb-4">
-                  Additional Notes
-                </h3>
-                <p class="text-sm text-gray-600 mb-4">
-                  Any other health information or concerns you'd like to share
-                  with medical staff
-                </p>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Extra Notes (Optional)</label>
-                  <textarea rows="4"
-                    placeholder="E.g., recent travel history, specific allergies, medications you're taking, any concerns about donating, or other relevant health information..."
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"></textarea>
-                  <p class="text-xs text-gray-500 mt-2">
-                    <i data-lucide="info" class="size-3 inline mr-1"></i>
-                    This information will be shared with medical professionals
-                    during your donation
-                  </p>
-                </div>
-              </div>
-
-              <div class="pt-6">
-                <button type="submit" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium">
-                  <i data-lucide="save" class="size-4 inline mr-2"></i>Save
-                  Changes
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <!-- Side Info -->
-        <div class="space-y-6">
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <h3 class="font-semibold text-gray-900 mb-4">
-              Why is this important?
-            </h3>
-            <ul class="space-y-3 text-sm text-gray-600">
-              <li class="flex items-start gap-2">
-                <i data-lucide="alert-circle" class="size-5 text-red-600 shrink-0 mt-0.5"></i>
-                <span>Accurate health info ensures safe donations</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <i data-lucide="alert-circle" class="size-5 text-red-600 shrink-0 mt-0.5"></i>
-                <span>Protects both you and the recipient</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <i data-lucide="alert-circle" class="size-5 text-red-600 shrink-0 mt-0.5"></i>
-                <span>Helps medical staff provide better care</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <i data-lucide="alert-circle" class="size-5 text-red-600 shrink-0 mt-0.5"></i>
-                <span>Required for regulatory compliance</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="p-6 bg-linear-to-br from-green-50 to-white border border-green-200 rounded-xl" id="statusCard">
-            <div class="flex items-center gap-3 mb-3">
-              <i data-lucide="check-circle" class="size-6 text-green-600" id="statusIcon"></i>
-              <h3 class="font-semibold text-gray-900">Your Status</h3>
-            </div>
-            <p class="text-sm text-gray-600 mb-3" id="statusDescription">
-              Based on your current health information:
-            </p>
-            <span class="px-3 py-1 text-sm font-medium bg-green-100 text-green-700 rounded-full" id="statusBadge">Loading...</span>
-            <ul class="mt-3 space-y-1 hidden" id="eligibilityReasons"></ul>
           </div>
         </div>
       </div>
-    </div>
-  </main>
 
-  <script type="module" src="/src/scripts/main.js"></script>
-  <script type="module">
-    import { initUserLoader } from '/src/scripts/user-loader.js';
-    initUserLoader();
-  </script>
-  <script type="module">
-    import { z } from 'https://cdn.jsdelivr.net/npm/zod@3.22.4/+esm';
+      <!-- Dashboard Content (Shown when approved) -->
+      <div id="dashboardContent" class="p-8 space-y-8">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">
+            Health Information
+          </h1>
+          <p class="text-gray-600">
+            Keep your health information up to date for safe donations
+          </p>
+        </div>
 
-    // Fetch health data from API
-    async function loadHealthData() {
-      try {
-        const response = await fetch('/api/donor/health.php', { credentials: 'include' });
-        const data = await response.json();
-        
-        if (data.success) {
-          // Populate form fields
-          if (data.health.weight) {
-            document.getElementById('weight').value = data.health.weight;
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Main Form -->
+          <div class="lg:col-span-2">
+            <div class="p-6 bg-white border border-gray-200 rounded-xl">
+              <div class="mb-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-1">
+                  Personal Health Details
+                </h2>
+                <p class="text-sm text-gray-600">
+                  Please provide accurate health information
+                </p>
+              </div>
+
+              <form id="healthForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2"
+                      >Weight (kg) *</label
+                    >
+                    <input
+                      type="number"
+                      id="weight"
+                      name="weight"
+                      placeholder="Your weight"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <p
+                      class="text-red-500 text-sm mt-1 hidden"
+                      id="weightError"
+                    ></p>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2"
+                      >Height (cm) *</label
+                    >
+                    <input
+                      type="number"
+                      id="height"
+                      name="height"
+                      placeholder="Your height"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <p
+                      class="text-red-500 text-sm mt-1 hidden"
+                      id="heightError"
+                    ></p>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2"
+                      >Blood Pressure (Systolic)</label
+                    >
+                    <input
+                      type="number"
+                      placeholder="e.g., 120"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2"
+                      >Blood Pressure (Diastolic)</label
+                    >
+                    <input
+                      type="number"
+                      placeholder="e.g., 80"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2"
+                      >Hemoglobin Level</label
+                    >
+                    <input
+                      type="text"
+                      placeholder="e.g., 14.5 g/dL"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2"
+                      >Last Medical Checkup</label
+                    >
+                    <input
+                      type="date"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                  </div>
+                </div>
+
+                <div class="border-t border-gray-200 pt-6">
+                  <h3 class="font-semibold text-gray-900 mb-4">
+                    Medical Conditions
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-4">
+                    Please indicate if you have any of the following conditions:
+                  </p>
+                  <div class="space-y-3">
+                    <div
+                      class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                    >
+                      <label class="cursor-pointer">Diabetes</label>
+                      <label
+                        class="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" />
+                        <div
+                          class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
+                        ></div>
+                      </label>
+                    </div>
+                    <div
+                      class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                    >
+                      <label class="cursor-pointer">Hypertension</label>
+                      <label
+                        class="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" />
+                        <div
+                          class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
+                        ></div>
+                      </label>
+                    </div>
+                    <div
+                      class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                    >
+                      <label class="cursor-pointer">Heart Disease</label>
+                      <label
+                        class="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" />
+                        <div
+                          class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
+                        ></div>
+                      </label>
+                    </div>
+                    <div
+                      class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                    >
+                      <label class="cursor-pointer">Asthma</label>
+                      <label
+                        class="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" />
+                        <div
+                          class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
+                        ></div>
+                      </label>
+                    </div>
+                    <div
+                      class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                    >
+                      <label class="cursor-pointer">Allergies</label>
+                      <label
+                        class="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" />
+                        <div
+                          class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
+                        ></div>
+                      </label>
+                    </div>
+                    <div
+                      class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                    >
+                      <label class="cursor-pointer"
+                        >Recent Surgery (within 6 months)</label
+                      >
+                      <label
+                        class="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" />
+                        <div
+                          class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
+                        ></div>
+                      </label>
+                    </div>
+                    <div
+                      class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                    >
+                      <label class="cursor-pointer"
+                        >Currently on Medication</label
+                      >
+                      <label
+                        class="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" />
+                        <div
+                          class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
+                        ></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="border-t border-gray-200 pt-6">
+                  <h3 class="font-semibold text-gray-900 mb-4">
+                    Lifestyle Information
+                  </h3>
+                  <div class="space-y-4">
+                    <div>
+                      <label
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                        >Do you smoke?</label
+                      >
+                      <select
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                      >
+                        <option>No</option>
+                        <option>Yes, occasionally</option>
+                        <option>Yes, regularly</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                        >Alcohol Consumption</label
+                      >
+                      <select
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                      >
+                        <option>None</option>
+                        <option>Occasional</option>
+                        <option>Regular</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                        >Exercise Frequency</label
+                      >
+                      <select
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                      >
+                        <option>Rarely</option>
+                        <option>1-2 times per week</option>
+                        <option>3-4 times per week</option>
+                        <option>Daily</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="border-t border-gray-200 pt-6">
+                  <h3 class="font-semibold text-gray-900 mb-4">
+                    Additional Notes
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-4">
+                    Any other health information or concerns you'd like to share
+                    with medical staff
+                  </p>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2"
+                      >Extra Notes (Optional)</label
+                    >
+                    <textarea
+                      rows="4"
+                      placeholder="E.g., recent travel history, specific allergies, medications you're taking, any concerns about donating, or other relevant health information..."
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
+                    ></textarea>
+                    <p class="text-xs text-gray-500 mt-2">
+                      <i data-lucide="info" class="size-3 inline mr-1"></i>
+                      This information will be shared with medical professionals
+                      during your donation
+                    </p>
+                  </div>
+                </div>
+
+                <div class="pt-6">
+                  <button
+                    type="submit"
+                    class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+                  >
+                    <i data-lucide="save" class="size-4 inline mr-2"></i>Save
+                    Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Side Info -->
+          <div class="space-y-6">
+            <div class="p-6 bg-white border border-gray-200 rounded-xl">
+              <h3 class="font-semibold text-gray-900 mb-4">
+                Why is this important?
+              </h3>
+              <ul class="space-y-3 text-sm text-gray-600">
+                <li class="flex items-start gap-2">
+                  <i
+                    data-lucide="alert-circle"
+                    class="size-5 text-red-600 shrink-0 mt-0.5"
+                  ></i>
+                  <span>Accurate health info ensures safe donations</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i
+                    data-lucide="alert-circle"
+                    class="size-5 text-red-600 shrink-0 mt-0.5"
+                  ></i>
+                  <span>Protects both you and the recipient</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i
+                    data-lucide="alert-circle"
+                    class="size-5 text-red-600 shrink-0 mt-0.5"
+                  ></i>
+                  <span>Helps medical staff provide better care</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i
+                    data-lucide="alert-circle"
+                    class="size-5 text-red-600 shrink-0 mt-0.5"
+                  ></i>
+                  <span>Required for regulatory compliance</span>
+                </li>
+              </ul>
+            </div>
+
+            <div
+              class="p-6 bg-linear-to-br from-green-50 to-white border border-green-200 rounded-xl"
+              id="statusCard"
+            >
+              <div class="flex items-center gap-3 mb-3">
+                <i
+                  data-lucide="check-circle"
+                  class="size-6 text-green-600"
+                  id="statusIcon"
+                ></i>
+                <h3 class="font-semibold text-gray-900">Your Status</h3>
+              </div>
+              <p class="text-sm text-gray-600 mb-3" id="statusDescription">
+                Based on your current health information:
+              </p>
+              <span
+                class="px-3 py-1 text-sm font-medium bg-green-100 text-green-700 rounded-full"
+                id="statusBadge"
+                >Loading...</span
+              >
+              <ul class="mt-3 space-y-1 hidden" id="eligibilityReasons"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/src/scripts/main.js"></script>
+    <script type="module">
+      import { initUserLoader } from "/src/scripts/user-loader.js";
+      initUserLoader();
+
+      // Account status check
+      async function checkAccountStatus() {
+        try {
+          const response = await fetch("/api/auth/check.php");
+          const data = await response.json();
+
+          if (!data.success || !data.logged_in) {
+            window.location.href = "/src/pages/auth/login.html";
+            return false;
           }
-          
-          // Update eligibility status
-          updateEligibilityStatus(data.eligibility);
-        } else {
-          showErrorState('Failed to load health information');
-        }
-      } catch (error) {
-        console.error('Error loading health data:', error);
-        showErrorState('Unable to connect to server');
-      }
-    }
 
-    function updateEligibilityStatus(eligibility) {
-      const statusCard = document.getElementById('statusCard');
-      const statusIcon = document.getElementById('statusIcon');
-      const statusBadge = document.getElementById('statusBadge');
-      const eligibilityReasons = document.getElementById('eligibilityReasons');
-      
-      if (eligibility.is_eligible) {
-        statusCard.className = 'p-6 bg-linear-to-br from-green-50 to-white border border-green-200 rounded-xl';
-        statusIcon.setAttribute('data-lucide', 'check-circle');
-        statusIcon.className = 'size-6 text-green-600';
-        statusBadge.textContent = 'Eligible to Donate';
-        statusBadge.className = 'px-3 py-1 text-sm font-medium bg-green-100 text-green-700 rounded-full';
-        eligibilityReasons.classList.add('hidden');
-      } else {
-        statusCard.className = 'p-6 bg-linear-to-br from-red-50 to-white border border-red-200 rounded-xl';
-        statusIcon.setAttribute('data-lucide', 'alert-circle');
-        statusIcon.className = 'size-6 text-red-600';
-        statusBadge.textContent = 'Not Eligible';
-        statusBadge.className = 'px-3 py-1 text-sm font-medium bg-red-100 text-red-700 rounded-full';
-        
-        if (eligibility.reasons && eligibility.reasons.length > 0) {
-          eligibilityReasons.innerHTML = eligibility.reasons.map(reason => 
-            `<li class="text-sm text-red-600 flex items-start gap-2">
+          const status = data.user.status || "pending";
+          const dashboardContent = document.getElementById("dashboardContent");
+          const pendingMessage = document.getElementById(
+            "pendingApprovalMessage",
+          );
+
+          // Handle rejected status - logout and redirect to login
+          if (status === "rejected") {
+            await fetch("/api/auth/logout.php", { method: "POST" });
+            window.location.href = "/src/pages/auth/login.html?error=rejected";
+            return false;
+          }
+
+          if (status !== "approved") {
+            if (dashboardContent) dashboardContent.classList.add("hidden");
+            if (pendingMessage) {
+              pendingMessage.classList.remove("hidden");
+              if (window.lucide) window.lucide.createIcons();
+            }
+            return false;
+          }
+
+          if (dashboardContent) dashboardContent.classList.remove("hidden");
+          if (pendingMessage) pendingMessage.classList.add("hidden");
+          return true;
+        } catch (error) {
+          console.error("Failed to check account status:", error);
+          return false;
+        }
+      }
+
+      // Initialize only if approved
+      checkAccountStatus();
+    </script>
+    <script type="module">
+      import { z } from "https://cdn.jsdelivr.net/npm/zod@3.22.4/+esm";
+
+      // Fetch health data from API
+      async function loadHealthData() {
+        try {
+          const response = await fetch("/api/donor/health.php", {
+            credentials: "include",
+          });
+          const data = await response.json();
+
+          if (data.success) {
+            // Populate form fields
+            if (data.health.weight) {
+              document.getElementById("weight").value = data.health.weight;
+            }
+
+            // Update eligibility status
+            updateEligibilityStatus(data.eligibility);
+          } else {
+            showErrorState("Failed to load health information");
+          }
+        } catch (error) {
+          console.error("Error loading health data:", error);
+          showErrorState("Unable to connect to server");
+        }
+      }
+
+      function updateEligibilityStatus(eligibility) {
+        const statusCard = document.getElementById("statusCard");
+        const statusIcon = document.getElementById("statusIcon");
+        const statusBadge = document.getElementById("statusBadge");
+        const eligibilityReasons =
+          document.getElementById("eligibilityReasons");
+
+        if (eligibility.is_eligible) {
+          statusCard.className =
+            "p-6 bg-linear-to-br from-green-50 to-white border border-green-200 rounded-xl";
+          statusIcon.setAttribute("data-lucide", "check-circle");
+          statusIcon.className = "size-6 text-green-600";
+          statusBadge.textContent = "Eligible to Donate";
+          statusBadge.className =
+            "px-3 py-1 text-sm font-medium bg-green-100 text-green-700 rounded-full";
+          eligibilityReasons.classList.add("hidden");
+        } else {
+          statusCard.className =
+            "p-6 bg-linear-to-br from-red-50 to-white border border-red-200 rounded-xl";
+          statusIcon.setAttribute("data-lucide", "alert-circle");
+          statusIcon.className = "size-6 text-red-600";
+          statusBadge.textContent = "Not Eligible";
+          statusBadge.className =
+            "px-3 py-1 text-sm font-medium bg-red-100 text-red-700 rounded-full";
+
+          if (eligibility.reasons && eligibility.reasons.length > 0) {
+            eligibilityReasons.innerHTML = eligibility.reasons
+              .map(
+                (reason) =>
+                  `<li class="text-sm text-red-600 flex items-start gap-2">
               <i data-lucide="x-circle" class="size-4 shrink-0 mt-0.5"></i>
               <span>${reason}</span>
-            </li>`
-          ).join('');
-          eligibilityReasons.classList.remove('hidden');
+            </li>`,
+              )
+              .join("");
+            eligibilityReasons.classList.remove("hidden");
+          }
+        }
+
+        // Refresh icons
+        if (window.lucide) {
+          window.lucide.createIcons();
         }
       }
-      
-      // Refresh icons
-      if (window.lucide) {
-        window.lucide.createIcons();
-      }
-    }
 
-    function showErrorState(message) {
-      const statusBadge = document.getElementById('statusBadge');
-      statusBadge.textContent = message;
-      statusBadge.className = 'px-3 py-1 text-sm font-medium bg-gray-100 text-gray-700 rounded-full';
-    }
-
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', loadHealthData);
-
-    const healthSchema = z.object({
-      weight: z.string().min(1, 'Weight is required').refine(val => !isNaN(Number(val)) && Number(val) >= 45, 'Weight must be at least 45 kg'),
-      height: z.string().min(1, 'Height is required').refine(val => !isNaN(Number(val)) && Number(val) >= 100, 'Height must be at least 100 cm')
-    });
-
-    function showError(fieldId, message) {
-      const field = document.getElementById(fieldId);
-      const errorEl = document.getElementById(fieldId + 'Error');
-      if (field) { field.classList.add('border-red-500'); field.classList.remove('border-gray-300'); }
-      if (errorEl) { errorEl.textContent = message; errorEl.classList.remove('hidden'); }
-    }
-
-    function clearError(fieldId) {
-      const field = document.getElementById(fieldId);
-      const errorEl = document.getElementById(fieldId + 'Error');
-      if (field) { field.classList.remove('border-red-500'); field.classList.add('border-gray-300'); }
-      if (errorEl) { errorEl.textContent = ''; errorEl.classList.add('hidden'); }
-    }
-
-    ['weight', 'height'].forEach(id => {
-      const field = document.getElementById(id);
-      if (field) field.addEventListener('input', () => clearError(id));
-    });
-
-    document.getElementById('healthForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      clearError('weight');
-      clearError('height');
-
-      const formData = {
-        weight: document.getElementById('weight').value,
-        height: document.getElementById('height').value
-      };
-
-      const result = healthSchema.safeParse(formData);
-      if (!result.success) {
-        result.error.errors.forEach(err => showError(err.path[0], err.message));
-        return;
+      function showErrorState(message) {
+        const statusBadge = document.getElementById("statusBadge");
+        statusBadge.textContent = message;
+        statusBadge.className =
+          "px-3 py-1 text-sm font-medium bg-gray-100 text-gray-700 rounded-full";
       }
 
-      const notification = document.createElement('div');
-      notification.className = 'fixed top-20 right-8 p-4 bg-green-50 border-l-4 border-green-600 rounded-lg shadow-lg z-50';
-      notification.innerHTML = '<div class="flex items-center gap-3"><i data-lucide="check-circle" class="size-5 text-green-600"></i><p class="text-green-900">Health information saved successfully!</p></div>';
-      document.body.appendChild(notification);
-      lucide.createIcons();
-      setTimeout(() => notification.remove(), 3000);
-    });
-  </script>
-</body>
+      // Initialize on page load
+      document.addEventListener("DOMContentLoaded", loadHealthData);
 
+      const healthSchema = z.object({
+        weight: z
+          .string()
+          .min(1, "Weight is required")
+          .refine(
+            (val) => !isNaN(Number(val)) && Number(val) >= 45,
+            "Weight must be at least 45 kg",
+          ),
+        height: z
+          .string()
+          .min(1, "Height is required")
+          .refine(
+            (val) => !isNaN(Number(val)) && Number(val) >= 100,
+            "Height must be at least 100 cm",
+          ),
+      });
+
+      function showError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        const errorEl = document.getElementById(fieldId + "Error");
+        if (field) {
+          field.classList.add("border-red-500");
+          field.classList.remove("border-gray-300");
+        }
+        if (errorEl) {
+          errorEl.textContent = message;
+          errorEl.classList.remove("hidden");
+        }
+      }
+
+      function clearError(fieldId) {
+        const field = document.getElementById(fieldId);
+        const errorEl = document.getElementById(fieldId + "Error");
+        if (field) {
+          field.classList.remove("border-red-500");
+          field.classList.add("border-gray-300");
+        }
+        if (errorEl) {
+          errorEl.textContent = "";
+          errorEl.classList.add("hidden");
+        }
+      }
+
+      ["weight", "height"].forEach((id) => {
+        const field = document.getElementById(id);
+        if (field) field.addEventListener("input", () => clearError(id));
+      });
+
+      document
+        .getElementById("healthForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          clearError("weight");
+          clearError("height");
+
+          const formData = {
+            weight: document.getElementById("weight").value,
+            height: document.getElementById("height").value,
+          };
+
+          const result = healthSchema.safeParse(formData);
+          if (!result.success) {
+            result.error.errors.forEach((err) =>
+              showError(err.path[0], err.message),
+            );
+            return;
+          }
+
+          const notification = document.createElement("div");
+          notification.className =
+            "fixed top-20 right-8 p-4 bg-green-50 border-l-4 border-green-600 rounded-lg shadow-lg z-50";
+          notification.innerHTML =
+            '<div class="flex items-center gap-3"><i data-lucide="check-circle" class="size-5 text-green-600"></i><p class="text-green-900">Health information saved successfully!</p></div>';
+          document.body.appendChild(notification);
+          lucide.createIcons();
+          setTimeout(() => notification.remove(), 3000);
+        });
+    </script>
+  </body>
 </html>

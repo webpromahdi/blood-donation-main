@@ -1,111 +1,223 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat - BloodConnect Donor</title>
+    <link rel="stylesheet" href="/src/styles/styles.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chat - BloodConnect Donor</title>
-  <link rel="stylesheet" href="/src/styles/styles.css" />
-</head>
-
-<body class="min-h-screen bg-gray-50">
-  <!-- Sidebar -->
-  <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
-    <div class="p-6 border-b border-gray-200">
-      <div class="flex items-center gap-3">
-        <div class="bg-red-600 p-2 rounded-lg">
-          <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Donor Portal</div>
+          </div>
         </div>
-        <div>
-          <div class="font-semibold text-red-600">BloodConnect</div>
-          <div class="text-sm text-gray-500">Donor Portal</div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/src/pages/donor/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/src/pages/donor/health.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="heart" class="size-5"></i><span>Health Info</span></a
+        >
+        <a
+          href="/src/pages/donor/voluntary.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="calendar" class="size-5"></i
+          ><span>Donate Voluntarily</span></a
+        >
+        <a
+          href="/src/pages/donor/history.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="file-text" class="size-5"></i
+          ><span>Donation History</span></a
+        >
+        <a
+          href="/src/pages/donor/certificates.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="award" class="size-5"></i
+          ><span>Certificates</span></a
+        >
+        <a
+          href="/src/pages/donor/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
         </div>
       </div>
     </div>
-    <nav class="flex-1 overflow-y-auto py-4">
-      <a href="/src/pages/donor/dashboard.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="layout-dashboard" class="size-5"></i><span>Dashboard</span></a>
-      <a href="/src/pages/donor/health.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="heart" class="size-5"></i><span>Health Info</span></a>
-      <a href="/src/pages/donor/voluntary.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="calendar" class="size-5"></i><span>Donate Voluntarily</span></a>
-      <a href="/src/pages/donor/history.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="file-text" class="size-5"></i><span>Donation History</span></a>
-      <a href="/src/pages/donor/certificates.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="award" class="size-5"></i><span>Certificates</span></a>
-      <a href="/src/pages/donor/chat.html"
-        class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"><i
-          data-lucide="message-square" class="size-5"></i><span>Chat</span></a>
-    </nav>
-    <div class="p-4 border-t border-gray-200">
-      <div class="text-center text-sm text-gray-500">
-        <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
-      </div>
-    </div>
-  </div>
 
-  <!-- Header -->
-  <header
-    class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8">
-    <div class="flex items-center gap-4 flex-1">
-      <h2 class="text-lg font-semibold text-gray-900">Messages</h2>
-    </div>
-    <div class="flex items-center gap-4">
-      <button class="relative p-2 hover:bg-gray-100 rounded-lg">
-        <i data-lucide="bell" class="size-5 text-gray-700"></i>
-      </button>
-      <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
-        <div class="text-right">
-          <div class="text-sm font-medium text-gray-900" data-user-name>Guest User</div>
-          <div class="text-xs text-gray-500" data-user-role>Blood Donor</div>
-        </div>
-        <div class="size-10 bg-green-100 rounded-full flex items-center justify-center">
-          <i data-lucide="user" class="size-5 text-green-600"></i>
-        </div>
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">Messages</h2>
       </div>
-      <a href="/" class="p-2 text-gray-600 hover:text-red-600"><i data-lucide="log-out" class="size-5"></i></a>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="ml-64 pt-16 h-screen">
-    <div class="flex h-[calc(100vh-64px)] items-center justify-center">
-      <!-- Coming Soon State -->
-      <div class="text-center max-w-md px-8">
-        <div class="bg-gray-100 size-24 rounded-full flex items-center justify-center mx-auto mb-6">
-          <i data-lucide="message-square" class="size-12 text-gray-400"></i>
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900" data-user-name>
+              Guest User
+            </div>
+            <div class="text-xs text-gray-500" data-user-role>Blood Donor</div>
+          </div>
+          <div
+            class="size-10 bg-green-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="user" class="size-5 text-green-600"></i>
+          </div>
         </div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">Chat Feature Coming Soon</h2>
-        <p class="text-gray-600 mb-6">
-          Real-time messaging with hospitals and seekers will be available in a future update.
-          For now, contact information is provided when you accept a request.
-        </p>
-        <div class="flex flex-col gap-3">
-          <a href="/src/pages/donor/dashboard.html"
-            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium">
-            <i data-lucide="layout-dashboard" class="size-5"></i>
-            Go to Dashboard
-          </a>
-          <a href="/src/pages/donor/history.html"
-            class="inline-flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium">
-            <i data-lucide="file-text" class="size-5"></i>
-            View Donation History
-          </a>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 pt-16 h-screen">
+      <!-- Pending Approval Message (Hidden by default) -->
+      <div id="pendingApprovalMessage" class="hidden p-8">
+        <div class="max-w-2xl mx-auto mt-16">
+          <div
+            class="p-8 bg-white border border-gray-200 rounded-xl text-center"
+          >
+            <div
+              class="bg-yellow-100 p-4 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center"
+            >
+              <i data-lucide="clock" class="size-10 text-yellow-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+              Account Under Review
+            </h2>
+            <p class="text-gray-600 mb-6">
+              Your account is currently pending approval. Please wait for admin
+              review before you can access the full dashboard and start donating
+              blood.
+            </p>
+            <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p class="text-sm text-yellow-800">
+                <i data-lucide="info" class="size-4 inline mr-1"></i>This
+                usually takes 24-48 hours. You will be notified once your
+                account is approved.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </main>
 
-  <script type="module" src="/src/scripts/main.js"></script>
-  <script type="module">
-    import { initUserLoader } from '/src/scripts/user-loader.js';
-    initUserLoader();
-  </script>
-</body>
+      <!-- Dashboard Content (Shown when approved) -->
+      <div
+        id="dashboardContent"
+        class="flex h-[calc(100vh-64px)] items-center justify-center"
+      >
+        <!-- Coming Soon State -->
+        <div class="text-center max-w-md px-8">
+          <div
+            class="bg-gray-100 size-24 rounded-full flex items-center justify-center mx-auto mb-6"
+          >
+            <i data-lucide="message-square" class="size-12 text-gray-400"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 mb-3">
+            Chat Feature Coming Soon
+          </h2>
+          <p class="text-gray-600 mb-6">
+            Real-time messaging with hospitals and seekers will be available in
+            a future update. For now, contact information is provided when you
+            accept a request.
+          </p>
+          <div class="flex flex-col gap-3">
+            <a
+              href="/src/pages/donor/dashboard.html"
+              class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium"
+            >
+              <i data-lucide="layout-dashboard" class="size-5"></i>
+              Go to Dashboard
+            </a>
+            <a
+              href="/src/pages/donor/history.html"
+              class="inline-flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+            >
+              <i data-lucide="file-text" class="size-5"></i>
+              View Donation History
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
 
+    <script type="module" src="/src/scripts/main.js"></script>
+    <script type="module">
+      import { initUserLoader } from "/src/scripts/user-loader.js";
+      initUserLoader();
+
+      // Account status check
+      async function checkAccountStatus() {
+        try {
+          const response = await fetch("/api/auth/check.php");
+          const data = await response.json();
+
+          if (!data.success || !data.logged_in) {
+            window.location.href = "/src/pages/auth/login.html";
+            return false;
+          }
+
+          const status = data.user.status || "pending";
+          const dashboardContent = document.getElementById("dashboardContent");
+          const pendingMessage = document.getElementById(
+            "pendingApprovalMessage",
+          );
+
+          // Handle rejected status - logout and redirect to login
+          if (status === "rejected") {
+            await fetch("/api/auth/logout.php", { method: "POST" });
+            window.location.href = "/src/pages/auth/login.html?error=rejected";
+            return false;
+          }
+
+          if (status !== "approved") {
+            if (dashboardContent) dashboardContent.classList.add("hidden");
+            if (pendingMessage) {
+              pendingMessage.classList.remove("hidden");
+              if (window.lucide) window.lucide.createIcons();
+            }
+            return false;
+          }
+
+          if (dashboardContent) dashboardContent.classList.remove("hidden");
+          if (pendingMessage) pendingMessage.classList.add("hidden");
+          return true;
+        } catch (error) {
+          console.error("Failed to check account status:", error);
+          return false;
+        }
+      }
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", checkAccountStatus);
+    </script>
+  </body>
 </html>

@@ -61,8 +61,8 @@ if (!$conn) {
 }
 
 try {
-    // Fetch user by email
-    $stmt = $conn->prepare('SELECT id, name, email, password, role FROM users WHERE email = ?');
+    // Fetch user by email (include status field)
+    $stmt = $conn->prepare('SELECT id, name, email, password, role, status FROM users WHERE email = ?');
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
@@ -77,6 +77,17 @@ try {
     if (!password_verify($password, $user['password'])) {
         http_response_code(401);
         echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
+        exit;
+    }
+
+    // Check if account has been rejected (for donor/hospital accounts)
+    if (in_array($user['role'], ['donor', 'hospital']) && $user['status'] === 'rejected') {
+        http_response_code(403);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Your account has been rejected by the admin.',
+            'rejected' => true
+        ]);
         exit;
     }
 

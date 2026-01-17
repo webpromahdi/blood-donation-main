@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -97,7 +97,38 @@
 
     <!-- Main Content -->
     <main class="ml-64 pt-16">
-      <div class="p-8 space-y-8">
+      <!-- Pending Approval Message (Hidden by default) -->
+      <div id="pendingApprovalMessage" class="hidden p-8">
+        <div class="max-w-2xl mx-auto mt-16">
+          <div
+            class="p-8 bg-white border border-gray-200 rounded-xl text-center"
+          >
+            <div
+              class="bg-yellow-100 p-4 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center"
+            >
+              <i data-lucide="clock" class="size-10 text-yellow-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+              Account Under Review
+            </h2>
+            <p class="text-gray-600 mb-6">
+              Your hospital account is currently pending approval. Please wait
+              for admin review before you can access the full dashboard and
+              create blood requests.
+            </p>
+            <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p class="text-sm text-yellow-800">
+                <i data-lucide="info" class="size-4 inline mr-1"></i>This
+                usually takes 24-48 hours. You will be notified once your
+                account is approved.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Content (Shown when approved) -->
+      <div id="dashboardContent" class="p-8 space-y-8">
         <div class="flex items-center justify-between">
           <div>
             <h1 class="text-2xl font-bold text-gray-900 mb-2">
@@ -258,6 +289,48 @@
       import { initUserLoader } from "/src/scripts/user-loader.js";
       initUserLoader();
 
+      // Account status check
+      async function checkAccountStatus() {
+        try {
+          const response = await fetch("/api/auth/check.php");
+          const data = await response.json();
+
+          if (!data.success || !data.logged_in) {
+            window.location.href = "/src/pages/auth/login.html";
+            return false;
+          }
+
+          const status = data.user.status || "pending";
+          const dashboardContent = document.getElementById("dashboardContent");
+          const pendingMessage = document.getElementById(
+            "pendingApprovalMessage",
+          );
+
+          // Handle rejected status - logout and redirect to login
+          if (status === "rejected") {
+            await fetch("/api/auth/logout.php", { method: "POST" });
+            window.location.href = "/src/pages/auth/login.html?error=rejected";
+            return false;
+          }
+
+          if (status !== "approved") {
+            if (dashboardContent) dashboardContent.classList.add("hidden");
+            if (pendingMessage) {
+              pendingMessage.classList.remove("hidden");
+              if (window.lucide) window.lucide.createIcons();
+            }
+            return false;
+          }
+
+          if (dashboardContent) dashboardContent.classList.remove("hidden");
+          if (pendingMessage) pendingMessage.classList.add("hidden");
+          return true;
+        } catch (error) {
+          console.error("Failed to check account status:", error);
+          return false;
+        }
+      }
+
       let requests = [];
 
       // Load voluntary requests from backend
@@ -281,7 +354,7 @@
             data.appointments.length > 0
           ) {
             requests = data.appointments.filter(
-              (a) => a.type === "voluntary" && a.status === "pending"
+              (a) => a.type === "voluntary" && a.status === "pending",
             );
             renderRequests();
           } else {
@@ -313,12 +386,12 @@
         const pendingBadge = document.getElementById("pendingBadge");
 
         const pendingRequests = requests.filter(
-          (r) => r.status === "pending" || r.status === "Pending"
+          (r) => r.status === "pending" || r.status === "Pending",
         );
 
         // Update stats
         const uniqueDonors = new Set(
-          pendingRequests.map((r) => r.donor_id || r.donorName)
+          pendingRequests.map((r) => r.donor_id || r.donorName),
         ).size;
         updateStats(requests.length, pendingRequests.length, uniqueDonors);
         if (pendingBadge)
@@ -380,7 +453,7 @@
             req.requested_time || req.time || "N/A"
           }</td>
           <td class="py-3 px-4 text-gray-600">${formatTimeAgo(
-            req.created_at
+            req.created_at,
           )}</td>
           <td class="py-3 px-4">
             <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">Pending</span>
@@ -400,7 +473,7 @@
             </div>
           </td>
         </tr>
-      `
+      `,
           )
           .join("");
 
@@ -445,7 +518,7 @@
             `Request from ${
               request.donor_name || "donor"
             } has been approved! Appointment scheduled.`,
-            "success"
+            "success",
           );
           renderRequests();
         }
@@ -457,7 +530,7 @@
           request.status = "Rejected";
           showNotification(
             `Request from ${request.donor_name || "donor"} has been declined.`,
-            "info"
+            "info",
           );
           renderRequests();
         }
@@ -488,7 +561,13 @@
       }
 
       // Initialize
-      document.addEventListener("DOMContentLoaded", loadVoluntaryRequests);
+      document.addEventListener("DOMContentLoaded", () => {
+        checkAccountStatus().then((isApproved) => {
+          if (isApproved) {
+            loadVoluntaryRequests();
+          }
+        });
+      });
     </script>
   </body>
 </html>

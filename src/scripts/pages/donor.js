@@ -3,21 +3,98 @@
  * Handles: dashboard, health form, history, certificates, voluntary
  */
 
-import { showNotification } from '../components/notifications.js';
+import { showNotification } from "../components/notifications.js";
+
+// ============================================
+// ACCOUNT STATUS CHECK
+// ============================================
+
+/**
+ * Check if donor account is approved and handle UI accordingly
+ * @returns {Promise<boolean>} - Returns true if approved, false if pending
+ */
+export async function checkAccountStatus() {
+  try {
+    const response = await fetch("/api/donor/profile.php", {
+      credentials: "include",
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      console.error("Failed to fetch profile:", data.message);
+      return false;
+    }
+
+    const status = data.account_status || data.profile?.status;
+
+    if (status !== "approved") {
+      // Show pending approval message, hide dashboard content
+      showPendingApprovalUI();
+      return false;
+    }
+
+    // Account is approved, show dashboard content
+    showApprovedDashboardUI();
+    return true;
+  } catch (error) {
+    console.error("Error checking account status:", error);
+    // On error, assume pending for safety
+    showPendingApprovalUI();
+    return false;
+  }
+}
+
+/**
+ * Show pending approval message and hide dashboard content
+ */
+function showPendingApprovalUI() {
+  const pendingMessage = document.getElementById("pendingApprovalMessage");
+  const dashboardContent = document.getElementById("dashboardContent");
+
+  if (pendingMessage) {
+    pendingMessage.classList.remove("hidden");
+  }
+
+  if (dashboardContent) {
+    dashboardContent.classList.add("hidden");
+  }
+
+  // Reinitialize icons for the pending message
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
+}
+
+/**
+ * Show full dashboard and hide pending message
+ */
+function showApprovedDashboardUI() {
+  const pendingMessage = document.getElementById("pendingApprovalMessage");
+  const dashboardContent = document.getElementById("dashboardContent");
+
+  if (pendingMessage) {
+    pendingMessage.classList.add("hidden");
+  }
+
+  if (dashboardContent) {
+    dashboardContent.classList.remove("hidden");
+  }
+}
 
 // ============================================
 // HEALTH FORM
 // ============================================
 
 export function initHealthForm() {
-    const form = document.querySelector('form');
+  const form = document.querySelector("form");
 
-    if (form) {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            showNotification('Health information saved successfully!', 'success');
-        });
-    }
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      showNotification("Health information saved successfully!", "success");
+    });
+  }
 }
 
 // ============================================
@@ -25,18 +102,18 @@ export function initHealthForm() {
 // ============================================
 
 export function updateDashboardStats(stats) {
-    const elements = {
-        totalDonations: document.getElementById('totalDonations'),
-        nextEligible: document.getElementById('nextEligible'),
-        livesImpacted: document.getElementById('livesImpacted'),
-        certCount: document.getElementById('certCount')
-    };
+  const elements = {
+    totalDonations: document.getElementById("totalDonations"),
+    nextEligible: document.getElementById("nextEligible"),
+    livesImpacted: document.getElementById("livesImpacted"),
+    certCount: document.getElementById("certCount"),
+  };
 
-    Object.entries(elements).forEach(([key, el]) => {
-        if (el && stats[key] !== undefined) {
-            el.textContent = stats[key];
-        }
-    });
+  Object.entries(elements).forEach(([key, el]) => {
+    if (el && stats[key] !== undefined) {
+      el.textContent = stats[key];
+    }
+  });
 }
 
 // ============================================
@@ -44,10 +121,12 @@ export function updateDashboardStats(stats) {
 // ============================================
 
 export function renderDonationHistory(donations) {
-    const container = document.getElementById('donationHistoryList');
-    if (!container) return;
+  const container = document.getElementById("donationHistoryList");
+  if (!container) return;
 
-    container.innerHTML = donations.map(donation => `
+  container.innerHTML = donations
+    .map(
+      (donation) => `
     <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
       <div class="flex items-center gap-4">
         <div class="size-10 bg-red-100 rounded-full flex items-center justify-center">
@@ -58,15 +137,17 @@ export function renderDonationHistory(donations) {
           <p class="text-sm text-gray-600">${donation.date}</p>
         </div>
       </div>
-      <span class="px-3 py-1 text-sm font-medium ${donation.status === 'Completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'} rounded-full">
+      <span class="px-3 py-1 text-sm font-medium ${donation.status === "Completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"} rounded-full">
         ${donation.status}
       </span>
     </div>
-  `).join('');
+  `,
+    )
+    .join("");
 
-    if (window.lucide) {
-        window.lucide.createIcons();
-    }
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
 }
 
 // ============================================
@@ -74,31 +155,40 @@ export function renderDonationHistory(donations) {
 // ============================================
 
 export function initVoluntaryForm() {
-    const form = document.getElementById('voluntaryForm');
+  const form = document.getElementById("voluntaryForm");
 
-    if (form) {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            showNotification('Voluntary donation registered! We will contact you soon.', 'success');
-        });
-    }
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      showNotification(
+        "Voluntary donation registered! We will contact you soon.",
+        "success",
+      );
+    });
+  }
 }
 
 // ============================================
 // INITIALIZATION
 // ============================================
 
-document.addEventListener('DOMContentLoaded', () => {
-    const path = window.location.pathname;
+document.addEventListener("DOMContentLoaded", async () => {
+  const path = window.location.pathname;
 
-    if (path.includes('health')) {
-        initHealthForm();
-    } else if (path.includes('voluntary')) {
-        initVoluntaryForm();
-    }
+  // Check account status first for all donor pages
+  const isApproved = await checkAccountStatus();
 
-    // Always initialize icons
-    if (window.lucide) {
-        window.lucide.createIcons();
+  // Only initialize page-specific features if account is approved
+  if (isApproved) {
+    if (path.includes("health")) {
+      initHealthForm();
+    } else if (path.includes("voluntary")) {
+      initVoluntaryForm();
     }
+  }
+
+  // Always initialize icons
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
 });

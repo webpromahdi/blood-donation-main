@@ -1,384 +1,659 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Request Blood - BloodConnect Hospital</title>
+    <link rel="stylesheet" href="/src/styles/styles.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Request Blood - BloodConnect Hospital</title>
-  <link rel="stylesheet" href="/src/styles/styles.css" />
-</head>
-
-<body class="min-h-screen bg-gray-50">
-  <!-- Sidebar -->
-  <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
-    <div class="p-6 border-b border-gray-200">
-      <div class="flex items-center gap-3">
-        <div class="bg-red-600 p-2 rounded-lg">
-          <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Hospital Portal</div>
+          </div>
         </div>
-        <div>
-          <div class="font-semibold text-red-600">BloodConnect</div>
-          <div class="text-sm text-gray-500">Hospital Portal</div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/src/pages/hospital/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="layout-dashboard" class="size-5"></i
+          ><span>Dashboard</span></a
+        >
+        <a
+          href="/src/pages/hospital/request.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+          ><i data-lucide="droplet" class="size-5"></i
+          ><span>Request Blood</span></a
+        >
+        <a
+          href="/src/pages/hospital/donors.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="users" class="size-5"></i><span>Donor List</span></a
+        >
+        <a
+          href="/src/pages/hospital/appointments.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="calendar-check" class="size-5"></i
+          ><span>Appointments</span></a
+        >
+        <a
+          href="/src/pages/hospital/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="message-square" class="size-5"></i
+          ><span>Chat</span></a
+        >
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
         </div>
       </div>
     </div>
-    <nav class="flex-1 overflow-y-auto py-4">
-      <a href="/src/pages/hospital/dashboard.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="layout-dashboard" class="size-5"></i><span>Dashboard</span></a>
-      <a href="/src/pages/hospital/request.html"
-        class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"><i
-          data-lucide="droplet" class="size-5"></i><span>Request Blood</span></a>
-      <a href="/src/pages/hospital/donors.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="users" class="size-5"></i><span>Donor List</span></a>
-      <a href="/src/pages/hospital/appointments.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="calendar-check" class="size-5"></i><span>Appointments</span></a>
-      <a href="/src/pages/hospital/chat.html"
-        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
-          data-lucide="message-square" class="size-5"></i><span>Chat</span></a>
-    </nav>
-    <div class="p-4 border-t border-gray-200">
-      <div class="text-center text-sm text-gray-500">
-        <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
-      </div>
-    </div>
-  </div>
 
-  <!-- Header -->
-  <header
-    class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8">
-    <div class="flex items-center gap-4 flex-1">
-      <h2 class="text-lg font-semibold text-gray-900">Request Blood</h2>
-    </div>
-    <div class="flex items-center gap-4">
-      <button class="relative p-2 hover:bg-gray-100 rounded-lg">
-        <i data-lucide="bell" class="size-5 text-gray-700"></i>
-      </button>
-      <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
-        <div class="text-right">
-          <div class="text-sm font-medium text-gray-900" data-user-name>City Hospital</div>
-          <div class="text-xs text-gray-500" data-user-role>Hospital Staff</div>
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-900">Request Blood</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900" data-user-name>
+              City Hospital
+            </div>
+            <div class="text-xs text-gray-500" data-user-role>
+              Hospital Staff
+            </div>
+          </div>
+          <div
+            class="size-10 bg-blue-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="building-2" class="size-5 text-blue-600"></i>
+          </div>
         </div>
-        <div class="size-10 bg-blue-100 rounded-full flex items-center justify-center">
-          <i data-lucide="building-2" class="size-5 text-blue-600"></i>
-        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
       </div>
-      <a href="/" class="p-2 text-gray-600 hover:text-red-600"><i data-lucide="log-out" class="size-5"></i></a>
-    </div>
-  </header>
+    </header>
 
-  <!-- Main Content -->
-  <main class="ml-64 pt-16">
-    <div class="p-8 space-y-8">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900 mb-2">Request Blood</h1>
-        <p class="text-gray-600">
-          Submit a new blood request to the donor network
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Main Form -->
-        <div class="lg:col-span-2">
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <div class="mb-6">
-              <h2 class="text-lg font-semibold text-gray-900 mb-1">
-                Blood Request Form
-              </h2>
-              <p class="text-sm text-gray-600">
-                Fill in the details for your blood requirement
+    <!-- Main Content -->
+    <main class="ml-64 pt-16">
+      <!-- Pending Approval Message (Hidden by default) -->
+      <div id="pendingApprovalMessage" class="hidden p-8">
+        <div class="max-w-2xl mx-auto mt-16">
+          <div
+            class="p-8 bg-white border border-gray-200 rounded-xl text-center"
+          >
+            <div
+              class="bg-yellow-100 p-4 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center"
+            >
+              <i data-lucide="clock" class="size-10 text-yellow-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+              Account Under Review
+            </h2>
+            <p class="text-gray-600 mb-6">
+              Your hospital account is currently pending approval. Please wait
+              for admin review before you can access the full dashboard and
+              create blood requests.
+            </p>
+            <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p class="text-sm text-yellow-800">
+                <i data-lucide="info" class="size-4 inline mr-1"></i>This
+                usually takes 24-48 hours. You will be notified once your
+                account is approved.
               </p>
             </div>
-
-            <form id="hospitalRequestForm" class="space-y-6">
-              <!-- Hospital Name (Auto-derived, read-only) -->
-              <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <div class="flex items-center gap-3">
-                  <i data-lucide="building-2" class="size-5 text-blue-600"></i>
-                  <div>
-                    <p class="text-xs text-gray-500">Requesting Hospital</p>
-                    <p class="font-semibold text-gray-900" id="hospitalDisplayName">City Hospital</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label class="text-gray-700 mb-2 block font-medium">Patient Name *</label>
-                  <input type="text" id="patientName" name="patientName" placeholder="Enter patient name"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                  <p class="text-red-500 text-sm mt-1 hidden" id="patientNameError"></p>
-                </div>
-
-                <div>
-                  <label class="text-gray-700 mb-2 block font-medium">Age *</label>
-                  <input type="number" id="patientAge" name="patientAge" placeholder="Patient age"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                  <p class="text-red-500 text-sm mt-1 hidden" id="patientAgeError"></p>
-                </div>
-
-                <div>
-                  <label class="text-gray-700 mb-2 block font-medium">Contact Phone *</label>
-                  <input type="tel" id="contactPhone" name="contactPhone" placeholder="Emergency contact number"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                  <p class="text-red-500 text-sm mt-1 hidden" id="contactPhoneError"></p>
-                </div>
-
-                <div>
-                  <label class="text-gray-700 mb-2 block font-medium">Email</label>
-                  <input type="email" id="email" name="email" placeholder="Contact email address"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                  <p class="text-red-500 text-sm mt-1 hidden" id="emailError"></p>
-                </div>
-
-                <div>
-                  <label class="text-gray-700 mb-2 block font-medium">Blood Type Needed *</label>
-                  <select id="bloodType" name="bloodType"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                    <option value="">Select blood type</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                  </select>
-                  <p class="text-red-500 text-sm mt-1 hidden" id="bloodTypeError"></p>
-                </div>
-
-                <div>
-                  <label class="text-gray-700 mb-2 block font-medium">Quantity (Units) *</label>
-                  <input type="number" id="quantity" name="quantity" placeholder="Number of units needed" min="1"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                  <p class="text-red-500 text-sm mt-1 hidden" id="quantityError"></p>
-                </div>
-
-                <div>
-                  <label class="text-gray-700 mb-2 block font-medium">City *</label>
-                  <input type="text" id="city" name="city" placeholder="Hospital city"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                  <p class="text-red-500 text-sm mt-1 hidden" id="cityError"></p>
-                </div>
-
-                <div>
-                  <label class="text-gray-700 mb-2 block font-medium">Required By Date *</label>
-                  <input type="date" id="requiredDate" name="requiredDate"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
-                  <p class="text-red-500 text-sm mt-1 hidden" id="requiredDateError"></p>
-                </div>
-              </div>
-
-              <div>
-                <label class="text-gray-700 mb-2 block font-medium">Medical Reason / Additional Information</label>
-                <textarea id="medicalReason" name="medicalReason"
-                  placeholder="Please provide details about why blood is needed..."
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 min-h-24"
-                  rows="3"></textarea>
-              </div>
-
-              <div class="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-200">
-                <div class="flex items-center gap-3">
-                  <i data-lucide="alert-circle" class="size-6 text-red-600 shrink-0"></i>
-                  <div>
-                    <label for="emergency-toggle" class="text-gray-900 cursor-pointer font-medium">This is an
-                      Emergency</label>
-                    <p class="text-sm text-gray-600">
-                      Emergency requests will be prioritized and sent to all
-                      compatible donors immediately
-                    </p>
-                  </div>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" id="emergency-toggle" class="sr-only peer" />
-                  <div
-                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600">
-                  </div>
-                </label>
-              </div>
-
-              <div class="flex gap-4 pt-6">
-                <button type="submit"
-                  class="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium h-12 flex items-center justify-center gap-2">
-                  <i data-lucide="send" class="size-5"></i>
-                  Submit Blood Request
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <!-- Side Info -->
-        <div class="space-y-6">
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <h3 class="font-semibold text-gray-900 mb-4">
-              Request Guidelines
-            </h3>
-            <ul class="space-y-3 text-sm text-gray-600">
-              <li class="flex items-start gap-2">
-                <i data-lucide="check-circle" class="size-5 text-green-600 shrink-0 mt-0.5"></i>
-                <span>Ensure patient information is accurate</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <i data-lucide="check-circle" class="size-5 text-green-600 shrink-0 mt-0.5"></i>
-                <span>Mark as emergency only when needed</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <i data-lucide="check-circle" class="size-5 text-green-600 shrink-0 mt-0.5"></i>
-                <span>Provide accurate contact information</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <i data-lucide="check-circle" class="size-5 text-green-600 shrink-0 mt-0.5"></i>
-                <span>Allow sufficient time for processing</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="p-6 bg-white border border-gray-200 rounded-xl">
-            <h3 class="font-semibold text-gray-900 mb-4">Need Help?</h3>
-            <p class="text-sm text-gray-600 mb-4">
-              Contact our support team for assistance with urgent requests.
-            </p>
-            <button class="w-full px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium">
-              <i data-lucide="message-square" class="size-4 inline mr-2"></i>Contact Support
-            </button>
-          </div>
-
-          <div class="p-6 bg-linear-to-br from-red-50 to-white border border-red-200 rounded-xl">
-            <div class="flex items-center gap-3 mb-3">
-              <i data-lucide="alert-triangle" class="size-6 text-red-600"></i>
-              <h3 class="font-semibold text-gray-900">Emergency Line</h3>
-            </div>
-            <p class="text-sm text-gray-600 mb-3">
-              For critical cases, call our 24/7 emergency hotline
-            </p>
-            <p class="text-xl font-bold text-red-600">1-800-BLOOD-NOW</p>
           </div>
         </div>
       </div>
-    </div>
-  </main>
 
-  <script type="module" src="/src/scripts/main.js"></script>
-  <script type="module">
-    // Hospital Request Form Validation
-    import { z } from 'https://cdn.jsdelivr.net/npm/zod@3.22.4/+esm';
+      <!-- Dashboard Content (Shown when approved) -->
+      <div id="dashboardContent" class="p-8 space-y-8">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">Request Blood</h1>
+          <p class="text-gray-600">
+            Submit a new blood request to the donor network
+          </p>
+        </div>
 
-    const fieldIds = ['patientName', 'patientAge', 'contactPhone', 'email', 'bloodType', 'quantity', 'city', 'requiredDate'];
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Main Form -->
+          <div class="lg:col-span-2">
+            <div class="p-6 bg-white border border-gray-200 rounded-xl">
+              <div class="mb-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-1">
+                  Blood Request Form
+                </h2>
+                <p class="text-sm text-gray-600">
+                  Fill in the details for your blood requirement
+                </p>
+              </div>
 
-    const hospitalRequestSchema = z.object({
-      patientName: z.string().min(1, 'Patient name is required'),
-      patientAge: z.string().min(1, 'Patient age is required').refine(val => !isNaN(Number(val)) && Number(val) > 0, 'Age must be a positive number'),
-      contactPhone: z.string().min(1, 'Contact phone is required').min(7, 'Please enter a valid phone number'),
-      email: z.string().email('Please enter a valid email address').optional().or(z.literal('')),
-      bloodType: z.string().min(1, 'Blood type is required'),
-      quantity: z.string().min(1, 'Quantity is required').refine(val => !isNaN(Number(val)) && Number(val) >= 1, 'Quantity must be at least 1'),
-      city: z.string().min(1, 'City is required'),
-      requiredDate: z.string().min(1, 'Required date is required')
-    });
+              <form id="hospitalRequestForm" class="space-y-6">
+                <!-- Hospital Name (Auto-derived, read-only) -->
+                <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div class="flex items-center gap-3">
+                    <i
+                      data-lucide="building-2"
+                      class="size-5 text-blue-600"
+                    ></i>
+                    <div>
+                      <p class="text-xs text-gray-500">Requesting Hospital</p>
+                      <p
+                        class="font-semibold text-gray-900"
+                        id="hospitalDisplayName"
+                      >
+                        City Hospital
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
-    function showError(fieldId, message) {
-      const field = document.getElementById(fieldId);
-      const errorEl = document.getElementById(fieldId + 'Error');
-      if (field) { field.classList.add('border-red-500'); field.classList.remove('border-gray-300'); }
-      if (errorEl) { errorEl.textContent = message; errorEl.classList.remove('hidden'); }
-    }
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="text-gray-700 mb-2 block font-medium"
+                      >Patient Name *</label
+                    >
+                    <input
+                      type="text"
+                      id="patientName"
+                      name="patientName"
+                      placeholder="Enter patient name"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <p
+                      class="text-red-500 text-sm mt-1 hidden"
+                      id="patientNameError"
+                    ></p>
+                  </div>
 
-    function clearError(fieldId) {
-      const field = document.getElementById(fieldId);
-      const errorEl = document.getElementById(fieldId + 'Error');
-      if (field) { field.classList.remove('border-red-500'); field.classList.add('border-gray-300'); }
-      if (errorEl) { errorEl.textContent = ''; errorEl.classList.add('hidden'); }
-    }
+                  <div>
+                    <label class="text-gray-700 mb-2 block font-medium"
+                      >Age *</label
+                    >
+                    <input
+                      type="number"
+                      id="patientAge"
+                      name="patientAge"
+                      placeholder="Patient age"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <p
+                      class="text-red-500 text-sm mt-1 hidden"
+                      id="patientAgeError"
+                    ></p>
+                  </div>
 
-    fieldIds.forEach(id => {
-      const field = document.getElementById(id);
-      if (field) {
-        field.addEventListener('input', () => clearError(id));
-        field.addEventListener('change', () => clearError(id));
-      }
-    });
+                  <div>
+                    <label class="text-gray-700 mb-2 block font-medium"
+                      >Contact Phone *</label
+                    >
+                    <input
+                      type="tel"
+                      id="contactPhone"
+                      name="contactPhone"
+                      placeholder="Emergency contact number"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <p
+                      class="text-red-500 text-sm mt-1 hidden"
+                      id="contactPhoneError"
+                    ></p>
+                  </div>
 
-    document.getElementById('hospitalRequestForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-      fieldIds.forEach(id => clearError(id));
+                  <div>
+                    <label class="text-gray-700 mb-2 block font-medium"
+                      >Email</label
+                    >
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder="Contact email address"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <p
+                      class="text-red-500 text-sm mt-1 hidden"
+                      id="emailError"
+                    ></p>
+                  </div>
 
-      const formData = {
-        patientName: document.getElementById('patientName').value.trim(),
-        patientAge: document.getElementById('patientAge').value,
-        contactPhone: document.getElementById('contactPhone').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        bloodType: document.getElementById('bloodType').value,
-        quantity: document.getElementById('quantity').value,
-        city: document.getElementById('city').value.trim(),
-        requiredDate: document.getElementById('requiredDate').value,
-        medicalReason: document.getElementById('medicalReason')?.value?.trim() || '',
-        emergency: document.getElementById('emergency-toggle')?.checked || false
-      };
+                  <div>
+                    <label class="text-gray-700 mb-2 block font-medium"
+                      >Blood Type Needed *</label
+                    >
+                    <select
+                      id="bloodType"
+                      name="bloodType"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    >
+                      <option value="">Select blood type</option>
+                      <option value="O+">O+</option>
+                      <option value="O-">O-</option>
+                      <option value="A+">A+</option>
+                      <option value="A-">A-</option>
+                      <option value="B+">B+</option>
+                      <option value="B-">B-</option>
+                      <option value="AB+">AB+</option>
+                      <option value="AB-">AB-</option>
+                    </select>
+                    <p
+                      class="text-red-500 text-sm mt-1 hidden"
+                      id="bloodTypeError"
+                    ></p>
+                  </div>
 
-      const result = hospitalRequestSchema.safeParse(formData);
+                  <div>
+                    <label class="text-gray-700 mb-2 block font-medium"
+                      >Quantity (Units) *</label
+                    >
+                    <input
+                      type="number"
+                      id="quantity"
+                      name="quantity"
+                      placeholder="Number of units needed"
+                      min="1"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <p
+                      class="text-red-500 text-sm mt-1 hidden"
+                      id="quantityError"
+                    ></p>
+                  </div>
 
-      if (!result.success) {
-        result.error.errors.forEach(err => showError(err.path[0], err.message));
-        return;
-      }
+                  <div>
+                    <label class="text-gray-700 mb-2 block font-medium"
+                      >City *</label
+                    >
+                    <input
+                      type="text"
+                      id="city"
+                      name="city"
+                      placeholder="Hospital city"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <p
+                      class="text-red-500 text-sm mt-1 hidden"
+                      id="cityError"
+                    ></p>
+                  </div>
 
-      // Show loading state
-      const submitBtn = this.querySelector('button[type="submit"]');
-      const originalText = submitBtn.innerHTML;
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i data-lucide="loader-2" class="size-5 animate-spin"></i> Submitting...';
-      lucide.createIcons();
+                  <div>
+                    <label class="text-gray-700 mb-2 block font-medium"
+                      >Required By Date *</label
+                    >
+                    <input
+                      type="date"
+                      id="requiredDate"
+                      name="requiredDate"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <p
+                      class="text-red-500 text-sm mt-1 hidden"
+                      id="requiredDateError"
+                    ></p>
+                  </div>
+                </div>
 
-      try {
-        const response = await fetch('/api/hospital/requests/create.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
-        });
+                <div>
+                  <label class="text-gray-700 mb-2 block font-medium"
+                    >Medical Reason / Additional Information</label
+                  >
+                  <textarea
+                    id="medicalReason"
+                    name="medicalReason"
+                    placeholder="Please provide details about why blood is needed..."
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 min-h-24"
+                    rows="3"
+                  ></textarea>
+                </div>
 
-        const data = await response.json();
+                <div
+                  class="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-200"
+                >
+                  <div class="flex items-center gap-3">
+                    <i
+                      data-lucide="alert-circle"
+                      class="size-6 text-red-600 shrink-0"
+                    ></i>
+                    <div>
+                      <label
+                        for="emergency-toggle"
+                        class="text-gray-900 cursor-pointer font-medium"
+                        >This is an Emergency</label
+                      >
+                      <p class="text-sm text-gray-600">
+                        Emergency requests will be prioritized and sent to all
+                        compatible donors immediately
+                      </p>
+                    </div>
+                  </div>
+                  <label
+                    class="relative inline-flex items-center cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      id="emergency-toggle"
+                      class="sr-only peer"
+                    />
+                    <div
+                      class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
+                    ></div>
+                  </label>
+                </div>
 
-        if (data.success) {
-          // Success notification
-          const notification = document.createElement('div');
-          notification.className = 'fixed top-20 right-8 p-4 bg-green-50 border-l-4 border-green-600 rounded-lg shadow-lg z-50';
-          notification.innerHTML = `<div class="flex items-center gap-3"><i data-lucide="check-circle" class="size-5 text-green-600"></i><div><p class="text-green-900 font-medium">Blood request submitted!</p><p class="text-sm text-green-700">Request Code: ${data.request.request_code}</p></div></div>`;
-          document.body.appendChild(notification);
-          lucide.createIcons();
-          setTimeout(() => notification.remove(), 5000);
-          this.reset();
-        } else {
-          // Error notification
-          const notification = document.createElement('div');
-          notification.className = 'fixed top-20 right-8 p-4 bg-red-50 border-l-4 border-red-600 rounded-lg shadow-lg z-50';
-          notification.innerHTML = `<div class="flex items-center gap-3"><i data-lucide="alert-circle" class="size-5 text-red-600"></i><p class="text-red-900">${data.message || 'Failed to submit request'}</p></div>`;
-          document.body.appendChild(notification);
-          lucide.createIcons();
-          setTimeout(() => notification.remove(), 5000);
+                <div class="flex gap-4 pt-6">
+                  <button
+                    type="submit"
+                    class="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium h-12 flex items-center justify-center gap-2"
+                  >
+                    <i data-lucide="send" class="size-5"></i>
+                    Submit Blood Request
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Side Info -->
+          <div class="space-y-6">
+            <div class="p-6 bg-white border border-gray-200 rounded-xl">
+              <h3 class="font-semibold text-gray-900 mb-4">
+                Request Guidelines
+              </h3>
+              <ul class="space-y-3 text-sm text-gray-600">
+                <li class="flex items-start gap-2">
+                  <i
+                    data-lucide="check-circle"
+                    class="size-5 text-green-600 shrink-0 mt-0.5"
+                  ></i>
+                  <span>Ensure patient information is accurate</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i
+                    data-lucide="check-circle"
+                    class="size-5 text-green-600 shrink-0 mt-0.5"
+                  ></i>
+                  <span>Mark as emergency only when needed</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i
+                    data-lucide="check-circle"
+                    class="size-5 text-green-600 shrink-0 mt-0.5"
+                  ></i>
+                  <span>Provide accurate contact information</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i
+                    data-lucide="check-circle"
+                    class="size-5 text-green-600 shrink-0 mt-0.5"
+                  ></i>
+                  <span>Allow sufficient time for processing</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="p-6 bg-white border border-gray-200 rounded-xl">
+              <h3 class="font-semibold text-gray-900 mb-4">Need Help?</h3>
+              <p class="text-sm text-gray-600 mb-4">
+                Contact our support team for assistance with urgent requests.
+              </p>
+              <button
+                class="w-full px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
+              >
+                <i data-lucide="message-square" class="size-4 inline mr-2"></i
+                >Contact Support
+              </button>
+            </div>
+
+            <div
+              class="p-6 bg-linear-to-br from-red-50 to-white border border-red-200 rounded-xl"
+            >
+              <div class="flex items-center gap-3 mb-3">
+                <i data-lucide="alert-triangle" class="size-6 text-red-600"></i>
+                <h3 class="font-semibold text-gray-900">Emergency Line</h3>
+              </div>
+              <p class="text-sm text-gray-600 mb-3">
+                For critical cases, call our 24/7 emergency hotline
+              </p>
+              <p class="text-xl font-bold text-red-600">1-800-BLOOD-NOW</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/src/scripts/main.js"></script>
+    <script type="module">
+      // Account status check
+      async function checkAccountStatus() {
+        try {
+          const response = await fetch("/api/auth/check.php");
+          const data = await response.json();
+
+          if (!data.success || !data.logged_in) {
+            window.location.href = "/src/pages/auth/login.html";
+            return false;
+          }
+
+          const status = data.user.status || "pending";
+          const dashboardContent = document.getElementById("dashboardContent");
+          const pendingMessage = document.getElementById(
+            "pendingApprovalMessage",
+          );
+
+          // Handle rejected status - logout and redirect to login
+          if (status === "rejected") {
+            await fetch("/api/auth/logout.php", { method: "POST" });
+            window.location.href = "/src/pages/auth/login.html?error=rejected";
+            return false;
+          }
+
+          if (status !== "approved") {
+            if (dashboardContent) dashboardContent.classList.add("hidden");
+            if (pendingMessage) {
+              pendingMessage.classList.remove("hidden");
+              if (window.lucide) window.lucide.createIcons();
+            }
+            return false;
+          }
+
+          if (dashboardContent) dashboardContent.classList.remove("hidden");
+          if (pendingMessage) pendingMessage.classList.add("hidden");
+          return true;
+        } catch (error) {
+          console.error("Failed to check account status:", error);
+          return false;
         }
-      } catch (error) {
-        console.error('Request error:', error);
-        const notification = document.createElement('div');
-        notification.className = 'fixed top-20 right-8 p-4 bg-red-50 border-l-4 border-red-600 rounded-lg shadow-lg z-50';
-        notification.innerHTML = '<div class="flex items-center gap-3"><i data-lucide="alert-circle" class="size-5 text-red-600"></i><p class="text-red-900">Connection error. Please try again.</p></div>';
-        document.body.appendChild(notification);
-        lucide.createIcons();
-        setTimeout(() => notification.remove(), 5000);
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-        lucide.createIcons();
       }
-    });
-  </script>
-  <script type="module">
-    import { initUserLoader } from '/src/scripts/user-loader.js';
-    initUserLoader();
-  </script>
-</body>
 
+      // Initialize status check
+      document.addEventListener("DOMContentLoaded", checkAccountStatus);
+    </script>
+    <script type="module">
+      // Hospital Request Form Validation
+      import { z } from "https://cdn.jsdelivr.net/npm/zod@3.22.4/+esm";
+
+      const fieldIds = [
+        "patientName",
+        "patientAge",
+        "contactPhone",
+        "email",
+        "bloodType",
+        "quantity",
+        "city",
+        "requiredDate",
+      ];
+
+      const hospitalRequestSchema = z.object({
+        patientName: z.string().min(1, "Patient name is required"),
+        patientAge: z
+          .string()
+          .min(1, "Patient age is required")
+          .refine(
+            (val) => !isNaN(Number(val)) && Number(val) > 0,
+            "Age must be a positive number",
+          ),
+        contactPhone: z
+          .string()
+          .min(1, "Contact phone is required")
+          .min(7, "Please enter a valid phone number"),
+        email: z
+          .string()
+          .email("Please enter a valid email address")
+          .optional()
+          .or(z.literal("")),
+        bloodType: z.string().min(1, "Blood type is required"),
+        quantity: z
+          .string()
+          .min(1, "Quantity is required")
+          .refine(
+            (val) => !isNaN(Number(val)) && Number(val) >= 1,
+            "Quantity must be at least 1",
+          ),
+        city: z.string().min(1, "City is required"),
+        requiredDate: z.string().min(1, "Required date is required"),
+      });
+
+      function showError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        const errorEl = document.getElementById(fieldId + "Error");
+        if (field) {
+          field.classList.add("border-red-500");
+          field.classList.remove("border-gray-300");
+        }
+        if (errorEl) {
+          errorEl.textContent = message;
+          errorEl.classList.remove("hidden");
+        }
+      }
+
+      function clearError(fieldId) {
+        const field = document.getElementById(fieldId);
+        const errorEl = document.getElementById(fieldId + "Error");
+        if (field) {
+          field.classList.remove("border-red-500");
+          field.classList.add("border-gray-300");
+        }
+        if (errorEl) {
+          errorEl.textContent = "";
+          errorEl.classList.add("hidden");
+        }
+      }
+
+      fieldIds.forEach((id) => {
+        const field = document.getElementById(id);
+        if (field) {
+          field.addEventListener("input", () => clearError(id));
+          field.addEventListener("change", () => clearError(id));
+        }
+      });
+
+      document
+        .getElementById("hospitalRequestForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          fieldIds.forEach((id) => clearError(id));
+
+          const formData = {
+            patientName: document.getElementById("patientName").value.trim(),
+            patientAge: document.getElementById("patientAge").value,
+            contactPhone: document.getElementById("contactPhone").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            bloodType: document.getElementById("bloodType").value,
+            quantity: document.getElementById("quantity").value,
+            city: document.getElementById("city").value.trim(),
+            requiredDate: document.getElementById("requiredDate").value,
+            medicalReason:
+              document.getElementById("medicalReason")?.value?.trim() || "",
+            emergency:
+              document.getElementById("emergency-toggle")?.checked || false,
+          };
+
+          const result = hospitalRequestSchema.safeParse(formData);
+
+          if (!result.success) {
+            result.error.errors.forEach((err) =>
+              showError(err.path[0], err.message),
+            );
+            return;
+          }
+
+          // Show loading state
+          const submitBtn = this.querySelector('button[type="submit"]');
+          const originalText = submitBtn.innerHTML;
+          submitBtn.disabled = true;
+          submitBtn.innerHTML =
+            '<i data-lucide="loader-2" class="size-5 animate-spin"></i> Submitting...';
+          lucide.createIcons();
+
+          try {
+            const response = await fetch("/api/hospital/requests/create.php", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              // Success notification
+              const notification = document.createElement("div");
+              notification.className =
+                "fixed top-20 right-8 p-4 bg-green-50 border-l-4 border-green-600 rounded-lg shadow-lg z-50";
+              notification.innerHTML = `<div class="flex items-center gap-3"><i data-lucide="check-circle" class="size-5 text-green-600"></i><div><p class="text-green-900 font-medium">Blood request submitted!</p><p class="text-sm text-green-700">Request Code: ${data.request.request_code}</p></div></div>`;
+              document.body.appendChild(notification);
+              lucide.createIcons();
+              setTimeout(() => notification.remove(), 5000);
+              this.reset();
+            } else {
+              // Error notification
+              const notification = document.createElement("div");
+              notification.className =
+                "fixed top-20 right-8 p-4 bg-red-50 border-l-4 border-red-600 rounded-lg shadow-lg z-50";
+              notification.innerHTML = `<div class="flex items-center gap-3"><i data-lucide="alert-circle" class="size-5 text-red-600"></i><p class="text-red-900">${data.message || "Failed to submit request"}</p></div>`;
+              document.body.appendChild(notification);
+              lucide.createIcons();
+              setTimeout(() => notification.remove(), 5000);
+            }
+          } catch (error) {
+            console.error("Request error:", error);
+            const notification = document.createElement("div");
+            notification.className =
+              "fixed top-20 right-8 p-4 bg-red-50 border-l-4 border-red-600 rounded-lg shadow-lg z-50";
+            notification.innerHTML =
+              '<div class="flex items-center gap-3"><i data-lucide="alert-circle" class="size-5 text-red-600"></i><p class="text-red-900">Connection error. Please try again.</p></div>';
+            document.body.appendChild(notification);
+            lucide.createIcons();
+            setTimeout(() => notification.remove(), 5000);
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+            lucide.createIcons();
+          }
+        });
+    </script>
+    <script type="module">
+      import { initUserLoader } from "/src/scripts/user-loader.js";
+      initUserLoader();
+    </script>
+  </body>
 </html>

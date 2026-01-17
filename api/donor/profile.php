@@ -24,7 +24,11 @@ session_start();
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../middleware/auth.php';
 
-requireAuth(['donor']);
+$user = requireAuth(['donor']);
+
+// Check if account is approved before allowing access to full profile data
+// Note: Profile endpoint returns status for dashboard to check, so we don't block here
+// But we do include status in response
 
 $donorId = $_SESSION['user_id'];
 
@@ -38,10 +42,31 @@ if (!$conn) {
 }
 
 try {
-    // Get donor profile
-    $stmt = $conn->prepare("SELECT id, name, email, phone, blood_group, age, weight, city, address, created_at FROM users WHERE id = ?");
+    // Get donor profile including status
+    $stmt = $conn->prepare("SELECT id, name, email, phone, blood_group, age, weight, city, address, status, created_at FROM users WHERE id = ?");
     $stmt->execute([$donorId]);
     $donor = $stmt->fetch();
+
+    // Get account status - return early if pending
+    $accountStatus = $donor['status'] ?? 'pending';
+    
+    // If account is pending, return limited profile with status only
+    if ($accountStatus !== 'approved') {
+        echo json_encode([
+            'success' => true,
+            'profile' => [
+                'id' => $donor['id'],
+                'name' => $donor['name'],
+                'email' => $donor['email'],
+                'status' => $accountStatus
+            ],
+            'account_status' => $accountStatus,
+            'requires_approval' => true,
+            'stats' => null,
+            'active_donation' => null
+        ]);
+        exit;
+    }
 
     // Total donations completed
     $stmt = $conn->prepare("SELECT COUNT(*) as count FROM donations WHERE donor_id = ? AND status = 'completed'");
@@ -86,8 +111,10 @@ try {
             'weight' => $donor['weight'],
             'city' => $donor['city'],
             'address' => $donor['address'],
+            'status' => $accountStatus,
             'member_since' => $donor['created_at']
         ],
+        'account_status' => $accountStatus,
         'stats' => [
             'total_donations' => (int) $totalDonations,
             'lives_saved' => (int) $livesSaved,

@@ -25,7 +25,10 @@ session_start();
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../middleware/auth.php';
 
-requireAuth(['hospital']);
+$user = requireAuth(['hospital']);
+
+// Require approved status to view donors
+requireApprovedStatus($_SESSION['user_id'], 'hospital');
 
 $hospitalId = $_SESSION['user_id'];
 

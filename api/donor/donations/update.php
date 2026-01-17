@@ -25,7 +25,10 @@ session_start();
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
 
-requireAuth(['donor']);
+$user = requireAuth(['donor']);
+
+// Require approved status to update donation status
+requireApprovedStatus($_SESSION['user_id'], 'donor');
 
 $input = json_decode(file_get_contents('php://input'), true);
 
