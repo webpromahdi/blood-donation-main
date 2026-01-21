@@ -56,27 +56,56 @@ try {
 
 /**
  * GET - List all announcements
+ * Automatically publishes scheduled announcements when their time has come
  */
 function handleGet($conn) {
+    // Auto-publish scheduled announcements whose time has come
+    $updateSql = "UPDATE announcements 
+                  SET status = 'published' 
+                  WHERE status = 'scheduled' 
+                  AND scheduled_at IS NOT NULL 
+                  AND scheduled_at <= NOW()";
+    $conn->exec($updateSql);
+    
+    // Fetch all announcements for admin view (including scheduled and archived)
     $sql = "SELECT a.*, u.name as admin_name 
             FROM announcements a 
             LEFT JOIN users u ON a.admin_id = u.id 
-            ORDER BY a.created_at DESC";
+            ORDER BY 
+                CASE a.status 
+                    WHEN 'scheduled' THEN 1 
+                    WHEN 'published' THEN 2 
+                    WHEN 'draft' THEN 3 
+                    WHEN 'archived' THEN 4 
+                END,
+                a.scheduled_at ASC,
+                a.created_at DESC";
     
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $announcements = $stmt->fetchAll();
     
-    // Format response
+    // Format response with computed status for display
     $formatted = array_map(function($a) {
+        $status = $a['status'];
+        $scheduledAt = $a['scheduled_at'];
+        
+        // Compute display status
+        $displayStatus = $status;
+        $isLive = ($status === 'published');
+        $isScheduled = ($status === 'scheduled' && $scheduledAt !== null);
+        
         return [
-            'id' => $a['id'],
+            'id' => (int) $a['id'],
             'title' => $a['title'],
             'message' => $a['message'],
             'target_audience' => $a['target_audience'],
             'priority' => $a['priority'],
-            'status' => $a['status'],
-            'scheduled_at' => $a['scheduled_at'],
+            'status' => $status,
+            'display_status' => $displayStatus,
+            'is_live' => $isLive,
+            'is_scheduled' => $isScheduled,
+            'scheduled_at' => $scheduledAt,
             'admin_name' => $a['admin_name'] ?? 'System',
             'created_at' => $a['created_at'],
             'updated_at' => $a['updated_at']

@@ -58,6 +58,9 @@ try {
         case 'chart_data':
             echo json_encode(getChartData($conn, $startDate, $endDate));
             break;
+        case 'monthly_registrations':
+            echo json_encode(getMonthlyRegistrations($conn, $startDate, $endDate));
+            break;
         case 'donors':
             echo json_encode(getDonorReport($conn, $startDate, $endDate, $bloodGroup, $status));
             break;
@@ -86,6 +89,110 @@ try {
     error_log("Reports API Error: " . $e->getMessage());
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Failed to generate report']);
+}
+
+/**
+ * Get monthly registration data by user role
+ */
+function getMonthlyRegistrations($conn, $startDate, $endDate) {
+    $result = [
+        'success' => true,
+        'monthly_registrations' => [],
+        'totals' => [
+            'donors' => 0,
+            'hospitals' => 0,
+            'seekers' => 0
+        ]
+    ];
+    
+    // Generate all months in range
+    $start = new DateTime($startDate);
+    $end = new DateTime($endDate);
+    $interval = new DateInterval('P1M');
+    $period = new DatePeriod($start, $interval, $end->modify('+1 month'));
+    
+    $monthlyData = [];
+    foreach ($period as $date) {
+        $key = $date->format('Y-m');
+        $monthlyData[$key] = [
+            'month' => $key,
+            'month_label' => $date->format('M Y'),
+            'donors' => 0,
+            'hospitals' => 0,
+            'seekers' => 0
+        ];
+    }
+    
+    // Reset end date
+    $end = new DateTime($endDate);
+    
+    // Get donor registrations by month
+    $stmt = $conn->prepare("
+        SELECT 
+            DATE_FORMAT(created_at, '%Y-%m') as month,
+            COUNT(*) as count
+        FROM users
+        WHERE role = 'donor' 
+        AND created_at BETWEEN :start_date AND :end_date
+        GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+        ORDER BY month ASC
+    ");
+    $stmt->execute(['start_date' => $startDate, 'end_date' => $endDate . ' 23:59:59']);
+    $donorsByMonth = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    foreach ($donorsByMonth as $row) {
+        if (isset($monthlyData[$row['month']])) {
+            $monthlyData[$row['month']]['donors'] = (int)$row['count'];
+            $result['totals']['donors'] += (int)$row['count'];
+        }
+    }
+    
+    // Get hospital registrations by month
+    $stmt = $conn->prepare("
+        SELECT 
+            DATE_FORMAT(created_at, '%Y-%m') as month,
+            COUNT(*) as count
+        FROM users
+        WHERE role = 'hospital' 
+        AND created_at BETWEEN :start_date AND :end_date
+        GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+        ORDER BY month ASC
+    ");
+    $stmt->execute(['start_date' => $startDate, 'end_date' => $endDate . ' 23:59:59']);
+    $hospitalsByMonth = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    foreach ($hospitalsByMonth as $row) {
+        if (isset($monthlyData[$row['month']])) {
+            $monthlyData[$row['month']]['hospitals'] = (int)$row['count'];
+            $result['totals']['hospitals'] += (int)$row['count'];
+        }
+    }
+    
+    // Get seeker registrations by month
+    $stmt = $conn->prepare("
+        SELECT 
+            DATE_FORMAT(created_at, '%Y-%m') as month,
+            COUNT(*) as count
+        FROM users
+        WHERE role = 'seeker' 
+        AND created_at BETWEEN :start_date AND :end_date
+        GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+        ORDER BY month ASC
+    ");
+    $stmt->execute(['start_date' => $startDate, 'end_date' => $endDate . ' 23:59:59']);
+    $seekersByMonth = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    foreach ($seekersByMonth as $row) {
+        if (isset($monthlyData[$row['month']])) {
+            $monthlyData[$row['month']]['seekers'] = (int)$row['count'];
+            $result['totals']['seekers'] += (int)$row['count'];
+        }
+    }
+    
+    $result['monthly_registrations'] = array_values($monthlyData);
+    $result['totals']['total'] = $result['totals']['donors'] + $result['totals']['hospitals'] + $result['totals']['seekers'];
+    
+    return $result;
 }
 
 /**

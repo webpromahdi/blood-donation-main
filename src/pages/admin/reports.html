@@ -428,15 +428,48 @@
           </div>
         </div>
 
-        <!-- Bar Chart - Monthly Donation Trends -->
+        <!-- Bar Chart - Monthly User Registration Report -->
         <div class="p-6 bg-white border border-gray-200 rounded-xl">
           <div class="mb-6">
             <h2 class="text-lg font-semibold text-gray-900 mb-1">
-              Monthly Donation Trends
+              Monthly User Registration Report
             </h2>
             <p class="text-sm text-gray-600">
-              Compare donations and requests over time
+              New registrations by user type over time
             </p>
+          </div>
+          <!-- Registration Summary Stats -->
+          <div id="registrationStats" class="grid grid-cols-4 gap-4 mb-6">
+            <div class="bg-red-50 p-4 rounded-lg text-center">
+              <p class="text-2xl font-bold text-red-600" id="totalDonorsReg">
+                0
+              </p>
+              <p class="text-sm text-gray-600">Donors</p>
+            </div>
+            <div class="bg-blue-50 p-4 rounded-lg text-center">
+              <p
+                class="text-2xl font-bold text-blue-600"
+                id="totalHospitalsReg"
+              >
+                0
+              </p>
+              <p class="text-sm text-gray-600">Hospitals</p>
+            </div>
+            <div class="bg-orange-50 p-4 rounded-lg text-center">
+              <p
+                class="text-2xl font-bold text-orange-600"
+                id="totalSeekersReg"
+              >
+                0
+              </p>
+              <p class="text-sm text-gray-600">Seekers</p>
+            </div>
+            <div class="bg-purple-50 p-4 rounded-lg text-center">
+              <p class="text-2xl font-bold text-purple-600" id="totalUsersReg">
+                0
+              </p>
+              <p class="text-sm text-gray-600">Total</p>
+            </div>
           </div>
           <div class="h-87.5 relative">
             <div
@@ -662,6 +695,7 @@
       };
 
       let chartData = null;
+      let registrationData = null;
       let lineChartInstance = null;
       let pieChartInstance = null;
       let barChartInstance = null;
@@ -779,11 +813,16 @@
 
           if (data.success) {
             chartData = data;
-            renderCharts();
+            renderLineChart();
+            renderPieChart();
           } else {
             showErrorToast(data.message || "Failed to load chart data");
-            renderEmptyCharts();
+            renderLineChart(true);
+            renderPieChart(true);
           }
+
+          // Load registration data separately
+          await loadRegistrationData();
         } catch (error) {
           console.error("Error loading chart data:", error);
           showErrorToast("Failed to connect to server");
@@ -791,6 +830,44 @@
         } finally {
           showChartLoading(false);
         }
+      }
+
+      async function loadRegistrationData() {
+        try {
+          const params = new URLSearchParams({
+            action: "monthly_registrations",
+            start_date: currentFilters.startDate,
+            end_date: currentFilters.endDate,
+          });
+
+          const response = await fetch(`/api/admin/reports.php?${params}`, {
+            credentials: "include",
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            registrationData = data;
+            updateRegistrationStats(data.totals);
+            renderBarChart();
+          } else {
+            renderBarChart(true);
+          }
+        } catch (error) {
+          console.error("Error loading registration data:", error);
+          renderBarChart(true);
+        }
+      }
+
+      function updateRegistrationStats(totals) {
+        document.getElementById("totalDonorsReg").textContent =
+          totals.donors || 0;
+        document.getElementById("totalHospitalsReg").textContent =
+          totals.hospitals || 0;
+        document.getElementById("totalSeekersReg").textContent =
+          totals.seekers || 0;
+        document.getElementById("totalUsersReg").textContent =
+          totals.total || 0;
       }
 
       function showChartLoading(show) {
@@ -820,6 +897,13 @@
         renderLineChart(true);
         renderPieChart(true);
         renderBarChart(true);
+        // Reset registration stats
+        updateRegistrationStats({
+          donors: 0,
+          hospitals: 0,
+          seekers: 0,
+          total: 0,
+        });
       }
 
       function renderLineChart(empty = false) {
@@ -1003,19 +1087,19 @@
           barChartInstance.destroy();
         }
 
-        const monthlyTrends =
-          empty || !chartData?.monthly_trends?.length
+        const monthlyRegs =
+          empty || !registrationData?.monthly_registrations?.length
             ? []
-            : chartData.monthly_trends;
+            : registrationData.monthly_registrations;
 
-        if (monthlyTrends.length === 0) {
+        if (monthlyRegs.length === 0) {
           barChartInstance = new Chart(ctx, {
             type: "bar",
             data: {
               labels: ["No Data"],
               datasets: [
                 {
-                  label: "Donations",
+                  label: "Donors",
                   data: [0],
                   backgroundColor: "#EF4444",
                 },
@@ -1028,7 +1112,7 @@
                 legend: { display: false },
                 title: {
                   display: true,
-                  text: "No historical data available",
+                  text: "No registration data available",
                   color: "#6B7280",
                 },
               },
@@ -1040,18 +1124,24 @@
         barChartInstance = new Chart(ctx, {
           type: "bar",
           data: {
-            labels: monthlyTrends.map((d) => d.month_label),
+            labels: monthlyRegs.map((d) => d.month_label),
             datasets: [
               {
-                label: "Donations",
-                data: monthlyTrends.map((d) => d.donations),
+                label: "Donors",
+                data: monthlyRegs.map((d) => d.donors),
                 backgroundColor: "#EF4444",
                 borderRadius: 4,
               },
               {
-                label: "Requests",
-                data: monthlyTrends.map((d) => d.requests),
+                label: "Hospitals",
+                data: monthlyRegs.map((d) => d.hospitals),
                 backgroundColor: "#3B82F6",
+                borderRadius: 4,
+              },
+              {
+                label: "Seekers",
+                data: monthlyRegs.map((d) => d.seekers),
+                backgroundColor: "#F97316",
                 borderRadius: 4,
               },
             ],
@@ -1063,12 +1153,28 @@
               legend: {
                 position: "bottom",
               },
+              tooltip: {
+                callbacks: {
+                  afterTitle: function (context) {
+                    const dataIndex = context[0].dataIndex;
+                    const total =
+                      monthlyRegs[dataIndex].donors +
+                      monthlyRegs[dataIndex].hospitals +
+                      monthlyRegs[dataIndex].seekers;
+                    return `Total: ${total} registrations`;
+                  },
+                },
+              },
             },
             scales: {
               y: {
                 beginAtZero: true,
                 grid: {
                   color: "rgba(0, 0, 0, 0.05)",
+                },
+                ticks: {
+                  stepSize: 1,
+                  precision: 0,
                 },
               },
               x: {
