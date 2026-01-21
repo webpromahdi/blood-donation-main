@@ -145,13 +145,23 @@
     <!-- Main Content -->
     <main class="ml-64 pt-16">
       <div class="p-8 space-y-8">
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900 mb-2">
-            Blood Group Management
-          </h1>
-          <p class="text-gray-600">
-            View and manage available donors by blood group
-          </p>
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">
+              Blood Group Management
+            </h1>
+            <p class="text-gray-600">
+              View and manage available donors by blood group
+            </p>
+          </div>
+          <button
+            onclick="refreshData()"
+            id="refreshBtn"
+            class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          >
+            <i data-lucide="refresh-cw" class="size-4" id="refreshIcon"></i>
+            <span>Refresh Data</span>
+          </button>
         </div>
 
         <!-- Blood Type Cards Grid -->
@@ -317,6 +327,26 @@
       // Donors data - loaded from API
       let donors = [];
       let bloodCounts = {};
+      let currentSelectedGroup = "O+";
+
+      // Show toast notification
+      function showToast(message, type = "info") {
+        const toast = document.createElement("div");
+        const bgColor =
+          type === "success"
+            ? "bg-green-600"
+            : type === "error"
+              ? "bg-red-600"
+              : "bg-blue-600";
+        toast.className = `fixed bottom-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-3`;
+        toast.innerHTML = `
+          <i data-lucide="${type === "success" ? "check-circle" : type === "error" ? "alert-circle" : "info"}" class="size-5"></i>
+          <span>${message}</span>
+        `;
+        document.body.appendChild(toast);
+        if (window.lucide) window.lucide.createIcons();
+        setTimeout(() => toast.remove(), 4000);
+      }
 
       // Fetch blood group data from API
       async function fetchBloodGroupData(bloodType = null) {
@@ -325,7 +355,18 @@
             ? `/api/admin/blood-groups.php?blood_type=${encodeURIComponent(bloodType)}`
             : "/api/admin/blood-groups.php";
 
-          const response = await fetch(url, { credentials: "include" });
+          const response = await fetch(url, {
+            credentials: "include",
+            headers: {
+              "Cache-Control": "no-cache",
+            },
+          });
+
+          if (response.status === 401) {
+            window.location.href = "/src/pages/auth/login.html";
+            return false;
+          }
+
           const data = await response.json();
 
           if (data.success) {
@@ -343,16 +384,22 @@
             return true;
           } else {
             console.error("Failed to fetch blood group data:", data.message);
+            showToast(
+              data.message || "Failed to load blood group data",
+              "error",
+            );
             return false;
           }
         } catch (error) {
           console.error("Error fetching blood group data:", error);
+          showToast("Error connecting to server", "error");
           return false;
         }
       }
 
       // Expose filter function to window for onclick attributes
       window.filterDonors = async function (group) {
+        currentSelectedGroup = group;
         const container = document.getElementById("donorsListContainer");
         const title = document.getElementById("listTitle");
         const subtitle = document.getElementById("listSubtitle");
@@ -541,6 +588,36 @@
           closeDonorModal();
         }
       });
+
+      // Refresh data function
+      window.refreshData = async function () {
+        const btn = document.getElementById("refreshBtn");
+        const icon = document.getElementById("refreshIcon");
+
+        // Disable button and show loading state
+        btn.disabled = true;
+        btn.classList.add("opacity-70", "cursor-not-allowed");
+        icon.classList.add("animate-spin");
+
+        try {
+          // Fetch fresh data from API
+          const success = await fetchBloodGroupData();
+
+          if (success) {
+            // Re-filter the current selected blood group
+            await window.filterDonors(currentSelectedGroup);
+            showToast("Data refreshed successfully", "success");
+          }
+        } catch (error) {
+          console.error("Error refreshing data:", error);
+          showToast("Failed to refresh data", "error");
+        } finally {
+          // Re-enable button
+          btn.disabled = false;
+          btn.classList.remove("opacity-70", "cursor-not-allowed");
+          icon.classList.remove("animate-spin");
+        }
+      };
 
       // Initial render - fetch all data then show O+ by default
       document.addEventListener("DOMContentLoaded", async () => {

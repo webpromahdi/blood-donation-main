@@ -157,3 +157,38 @@ CREATE INDEX idx_announcements_status ON announcements(status);
 CREATE INDEX idx_announcements_target ON announcements(target_audience);
 CREATE INDEX idx_announcements_priority ON announcements(priority);
 CREATE INDEX idx_announcements_scheduled ON announcements(scheduled_at);
+
+-- =====================================================
+-- DONOR HEALTH TABLE
+-- Stores health information for donors
+-- =====================================================
+CREATE TABLE IF NOT EXISTS donor_health (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    donor_id INT NOT NULL UNIQUE,
+    
+    -- Physical measurements
+    weight DECIMAL(5,2),
+    height DECIMAL(5,2),
+    
+    -- Health conditions
+    has_diabetes BOOLEAN DEFAULT FALSE,
+    has_hypertension BOOLEAN DEFAULT FALSE,
+    has_heart_disease BOOLEAN DEFAULT FALSE,
+    has_blood_disorders BOOLEAN DEFAULT FALSE,
+    has_infectious_disease BOOLEAN DEFAULT FALSE,
+    
+    -- Additional info
+    medications TEXT,
+    allergies TEXT,
+    last_checkup DATE,
+    notes TEXT,
+    
+    -- Timestamps
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (donor_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Donor health indexes
+CREATE INDEX idx_donor_health_donor ON donor_health(donor_id);

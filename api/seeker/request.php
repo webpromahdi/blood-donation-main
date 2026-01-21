@@ -138,24 +138,35 @@ try {
  */
 function getLifecycleStatus($requestStatus, $donationStatus)
 {
-    if ($requestStatus === 'pending')
-        return 'pending';
+    // Terminal states
     if ($requestStatus === 'rejected')
         return 'rejected';
-    if ($requestStatus === 'approved' && !$donationStatus)
-        return 'approved';
     if ($requestStatus === 'completed')
         return 'completed';
-
-    // In progress - use donation status
-    if ($donationStatus === 'accepted')
+    if ($requestStatus === 'cancelled')
+        return 'cancelled';
+    
+    // Pending admin approval
+    if ($requestStatus === 'pending')
+        return 'pending';
+    
+    // Approved but no donor yet
+    if ($requestStatus === 'approved' && !$donationStatus)
+        return 'approved';
+    
+    // In progress - derive from donation status
+    if ($requestStatus === 'in_progress' || ($requestStatus === 'approved' && $donationStatus)) {
+        if ($donationStatus === 'accepted')
+            return 'donor_assigned';
+        if ($donationStatus === 'on_the_way')
+            return 'on_the_way';
+        if ($donationStatus === 'reached')
+            return 'reached';
+        if ($donationStatus === 'completed')
+            return 'completed';
+        // Fallback for in_progress without specific donation status
         return 'donor_assigned';
-    if ($donationStatus === 'on_the_way')
-        return 'on_the_way';
-    if ($donationStatus === 'reached')
-        return 'reached';
-    if ($donationStatus === 'completed')
-        return 'completed';
+    }
 
     return $requestStatus;
 }

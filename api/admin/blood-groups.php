@@ -38,6 +38,15 @@ if (!$conn) {
 }
 
 try {
+    // Check if donor_health table exists
+    $healthTableExists = false;
+    try {
+        $checkTable = $conn->query("SHOW TABLES LIKE 'donor_health'");
+        $healthTableExists = $checkTable->rowCount() > 0;
+    } catch (Exception $e) {
+        $healthTableExists = false;
+    }
+
     // Get blood group counts
     $bloodTypes = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
     $counts = [];
@@ -53,18 +62,33 @@ try {
     $bloodTypeFilter = isset($_GET['blood_type']) ? $_GET['blood_type'] : null;
     
     if ($bloodTypeFilter && in_array($bloodTypeFilter, $bloodTypes)) {
-        $sql = "SELECT u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address,
-                       u.weight, u.status, u.created_at,
-                       COUNT(DISTINCT d.id) as total_donations,
-                       MAX(d.completed_at) as last_donation,
-                       dh.weight as health_weight, dh.height, dh.has_diabetes, dh.has_hypertension,
-                       dh.has_heart_disease
-                FROM users u
-                LEFT JOIN donations d ON u.id = d.donor_id AND d.status = 'completed'
-                LEFT JOIN donor_health dh ON u.id = dh.donor_id
-                WHERE u.role = 'donor' AND u.blood_group = ? AND u.status = 'approved'
-                GROUP BY u.id
-                ORDER BY total_donations DESC, u.created_at DESC";
+        if ($healthTableExists) {
+            $sql = "SELECT u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address,
+                           u.weight, u.status, u.created_at,
+                           COUNT(DISTINCT d.id) as total_donations,
+                           MAX(d.completed_at) as last_donation,
+                           MAX(dh.weight) as health_weight, MAX(dh.height) as height, 
+                           MAX(dh.has_diabetes) as has_diabetes, MAX(dh.has_hypertension) as has_hypertension,
+                           MAX(dh.has_heart_disease) as has_heart_disease
+                    FROM users u
+                    LEFT JOIN donations d ON u.id = d.donor_id AND d.status = 'completed'
+                    LEFT JOIN donor_health dh ON u.id = dh.donor_id
+                    WHERE u.role = 'donor' AND u.blood_group = ? AND u.status = 'approved'
+                    GROUP BY u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address, u.weight, u.status, u.created_at
+                    ORDER BY total_donations DESC, u.created_at DESC";
+        } else {
+            $sql = "SELECT u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address,
+                           u.weight, u.status, u.created_at,
+                           COUNT(DISTINCT d.id) as total_donations,
+                           MAX(d.completed_at) as last_donation,
+                           NULL as health_weight, NULL as height, 
+                           0 as has_diabetes, 0 as has_hypertension, 0 as has_heart_disease
+                    FROM users u
+                    LEFT JOIN donations d ON u.id = d.donor_id AND d.status = 'completed'
+                    WHERE u.role = 'donor' AND u.blood_group = ? AND u.status = 'approved'
+                    GROUP BY u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address, u.weight, u.status, u.created_at
+                    ORDER BY total_donations DESC, u.created_at DESC";
+        }
         
         $stmt = $conn->prepare($sql);
         $stmt->execute([$bloodTypeFilter]);
@@ -108,18 +132,33 @@ try {
         }
     } else {
         // Return all donors if no specific type requested
-        $sql = "SELECT u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address,
-                       u.weight, u.status, u.created_at,
-                       COUNT(DISTINCT d.id) as total_donations,
-                       MAX(d.completed_at) as last_donation,
-                       dh.weight as health_weight, dh.height, dh.has_diabetes, dh.has_hypertension,
-                       dh.has_heart_disease
-                FROM users u
-                LEFT JOIN donations d ON u.id = d.donor_id AND d.status = 'completed'
-                LEFT JOIN donor_health dh ON u.id = dh.donor_id
-                WHERE u.role = 'donor' AND u.status = 'approved'
-                GROUP BY u.id
-                ORDER BY u.blood_group, total_donations DESC";
+        if ($healthTableExists) {
+            $sql = "SELECT u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address,
+                           u.weight, u.status, u.created_at,
+                           COUNT(DISTINCT d.id) as total_donations,
+                           MAX(d.completed_at) as last_donation,
+                           MAX(dh.weight) as health_weight, MAX(dh.height) as height, 
+                           MAX(dh.has_diabetes) as has_diabetes, MAX(dh.has_hypertension) as has_hypertension,
+                           MAX(dh.has_heart_disease) as has_heart_disease
+                    FROM users u
+                    LEFT JOIN donations d ON u.id = d.donor_id AND d.status = 'completed'
+                    LEFT JOIN donor_health dh ON u.id = dh.donor_id
+                    WHERE u.role = 'donor' AND u.status = 'approved'
+                    GROUP BY u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address, u.weight, u.status, u.created_at
+                    ORDER BY u.blood_group, total_donations DESC";
+        } else {
+            $sql = "SELECT u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address,
+                           u.weight, u.status, u.created_at,
+                           COUNT(DISTINCT d.id) as total_donations,
+                           MAX(d.completed_at) as last_donation,
+                           NULL as health_weight, NULL as height, 
+                           0 as has_diabetes, 0 as has_hypertension, 0 as has_heart_disease
+                    FROM users u
+                    LEFT JOIN donations d ON u.id = d.donor_id AND d.status = 'completed'
+                    WHERE u.role = 'donor' AND u.status = 'approved'
+                    GROUP BY u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address, u.weight, u.status, u.created_at
+                    ORDER BY u.blood_group, total_donations DESC";
+        }
         
         $stmt = $conn->prepare($sql);
         $stmt->execute();
