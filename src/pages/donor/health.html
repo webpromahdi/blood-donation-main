@@ -551,6 +551,99 @@
             if (data.health.weight) {
               document.getElementById("weight").value = data.health.weight;
             }
+            if (data.health.height) {
+              document.getElementById("height").value = data.health.height;
+            }
+
+            // Populate blood pressure fields
+            const bpSystolicInputs = document.querySelectorAll(
+              'input[placeholder="e.g., 120"]',
+            );
+            const bpDiastolicInputs = document.querySelectorAll(
+              'input[placeholder="e.g., 80"]',
+            );
+            if (bpSystolicInputs[0] && data.health.blood_pressure_systolic) {
+              bpSystolicInputs[0].value = data.health.blood_pressure_systolic;
+            }
+            if (bpDiastolicInputs[0] && data.health.blood_pressure_diastolic) {
+              bpDiastolicInputs[0].value = data.health.blood_pressure_diastolic;
+            }
+
+            // Populate hemoglobin
+            const hemoglobinInput = document.querySelector(
+              'input[placeholder="e.g., 14.5 g/dL"]',
+            );
+            if (hemoglobinInput && data.health.hemoglobin) {
+              hemoglobinInput.value = data.health.hemoglobin;
+            }
+
+            // Populate medical checkup date
+            const checkupInput = document.querySelector('input[type="date"]');
+            if (checkupInput && data.health.last_medical_checkup) {
+              checkupInput.value = data.health.last_medical_checkup;
+            }
+
+            // Populate medical conditions (checkboxes)
+            const conditionMap = {
+              has_diabetes: "Diabetes",
+              has_hypertension: "Hypertension",
+              has_heart_disease: "Heart Disease",
+              has_asthma: "Asthma",
+              has_allergies: "Allergies",
+              has_recent_surgery: "Recent Surgery",
+              is_on_medication: "Currently on Medication",
+            };
+
+            Object.keys(conditionMap).forEach((key) => {
+              if (data.health[key]) {
+                const label = conditionMap[key];
+                const checkbox = Array.from(
+                  document.querySelectorAll(".space-y-3 label.cursor-pointer"),
+                ).find((el) => el.textContent.includes(label));
+                if (checkbox) {
+                  const toggle = checkbox
+                    .closest(".flex")
+                    .querySelector('input[type="checkbox"]');
+                  if (toggle) toggle.checked = true;
+                }
+              }
+            });
+
+            // Populate lifestyle dropdowns
+            const selects = document.querySelectorAll("select");
+            if (selects[0] && data.health.smoking_status) {
+              const smokingMap = {
+                no: "No",
+                occasionally: "Yes, occasionally",
+                regularly: "Yes, regularly",
+              };
+              selects[0].value = smokingMap[data.health.smoking_status] || "No";
+            }
+            if (selects[1] && data.health.alcohol_consumption) {
+              const alcoholMap = {
+                none: "None",
+                occasional: "Occasional",
+                regular: "Regular",
+              };
+              selects[1].value =
+                alcoholMap[data.health.alcohol_consumption] || "None";
+            }
+            if (selects[2] && data.health.exercise_frequency) {
+              const exerciseMap = {
+                rarely: "Rarely",
+                "1-2_weekly": "1-2 times per week",
+                "3-4_weekly": "3-4 times per week",
+                daily: "Daily",
+              };
+              selects[2].value =
+                exerciseMap[data.health.exercise_frequency] || "Rarely";
+            }
+
+            // Populate notes
+            const notesTextarea = document.querySelector("textarea");
+            if (notesTextarea && data.health.additional_notes) {
+              notesTextarea.value = data.health.additional_notes;
+            }
 
             // Update eligibility status
             updateEligibilityStatus(data.eligibility);
@@ -668,7 +761,7 @@
 
       document
         .getElementById("healthForm")
-        .addEventListener("submit", function (e) {
+        .addEventListener("submit", async function (e) {
           e.preventDefault();
           clearError("weight");
           clearError("height");
@@ -686,14 +779,130 @@
             return;
           }
 
-          const notification = document.createElement("div");
-          notification.className =
-            "fixed top-20 right-8 p-4 bg-green-50 border-l-4 border-green-600 rounded-lg shadow-lg z-50";
-          notification.innerHTML =
-            '<div class="flex items-center gap-3"><i data-lucide="check-circle" class="size-5 text-green-600"></i><p class="text-green-900">Health information saved successfully!</p></div>';
-          document.body.appendChild(notification);
-          lucide.createIcons();
-          setTimeout(() => notification.remove(), 3000);
+          // Collect all form data for API
+          const bpSystolicInputs = document.querySelectorAll(
+            'input[placeholder="e.g., 120"]',
+          );
+          const bpDiastolicInputs = document.querySelectorAll(
+            'input[placeholder="e.g., 80"]',
+          );
+          const hemoglobinInput = document.querySelector(
+            'input[placeholder="e.g., 14.5 g/dL"]',
+          );
+          const checkupInput = document.querySelector('input[type="date"]');
+          const notesTextarea = document.querySelector("textarea");
+          const selects = document.querySelectorAll("select");
+
+          // Get medical conditions
+          const conditionLabels = [
+            "Diabetes",
+            "Hypertension",
+            "Heart Disease",
+            "Asthma",
+            "Allergies",
+            "Recent Surgery",
+            "Currently on Medication",
+          ];
+          const conditions = {};
+          conditionLabels.forEach((label) => {
+            const checkbox = Array.from(
+              document.querySelectorAll(".space-y-3 label.cursor-pointer"),
+            ).find((el) => el.textContent.includes(label));
+            if (checkbox) {
+              const toggle = checkbox
+                .closest(".flex")
+                .querySelector('input[type="checkbox"]');
+              const key = label
+                .toLowerCase()
+                .replace(/ /g, "_")
+                .replace("currently_on_medication", "is_on_medication")
+                .replace("recent_surgery", "has_recent_surgery");
+              conditions["has_" + key.replace("has_", "")] = toggle
+                ? toggle.checked
+                : false;
+            }
+          });
+
+          // Map select values
+          const smokingMap = {
+            No: "no",
+            "Yes, occasionally": "occasionally",
+            "Yes, regularly": "regularly",
+          };
+          const alcoholMap = {
+            None: "none",
+            Occasional: "occasional",
+            Regular: "regular",
+          };
+          const exerciseMap = {
+            Rarely: "rarely",
+            "1-2 times per week": "1-2_weekly",
+            "3-4 times per week": "3-4_weekly",
+            Daily: "daily",
+          };
+
+          const healthData = {
+            weight: parseFloat(formData.weight),
+            height: parseFloat(formData.height),
+            blood_pressure_systolic: bpSystolicInputs[0]?.value
+              ? parseInt(bpSystolicInputs[0].value)
+              : null,
+            blood_pressure_diastolic: bpDiastolicInputs[0]?.value
+              ? parseInt(bpDiastolicInputs[0].value)
+              : null,
+            hemoglobin: hemoglobinInput?.value
+              ? parseFloat(hemoglobinInput.value)
+              : null,
+            last_medical_checkup: checkupInput?.value || null,
+            has_diabetes: conditions.has_diabetes || false,
+            has_hypertension: conditions.has_hypertension || false,
+            has_heart_disease: conditions.has_heart_disease || false,
+            has_asthma: conditions.has_asthma || false,
+            has_allergies: conditions.has_allergies || false,
+            has_recent_surgery: conditions.has_recent_surgery || false,
+            is_on_medication: conditions.has_is_on_medication || false,
+            smoking_status: smokingMap[selects[0]?.value] || "no",
+            alcohol_consumption: alcoholMap[selects[1]?.value] || "none",
+            exercise_frequency: exerciseMap[selects[2]?.value] || "rarely",
+            additional_notes: notesTextarea?.value || null,
+          };
+
+          try {
+            const response = await fetch("/api/donor/health/update.php", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify(healthData),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              const notification = document.createElement("div");
+              notification.className =
+                "fixed top-20 right-8 p-4 bg-green-50 border-l-4 border-green-600 rounded-lg shadow-lg z-50";
+              notification.innerHTML =
+                '<div class="flex items-center gap-3"><i data-lucide="check-circle" class="size-5 text-green-600"></i><p class="text-green-900">Health information saved successfully!</p></div>';
+              document.body.appendChild(notification);
+              lucide.createIcons();
+              setTimeout(() => notification.remove(), 3000);
+
+              // Reload data to update eligibility status
+              loadHealthData();
+            } else {
+              throw new Error(data.message || "Failed to save");
+            }
+          } catch (error) {
+            console.error("Save error:", error);
+            const notification = document.createElement("div");
+            notification.className =
+              "fixed top-20 right-8 p-4 bg-red-50 border-l-4 border-red-600 rounded-lg shadow-lg z-50";
+            notification.innerHTML =
+              '<div class="flex items-center gap-3"><i data-lucide="x-circle" class="size-5 text-red-600"></i><p class="text-red-900">Failed to save health information. Please try again.</p></div>';
+            document.body.appendChild(notification);
+            lucide.createIcons();
+            setTimeout(() => notification.remove(), 3000);
+          }
         });
     </script>
   </body>

@@ -881,13 +881,15 @@
             const response = await fetch("/api/donor/requests.php");
             const data = await response.json();
             if (data.success) {
-              // Map to frontend format
+              // Map to frontend format with seeker contact info
               emergencyAlerts = data.emergency_requests.map((req) => ({
                 id: req.id,
                 dbId: req.id,
                 patientName: req.patient_name,
-                patientAge: 0,
-                contactPhone: "",
+                patientAge: req.patient_age || req.requester_age || null,
+                contactPhone: req.contact_phone || req.requester_phone || "",
+                contactEmail: req.contact_email || req.requester_email || "",
+                requesterName: req.requester_name || "",
                 bloodType: req.blood_type,
                 hospital: req.hospital_name,
                 city: req.city,
@@ -904,8 +906,10 @@
                 id: req.id,
                 dbId: req.id,
                 patientName: req.patient_name,
-                patientAge: 0,
-                contactPhone: "",
+                patientAge: req.patient_age || req.requester_age || null,
+                contactPhone: req.contact_phone || req.requester_phone || "",
+                contactEmail: req.contact_email || req.requester_email || "",
+                requesterName: req.requester_name || "",
                 bloodType: req.blood_type,
                 hospital: req.hospital_name,
                 city: req.city,

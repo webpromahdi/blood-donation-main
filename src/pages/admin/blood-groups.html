@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -316,12 +316,54 @@
 
       // Donors data - loaded from API
       let donors = [];
+      let bloodCounts = {};
+
+      // Fetch blood group data from API
+      async function fetchBloodGroupData(bloodType = null) {
+        try {
+          const url = bloodType
+            ? `/api/admin/blood-groups.php?blood_type=${encodeURIComponent(bloodType)}`
+            : "/api/admin/blood-groups.php";
+
+          const response = await fetch(url, { credentials: "include" });
+          const data = await response.json();
+
+          if (data.success) {
+            donors = data.donors;
+            bloodCounts = data.counts;
+
+            // Update count displays
+            Object.keys(bloodCounts).forEach((type) => {
+              const countEl = document.getElementById(`count-${type}`);
+              if (countEl) {
+                countEl.textContent = bloodCounts[type];
+              }
+            });
+
+            return true;
+          } else {
+            console.error("Failed to fetch blood group data:", data.message);
+            return false;
+          }
+        } catch (error) {
+          console.error("Error fetching blood group data:", error);
+          return false;
+        }
+      }
 
       // Expose filter function to window for onclick attributes
-      window.filterDonors = function (group) {
+      window.filterDonors = async function (group) {
         const container = document.getElementById("donorsListContainer");
         const title = document.getElementById("listTitle");
         const subtitle = document.getElementById("listSubtitle");
+
+        // Show loading state
+        container.innerHTML = `
+          <div class="text-center py-12">
+            <div class="animate-spin size-8 border-4 border-red-600 border-t-transparent rounded-full mx-auto mb-3"></div>
+            <p class="text-gray-500">Loading donors...</p>
+          </div>
+        `;
 
         // Update selection styling
         document.querySelectorAll('[id^="card-"]').forEach((card) => {
@@ -335,7 +377,10 @@
           selectedCard.classList.add("bg-red-50", "ring-2", "ring-red-500");
         }
 
-        // Filter data
+        // Fetch data for selected blood group
+        await fetchBloodGroupData(group);
+
+        // Filter data (already filtered by API, but filter locally for display)
         const filteredDonors = donors.filter((d) => d.group === group);
 
         // Update title
@@ -363,14 +408,16 @@
                   <div class="flex items-center gap-2 mb-1">
                     <h3 class="font-semibold text-gray-900">${donor.name}</h3>
                     <span class="px-2 py-0.5 text-xs font-medium ${
-                      donor.status === "Active"
+                      donor.status === "Available"
                         ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-600"
+                        : donor.status === "Busy"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-gray-100 text-gray-600"
                     } rounded-full">${donor.status}</span>
                   </div>
                   <div class="flex items-center gap-4 text-sm text-gray-500">
                     <span class="flex items-center gap-1"><i data-lucide="map-pin" class="size-3"></i> ${
-                      donor.location
+                      donor.location || "Unknown"
                     }</span>
                     <span class="flex items-center gap-1"><i data-lucide="droplet" class="size-3"></i> ${
                       donor.donations
@@ -389,7 +436,7 @@
                 </button>
               </div>
             </div>
-          `
+          `,
             )
             .join("");
         }
@@ -404,16 +451,14 @@
 
         // Populate modal with donor data
         document.getElementById("modalDonorId").textContent = `DON${String(
-          donor.id
+          donor.id,
         ).padStart(3, "0")}`;
         document.getElementById("modalDonorName").textContent = donor.name;
-        document.getElementById(
-          "modalDonorAge"
-        ).textContent = `${donor.age} years`;
+        document.getElementById("modalDonorAge").textContent =
+          `${donor.age} years`;
         document.getElementById("modalDonorGender").textContent = donor.gender;
-        document.getElementById(
-          "modalDonorWeight"
-        ).textContent = `${donor.weight} kg`;
+        document.getElementById("modalDonorWeight").textContent =
+          `${donor.weight} kg`;
         document.getElementById("modalDonorEmail").textContent = donor.email;
         document.getElementById("modalDonorPhone").textContent = donor.phone;
         document.getElementById("modalDonorAddress").textContent =
@@ -497,9 +542,12 @@
         }
       });
 
-      // Initial render - show O+ by default or all
-      document.addEventListener("DOMContentLoaded", () => {
-        window.filterDonors("O+"); // Default selection
+      // Initial render - fetch all data then show O+ by default
+      document.addEventListener("DOMContentLoaded", async () => {
+        // First fetch all blood group counts
+        await fetchBloodGroupData();
+        // Then show O+ donors by default
+        window.filterDonors("O+");
       });
     </script>
 
@@ -753,7 +801,7 @@
                 Close
               </button>
               <button
-                onclick="window.location.href='/src/pages/admin/chat.html'"
+                onclick="window.location.href = '/src/pages/admin/chat.html'"
                 class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
               >
                 <i data-lucide="message-square" class="size-4"></i>

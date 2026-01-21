@@ -64,10 +64,16 @@ try {
         exit;
     }
 
+    // Only allow accepting 'approved' requests (not pending, not already in_progress by another donor)
     if ($request['status'] !== 'approved') {
         $conn->rollBack();
+        $statusMessage = $request['status'] === 'pending' 
+            ? 'Request is still pending admin approval' 
+            : ($request['status'] === 'in_progress' 
+                ? 'Request has already been accepted by another donor' 
+                : 'Request is not available');
         http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Request is not available. Status: ' . $request['status']]);
+        echo json_encode(['success' => false, 'message' => $statusMessage . '. Status: ' . $request['status']]);
         exit;
     }
 

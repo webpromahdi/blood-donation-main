@@ -53,6 +53,11 @@ try {
         exit;
     }
 
+    // Get detailed health info from donor_health table
+    $stmt = $conn->prepare("SELECT * FROM donor_health WHERE donor_id = ?");
+    $stmt->execute([$donorId]);
+    $healthInfo = $stmt->fetch();
+
     // Get donation stats for eligibility check
     $stmt = $conn->prepare("SELECT completed_at FROM donations WHERE donor_id = ? AND status = 'completed' ORDER BY completed_at DESC LIMIT 1");
     $stmt->execute([$donorId]);
@@ -98,14 +103,34 @@ try {
         }
     }
 
+    // Use weight from health info if available, otherwise from user profile
+    $weight = $healthInfo && $healthInfo['weight'] ? $healthInfo['weight'] : $donor['weight'];
+    $height = $healthInfo ? $healthInfo['height'] : null;
+
     echo json_encode([
         'success' => true,
         'health' => [
             'blood_group' => $donor['blood_group'],
             'age' => $donor['age'],
-            'weight' => $donor['weight'],
+            'weight' => $weight,
+            'height' => $height,
             'city' => $donor['city'],
-            'address' => $donor['address']
+            'address' => $donor['address'],
+            'blood_pressure_systolic' => $healthInfo ? $healthInfo['blood_pressure_systolic'] : null,
+            'blood_pressure_diastolic' => $healthInfo ? $healthInfo['blood_pressure_diastolic'] : null,
+            'hemoglobin' => $healthInfo ? $healthInfo['hemoglobin'] : null,
+            'has_diabetes' => $healthInfo ? (bool)$healthInfo['has_diabetes'] : false,
+            'has_hypertension' => $healthInfo ? (bool)$healthInfo['has_hypertension'] : false,
+            'has_heart_disease' => $healthInfo ? (bool)$healthInfo['has_heart_disease'] : false,
+            'has_asthma' => $healthInfo ? (bool)$healthInfo['has_asthma'] : false,
+            'has_allergies' => $healthInfo ? (bool)$healthInfo['has_allergies'] : false,
+            'has_recent_surgery' => $healthInfo ? (bool)$healthInfo['has_recent_surgery'] : false,
+            'is_on_medication' => $healthInfo ? (bool)$healthInfo['is_on_medication'] : false,
+            'smoking_status' => $healthInfo ? $healthInfo['smoking_status'] : 'no',
+            'alcohol_consumption' => $healthInfo ? $healthInfo['alcohol_consumption'] : 'none',
+            'exercise_frequency' => $healthInfo ? $healthInfo['exercise_frequency'] : 'rarely',
+            'last_medical_checkup' => $healthInfo ? $healthInfo['last_medical_checkup'] : null,
+            'additional_notes' => $healthInfo ? $healthInfo['additional_notes'] : null
         ],
         'eligibility' => [
             'is_eligible' => $isEligible,

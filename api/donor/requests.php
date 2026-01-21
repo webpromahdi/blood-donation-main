@@ -63,6 +63,9 @@ try {
 
     $sql = "SELECT r.*, 
                    u.name as requester_name,
+                   u.phone as requester_phone,
+                   u.email as requester_email,
+                   u.age as requester_age,
                    (SELECT COUNT(*) FROM donations d WHERE d.request_id = r.id AND d.status != 'cancelled') as donor_responses
             FROM blood_requests r
             LEFT JOIN users u ON r.requester_id = u.id
@@ -96,6 +99,7 @@ try {
             'id' => $req['id'],
             'request_code' => $req['request_code'],
             'patient_name' => $req['patient_name'],
+            'patient_age' => $req['patient_age'],
             'blood_type' => $req['blood_type'],
             'quantity' => $req['quantity'],
             'hospital_name' => $req['hospital_name'],
@@ -104,7 +108,14 @@ try {
             'urgency' => $req['urgency'],
             'medical_reason' => $req['medical_reason'],
             'created_at' => $req['created_at'],
-            'donor_responses' => (int) $req['donor_responses']
+            'donor_responses' => (int) $req['donor_responses'],
+            // Include seeker contact info for donor view
+            'contact_phone' => $req['contact_phone'],
+            'contact_email' => $req['contact_email'],
+            'requester_name' => $req['requester_name'],
+            'requester_phone' => $req['requester_phone'],
+            'requester_email' => $req['requester_email'],
+            'requester_age' => $req['requester_age']
         ];
     }, $requests);
 
