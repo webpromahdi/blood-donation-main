@@ -395,7 +395,12 @@
                   <i data-lucide="check-circle" class="size-3 inline mr-1"></i>Unlocked
                 </span>
               </div>
-              <button class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium">
+              <button 
+                type="button"
+                data-action="download-achievement"
+                data-tier-name="${tier.name}"
+                data-tier-required="${tier.required}"
+                class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium">
                 <i data-lucide="download" class="size-4 inline mr-2"></i>Download
               </button>
             </div>
@@ -434,12 +439,24 @@
         const container = document.getElementById("donationCertificates");
         const emptyState = document.getElementById("emptyState");
 
-        // Filter only completed donations with certificates
+        // Check if there are any donations at all
+        if (!donations || donations.length === 0) {
+          container.classList.add("hidden");
+          emptyState.classList.remove("hidden");
+          return;
+        }
+
+        // Filter completed donations with certificates
         const completedDonations = donations.filter(
           (d) => d.status === "completed" && d.certificate,
         );
 
-        if (completedDonations.length === 0) {
+        // Filter in-progress donations (not completed, not cancelled)
+        const pendingDonations = donations.filter(
+          (d) => d.status !== "completed" && d.status !== "cancelled",
+        );
+
+        if (completedDonations.length === 0 && pendingDonations.length === 0) {
           container.classList.add("hidden");
           emptyState.classList.remove("hidden");
           return;
@@ -448,43 +465,352 @@
         container.classList.remove("hidden");
         emptyState.classList.add("hidden");
 
-        container.innerHTML = completedDonations
-          .map((donation) => {
-            const date = donation.certificate.date
-              ? new Date(donation.certificate.date).toLocaleDateString(
-                  "en-US",
-                  {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  },
-                )
-              : "N/A";
+        let html = "";
 
-            return `
-          <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+        // Render completed donations with download buttons
+        completedDonations.forEach((donation) => {
+          const date = donation.certificate.date
+            ? new Date(donation.certificate.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })
+            : "N/A";
+
+          html += `
+          <div class="flex items-center justify-between p-4 border border-green-200 bg-green-50/30 rounded-lg hover:shadow-md transition-shadow">
             <div class="flex items-center gap-4">
-              <div class="bg-red-100 p-3 rounded-lg">
-                <i data-lucide="file-text" class="size-6 text-red-600"></i>
+              <div class="bg-green-100 p-3 rounded-lg">
+                <i data-lucide="file-check" class="size-6 text-green-600"></i>
               </div>
               <div>
-                <h4 class="font-medium text-gray-900">Donation Certificate - ${
-                  donation.donation_id
-                }</h4>
-                <p class="text-sm text-gray-600">${
-                  donation.hospital || "Hospital"
-                } • ${date}</p>
+                <h4 class="font-medium text-gray-900">Donation Certificate - ${donation.donation_id}</h4>
+                <p class="text-sm text-gray-600">${donation.hospital || "Hospital"} • ${date}</p>
+                <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 rounded-full mt-1">
+                  <i data-lucide="check-circle" class="size-3 mr-1"></i>Completed
+                </span>
               </div>
             </div>
-            <button class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium">
-              <i data-lucide="download" class="size-4 inline mr-2"></i>Download
+            <button 
+              type="button"
+              data-donation-id="${donation.id}"
+              data-action="download-certificate"
+              class="download-cert-btn px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium flex items-center">
+              <i data-lucide="download" class="size-4 mr-2"></i>Download
             </button>
           </div>
         `;
-          })
-          .join("");
+        });
 
+        // Render pending donations with disabled buttons
+        pendingDonations.forEach((donation) => {
+          const date = donation.date
+            ? new Date(donation.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })
+            : "N/A";
+
+          const statusLabel = getStatusLabel(donation.status);
+
+          html += `
+          <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg opacity-75">
+            <div class="flex items-center gap-4">
+              <div class="bg-gray-100 p-3 rounded-lg">
+                <i data-lucide="file-text" class="size-6 text-gray-400"></i>
+              </div>
+              <div>
+                <h4 class="font-medium text-gray-700">Donation - ${donation.donation_id}</h4>
+                <p class="text-sm text-gray-500">${donation.hospital || "Hospital"} • ${date}</p>
+                <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium ${statusLabel.classes} rounded-full mt-1">
+                  <i data-lucide="${statusLabel.icon}" class="size-3 mr-1"></i>${statusLabel.text}
+                </span>
+              </div>
+            </div>
+            <button 
+              disabled
+              class="px-4 py-2 border border-gray-300 text-gray-400 rounded-lg font-medium cursor-not-allowed flex items-center"
+              title="Certificate available after donation is completed">
+              <i data-lucide="lock" class="size-4 mr-2"></i>Locked
+            </button>
+          </div>
+        `;
+        });
+
+        container.innerHTML = html;
         if (window.lucide) window.lucide.createIcons();
+      }
+
+      // Helper function to get status label styling
+      function getStatusLabel(status) {
+        const statusMap = {
+          accepted: {
+            text: "Accepted",
+            icon: "clock",
+            classes: "bg-blue-100 text-blue-700",
+          },
+          on_the_way: {
+            text: "On the Way",
+            icon: "navigation",
+            classes: "bg-yellow-100 text-yellow-700",
+          },
+          reached: {
+            text: "At Hospital",
+            icon: "map-pin",
+            classes: "bg-purple-100 text-purple-700",
+          },
+        };
+        return (
+          statusMap[status] || {
+            text: "Pending",
+            icon: "clock",
+            classes: "bg-gray-100 text-gray-600",
+          }
+        );
+      }
+
+      // Download certificate for a specific donation
+      async function downloadCertificate(donationId) {
+        console.log("downloadCertificate called with ID:", donationId);
+
+        // Clear any previous error messages
+        hideDownloadError();
+
+        // Show loading state on button
+        const downloadBtn = document.querySelector(
+          `button[data-donation-id="${donationId}"]`,
+        );
+        const originalBtnHtml = downloadBtn ? downloadBtn.innerHTML : "";
+        if (downloadBtn) {
+          downloadBtn.disabled = true;
+          downloadBtn.innerHTML =
+            '<i data-lucide="loader" class="size-4 inline mr-2 animate-spin"></i>Downloading...';
+          if (window.lucide) window.lucide.createIcons();
+        }
+
+        try {
+          // Build the download URL
+          const downloadUrl = `/api/donor/certificates/download.php?donation_id=${donationId}`;
+
+          // Use fetch to get the file with credentials
+          const response = await fetch(downloadUrl, {
+            method: "GET",
+            credentials: "include",
+          });
+
+          // Check if response is an error (JSON response)
+          const contentType = response.headers.get("content-type") || "";
+
+          if (!response.ok) {
+            // Try to parse error message from JSON response
+            if (contentType.includes("application/json")) {
+              const errorData = await response.json();
+              showDownloadError(
+                errorData.message || "Failed to download certificate",
+              );
+            } else {
+              showDownloadError(
+                `Download failed (Error ${response.status}). Please try again.`,
+              );
+            }
+            return;
+          }
+
+          // If we got JSON on a 200, it's an unexpected error
+          if (contentType.includes("application/json")) {
+            const errorData = await response.json();
+            showDownloadError(errorData.message || "Unexpected error occurred");
+            return;
+          }
+
+          // Get filename from Content-Disposition header or use default
+          const contentDisposition = response.headers.get(
+            "content-disposition",
+          );
+          let filename = `certificate-DON${String(donationId).padStart(3, "0")}.html`;
+          if (contentDisposition) {
+            const filenameMatch =
+              contentDisposition.match(/filename="?([^"]+)"?/);
+            if (filenameMatch && filenameMatch[1]) {
+              filename = filenameMatch[1];
+            }
+          }
+
+          // Convert response to blob and trigger download
+          const blob = await response.blob();
+
+          if (blob.size === 0) {
+            showDownloadError("Certificate file is empty. Please try again.");
+            return;
+          }
+
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.style.display = "none";
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+
+          // Cleanup
+          setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          }, 100);
+        } catch (error) {
+          showDownloadError(
+            "Unable to download certificate. Please check your connection.",
+          );
+        } finally {
+          // Restore button state
+          if (downloadBtn) {
+            downloadBtn.disabled = false;
+            downloadBtn.innerHTML = originalBtnHtml;
+            if (window.lucide) window.lucide.createIcons();
+          }
+        }
+      }
+
+      // Show download error message inline
+      function showDownloadError(message) {
+        // Remove any existing error
+        hideDownloadError();
+
+        const container = document.getElementById("donationCertificates");
+        const errorDiv = document.createElement("div");
+        errorDiv.id = "downloadError";
+        errorDiv.className =
+          "p-4 bg-red-50 border border-red-200 rounded-lg mb-4";
+        errorDiv.innerHTML = `
+          <div class="flex items-center gap-3">
+            <i data-lucide="alert-circle" class="size-5 text-red-600"></i>
+            <p class="text-red-700">${message}</p>
+            <button onclick="hideDownloadError()" class="ml-auto text-red-600 hover:text-red-800">
+              <i data-lucide="x" class="size-4"></i>
+            </button>
+          </div>
+        `;
+        container.insertBefore(errorDiv, container.firstChild);
+        if (window.lucide) window.lucide.createIcons();
+      }
+
+      // Hide download error message
+      function hideDownloadError() {
+        const existingError = document.getElementById("downloadError");
+        if (existingError) {
+          existingError.remove();
+        }
+      }
+
+      // Expose functions to window IMMEDIATELY for inline onclick handlers
+      // Must be done before DOM is manipulated with dynamic HTML
+      window.downloadCertificate = downloadCertificate;
+      window.hideDownloadError = hideDownloadError;
+
+      // Event delegation for certificate download buttons
+      document.addEventListener("click", function (e) {
+        // Handle donation certificate download
+        const downloadBtn = e.target.closest(
+          "[data-action='download-certificate']",
+        );
+        if (downloadBtn) {
+          e.preventDefault();
+          const donationId = downloadBtn.getAttribute("data-donation-id");
+          if (donationId) {
+            downloadCertificate(parseInt(donationId, 10));
+          }
+        }
+
+        // Handle class-based selector as fallback
+        const downloadBtnByClass = e.target.closest(".download-cert-btn");
+        if (downloadBtnByClass && !downloadBtn) {
+          const donationId =
+            downloadBtnByClass.getAttribute("data-donation-id");
+          if (donationId) {
+            downloadCertificate(parseInt(donationId, 10));
+          }
+        }
+
+        // Handle achievement certificate download
+        const achievementBtn = e.target.closest(
+          "[data-action='download-achievement']",
+        );
+        if (achievementBtn) {
+          e.preventDefault();
+          const tierName = achievementBtn.getAttribute("data-tier-name");
+          const tierRequired =
+            achievementBtn.getAttribute("data-tier-required");
+          downloadAchievementCertificate(
+            tierName,
+            tierRequired,
+            achievementBtn,
+          );
+        }
+      });
+
+      // Download achievement/milestone certificate
+      async function downloadAchievementCertificate(
+        tierName,
+        tierRequired,
+        btn,
+      ) {
+        const originalBtnHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML =
+          '<i data-lucide="loader" class="size-4 inline mr-2 animate-spin"></i>Downloading...';
+        if (window.lucide) window.lucide.createIcons();
+
+        try {
+          const downloadUrl = `/api/donor/certificates/achievement.php?tier=${encodeURIComponent(tierName)}&required=${tierRequired}`;
+
+          const response = await fetch(downloadUrl, {
+            method: "GET",
+            credentials: "include",
+          });
+
+          const contentType = response.headers.get("content-type") || "";
+
+          if (!response.ok) {
+            if (contentType.includes("application/json")) {
+              const errorData = await response.json();
+              showDownloadError(
+                errorData.message || "Failed to download certificate",
+              );
+            } else {
+              showDownloadError(`Download failed (Error ${response.status})`);
+            }
+            return;
+          }
+
+          if (contentType.includes("application/json")) {
+            const errorData = await response.json();
+            showDownloadError(errorData.message || "Unexpected error");
+            return;
+          }
+
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.style.display = "none";
+          a.href = url;
+          a.download = `certificate-${tierName.toLowerCase()}-milestone.html`;
+          document.body.appendChild(a);
+          a.click();
+
+          setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          }, 100);
+        } catch (error) {
+          showDownloadError(
+            "Unable to download certificate. Please try again.",
+          );
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = originalBtnHtml;
+          if (window.lucide) window.lucide.createIcons();
+        }
       }
 
       function showError(message) {

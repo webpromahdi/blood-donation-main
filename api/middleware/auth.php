@@ -62,6 +62,10 @@ function requireAuth($allowedRoles = null)
     $user = checkAuth($allowedRoles);
 
     if (!$user) {
+        // Clean output buffer if active to prevent headers already sent error
+        if (ob_get_level() > 0) {
+            ob_end_clean();
+        }
         header('Content-Type: application/json');
         http_response_code(401);
         echo json_encode([
@@ -144,6 +148,10 @@ function requireApprovedStatus($userId, $role)
     $status = getUserStatus($userId);
     
     if ($status === 'rejected') {
+        // Clean output buffer if active to prevent headers already sent error
+        if (ob_get_level() > 0) {
+            ob_end_clean();
+        }
         header('Content-Type: application/json');
         http_response_code(403);
         echo json_encode([
@@ -156,6 +164,10 @@ function requireApprovedStatus($userId, $role)
     }
     
     if ($status !== 'approved') {
+        // Clean output buffer if active to prevent headers already sent error
+        if (ob_get_level() > 0) {
+            ob_end_clean();
+        }
         header('Content-Type: application/json');
         http_response_code(403);
         echo json_encode([
