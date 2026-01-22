@@ -43,7 +43,7 @@ try {
     // Fetch all hospital fields for admin view
     $sql = "SELECT u.id as user_id, h.id as hospital_id, u.name, u.email, u.phone, 
                    h.address, h.registration_number, h.hospital_type, h.website, 
-                   h.contact_person, h.city, h.state, h.pincode, h.operating_hours,
+                   h.contact_person, h.city, h.state, h.pincode, h.license_expiry_date,
                    h.has_blood_bank, u.status, u.created_at, h.total_requests,
                    SUM(CASE WHEN r.status = 'completed' THEN 1 ELSE 0 END) as completed_requests,
                    SUM(CASE WHEN r.status = 'pending' THEN 1 ELSE 0 END) as pending_requests
@@ -91,7 +91,7 @@ try {
             'website' => $hospital['website'],
             'contact_person' => $hospital['contact_person'],
             'contact_phone' => $hospital['phone'], // Use main phone as contact phone
-            'operating_hours' => $hospital['operating_hours'],
+            'license_expiry_date' => $hospital['license_expiry_date'],
             'has_blood_bank' => (bool) ($hospital['has_blood_bank'] ?? false),
             'emergency_services' => true, // Default assumption
             'status' => $approvalStatus,

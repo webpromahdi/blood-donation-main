@@ -152,11 +152,11 @@ try {
         $contactPerson = isset($input['contactPerson']) ? trim($input['contactPerson']) : null;
         $hospitalType = isset($input['hospitalType']) && in_array($input['hospitalType'], ['government', 'private', 'charity']) 
             ? $input['hospitalType'] : 'private';
-        $operatingHours = isset($input['operatingHours']) ? trim($input['operatingHours']) : null;
+        $licenseExpiryDate = isset($input['licenseExpiry']) ? trim($input['licenseExpiry']) : null;
         $hasBloodBank = isset($input['hasBloodBank']) ? (bool)$input['hasBloodBank'] : false;
 
-        $stmt = $conn->prepare('INSERT INTO hospitals (user_id, registration_number, hospital_type, address, city, state, pincode, website, contact_person, operating_hours, has_blood_bank) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        $stmt->execute([$userId, $registrationNumber, $hospitalType, $hospitalAddress, $city, $state, $pincode, $website, $contactPerson, $operatingHours, $hasBloodBank]);
+        $stmt = $conn->prepare('INSERT INTO hospitals (user_id, registration_number, hospital_type, address, city, state, pincode, website, contact_person, license_expiry_date, has_blood_bank) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt->execute([$userId, $registrationNumber, $hospitalType, $hospitalAddress, $city, $state, $pincode, $website, $contactPerson, $licenseExpiryDate, $hasBloodBank]);
         
     } elseif ($role === 'seeker') {
         $city = isset($input['city']) ? trim($input['city']) : null;

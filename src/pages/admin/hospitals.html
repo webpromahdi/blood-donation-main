@@ -515,36 +515,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Capacity Information -->
-            <div class="bg-red-50 rounded-xl p-4">
-              <h4
-                class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
-              >
-                <i data-lucide="activity" class="size-4 text-red-600"></i>
-                Capacity
-              </h4>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <p class="text-xs text-gray-500 mb-1">Total Beds</p>
-                  <p
-                    id="modalHospitalBeds"
-                    class="text-sm font-medium text-gray-900"
-                  >
-                    --
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 mb-1">Blood Bank Capacity</p>
-                  <p
-                    id="modalBloodBankCapacity"
-                    class="text-sm font-medium text-gray-900"
-                  >
-                    --
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
 
           <!-- Modal Footer -->
@@ -743,12 +713,15 @@
             zipCode: h.zip_code || "N/A",
             licenseNumber: h.license_number || h.registration_number || "N/A",
             registrationNumber: h.registration_number || "N/A",
-            licenseExpiry: h.license_expiry || "N/A",
-            bedCapacity: h.bed_capacity || 0,
-            bloodBankCapacity: h.has_blood_bank ? "Available" : "N/A",
+            licenseExpiry: h.license_expiry_date
+              ? new Date(h.license_expiry_date).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })
+              : "N/A",
             hasBloodBank: h.has_blood_bank || false,
             emergencyServices: h.emergency_services || false,
-            operatingHours: h.operating_hours || "N/A",
             contactPerson: h.contact_person || "N/A",
             contactPersonPhone: h.contact_phone || h.phone || "N/A",
             registeredAt: h.registered_at
@@ -954,10 +927,6 @@
             hospital.licenseNumber;
           document.getElementById("modalHospitalLicenseExpiry").textContent =
             hospital.licenseExpiry;
-          document.getElementById("modalHospitalBeds").textContent =
-            hospital.bedCapacity + " beds";
-          document.getElementById("modalBloodBankCapacity").textContent =
-            hospital.bloodBankCapacity;
           document.getElementById("modalHospitalContactPerson").textContent =
             hospital.contactPerson;
           document.getElementById("modalHospitalContactPhone").textContent =

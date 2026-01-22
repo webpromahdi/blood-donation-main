@@ -166,7 +166,7 @@ CREATE TABLE hospitals (
     pincode VARCHAR(10),
     website VARCHAR(255),
     contact_person VARCHAR(255),
-    operating_hours VARCHAR(100),
+    license_expiry_date DATE,
     has_blood_bank BOOLEAN DEFAULT FALSE,
     total_requests INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

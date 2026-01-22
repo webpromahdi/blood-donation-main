@@ -93,7 +93,10 @@
         <form id="registerForm" class="space-y-5">
           <!-- Name Field (hidden for admin) -->
           <div id="nameFieldContainer">
-            <label for="name" class="text-gray-700 mb-2 block font-medium"
+            <label
+              for="name"
+              id="nameLabel"
+              class="text-gray-700 mb-2 block font-medium"
               >Full Name</label
             >
             <div class="relative">
@@ -545,39 +548,30 @@
               ></p>
             </div>
 
-            <!-- Operating Hours -->
+            <!-- License Expiry -->
             <div>
               <label
-                for="operatingHours"
+                for="licenseExpiry"
                 class="text-gray-700 mb-2 block font-medium"
-                >Operating Hours</label
+                >License Expiry Date <span class="text-red-500">*</span></label
               >
               <div class="relative">
                 <i
-                  data-lucide="clock"
+                  data-lucide="calendar"
                   class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
                 ></i>
                 <input
-                  id="operatingHours"
-                  name="operatingHours"
-                  type="text"
-                  placeholder="e.g., 24/7 or 8AM - 8PM"
+                  id="licenseExpiry"
+                  name="licenseExpiry"
+                  type="date"
+                  required
                   class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                 />
               </div>
-            </div>
-
-            <!-- Has Blood Bank -->
-            <div class="flex items-center gap-3">
-              <input
-                type="checkbox"
-                id="hasBloodBank"
-                name="hasBloodBank"
-                class="w-5 h-5 rounded border-gray-300 text-red-600 focus:ring-red-500"
-              />
-              <label for="hasBloodBank" class="text-gray-700 font-medium"
-                >Hospital has a Blood Bank</label
-              >
+              <p
+                class="text-red-500 text-sm mt-1 hidden"
+                id="licenseExpiryError"
+              ></p>
             </div>
           </div>
 
@@ -691,10 +685,20 @@
         // Show/hide name field (hidden for admin only)
         const nameFieldContainer =
           document.getElementById("nameFieldContainer");
+        const nameLabel = document.getElementById("nameLabel");
+        const nameInput = document.getElementById("name");
         if (role === "admin") {
           nameFieldContainer.classList.add("hidden");
         } else {
           nameFieldContainer.classList.remove("hidden");
+          // Update label and placeholder based on role
+          if (role === "hospital") {
+            nameLabel.textContent = "Hospital Name";
+            nameInput.placeholder = "Enter hospital name";
+          } else {
+            nameLabel.textContent = "Full Name";
+            nameInput.placeholder = "Enter your full name";
+          }
         }
 
         if (role === "donor") {
@@ -779,6 +783,7 @@
           "city",
           "hospitalCity",
           "contactPerson",
+          "licenseExpiry",
           "terms",
           "name",
         ];
@@ -903,6 +908,9 @@
           const contactPerson = document
             .getElementById("contactPerson")
             .value.trim();
+          const licenseExpiry = document
+            .getElementById("licenseExpiry")
+            .value.trim();
 
           if (!registrationNumber) {
             showError("registrationNumber", "Registration number is required");
@@ -918,6 +926,10 @@
           }
           if (!contactPerson) {
             showError("contactPerson", "Contact person is required");
+            isValid = false;
+          }
+          if (!licenseExpiry) {
+            showError("licenseExpiry", "License expiry date is required");
             isValid = false;
           }
         }
@@ -974,12 +986,8 @@
               formData.website = document.getElementById("website").value;
               formData.contactPerson =
                 document.getElementById("contactPerson").value;
-              formData.operatingHours =
-                document.getElementById("operatingHours").value;
-              formData.hasBloodBank = document.getElementById("hasBloodBank")
-                .checked
-                ? 1
-                : 0;
+              formData.licenseExpiry =
+                document.getElementById("licenseExpiry").value;
             }
 
             // Get submit button and show loading state
