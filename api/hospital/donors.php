@@ -128,7 +128,7 @@ try {
 
     // Format response
     $formattedDonors = array_map(function ($donor) {
-        // Calculate availability (56 days since last donation)
+        // Calculate availability (90 days since last donation)
         $isAvailable = true;
         if ($donor['next_eligible_date']) {
             $nextDate = new DateTime($donor['next_eligible_date']);
@@ -136,7 +136,7 @@ try {
         } elseif ($donor['last_donation_date']) {
             $lastDate = new DateTime($donor['last_donation_date']);
             $nextDate = clone $lastDate;
-            $nextDate->modify('+56 days');
+            $nextDate->modify('+90 days');
             $isAvailable = $nextDate <= new DateTime();
         }
 

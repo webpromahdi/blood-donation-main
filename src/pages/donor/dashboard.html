@@ -798,42 +798,74 @@
             const response = await fetch("/api/donor/profile.php");
             const data = await response.json();
             if (data.success) {
-              // Update stats cards
-              const statsCards = document.querySelectorAll(
-                ".grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 > div",
-              );
-              if (statsCards[0])
-                statsCards[0].querySelector("h2").textContent =
-                  data.stats.total_donations;
-              if (statsCards[1])
-                statsCards[1].querySelector("h2").textContent =
-                  data.stats.lives_saved;
-              if (statsCards[0]) {
-                const lastDonation = data.stats.last_donation
-                  ? new Date(data.stats.last_donation).toLocaleDateString()
-                  : "No donations yet";
-                statsCards[0].querySelector(".text-green-600").textContent =
-                  `Last donation: ${lastDonation}`;
+              // Update Total Donations
+              const totalDonationsEl = document.getElementById("totalDonationsCount");
+              if (totalDonationsEl) {
+                totalDonationsEl.textContent = data.stats.total_donations || 0;
               }
-              if (statsCards[2] && data.stats.next_eligible) {
-                statsCards[2].querySelector("h2").textContent = new Date(
+
+              // Update Last Donation text
+              const lastDonationEl = document.getElementById("lastDonationText");
+              if (lastDonationEl) {
+                const lastDonation = data.stats.last_donation
+                  ? "Last: " + new Date(data.stats.last_donation).toLocaleDateString()
+                  : "No donations yet";
+                lastDonationEl.textContent = lastDonation;
+              }
+
+              // Update Lives Saved (1 donation = 1 life)
+              const livesSavedEl = document.getElementById("livesSavedCount");
+              if (livesSavedEl) {
+                livesSavedEl.textContent = data.stats.lives_saved || 0;
+              }
+
+              // Update Next Eligible Date with eligibility info
+              const nextEligibleDateEl = document.getElementById("nextEligibleDate");
+              const nextEligibleTextEl = document.getElementById("nextEligibleText");
+              if (nextEligibleDateEl && data.eligibility) {
+                if (data.eligibility.can_donate) {
+                  nextEligibleDateEl.textContent = "Now";
+                  nextEligibleDateEl.classList.remove("text-yellow-600");
+                  nextEligibleDateEl.classList.add("text-green-600");
+                  if (nextEligibleTextEl) {
+                    nextEligibleTextEl.textContent = "You are eligible to donate!";
+                    nextEligibleTextEl.classList.remove("text-yellow-600");
+                    nextEligibleTextEl.classList.add("text-green-600");
+                  }
+                } else if (data.eligibility.next_eligible_date) {
+                  const nextDate = new Date(data.eligibility.next_eligible_date);
+                  nextEligibleDateEl.textContent = nextDate.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  });
+                  nextEligibleDateEl.classList.remove("text-green-600");
+                  nextEligibleDateEl.classList.add("text-yellow-600");
+                  if (nextEligibleTextEl) {
+                    nextEligibleTextEl.textContent = `${data.eligibility.days_remaining} days until eligible`;
+                    nextEligibleTextEl.classList.remove("text-green-600");
+                    nextEligibleTextEl.classList.add("text-yellow-600");
+                  }
+                }
+              } else if (nextEligibleDateEl && data.stats.next_eligible) {
+                // Fallback to old stats format
+                nextEligibleDateEl.textContent = new Date(
                   data.stats.next_eligible,
                 ).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
                 });
               }
+
               // Update header name
-              const headerName = document.querySelector(
-                ".text-sm.font-medium.text-gray-900",
-              );
+              const headerName = document.querySelector("[data-user-name]");
               if (headerName && data.profile.name) {
                 headerName.textContent = data.profile.name;
               }
+
               // Update blood type
-              if (statsCards[3] && data.profile.blood_group) {
-                statsCards[3].querySelector("h2").textContent =
-                  data.profile.blood_group;
+              const bloodTypeEl = document.getElementById("bloodTypeValue");
+              if (bloodTypeEl && data.profile.blood_group) {
+                bloodTypeEl.textContent = data.profile.blood_group;
               }
 
               // *** RESTORE ACTIVE DONATION FROM DATABASE ***

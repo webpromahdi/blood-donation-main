@@ -83,6 +83,9 @@ try {
 
     $donorId = $donor['donor_id'];
 
+    // Cooldown period in days (90 days)
+    $cooldownDays = 90;
+
     // Get total completed donations from donations table
     $stmt = $conn->prepare("SELECT COUNT(*) as count FROM donations WHERE donor_id = ? AND status = 'completed'");
     $stmt->execute([$donorId]);
@@ -92,6 +95,17 @@ try {
     $stmt = $conn->prepare("SELECT completed_at FROM donations WHERE donor_id = ? AND status = 'completed' ORDER BY completed_at DESC LIMIT 1");
     $stmt->execute([$donorId]);
     $lastDonation = $stmt->fetch();
+
+    // Use last donation date from either donations table or donors table (whichever is more recent)
+    $lastDonationDate = null;
+    if ($lastDonation && $lastDonation['completed_at']) {
+        $lastDonationDate = $lastDonation['completed_at'];
+    }
+    if ($donor['last_donation_date']) {
+        if (!$lastDonationDate || strtotime($donor['last_donation_date']) > strtotime($lastDonationDate)) {
+            $lastDonationDate = $donor['last_donation_date'];
+        }
+    }
 
     // Active donation (if any)
     $stmt = $conn->prepare("
@@ -106,16 +120,27 @@ try {
     $stmt->execute([$donorId]);
     $activeDonation = $stmt->fetch();
 
-    // Calculate next eligible date (56 days after last donation)
-    $nextEligible = $donor['next_eligible_date'];
-    if (!$nextEligible && $lastDonation && $lastDonation['completed_at']) {
-        $lastDate = new DateTime($lastDonation['completed_at']);
-        $nextDate = $lastDate->modify('+56 days');
+    // Calculate next eligible date (90 days after last donation)
+    $nextEligible = null;
+    $isEligible = true;
+    $daysUntilEligible = 0;
+
+    if ($lastDonationDate) {
+        $lastDate = new DateTime($lastDonationDate);
+        $today = new DateTime('today');
+        $nextDate = clone $lastDate;
+        $nextDate->modify('+' . $cooldownDays . ' days');
         $nextEligible = $nextDate->format('Y-m-d');
+        
+        if ($today < $nextDate) {
+            $isEligible = false;
+            $interval = $today->diff($nextDate);
+            $daysUntilEligible = $interval->days;
+        }
     }
 
-    // Lives saved estimate (each donation can save up to 3 lives)
-    $livesSaved = $totalDonations * 3;
+    // Lives saved estimate (1 donation = 1 life as per requirement)
+    $livesSaved = $totalDonations;
 
     echo json_encode([
         'success' => true,
@@ -139,8 +164,18 @@ try {
         'stats' => [
             'total_donations' => (int) $totalDonations,
             'lives_saved' => (int) $livesSaved,
-            'last_donation' => $lastDonation ? $lastDonation['completed_at'] : $donor['last_donation_date'],
-            'next_eligible' => $nextEligible
+            'last_donation' => $lastDonationDate,
+            'next_eligible' => $nextEligible,
+            'is_eligible' => $isEligible,
+            'days_until_eligible' => $daysUntilEligible,
+            'cooldown_days' => $cooldownDays
+        ],
+        'eligibility' => [
+            'can_donate' => $isEligible,
+            'last_donation_date' => $lastDonationDate,
+            'next_eligible_date' => $nextEligible,
+            'days_remaining' => $daysUntilEligible,
+            'cooldown_period' => $cooldownDays
         ],
         'active_donation' => $activeDonation ? [
             'id' => $activeDonation['id'],

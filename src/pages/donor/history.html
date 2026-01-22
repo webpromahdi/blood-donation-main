@@ -449,9 +449,15 @@
               }
             </span>
           </td>
-          <td class="py-3 px-4 text-gray-600">${
-            donation.urgency === "emergency" ? "Emergency Request" : "Voluntary"
-          }</td>
+          <td class="py-3 px-4">
+            <span class="px-2 py-1 text-xs font-medium ${
+              donation.is_voluntary
+                ? "bg-green-100 text-green-700"
+                : "bg-blue-100 text-blue-700"
+            } rounded-full">
+              ${donation.donation_type || (donation.is_voluntary ? "Voluntary" : "Request-based")}
+            </span>
+          </td>
           <td class="py-3 px-4">
             <span class="px-2 py-1 text-xs font-medium border ${getStatusClass(
               donation.status,
@@ -477,7 +483,7 @@
               }
             </div>
           </td>
-        </tr>
+        </tr>`
       `,
           )
           .join("");
@@ -503,7 +509,8 @@
         if (totalEl) totalEl.textContent = stats.total_donations || 0;
         if (volumeEl) volumeEl.textContent = `${stats.total_volume || 0} U`;
         if (yearEl) yearEl.textContent = stats.this_year || 0;
-        if (livesEl) livesEl.textContent = `${stats.lives_saved || 0}+`;
+        // 1 donation = 1 life saved
+        if (livesEl) livesEl.textContent = `${stats.lives_saved || 0}`;
       }
 
       function openDonationModal(id) {
@@ -600,14 +607,14 @@
               <h2 class="text-3xl font-bold text-red-600 mb-2">BloodConnect</h2>
               <h3 class="text-xl font-semibold text-gray-700">Certificate of Blood Donation</h3>
             </div>
-            
+
             <div class="text-center mb-6">
               <p class="text-gray-600 mb-4">This is to certify that</p>
               <h4 class="text-2xl font-bold text-gray-900 mb-4">${cert.donor_name}</h4>
               <p class="text-gray-600 mb-2">has generously donated blood on</p>
               <p class="text-xl font-semibold text-red-600 mb-4">${formattedDate}</p>
             </div>
-            
+
             <div class="grid grid-cols-2 gap-4 bg-gray-50 rounded-lg p-4 mb-6">
               <div class="text-center p-3">
                 <p class="text-sm text-gray-500 mb-1">Blood Group</p>
@@ -626,7 +633,7 @@
                 <p class="text-lg font-semibold text-gray-900">${cert.cert_id}</p>
               </div>
             </div>
-            
+
             <div class="text-center border-t-2 border-red-200 pt-6">
               <div class="flex justify-center items-center gap-2 mb-2">
                 <i data-lucide="award" class="size-5 text-red-600"></i>

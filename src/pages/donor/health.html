@@ -140,6 +140,53 @@
           </p>
         </div>
 
+        <!-- Health Record Status Banner -->
+        <div id="healthRecordBanner" class="hidden">
+          <!-- New Record Banner -->
+          <div
+            id="newRecordBanner"
+            class="hidden p-4 bg-blue-50 border border-blue-200 rounded-xl"
+          >
+            <div class="flex items-start gap-3">
+              <i
+                data-lucide="info"
+                class="size-5 text-blue-600 shrink-0 mt-0.5"
+              ></i>
+              <div>
+                <p class="font-medium text-blue-900">
+                  Complete Your Health Profile
+                </p>
+                <p class="text-sm text-blue-700 mt-1">
+                  Please fill in your health information. Weight and Height are
+                  required for your first submission.
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Existing Record Banner -->
+          <div
+            id="existingRecordBanner"
+            class="hidden p-4 bg-green-50 border border-green-200 rounded-xl"
+          >
+            <div class="flex items-start gap-3">
+              <i
+                data-lucide="check-circle"
+                class="size-5 text-green-600 shrink-0 mt-0.5"
+              ></i>
+              <div>
+                <p class="font-medium text-green-900">
+                  Your Health Information is on File
+                </p>
+                <p class="text-sm text-green-700 mt-1">
+                  Update any fields you need to change. Empty fields will keep
+                  their current values.
+                </p>
+                <p class="text-sm text-green-600 mt-2" id="lastUpdatedText"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <!-- Main Form -->
           <div class="lg:col-span-2">
@@ -156,7 +203,9 @@
               <form id="healthForm" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"
+                    <label
+                      class="block text-sm font-medium text-gray-700 mb-2"
+                      for="weight"
                       >Weight (kg) *</label
                     >
                     <input
@@ -172,7 +221,9 @@
                     ></p>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"
+                    <label
+                      class="block text-sm font-medium text-gray-700 mb-2"
+                      for="height"
                       >Height (cm) *</label
                     >
                     <input
@@ -193,6 +244,7 @@
                     >
                     <input
                       type="number"
+                      id="bpSystolic"
                       placeholder="e.g., 120"
                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
@@ -203,6 +255,7 @@
                     >
                     <input
                       type="number"
+                      id="bpDiastolic"
                       placeholder="e.g., 80"
                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
@@ -213,6 +266,7 @@
                     >
                     <input
                       type="text"
+                      id="hemoglobin"
                       placeholder="e.g., 14.5 g/dL"
                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
@@ -223,6 +277,7 @@
                     >
                     <input
                       type="date"
+                      id="lastCheckup"
                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
                   </div>
@@ -239,11 +294,17 @@
                     <div
                       class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
                     >
-                      <label class="cursor-pointer">Diabetes</label>
+                      <label class="cursor-pointer" for="hasDiabetes"
+                        >Diabetes</label
+                      >
                       <label
                         class="relative inline-flex items-center cursor-pointer"
                       >
-                        <input type="checkbox" class="sr-only peer" />
+                        <input
+                          type="checkbox"
+                          id="hasDiabetes"
+                          class="sr-only peer"
+                        />
                         <div
                           class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
                         ></div>
@@ -252,11 +313,17 @@
                     <div
                       class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
                     >
-                      <label class="cursor-pointer">Hypertension</label>
+                      <label class="cursor-pointer" for="hasHypertension"
+                        >Hypertension</label
+                      >
                       <label
                         class="relative inline-flex items-center cursor-pointer"
                       >
-                        <input type="checkbox" class="sr-only peer" />
+                        <input
+                          type="checkbox"
+                          id="hasHypertension"
+                          class="sr-only peer"
+                        />
                         <div
                           class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
                         ></div>
@@ -265,11 +332,17 @@
                     <div
                       class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
                     >
-                      <label class="cursor-pointer">Heart Disease</label>
+                      <label class="cursor-pointer" for="hasHeartDisease"
+                        >Heart Disease</label
+                      >
                       <label
                         class="relative inline-flex items-center cursor-pointer"
                       >
-                        <input type="checkbox" class="sr-only peer" />
+                        <input
+                          type="checkbox"
+                          id="hasHeartDisease"
+                          class="sr-only peer"
+                        />
                         <div
                           class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
                         ></div>
@@ -278,11 +351,17 @@
                     <div
                       class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
                     >
-                      <label class="cursor-pointer">Asthma</label>
+                      <label class="cursor-pointer" for="hasAsthma"
+                        >Asthma</label
+                      >
                       <label
                         class="relative inline-flex items-center cursor-pointer"
                       >
-                        <input type="checkbox" class="sr-only peer" />
+                        <input
+                          type="checkbox"
+                          id="hasAsthma"
+                          class="sr-only peer"
+                        />
                         <div
                           class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
                         ></div>
@@ -291,11 +370,17 @@
                     <div
                       class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
                     >
-                      <label class="cursor-pointer">Allergies</label>
+                      <label class="cursor-pointer" for="hasAllergies"
+                        >Allergies</label
+                      >
                       <label
                         class="relative inline-flex items-center cursor-pointer"
                       >
-                        <input type="checkbox" class="sr-only peer" />
+                        <input
+                          type="checkbox"
+                          id="hasAllergies"
+                          class="sr-only peer"
+                        />
                         <div
                           class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
                         ></div>
@@ -304,13 +389,17 @@
                     <div
                       class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
                     >
-                      <label class="cursor-pointer"
+                      <label class="cursor-pointer" for="hasRecentSurgery"
                         >Recent Surgery (within 6 months)</label
                       >
                       <label
                         class="relative inline-flex items-center cursor-pointer"
                       >
-                        <input type="checkbox" class="sr-only peer" />
+                        <input
+                          type="checkbox"
+                          id="hasRecentSurgery"
+                          class="sr-only peer"
+                        />
                         <div
                           class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
                         ></div>
@@ -319,13 +408,17 @@
                     <div
                       class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
                     >
-                      <label class="cursor-pointer"
+                      <label class="cursor-pointer" for="isOnMedication"
                         >Currently on Medication</label
                       >
                       <label
                         class="relative inline-flex items-center cursor-pointer"
                       >
-                        <input type="checkbox" class="sr-only peer" />
+                        <input
+                          type="checkbox"
+                          id="isOnMedication"
+                          class="sr-only peer"
+                        />
                         <div
                           class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
                         ></div>
@@ -342,41 +435,46 @@
                     <div>
                       <label
                         class="block text-sm font-medium text-gray-700 mb-2"
+                        for="smokingStatus"
                         >Do you smoke?</label
                       >
                       <select
+                        id="smokingStatus"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                       >
-                        <option>No</option>
-                        <option>Yes, occasionally</option>
-                        <option>Yes, regularly</option>
+                        <option value="no">No</option>
+                        <option value="occasionally">Yes, occasionally</option>
+                        <option value="regularly">Yes, regularly</option>
                       </select>
                     </div>
                     <div>
                       <label
                         class="block text-sm font-medium text-gray-700 mb-2"
+                        for="alcoholConsumption"
                         >Alcohol Consumption</label
                       >
                       <select
+                        id="alcoholConsumption"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                       >
-                        <option>None</option>
-                        <option>Occasional</option>
-                        <option>Regular</option>
+                        <option value="none">None</option>
+                        <option value="occasionally">Occasional</option>
+                        <option value="regularly">Regular</option>
                       </select>
                     </div>
                     <div>
                       <label
                         class="block text-sm font-medium text-gray-700 mb-2"
+                        for="exerciseFrequency"
                         >Exercise Frequency</label
                       >
                       <select
+                        id="exerciseFrequency"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                       >
-                        <option>Rarely</option>
-                        <option>1-2 times per week</option>
-                        <option>3-4 times per week</option>
-                        <option>Daily</option>
+                        <option value="rarely">Rarely</option>
+                        <option value="weekly">1-2 times per week</option>
+                        <option value="daily">Daily</option>
                       </select>
                     </div>
                   </div>
@@ -391,10 +489,13 @@
                     with medical staff
                   </p>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"
+                    <label
+                      class="block text-sm font-medium text-gray-700 mb-2"
+                      for="additionalNotes"
                       >Extra Notes (Optional)</label
                     >
                     <textarea
+                      id="additionalNotes"
                       rows="4"
                       placeholder="E.g., recent travel history, specific allergies, medications you're taking, any concerns about donating, or other relevant health information..."
                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
@@ -538,6 +639,9 @@
     <script type="module">
       import { z } from "https://cdn.jsdelivr.net/npm/zod@3.22.4/+esm";
 
+      // Track if health record exists (for flexible validation)
+      let hasExistingHealthRecord = false;
+
       // Fetch health data from API
       async function loadHealthData() {
         try {
@@ -546,7 +650,40 @@
           });
           const data = await response.json();
 
+          // Show the status banner
+          const banner = document.getElementById("healthRecordBanner");
+          const newRecordBanner = document.getElementById("newRecordBanner");
+          const existingRecordBanner = document.getElementById(
+            "existingRecordBanner",
+          );
+          banner.classList.remove("hidden");
+
           if (data.success) {
+            // Check if there's existing health data
+            const hasData = data.health.height || data.health.weight;
+            hasExistingHealthRecord = hasData;
+
+            if (hasData) {
+              // Show existing record banner
+              newRecordBanner.classList.add("hidden");
+              existingRecordBanner.classList.remove("hidden");
+
+              // Show last updated time if available
+              const lastUpdatedText =
+                document.getElementById("lastUpdatedText");
+              if (data.health.updated_at) {
+                const date = new Date(data.health.updated_at);
+                lastUpdatedText.textContent = `Last updated: ${date.toLocaleDateString()} at ${date.toLocaleTimeString()}`;
+              }
+
+              // Update weight/height labels to show they're optional for updates
+              updateLabelsForExistingRecord();
+            } else {
+              // Show new record banner
+              newRecordBanner.classList.remove("hidden");
+              existingRecordBanner.classList.add("hidden");
+            }
+
             // Populate form fields
             if (data.health.weight) {
               document.getElementById("weight").value = data.health.weight;
@@ -556,103 +693,92 @@
             }
 
             // Populate blood pressure fields
-            const bpSystolicInputs = document.querySelectorAll(
-              'input[placeholder="e.g., 120"]',
-            );
-            const bpDiastolicInputs = document.querySelectorAll(
-              'input[placeholder="e.g., 80"]',
-            );
-            if (bpSystolicInputs[0] && data.health.blood_pressure_systolic) {
-              bpSystolicInputs[0].value = data.health.blood_pressure_systolic;
+            if (data.health.blood_pressure_systolic) {
+              document.getElementById("bpSystolic").value =
+                data.health.blood_pressure_systolic;
             }
-            if (bpDiastolicInputs[0] && data.health.blood_pressure_diastolic) {
-              bpDiastolicInputs[0].value = data.health.blood_pressure_diastolic;
+            if (data.health.blood_pressure_diastolic) {
+              document.getElementById("bpDiastolic").value =
+                data.health.blood_pressure_diastolic;
             }
 
             // Populate hemoglobin
-            const hemoglobinInput = document.querySelector(
-              'input[placeholder="e.g., 14.5 g/dL"]',
-            );
-            if (hemoglobinInput && data.health.hemoglobin) {
-              hemoglobinInput.value = data.health.hemoglobin;
+            if (data.health.hemoglobin) {
+              document.getElementById("hemoglobin").value =
+                data.health.hemoglobin;
             }
 
             // Populate medical checkup date
-            const checkupInput = document.querySelector('input[type="date"]');
-            if (checkupInput && data.health.last_medical_checkup) {
-              checkupInput.value = data.health.last_medical_checkup;
+            if (data.health.last_medical_checkup) {
+              document.getElementById("lastCheckup").value =
+                data.health.last_medical_checkup;
             }
 
-            // Populate medical conditions (checkboxes)
-            const conditionMap = {
-              has_diabetes: "Diabetes",
-              has_hypertension: "Hypertension",
-              has_heart_disease: "Heart Disease",
-              has_asthma: "Asthma",
-              has_allergies: "Allergies",
-              has_recent_surgery: "Recent Surgery",
-              is_on_medication: "Currently on Medication",
-            };
+            // Populate medical conditions (checkboxes) using IDs
+            if (data.health.has_diabetes)
+              document.getElementById("hasDiabetes").checked = true;
+            if (data.health.has_hypertension)
+              document.getElementById("hasHypertension").checked = true;
+            if (data.health.has_heart_disease)
+              document.getElementById("hasHeartDisease").checked = true;
+            if (data.health.has_asthma)
+              document.getElementById("hasAsthma").checked = true;
+            if (data.health.has_allergies)
+              document.getElementById("hasAllergies").checked = true;
+            if (data.health.has_recent_surgery)
+              document.getElementById("hasRecentSurgery").checked = true;
+            if (data.health.is_on_medication)
+              document.getElementById("isOnMedication").checked = true;
 
-            Object.keys(conditionMap).forEach((key) => {
-              if (data.health[key]) {
-                const label = conditionMap[key];
-                const checkbox = Array.from(
-                  document.querySelectorAll(".space-y-3 label.cursor-pointer"),
-                ).find((el) => el.textContent.includes(label));
-                if (checkbox) {
-                  const toggle = checkbox
-                    .closest(".flex")
-                    .querySelector('input[type="checkbox"]');
-                  if (toggle) toggle.checked = true;
-                }
-              }
-            });
-
-            // Populate lifestyle dropdowns
-            const selects = document.querySelectorAll("select");
-            if (selects[0] && data.health.smoking_status) {
-              const smokingMap = {
-                no: "No",
-                occasionally: "Yes, occasionally",
-                regularly: "Yes, regularly",
-              };
-              selects[0].value = smokingMap[data.health.smoking_status] || "No";
+            // Populate lifestyle dropdowns using IDs
+            if (data.health.smoking_status) {
+              document.getElementById("smokingStatus").value =
+                data.health.smoking_status;
             }
-            if (selects[1] && data.health.alcohol_consumption) {
-              const alcoholMap = {
-                none: "None",
-                occasional: "Occasional",
-                regular: "Regular",
-              };
-              selects[1].value =
-                alcoholMap[data.health.alcohol_consumption] || "None";
+            if (data.health.alcohol_consumption) {
+              document.getElementById("alcoholConsumption").value =
+                data.health.alcohol_consumption;
             }
-            if (selects[2] && data.health.exercise_frequency) {
-              const exerciseMap = {
-                rarely: "Rarely",
-                "1-2_weekly": "1-2 times per week",
-                "3-4_weekly": "3-4 times per week",
-                daily: "Daily",
-              };
-              selects[2].value =
-                exerciseMap[data.health.exercise_frequency] || "Rarely";
+            if (data.health.exercise_frequency) {
+              document.getElementById("exerciseFrequency").value =
+                data.health.exercise_frequency;
             }
 
             // Populate notes
-            const notesTextarea = document.querySelector("textarea");
-            if (notesTextarea && data.health.additional_notes) {
-              notesTextarea.value = data.health.additional_notes;
+            if (data.health.additional_notes) {
+              document.getElementById("additionalNotes").value =
+                data.health.additional_notes;
             }
 
             // Update eligibility status
             updateEligibilityStatus(data.eligibility);
           } else {
+            // No data - show new record banner
+            newRecordBanner.classList.remove("hidden");
+            existingRecordBanner.classList.add("hidden");
             showErrorState("Failed to load health information");
           }
+
+          // Refresh icons
+          if (window.lucide) window.lucide.createIcons();
         } catch (error) {
           console.error("Error loading health data:", error);
           showErrorState("Unable to connect to server");
+        }
+      }
+
+      function updateLabelsForExistingRecord() {
+        // Update the weight and height labels to indicate they're optional for updates
+        const weightLabel = document.querySelector('label[for="weight"]');
+        const heightLabel = document.querySelector('label[for="height"]');
+
+        if (weightLabel) {
+          weightLabel.innerHTML =
+            'Weight (kg) <span class="text-gray-400 font-normal">(leave empty to keep current)</span>';
+        }
+        if (heightLabel) {
+          heightLabel.innerHTML =
+            'Height (cm) <span class="text-gray-400 font-normal">(leave empty to keep current)</span>';
         }
       }
 
@@ -664,22 +790,30 @@
           document.getElementById("eligibilityReasons");
 
         if (eligibility.is_eligible) {
-          statusCard.className =
-            "p-6 bg-linear-to-br from-green-50 to-white border border-green-200 rounded-xl";
+          statusCard.setAttribute(
+            "class",
+            "p-6 bg-linear-to-br from-green-50 to-white border border-green-200 rounded-xl",
+          );
           statusIcon.setAttribute("data-lucide", "check-circle");
-          statusIcon.className = "size-6 text-green-600";
+          statusIcon.setAttribute("class", "size-6 text-green-600");
           statusBadge.textContent = "Eligible to Donate";
-          statusBadge.className =
-            "px-3 py-1 text-sm font-medium bg-green-100 text-green-700 rounded-full";
+          statusBadge.setAttribute(
+            "class",
+            "px-3 py-1 text-sm font-medium bg-green-100 text-green-700 rounded-full",
+          );
           eligibilityReasons.classList.add("hidden");
         } else {
-          statusCard.className =
-            "p-6 bg-linear-to-br from-red-50 to-white border border-red-200 rounded-xl";
+          statusCard.setAttribute(
+            "class",
+            "p-6 bg-linear-to-br from-red-50 to-white border border-red-200 rounded-xl",
+          );
           statusIcon.setAttribute("data-lucide", "alert-circle");
-          statusIcon.className = "size-6 text-red-600";
+          statusIcon.setAttribute("class", "size-6 text-red-600");
           statusBadge.textContent = "Not Eligible";
-          statusBadge.className =
-            "px-3 py-1 text-sm font-medium bg-red-100 text-red-700 rounded-full";
+          statusBadge.setAttribute(
+            "class",
+            "px-3 py-1 text-sm font-medium bg-red-100 text-red-700 rounded-full",
+          );
 
           if (eligibility.reasons && eligibility.reasons.length > 0) {
             eligibilityReasons.innerHTML = eligibility.reasons
@@ -711,7 +845,8 @@
       // Initialize on page load
       document.addEventListener("DOMContentLoaded", loadHealthData);
 
-      const healthSchema = z.object({
+      // Schema for new records (weight/height required)
+      const newRecordSchema = z.object({
         weight: z
           .string()
           .min(1, "Weight is required")
@@ -724,6 +859,22 @@
           .min(1, "Height is required")
           .refine(
             (val) => !isNaN(Number(val)) && Number(val) >= 100,
+            "Height must be at least 100 cm",
+          ),
+      });
+
+      // Schema for updates (weight/height optional, but if provided must be valid)
+      const updateRecordSchema = z.object({
+        weight: z
+          .string()
+          .refine(
+            (val) => val === "" || (!isNaN(Number(val)) && Number(val) >= 45),
+            "Weight must be at least 45 kg",
+          ),
+        height: z
+          .string()
+          .refine(
+            (val) => val === "" || (!isNaN(Number(val)) && Number(val) >= 100),
             "Height must be at least 100 cm",
           ),
       });
@@ -771,7 +922,12 @@
             height: document.getElementById("height").value,
           };
 
-          const result = healthSchema.safeParse(formData);
+          // Use appropriate schema based on whether record exists
+          const schema = hasExistingHealthRecord
+            ? updateRecordSchema
+            : newRecordSchema;
+          const result = schema.safeParse(formData);
+
           if (!result.success) {
             result.error.errors.forEach((err) =>
               showError(err.path[0], err.message),
@@ -779,93 +935,49 @@
             return;
           }
 
-          // Collect all form data for API
-          const bpSystolicInputs = document.querySelectorAll(
-            'input[placeholder="e.g., 120"]',
-          );
-          const bpDiastolicInputs = document.querySelectorAll(
-            'input[placeholder="e.g., 80"]',
-          );
-          const hemoglobinInput = document.querySelector(
-            'input[placeholder="e.g., 14.5 g/dL"]',
-          );
-          const checkupInput = document.querySelector('input[type="date"]');
-          const notesTextarea = document.querySelector("textarea");
-          const selects = document.querySelectorAll("select");
-
-          // Get medical conditions
-          const conditionLabels = [
-            "Diabetes",
-            "Hypertension",
-            "Heart Disease",
-            "Asthma",
-            "Allergies",
-            "Recent Surgery",
-            "Currently on Medication",
-          ];
-          const conditions = {};
-          conditionLabels.forEach((label) => {
-            const checkbox = Array.from(
-              document.querySelectorAll(".space-y-3 label.cursor-pointer"),
-            ).find((el) => el.textContent.includes(label));
-            if (checkbox) {
-              const toggle = checkbox
-                .closest(".flex")
-                .querySelector('input[type="checkbox"]');
-              const key = label
-                .toLowerCase()
-                .replace(/ /g, "_")
-                .replace("currently_on_medication", "is_on_medication")
-                .replace("recent_surgery", "has_recent_surgery");
-              conditions["has_" + key.replace("has_", "")] = toggle
-                ? toggle.checked
-                : false;
-            }
-          });
-
-          // Map select values
-          const smokingMap = {
-            No: "no",
-            "Yes, occasionally": "occasionally",
-            "Yes, regularly": "regularly",
-          };
-          const alcoholMap = {
-            None: "none",
-            Occasional: "occasional",
-            Regular: "regular",
-          };
-          const exerciseMap = {
-            Rarely: "rarely",
-            "1-2 times per week": "1-2_weekly",
-            "3-4 times per week": "3-4_weekly",
-            Daily: "daily",
-          };
-
+          // Collect all form data for API using IDs
           const healthData = {
-            weight: parseFloat(formData.weight),
-            height: parseFloat(formData.height),
-            blood_pressure_systolic: bpSystolicInputs[0]?.value
-              ? parseInt(bpSystolicInputs[0].value)
+            weight: formData.weight ? parseFloat(formData.weight) : null,
+            height: formData.height ? parseFloat(formData.height) : null,
+            blood_pressure_systolic: document.getElementById("bpSystolic").value
+              ? parseInt(document.getElementById("bpSystolic").value)
               : null,
-            blood_pressure_diastolic: bpDiastolicInputs[0]?.value
-              ? parseInt(bpDiastolicInputs[0].value)
+            blood_pressure_diastolic: document.getElementById("bpDiastolic")
+              .value
+              ? parseInt(document.getElementById("bpDiastolic").value)
               : null,
-            hemoglobin: hemoglobinInput?.value
-              ? parseFloat(hemoglobinInput.value)
+            hemoglobin: document.getElementById("hemoglobin").value
+              ? parseFloat(document.getElementById("hemoglobin").value)
               : null,
-            last_medical_checkup: checkupInput?.value || null,
-            has_diabetes: conditions.has_diabetes || false,
-            has_hypertension: conditions.has_hypertension || false,
-            has_heart_disease: conditions.has_heart_disease || false,
-            has_asthma: conditions.has_asthma || false,
-            has_allergies: conditions.has_allergies || false,
-            has_recent_surgery: conditions.has_recent_surgery || false,
-            is_on_medication: conditions.has_is_on_medication || false,
-            smoking_status: smokingMap[selects[0]?.value] || "no",
-            alcohol_consumption: alcoholMap[selects[1]?.value] || "none",
-            exercise_frequency: exerciseMap[selects[2]?.value] || "rarely",
-            additional_notes: notesTextarea?.value || null,
+            last_medical_checkup:
+              document.getElementById("lastCheckup").value || null,
+            has_diabetes: document.getElementById("hasDiabetes").checked,
+            has_hypertension:
+              document.getElementById("hasHypertension").checked,
+            has_heart_disease:
+              document.getElementById("hasHeartDisease").checked,
+            has_asthma: document.getElementById("hasAsthma").checked,
+            has_allergies: document.getElementById("hasAllergies").checked,
+            has_recent_surgery:
+              document.getElementById("hasRecentSurgery").checked,
+            is_on_medication: document.getElementById("isOnMedication").checked,
+            smoking_status: document.getElementById("smokingStatus").value,
+            alcohol_consumption:
+              document.getElementById("alcoholConsumption").value,
+            exercise_frequency:
+              document.getElementById("exerciseFrequency").value,
+            additional_notes:
+              document.getElementById("additionalNotes").value || null,
           };
+
+          // Remove null values for partial updates (backend will preserve existing)
+          if (hasExistingHealthRecord) {
+            Object.keys(healthData).forEach((key) => {
+              if (healthData[key] === null || healthData[key] === "") {
+                delete healthData[key];
+              }
+            });
+          }
 
           try {
             const response = await fetch("/api/donor/health/update.php", {
@@ -878,16 +990,20 @@
             const data = await response.json();
 
             if (data.success) {
+              const isUpdate = data.is_update || hasExistingHealthRecord;
               const notification = document.createElement("div");
               notification.className =
                 "fixed top-20 right-8 p-4 bg-green-50 border-l-4 border-green-600 rounded-lg shadow-lg z-50";
-              notification.innerHTML =
-                '<div class="flex items-center gap-3"><i data-lucide="check-circle" class="size-5 text-green-600"></i><p class="text-green-900">Health information saved successfully!</p></div>';
+              notification.innerHTML = `
+                <div class="flex items-center gap-3">
+                  <i data-lucide="check-circle" class="size-5 text-green-600"></i>
+                  <p class="text-green-900">${isUpdate ? "Health information updated successfully!" : "Health information saved successfully!"}</p>
+                </div>`;
               document.body.appendChild(notification);
               lucide.createIcons();
               setTimeout(() => notification.remove(), 3000);
 
-              // Reload data to update eligibility status
+              // Reload data to update eligibility status and banners
               loadHealthData();
             } else {
               throw new Error(data.message || "Failed to save");

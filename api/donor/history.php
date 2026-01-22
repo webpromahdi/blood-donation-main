@@ -62,11 +62,13 @@ try {
 
     $donorId = $donor['donor_id'];
 
-    // Get all donations with request details
+    // Get all donations with request details (includes both request-based and voluntary donations)
+    // Voluntary donations are linked through blood_requests with request_code starting with 'VOL-'
     $sql = "SELECT dn.id, dn.status, dn.accepted_at, dn.completed_at, dn.quantity,
                    r.request_code, bg.blood_type, r.hospital_name, r.city,
-                   r.urgency, r.patient_name,
-                   c.certificate_code, c.issued_at as certificate_issued_at
+                   r.urgency, r.patient_name, r.medical_reason,
+                   c.certificate_code, c.issued_at as certificate_issued_at,
+                   CASE WHEN r.request_code LIKE 'VOL-%' THEN 'voluntary' ELSE 'request' END as donation_type
             FROM donations dn
             JOIN blood_requests r ON dn.request_id = r.id
             JOIN blood_groups bg ON r.blood_group_id = bg.id
@@ -81,6 +83,7 @@ try {
     // Format response
     $formattedDonations = array_map(function ($donation) use ($donor) {
         $donationId = 'DON' . str_pad($donation['id'], 3, '0', STR_PAD_LEFT);
+        $isVoluntary = $donation['donation_type'] === 'voluntary';
 
         return [
             'id' => $donation['id'],
@@ -94,6 +97,8 @@ try {
             'urgency' => $donation['urgency'],
             'status' => $donation['status'],
             'patient_name' => $donation['patient_name'],
+            'donation_type' => $isVoluntary ? 'Voluntary' : 'Request-based',
+            'is_voluntary' => $isVoluntary,
             // Certificate data
             'certificate' => $donation['status'] === 'completed' ? [
                 'cert_id' => $donation['certificate_code'] ?? ('CERT-' . date('Y', strtotime($donation['completed_at'])) . '-' . $donationId),
@@ -108,6 +113,8 @@ try {
 
     // Calculate stats
     $completedDonations = array_filter($formattedDonations, fn($d) => $d['status'] === 'completed');
+    $voluntaryDonations = array_filter($completedDonations, fn($d) => $d['is_voluntary']);
+    $requestDonations = array_filter($completedDonations, fn($d) => !$d['is_voluntary']);
     $totalQuantity = array_sum(array_map(fn($d) => $d['quantity'], $completedDonations));
     $thisYear = array_filter($completedDonations, function ($d) {
         return $d['date'] && date('Y', strtotime($d['date'])) === date('Y');
@@ -115,9 +122,11 @@ try {
 
     $stats = [
         'total_donations' => count($completedDonations),
+        'voluntary_donations' => count($voluntaryDonations),
+        'request_donations' => count($requestDonations),
         'total_volume' => $totalQuantity,
         'this_year' => count($thisYear),
-        'lives_saved' => count($completedDonations) * 3
+        'lives_saved' => count($completedDonations) // 1 donation = 1 life saved
     ];
 
     echo json_encode([

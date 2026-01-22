@@ -70,9 +70,10 @@ try {
         exit;
     }
 
-    // Get donor info including blood_group_id
+    // Get donor info including blood_group_id and last donation date
     $stmt = $conn->prepare("
-        SELECT d.id as donor_id, d.blood_group_id, d.city as donor_city
+        SELECT d.id as donor_id, d.blood_group_id, d.city as donor_city, 
+               d.last_donation_date, d.next_eligible_date
         FROM donors d 
         WHERE d.user_id = ?
     ");
@@ -84,6 +85,71 @@ try {
         echo json_encode(['success' => false, 'message' => 'Donor profile not found']);
         exit;
     }
+
+    // === ELIGIBILITY CHECK (Server-side enforcement) ===
+    // Cooldown period in days (90 days)
+    $cooldownDays = 90;
+
+    // Get last completed donation date from donations table
+    $stmt = $conn->prepare("
+        SELECT MAX(completed_at) as last_donation_date
+        FROM donations 
+        WHERE donor_id = ? AND status = 'completed'
+    ");
+    $stmt->execute([$donor['donor_id']]);
+    $lastDonationResult = $stmt->fetch();
+
+    // Use either donations table or donors table date (whichever is more recent)
+    $lastDonationDate = null;
+    if ($lastDonationResult && $lastDonationResult['last_donation_date']) {
+        $lastDonationDate = $lastDonationResult['last_donation_date'];
+    }
+    if ($donor['last_donation_date']) {
+        if (!$lastDonationDate || strtotime($donor['last_donation_date']) > strtotime($lastDonationDate)) {
+            $lastDonationDate = $donor['last_donation_date'];
+        }
+    }
+
+    // Check cooldown period
+    if ($lastDonationDate) {
+        $lastDate = new DateTime($lastDonationDate);
+        $today = new DateTime('today');
+        $nextEligibleDate = clone $lastDate;
+        $nextEligibleDate->modify('+' . $cooldownDays . ' days');
+        
+        if ($today < $nextEligibleDate) {
+            $daysRemaining = $today->diff($nextEligibleDate)->days;
+            http_response_code(400);
+            echo json_encode([
+                'success' => false, 
+                'message' => 'You are not eligible to donate yet. You can donate again after ' . $nextEligibleDate->format('F d, Y') . ' (' . $daysRemaining . ' days remaining).',
+                'next_eligible_date' => $nextEligibleDate->format('Y-m-d'),
+                'days_remaining' => $daysRemaining,
+                'reason' => 'cooldown_period'
+            ]);
+            exit;
+        }
+    }
+
+    // Check for existing pending/approved voluntary donations
+    $stmt = $conn->prepare("
+        SELECT COUNT(*) as active_count
+        FROM voluntary_donations 
+        WHERE donor_id = ? AND status IN ('pending', 'approved', 'scheduled')
+    ");
+    $stmt->execute([$donor['donor_id']]);
+    $activeRequests = $stmt->fetch();
+
+    if ($activeRequests['active_count'] > 0) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false, 
+            'message' => 'You already have an active voluntary donation request. Please wait for it to be completed or cancelled before submitting a new one.',
+            'reason' => 'active_request_exists'
+        ]);
+        exit;
+    }
+    // === END ELIGIBILITY CHECK ===
 
     // Validate date is in the future
     $availabilityDate = $input['availability_date'];

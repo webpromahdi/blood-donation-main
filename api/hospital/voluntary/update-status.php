@@ -70,6 +70,7 @@ try {
     // Verify voluntary donation exists and belongs to this hospital
     $stmt = $conn->prepare("
         SELECT v.id, v.status, v.donor_id, v.hospital_id, v.availability_date, v.preferred_time,
+               v.blood_group_id, v.city,
                u.name as donor_name, d.user_id as donor_user_id, bg.blood_type
         FROM voluntary_donations v
         JOIN donors d ON v.donor_id = d.id
@@ -137,26 +138,142 @@ try {
             exit;
         }
 
-        $stmt = $conn->prepare("
-            UPDATE voluntary_donations 
-            SET status = 'completed',
-                updated_at = NOW()
-            WHERE id = ?
-        ");
-        $stmt->execute([$input['voluntary_id']]);
+        // Define cooldown period (90 days as per requirement)
+        $cooldownDays = 90;
 
-        // Update donor stats
-        $stmt = $conn->prepare("
-            UPDATE donors 
-            SET total_donations = total_donations + 1,
-                last_donation_date = CURDATE(),
-                next_eligible_date = DATE_ADD(CURDATE(), INTERVAL 56 DAY)
-            WHERE id = ?
-        ");
-        $stmt->execute([$voluntary['donor_id']]);
+        // Start transaction for atomic operations
+        $conn->beginTransaction();
+
+        try {
+            // Update voluntary donation status
+            $stmt = $conn->prepare("
+                UPDATE voluntary_donations 
+                SET status = 'completed',
+                    updated_at = NOW()
+                WHERE id = ?
+            ");
+            $stmt->execute([$input['voluntary_id']]);
+
+            // Create a blood request entry to link with donations table
+            // This maintains referential integrity with existing donations schema
+            $stmt = $conn->prepare("
+                INSERT INTO blood_requests (
+                    request_code,
+                    requester_id,
+                    requester_type,
+                    patient_name,
+                    contact_phone,
+                    blood_group_id,
+                    quantity,
+                    units_fulfilled,
+                    hospital_id,
+                    hospital_name,
+                    city,
+                    required_date,
+                    medical_reason,
+                    urgency,
+                    status,
+                    approved_at,
+                    created_at
+                ) VALUES (
+                    ?,
+                    ?,
+                    'hospital',
+                    'Voluntary Donation',
+                    '',
+                    ?,
+                    1,
+                    1,
+                    ?,
+                    ?,
+                    ?,
+                    CURDATE(),
+                    'Voluntary blood donation',
+                    'normal',
+                    'completed',
+                    NOW(),
+                    NOW()
+                )
+            ");
+
+            // Generate unique request code for voluntary donation
+            $requestCode = 'VOL-' . date('Ymd') . '-' . str_pad($input['voluntary_id'], 4, '0', STR_PAD_LEFT);
+            
+            // Get hospital user_id for requester_id
+            $stmt2 = $conn->prepare("SELECT user_id FROM hospitals WHERE id = ?");
+            $stmt2->execute([$hospital['id']]);
+            $hospitalUser = $stmt2->fetch();
+
+            $stmt->execute([
+                $requestCode,
+                $hospitalUser['user_id'],
+                $voluntary['blood_group_id'] ?? 1,
+                $hospital['id'],
+                $hospital['name'],
+                $voluntary['city'] ?? '',
+            ]);
+
+            $requestId = $conn->lastInsertId();
+
+            // Insert into donations table - this is the key record for history
+            $stmt = $conn->prepare("
+                INSERT INTO donations (
+                    request_id,
+                    donor_id,
+                    status,
+                    quantity,
+                    accepted_at,
+                    completed_at,
+                    created_at
+                ) VALUES (?, ?, 'completed', 1, NOW(), NOW(), NOW())
+            ");
+            $stmt->execute([$requestId, $voluntary['donor_id']]);
+
+            $donationId = $conn->lastInsertId();
+
+            // Update donor stats with proper cooldown (90 days)
+            $stmt = $conn->prepare("
+                UPDATE donors 
+                SET total_donations = total_donations + 1,
+                    last_donation_date = CURDATE(),
+                    next_eligible_date = DATE_ADD(CURDATE(), INTERVAL ? DAY)
+                WHERE id = ?
+            ");
+            $stmt->execute([$cooldownDays, $voluntary['donor_id']]);
+
+            // Generate certificate for completed donation
+            $certCode = 'CERT-' . date('Y') . '-VOL-' . str_pad($donationId, 5, '0', STR_PAD_LEFT);
+            
+            $stmt = $conn->prepare("
+                INSERT INTO certificates (
+                    certificate_code,
+                    donation_id,
+                    donor_id,
+                    donor_name,
+                    blood_group,
+                    donation_date,
+                    hospital_name,
+                    quantity,
+                    issued_at
+                ) VALUES (?, ?, ?, ?, ?, CURDATE(), ?, 1, NOW())
+            ");
+            $stmt->execute([
+                $certCode,
+                $donationId,
+                $voluntary['donor_id'],
+                $voluntary['donor_name'],
+                $voluntary['blood_type'],
+                $hospital['name']
+            ]);
+
+            $conn->commit();
+        } catch (Exception $e) {
+            $conn->rollBack();
+            throw $e;
+        }
 
         $notificationTitle = 'Thank You for Donating!';
-        $notificationMessage = "Your voluntary blood donation at {$hospital['name']} has been completed. Thank you for saving lives!";
+        $notificationMessage = "Your voluntary blood donation at {$hospital['name']} has been completed. Thank you for saving lives! You can donate again after " . date('M d, Y', strtotime("+{$cooldownDays} days")) . ".";
 
     } elseif ($newStatus === 'cancelled') {
         $stmt = $conn->prepare("

@@ -4,6 +4,7 @@
  * POST /api/donor/health/update.php
  * 
  * Normalized Schema: Updates donor_health table (linked to donors table)
+ * Supports partial updates - only provided fields are updated
  */
 
 header('Content-Type: application/json');
@@ -58,45 +59,89 @@ try {
     
     $donorId = $donor['id'];
 
-    // Extract and sanitize input data
-    $height = isset($input['height']) ? floatval($input['height']) : null;
-    $bpSystolic = isset($input['blood_pressure_systolic']) ? intval($input['blood_pressure_systolic']) : null;
-    $bpDiastolic = isset($input['blood_pressure_diastolic']) ? intval($input['blood_pressure_diastolic']) : null;
-    $hemoglobin = isset($input['hemoglobin']) ? floatval($input['hemoglobin']) : null;
-    
-    // Medical conditions
-    $hasDiabetes = isset($input['has_diabetes']) ? (bool)$input['has_diabetes'] : false;
-    $hasHypertension = isset($input['has_hypertension']) ? (bool)$input['has_hypertension'] : false;
-    $hasHeartDisease = isset($input['has_heart_disease']) ? (bool)$input['has_heart_disease'] : false;
-    $hasBloodDisorders = isset($input['has_blood_disorders']) ? (bool)$input['has_blood_disorders'] : false;
-    $hasInfectiousDisease = isset($input['has_infectious_disease']) ? (bool)$input['has_infectious_disease'] : false;
-    $hasAsthma = isset($input['has_asthma']) ? (bool)$input['has_asthma'] : false;
-    $hasAllergies = isset($input['has_allergies']) ? (bool)$input['has_allergies'] : false;
-    $hasRecentSurgery = isset($input['has_recent_surgery']) ? (bool)$input['has_recent_surgery'] : false;
-    $isOnMedication = isset($input['is_on_medication']) ? (bool)$input['is_on_medication'] : false;
-    
-    // Lifestyle
-    $smokingStatus = isset($input['smoking_status']) && in_array($input['smoking_status'], ['no', 'occasionally', 'regularly']) 
-        ? $input['smoking_status'] : 'no';
-    $alcoholConsumption = isset($input['alcohol_consumption']) && in_array($input['alcohol_consumption'], ['none', 'occasionally', 'regularly'])
-        ? $input['alcohol_consumption'] : 'none';
-    $exerciseFrequency = isset($input['exercise_frequency']) && in_array($input['exercise_frequency'], ['rarely', 'weekly', 'daily'])
-        ? $input['exercise_frequency'] : 'rarely';
-    
-    // Additional
-    $medications = isset($input['medications']) ? trim($input['medications']) : null;
-    $allergiesDetails = isset($input['allergies_details']) ? trim($input['allergies_details']) : null;
-    $lastMedicalCheckup = isset($input['last_medical_checkup']) && !empty($input['last_medical_checkup']) 
-        ? $input['last_medical_checkup'] : null;
-    $additionalNotes = isset($input['additional_notes']) ? trim($input['additional_notes']) : null;
-
     // Check if health record exists
-    $stmt = $conn->prepare("SELECT id FROM donor_health WHERE donor_id = ?");
+    $stmt = $conn->prepare("SELECT * FROM donor_health WHERE donor_id = ?");
     $stmt->execute([$donorId]);
     $existingHealth = $stmt->fetch();
 
+    // Helper function to get value (only if explicitly provided and not empty string)
+    function getValue($input, $key, $existing, $default = null) {
+        // If key exists in input and is not null
+        if (array_key_exists($key, $input)) {
+            $value = $input[$key];
+            // If value is empty string or null, preserve existing value
+            if ($value === '' || $value === null) {
+                return $existing ? $existing[$key] : $default;
+            }
+            return $value;
+        }
+        // Key not in input, preserve existing value
+        return $existing ? $existing[$key] : $default;
+    }
+
+    // Helper function for boolean values
+    function getBoolValue($input, $key, $existing) {
+        if (array_key_exists($key, $input)) {
+            return (bool)$input[$key];
+        }
+        return $existing ? (bool)$existing[$key] : false;
+    }
+
+    // Extract values - preserve existing if not provided
+    $height = getValue($input, 'height', $existingHealth);
+    $height = $height !== null ? floatval($height) : null;
+    
+    $bpSystolic = getValue($input, 'blood_pressure_systolic', $existingHealth);
+    $bpSystolic = $bpSystolic !== null ? intval($bpSystolic) : null;
+    
+    $bpDiastolic = getValue($input, 'blood_pressure_diastolic', $existingHealth);
+    $bpDiastolic = $bpDiastolic !== null ? intval($bpDiastolic) : null;
+    
+    $hemoglobin = getValue($input, 'hemoglobin', $existingHealth);
+    $hemoglobin = $hemoglobin !== null ? floatval($hemoglobin) : null;
+    
+    // Medical conditions - only update if explicitly provided
+    $hasDiabetes = getBoolValue($input, 'has_diabetes', $existingHealth);
+    $hasHypertension = getBoolValue($input, 'has_hypertension', $existingHealth);
+    $hasHeartDisease = getBoolValue($input, 'has_heart_disease', $existingHealth);
+    $hasBloodDisorders = getBoolValue($input, 'has_blood_disorders', $existingHealth);
+    $hasInfectiousDisease = getBoolValue($input, 'has_infectious_disease', $existingHealth);
+    $hasAsthma = getBoolValue($input, 'has_asthma', $existingHealth);
+    $hasAllergies = getBoolValue($input, 'has_allergies', $existingHealth);
+    $hasRecentSurgery = getBoolValue($input, 'has_recent_surgery', $existingHealth);
+    $isOnMedication = getBoolValue($input, 'is_on_medication', $existingHealth);
+    
+    // Lifestyle - preserve existing if not provided
+    $smokingStatus = getValue($input, 'smoking_status', $existingHealth, 'no');
+    if (!in_array($smokingStatus, ['no', 'occasionally', 'regularly'])) {
+        $smokingStatus = $existingHealth ? $existingHealth['smoking_status'] : 'no';
+    }
+    
+    $alcoholConsumption = getValue($input, 'alcohol_consumption', $existingHealth, 'none');
+    if (!in_array($alcoholConsumption, ['none', 'occasionally', 'regularly'])) {
+        $alcoholConsumption = $existingHealth ? $existingHealth['alcohol_consumption'] : 'none';
+    }
+    
+    $exerciseFrequency = getValue($input, 'exercise_frequency', $existingHealth, 'rarely');
+    if (!in_array($exerciseFrequency, ['rarely', 'weekly', 'daily'])) {
+        $exerciseFrequency = $existingHealth ? $existingHealth['exercise_frequency'] : 'rarely';
+    }
+    
+    // Additional text fields
+    $medications = getValue($input, 'medications', $existingHealth);
+    $medications = $medications !== null ? trim($medications) : null;
+    
+    $allergiesDetails = getValue($input, 'allergies_details', $existingHealth);
+    $allergiesDetails = $allergiesDetails !== null ? trim($allergiesDetails) : null;
+    
+    $lastMedicalCheckup = getValue($input, 'last_medical_checkup', $existingHealth);
+    $lastMedicalCheckup = !empty($lastMedicalCheckup) ? $lastMedicalCheckup : null;
+    
+    $additionalNotes = getValue($input, 'additional_notes', $existingHealth);
+    $additionalNotes = $additionalNotes !== null ? trim($additionalNotes) : null;
+
     if ($existingHealth) {
-        // Update existing record
+        // Update existing record - preserving untouched fields
         $sql = "UPDATE donor_health SET 
                 height = ?, blood_pressure_systolic = ?, blood_pressure_diastolic = ?,
                 hemoglobin = ?, has_diabetes = ?, has_hypertension = ?, has_heart_disease = ?,
@@ -114,6 +159,7 @@ try {
             $smokingStatus, $alcoholConsumption, $exerciseFrequency,
             $medications, $allergiesDetails, $lastMedicalCheckup, $additionalNotes, $donorId
         ]);
+        $message = 'Health information updated successfully';
     } else {
         // Insert new record
         $sql = "INSERT INTO donor_health (donor_id, height, blood_pressure_systolic, blood_pressure_diastolic,
@@ -130,10 +176,11 @@ try {
             $smokingStatus, $alcoholConsumption, $exerciseFrequency,
             $medications, $allergiesDetails, $lastMedicalCheckup, $additionalNotes
         ]);
+        $message = 'Health information saved successfully';
     }
 
     // Update weight in donors table if provided
-    if (isset($input['weight'])) {
+    if (array_key_exists('weight', $input) && $input['weight'] !== '' && $input['weight'] !== null) {
         $weight = floatval($input['weight']);
         $stmt = $conn->prepare("UPDATE donors SET weight = ? WHERE id = ?");
         $stmt->execute([$weight, $donorId]);
@@ -141,7 +188,8 @@ try {
 
     echo json_encode([
         'success' => true,
-        'message' => 'Health information saved successfully'
+        'message' => $message,
+        'is_update' => (bool)$existingHealth
     ]);
 
 } catch (PDOException $e) {

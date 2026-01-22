@@ -80,7 +80,7 @@ try {
     $stmt->execute([$donorId]);
     $totalDonations = $stmt->fetch()['count'];
 
-    // Calculate eligibility (56 days since last donation, weight >= 50kg, age 18-65)
+    // Calculate eligibility (90 days since last donation, weight >= 50kg, age 18-65)
     $isEligible = true;
     $eligibilityReasons = [];
 
@@ -89,7 +89,7 @@ try {
     if ($lastDonation && $lastDonation['completed_at']) {
         $lastDate = new DateTime($lastDonation['completed_at']);
         $nextDate = clone $lastDate;
-        $nextDate->modify('+56 days');
+        $nextDate->modify('+90 days');
         $nextEligibleDate = $nextDate->format('Y-m-d');
 
         if ($nextDate > new DateTime()) {
@@ -158,7 +158,8 @@ try {
             'alcohol_consumption' => $healthInfo ? $healthInfo['alcohol_consumption'] : 'none',
             'exercise_frequency' => $healthInfo ? $healthInfo['exercise_frequency'] : 'rarely',
             'last_medical_checkup' => $healthInfo ? $healthInfo['last_medical_checkup'] : null,
-            'additional_notes' => $healthInfo ? $healthInfo['additional_notes'] : null
+            'additional_notes' => $healthInfo ? $healthInfo['additional_notes'] : null,
+            'updated_at' => $healthInfo ? $healthInfo['updated_at'] : null
         ],
         'eligibility' => [
             'is_eligible' => $isEligible,
@@ -179,8 +180,4 @@ try {
     error_log("Donor Health Error: " . $e->getMessage());
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Failed to fetch health information']);
-}
-    error_log("Donor Health Error: " . $e->getMessage());
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Failed to fetch health info']);
 }

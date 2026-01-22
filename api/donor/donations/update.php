@@ -136,7 +136,7 @@ try {
             UPDATE donors 
             SET total_donations = total_donations + 1,
                 last_donation_date = CURDATE(),
-                next_eligible_date = DATE_ADD(CURDATE(), INTERVAL 56 DAY)
+                next_eligible_date = DATE_ADD(CURDATE(), INTERVAL 90 DAY)
             WHERE id = ?
         ");
         $stmt->execute([$donorId]);

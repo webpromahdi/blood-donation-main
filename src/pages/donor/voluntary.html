@@ -169,8 +169,41 @@
           </div>
         </div>
 
+        <!-- Eligibility Alert (shown when donor is not eligible) -->
+        <div id="eligibilityAlert" class="hidden">
+          <div
+            class="p-4 bg-yellow-50 border border-yellow-200 rounded-xl flex items-start gap-4"
+          >
+            <div
+              class="size-10 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0"
+            >
+              <i
+                data-lucide="alert-triangle"
+                class="size-5 text-yellow-600"
+              ></i>
+            </div>
+            <div class="flex-1">
+              <h3 class="font-semibold text-yellow-900">
+                Not Eligible to Donate Yet
+              </h3>
+              <p class="text-sm text-yellow-700 mt-1" id="eligibilityMessage">
+                You need to wait before you can donate again.
+              </p>
+              <p
+                class="text-sm text-yellow-800 mt-2 font-medium"
+                id="nextEligibleInfo"
+              >
+                Next eligible date: <span id="nextEligibleDateDisplay">--</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
         <!-- Submission Form Section -->
-        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <div
+          id="formSection"
+          class="bg-white border border-gray-200 rounded-xl overflow-hidden"
+        >
           <div
             class="p-6 border-b border-gray-200 bg-gradient-to-r from-red-50 to-white"
           >
@@ -792,6 +825,100 @@
       let stats = { total: 0, pending: 0, approved: 0, completed: 0 };
       let cancelRequestId = null;
       let currentDetailId = null;
+      let donorEligibility = { eligible: true, nextEligibleDate: null };
+
+      // ============================================
+      // ELIGIBILITY CHECK
+      // ============================================
+      async function checkDonorEligibility() {
+        try {
+          const response = await fetch("/api/donor/eligibility.php", {
+            credentials: "include",
+          });
+          const data = await response.json();
+
+          if (!data.success) {
+            console.error("Failed to check eligibility:", data.message);
+            return true; // Default to eligible on error
+          }
+
+          donorEligibility = {
+            eligible: data.eligible,
+            nextEligibleDate: data.next_eligible_date,
+            daysRemaining: data.days_until_eligible,
+            message: data.message,
+            hasActiveRequest: data.has_active_request,
+            reason: data.reason,
+          };
+
+          updateEligibilityUI();
+          return data.eligible;
+        } catch (error) {
+          console.error("Error checking eligibility:", error);
+          return true; // Default to eligible on error
+        }
+      }
+
+      function updateEligibilityUI() {
+        const eligibilityAlert = document.getElementById("eligibilityAlert");
+        const formSection = document.getElementById("formSection");
+        const submitBtn = document.getElementById("submitBtn");
+
+        if (!donorEligibility.eligible || donorEligibility.hasActiveRequest) {
+          // Show eligibility alert
+          if (eligibilityAlert) {
+            eligibilityAlert.classList.remove("hidden");
+
+            const messageEl = document.getElementById("eligibilityMessage");
+            const dateDisplayEl = document.getElementById(
+              "nextEligibleDateDisplay",
+            );
+            const nextInfoEl = document.getElementById("nextEligibleInfo");
+
+            if (donorEligibility.hasActiveRequest) {
+              messageEl.textContent =
+                "You already have an active voluntary donation request. Please wait for it to be completed or cancelled.";
+              nextInfoEl.classList.add("hidden");
+            } else if (donorEligibility.nextEligibleDate) {
+              const nextDate = new Date(donorEligibility.nextEligibleDate);
+              const formattedDate = nextDate.toLocaleDateString("en-US", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              });
+              messageEl.textContent = `You need to wait ${donorEligibility.daysRemaining} more days before you can donate again (90-day cooldown period).`;
+              dateDisplayEl.textContent = formattedDate;
+              nextInfoEl.classList.remove("hidden");
+            }
+          }
+
+          // Disable form and submit button
+          if (formSection) {
+            formSection.classList.add("opacity-60", "pointer-events-none");
+          }
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.classList.add("opacity-50", "cursor-not-allowed");
+            submitBtn.innerHTML = `<i data-lucide="ban" class="size-4"></i> Not Eligible to Donate`;
+            if (window.lucide) window.lucide.createIcons();
+          }
+        } else {
+          // Hide eligibility alert, enable form
+          if (eligibilityAlert) {
+            eligibilityAlert.classList.add("hidden");
+          }
+          if (formSection) {
+            formSection.classList.remove("opacity-60", "pointer-events-none");
+          }
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
+            submitBtn.innerHTML = `<i data-lucide="send" class="size-4"></i> Submit Donation Request`;
+            if (window.lucide) window.lucide.createIcons();
+          }
+        }
+      }
 
       // ============================================
       // ACCOUNT STATUS CHECK
@@ -1428,6 +1555,9 @@
             // Reload requests to show the new one
             await loadRequests();
 
+            // Re-check eligibility (since donor now has an active request)
+            await checkDonorEligibility();
+
             // Scroll to requests section smoothly
             document
               .getElementById("requestsGrid")
@@ -1492,6 +1622,9 @@
             showNotification("Request cancelled successfully", "success");
             closeCancelModal();
             loadRequests();
+
+            // Re-check eligibility (donor may now be able to submit again)
+            await checkDonorEligibility();
           } else {
             showNotification(
               data.message || "Failed to cancel request",
@@ -1555,6 +1688,9 @@
         const isApproved = await checkAccountStatus();
 
         if (isApproved) {
+          // Check donor eligibility (cooldown period)
+          await checkDonorEligibility();
+
           // Load hospitals and requests
           await loadHospitals();
           loadRequests();
