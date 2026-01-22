@@ -90,7 +90,7 @@ try {
                     JOIN users u ON d.user_id = u.id
                     JOIN blood_groups bg ON v.blood_group_id = bg.id
                     JOIN blood_groups donor_bg ON d.blood_group_id = donor_bg.id
-                    WHERE v.hospital_id = ? AND v.status IN ('approved', 'completed')
+                    WHERE v.hospital_id = ? AND v.status IN ('approved', 'scheduled', 'completed')
                     ORDER BY v.availability_date ASC";
 
     $stmt = $conn->prepare($sqlVoluntary);
@@ -146,6 +146,7 @@ try {
         // Map voluntary status to display status
         $statusMap = [
             'approved' => 'Pending',  // Approved by admin, waiting for hospital to confirm
+            'scheduled' => 'Confirmed', // Confirmed/scheduled by hospital
             'completed' => 'Completed',
             'cancelled' => 'Cancelled'
         ];

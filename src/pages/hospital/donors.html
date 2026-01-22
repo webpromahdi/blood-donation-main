@@ -134,12 +134,14 @@
               Browse and contact registered blood donors
             </p>
           </div>
-          <button
-            class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium"
-          >
-            <i data-lucide="filter" class="size-4 inline mr-2"></i>Filter by
-            Location
-          </button>
+          <div class="flex items-center gap-3">
+            <select
+              id="locationFilter"
+              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              <option value="">All Locations</option>
+            </select>
+          </div>
         </div>
 
         <!-- Quick Filter -->
@@ -374,7 +376,9 @@
     <script>
       // Hospital Donor List - Dynamic Data from API
       let donors = [];
+      let cities = [];
       let selectedBloodGroup = "All Donors";
+      let selectedLocation = "";
       let availableOnly = false;
 
       // Show loading state
@@ -445,7 +449,13 @@
             selectedBloodGroup === "All Donors" ||
             donor.blood_group === selectedBloodGroup;
           const matchesAvailable = !availableOnly || donor.is_available;
-          return matchesBlood && matchesAvailable;
+          const matchesLocation =
+            !selectedLocation ||
+            (donor.city &&
+              donor.city
+                .toLowerCase()
+                .includes(selectedLocation.toLowerCase()));
+          return matchesBlood && matchesAvailable && matchesLocation;
         });
 
         if (filtered.length === 0) {
@@ -454,9 +464,11 @@
           emptyStateMessage.textContent =
             selectedBloodGroup !== "All Donors"
               ? `No donors found for ${selectedBloodGroup} blood type`
-              : donors.length === 0
-                ? "No donors registered in the system yet"
-                : "No donors match your current filters";
+              : selectedLocation
+                ? `No donors found in ${selectedLocation}`
+                : donors.length === 0
+                  ? "No donors registered in the system yet"
+                  : "No donors match your current filters";
           donorCountText.textContent = "Total 0 donors in your network";
         } else {
           tableBody.parentElement.classList.remove("hidden");
@@ -467,7 +479,7 @@
             selectedBloodGroup !== "All Donors"
               ? `with ${selectedBloodGroup} blood type `
               : ""
-          }in your network`;
+          }${selectedLocation ? `in ${selectedLocation} ` : ""}in your network`;
 
           tableBody.innerHTML = filtered
             .map(
@@ -523,7 +535,12 @@
                   <button class="view-details-btn px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg" data-id="${
                     donor.id
                   }">
-                    <i data-lucide="eye" class="size-4 inline mr-1"></i>View Details
+                    <i data-lucide="eye" class="size-4 inline mr-1"></i>View
+                  </button>
+                  <button class="chat-btn px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg" data-id="${
+                    donor.id
+                  }" data-user-id="${donor.user_id}" data-name="${donor.name}">
+                    <i data-lucide="message-square" class="size-4 inline mr-1"></i>Chat
                   </button>
                 </div>
               </td>
@@ -542,7 +559,22 @@
               openDonorModal(donorId);
             });
           });
+
+          // Attach event listeners for Chat buttons
+          document.querySelectorAll(".chat-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const donorUserId = this.dataset.userId;
+              const donorName = this.dataset.name;
+              startChat(donorUserId, donorName);
+            });
+          });
         }
+      }
+
+      // Start chat with donor
+      function startChat(donorUserId, donorName) {
+        // Navigate to chat page with donor ID
+        window.location.href = `/src/pages/hospital/chat.html?user=${donorUserId}&name=${encodeURIComponent(donorName)}`;
       }
 
       // Modal functions
@@ -627,7 +659,19 @@
         showLoading();
 
         try {
-          const response = await fetch("/api/hospital/donors.php");
+          // Build URL with filters
+          let url = "/api/hospital/donors.php?";
+          if (selectedBloodGroup !== "All Donors") {
+            url += `blood_type=${encodeURIComponent(selectedBloodGroup)}&`;
+          }
+          if (selectedLocation) {
+            url += `location=${encodeURIComponent(selectedLocation)}&`;
+          }
+          if (availableOnly) {
+            url += `available=true&`;
+          }
+
+          const response = await fetch(url);
 
           if (response.status === 401) {
             window.location.href = "/src/pages/auth/login.html";
@@ -642,10 +686,34 @@
           }
 
           donors = data.donors || [];
+
+          // Populate location filter if cities are available
+          if (data.cities && data.cities.length > 0) {
+            cities = data.cities;
+            populateLocationFilter();
+          }
+
           renderDonors();
         } catch (error) {
           console.error("Error loading donors:", error);
           showError("Unable to connect to the server. Please try again later.");
+        }
+      }
+
+      // Populate location filter dropdown
+      function populateLocationFilter() {
+        const locationFilter = document.getElementById("locationFilter");
+        if (locationFilter && cities.length > 0) {
+          const currentValue = locationFilter.value;
+          locationFilter.innerHTML =
+            '<option value="">All Locations</option>' +
+            cities
+              .map((city) => `<option value="${city}">${city}</option>`)
+              .join("");
+          // Restore selection if it exists
+          if (currentValue && cities.includes(currentValue)) {
+            locationFilter.value = currentValue;
+          }
         }
       }
 
@@ -713,6 +781,12 @@
         clearFiltersBtn.addEventListener("click", function () {
           selectedBloodGroup = "All Donors";
           availableOnly = false;
+          selectedLocation = "";
+
+          // Reset location filter dropdown
+          const locationFilter = document.getElementById("locationFilter");
+          if (locationFilter) locationFilter.value = "";
+
           filterButtons.forEach((btn) => {
             const btnText = btn.textContent.trim();
             if (btnText === "All Donors") {
@@ -736,6 +810,15 @@
           });
           renderDonors();
         });
+
+        // Location filter change handler
+        const locationFilter = document.getElementById("locationFilter");
+        if (locationFilter) {
+          locationFilter.addEventListener("change", function () {
+            selectedLocation = this.value;
+            renderDonors();
+          });
+        }
 
         // Load donors from API
         loadDonors();

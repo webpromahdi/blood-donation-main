@@ -196,13 +196,6 @@
                 View and manage donation appointments
               </p>
             </div>
-            <button
-              onclick="showScheduleNotification()"
-              class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
-            >
-              <i data-lucide="calendar" class="size-4 inline mr-2"></i>Schedule
-              New
-            </button>
           </div>
 
           <!-- Tab Navigation -->
@@ -482,6 +475,7 @@
         // Map API statuses to display statuses
         const statusMap = {
           accepted: "Confirmed",
+          scheduled: "Confirmed",
           on_the_way: "Confirmed",
           reached: "Confirmed",
           completed: "Completed",
@@ -506,7 +500,7 @@
         const tabButtons = document.querySelectorAll(".tab-btn");
 
         // Make updateTabStyles global
-        window.updateTabStyles = function() {
+        window.updateTabStyles = function () {
           tabButtons.forEach((btn) => {
             const isActive = btn.dataset.tab === currentTab;
             btn.classList.toggle("border-red-600", isActive);

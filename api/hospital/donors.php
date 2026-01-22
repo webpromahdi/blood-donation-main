@@ -102,16 +102,29 @@ try {
                JOIN blood_groups bg ON d.blood_group_id = bg.id
                WHERE u.status = 'approved'";
 
+    $params = [];
+
     // Filter by blood type if specified
     if (isset($_GET['blood_type']) && !empty($_GET['blood_type'])) {
         $sqlAll .= " AND bg.blood_type = ?";
-        $stmtAll = $conn->prepare($sqlAll . " ORDER BY d.total_donations DESC");
-        $stmtAll->execute([$_GET['blood_type']]);
-    } else {
-        $stmtAll = $conn->prepare($sqlAll . " ORDER BY d.total_donations DESC");
-        $stmtAll->execute();
+        $params[] = $_GET['blood_type'];
     }
+
+    // Filter by location/city if specified
+    if (isset($_GET['location']) && !empty($_GET['location'])) {
+        $sqlAll .= " AND d.city LIKE ?";
+        $params[] = '%' . $_GET['location'] . '%';
+    }
+
+    $sqlAll .= " ORDER BY d.total_donations DESC";
+    $stmtAll = $conn->prepare($sqlAll);
+    $stmtAll->execute($params);
     $allDonors = $stmtAll->fetchAll();
+
+    // Get unique cities for filter options
+    $citiesStmt = $conn->prepare("SELECT DISTINCT city FROM donors WHERE city IS NOT NULL AND city != '' ORDER BY city");
+    $citiesStmt->execute();
+    $cities = $citiesStmt->fetchAll(PDO::FETCH_COLUMN);
 
     // Format response
     $formattedDonors = array_map(function ($donor) {
@@ -153,6 +166,7 @@ try {
         'donors' => $formattedDonors,
         'hospital_donors' => $donors,
         'active_donors' => $activeDonors,
+        'cities' => $cities,
         'total' => count($formattedDonors)
     ]);
 

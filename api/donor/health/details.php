@@ -94,7 +94,7 @@ try {
     $stmt = $conn->prepare("
         SELECT d.id as donor_id, u.id as user_id, u.name, u.phone, u.email, 
                bg.blood_type as blood_group, d.age, d.city, d.total_donations as stored_donations,
-               u.created_at
+               d.weight as donor_weight, u.created_at
         FROM donors d
         JOIN users u ON d.user_id = u.id
         LEFT JOIN blood_groups bg ON d.blood_group_id = bg.id
@@ -119,6 +119,9 @@ try {
     $stmt->execute([$donorId]);
     $totalDonations = $stmt->fetch()['count'];
 
+    // Get weight - prefer from health table if available, otherwise use donors table
+    $donorWeight = $health && $health['weight'] ? $health['weight'] : ($donor['donor_weight'] ?? null);
+
     // Format response
     $response = [
         'success' => true,
@@ -131,11 +134,12 @@ try {
             'blood_group' => $donor['blood_group'],
             'age' => $donor['age'],
             'city' => $donor['city'],
+            'weight' => $donorWeight,
             'total_donations' => max((int)$totalDonations, (int)$donor['stored_donations']),
             'member_since' => $donor['created_at']
         ],
         'health' => $health ? [
-            'weight' => $health['weight'],
+            'weight' => $donorWeight,
             'height' => $health['height'],
             'blood_pressure' => $health['blood_pressure_systolic'] && $health['blood_pressure_diastolic'] 
                 ? $health['blood_pressure_systolic'] . '/' . $health['blood_pressure_diastolic'] . ' mmHg'

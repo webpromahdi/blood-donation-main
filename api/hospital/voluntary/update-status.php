@@ -90,20 +90,12 @@ try {
     $currentStatus = $voluntary['status'];
     
     // Validate status transitions
-    $validTransitions = [
-        'approved' => ['confirmed', 'cancelled'],
-        'confirmed' => ['completed', 'cancelled'],
-    ];
-
-    // Map 'confirmed' to how we store it (we'll store as a flag or use scheduled fields)
-    // For database, we keep status as 'approved' but set scheduled_date/time when confirmed
-    // Or we can add a new status. For simplicity, we'll update scheduling fields for 'confirmed'
-    
+    // 'approved' (by admin) -> 'scheduled'/'confirmed' (by hospital) -> 'completed' or 'cancelled'
     $notificationTitle = '';
     $notificationMessage = '';
 
     if ($newStatus === 'confirmed') {
-        if ($currentStatus !== 'approved') {
+        if ($currentStatus !== 'approved' && $currentStatus !== 'pending') {
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Can only confirm approved voluntary donations']);
             exit;
@@ -124,9 +116,11 @@ try {
             $scheduledTime = $timeMap[$voluntary['preferred_time']] ?? '10:00:00';
         }
 
+        // Update status to 'scheduled' in the database so it shows as Confirmed/Scheduled
         $stmt = $conn->prepare("
             UPDATE voluntary_donations 
-            SET scheduled_date = ?,
+            SET status = 'scheduled',
+                scheduled_date = ?,
                 scheduled_time = ?,
                 updated_at = NOW()
             WHERE id = ?
@@ -137,7 +131,7 @@ try {
         $notificationMessage = "Your voluntary donation has been confirmed by {$hospital['name']}. Scheduled for " . date('M d, Y', strtotime($scheduledDate)) . " at " . date('h:i A', strtotime($scheduledTime));
 
     } elseif ($newStatus === 'completed') {
-        if ($currentStatus !== 'approved') {
+        if ($currentStatus !== 'approved' && $currentStatus !== 'scheduled') {
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Can only complete approved/confirmed voluntary donations']);
             exit;
@@ -150,6 +144,16 @@ try {
             WHERE id = ?
         ");
         $stmt->execute([$input['voluntary_id']]);
+
+        // Update donor stats
+        $stmt = $conn->prepare("
+            UPDATE donors 
+            SET total_donations = total_donations + 1,
+                last_donation_date = CURDATE(),
+                next_eligible_date = DATE_ADD(CURDATE(), INTERVAL 56 DAY)
+            WHERE id = ?
+        ");
+        $stmt->execute([$voluntary['donor_id']]);
 
         $notificationTitle = 'Thank You for Donating!';
         $notificationMessage = "Your voluntary blood donation at {$hospital['name']} has been completed. Thank you for saving lives!";

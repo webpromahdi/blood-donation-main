@@ -40,10 +40,11 @@ if (!$conn) {
 
 try {
     // Query with normalized schema - JOIN users and hospitals tables
-    // Note: r.requester_id references users.id (not hospitals.id) with requester_type = 'hospital'
+    // Fetch all hospital fields for admin view
     $sql = "SELECT u.id as user_id, h.id as hospital_id, u.name, u.email, u.phone, 
-                   h.address, h.registration_number, h.website, h.contact_person, 
-                   h.city, u.status, u.created_at, h.total_requests,
+                   h.address, h.registration_number, h.hospital_type, h.website, 
+                   h.contact_person, h.city, h.state, h.pincode, h.operating_hours,
+                   h.has_blood_bank, u.status, u.created_at, h.total_requests,
                    SUM(CASE WHEN r.status = 'completed' THEN 1 ELSE 0 END) as completed_requests,
                    SUM(CASE WHEN r.status = 'pending' THEN 1 ELSE 0 END) as pending_requests
             FROM users u
@@ -65,6 +66,14 @@ try {
         // Map status to display format for backward compatibility
         $displayStatus = $approvalStatus === 'approved' ? 'Approved' : ($approvalStatus === 'rejected' ? 'Rejected' : 'Pending');
 
+        // Map hospital_type to display format
+        $typeMap = [
+            'government' => 'Public',
+            'private' => 'Private',
+            'charity' => 'Charity'
+        ];
+        $displayType = $typeMap[$hospital['hospital_type'] ?? 'private'] ?? 'Private';
+
         return [
             'id' => $hospital['user_id'],
             'hospital_id' => $hospital['hospital_id'],
@@ -73,9 +82,18 @@ try {
             'phone' => $hospital['phone'],
             'address' => $hospital['address'],
             'city' => $hospital['city'],
+            'state' => $hospital['state'],
+            'zip_code' => $hospital['pincode'],
             'registration_number' => $hospital['registration_number'],
+            'license_number' => $hospital['registration_number'], // Alias for backward compatibility
+            'hospital_type' => $hospital['hospital_type'],
+            'type' => $displayType,
             'website' => $hospital['website'],
             'contact_person' => $hospital['contact_person'],
+            'contact_phone' => $hospital['phone'], // Use main phone as contact phone
+            'operating_hours' => $hospital['operating_hours'],
+            'has_blood_bank' => (bool) ($hospital['has_blood_bank'] ?? false),
+            'emergency_services' => true, // Default assumption
             'status' => $approvalStatus,
             'display_status' => $displayStatus,
             'total_requests' => (int) ($hospital['total_requests'] ?? 0),

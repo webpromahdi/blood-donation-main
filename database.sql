@@ -443,8 +443,8 @@ CREATE TABLE voluntary_donations (
     preferred_time ENUM('morning', 'afternoon', 'evening', 'any') DEFAULT 'any',
     notes TEXT,
     
-    -- Status tracking
-    status ENUM('pending', 'approved', 'rejected', 'completed', 'cancelled') DEFAULT 'pending',
+    -- Status tracking (added 'scheduled' for hospital confirmation)
+    status ENUM('pending', 'approved', 'scheduled', 'rejected', 'completed', 'cancelled') DEFAULT 'pending',
     
     -- Admin processing
     approved_by_admin_id INT NULL,

@@ -216,37 +216,49 @@
                   </select>
                 </div>
 
-                <!-- Hospital Search -->
+                <!-- Searchable Hospital Selection -->
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                    Search Hospital
+                    Search &amp; Select Hospital
+                    <span class="text-red-500">*</span>
                   </label>
-                  <div class="relative">
+                  <div class="relative" id="hospitalSelectContainer">
                     <i
                       data-lucide="search"
-                      class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400"
+                      class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none z-10"
                     ></i>
                     <input
                       type="text"
                       id="hospitalSearch"
                       placeholder="Type to search hospitals..."
-                      class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      autocomplete="off"
+                      class="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     />
+                    <i
+                      data-lucide="chevron-down"
+                      id="hospitalDropdownIcon"
+                      class="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none transition-transform"
+                    ></i>
+                    <!-- Hidden select for form submission -->
+                    <select id="hospitalSelect" required class="hidden">
+                      <option value="">Select a hospital...</option>
+                    </select>
+                    <!-- Dropdown list -->
+                    <div
+                      id="hospitalDropdown"
+                      class="hidden absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                    >
+                      <div id="hospitalListContainer" class="py-1">
+                        <!-- Hospital options populated by JS -->
+                      </div>
+                      <div
+                        id="noHospitalsMessage"
+                        class="hidden p-3 text-sm text-gray-500 text-center"
+                      >
+                        No hospitals found matching your search
+                      </div>
+                    </div>
                   </div>
-                </div>
-
-                <!-- Hospital Dropdown -->
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                    Choose Hospital <span class="text-red-500">*</span>
-                  </label>
-                  <select
-                    id="hospitalSelect"
-                    required
-                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white"
-                  >
-                    <option value="">Select a hospital...</option>
-                  </select>
                   <p class="text-xs text-gray-500 mt-1.5">
                     Only verified hospitals are shown
                   </p>
@@ -830,21 +842,20 @@
       async function loadHospitals() {
         try {
           const cityFilter = document.getElementById("cityFilter").value;
-          const searchFilter = document.getElementById("hospitalSearch").value;
 
           let url = "/api/donor/hospitals/list.php?";
-          if (cityFilter) url += `city=${encodeURIComponent(cityFilter)}&`;
-          if (searchFilter) url += `search=${encodeURIComponent(searchFilter)}`;
+          if (cityFilter) url += `city=${encodeURIComponent(cityFilter)}`;
 
           const response = await fetch(url, { credentials: "include" });
           const data = await response.json();
 
           if (data.success) {
             hospitals = data.hospitals || [];
-            renderHospitalSelect();
+            renderHospitalDropdown();
+            updateHospitalSelect();
 
             // Populate city filter on first load
-            if (!cityFilter && !searchFilter && data.cities) {
+            if (!cityFilter && data.cities) {
               const citySelect = document.getElementById("cityFilter");
               citySelect.innerHTML =
                 '<option value="">All Cities</option>' +
@@ -859,7 +870,7 @@
         }
       }
 
-      function renderHospitalSelect() {
+      function updateHospitalSelect() {
         const select = document.getElementById("hospitalSelect");
         select.innerHTML =
           '<option value="">Select a hospital...</option>' +
@@ -878,6 +889,117 @@
           `,
             )
             .join("");
+      }
+
+      function renderHospitalDropdown(searchTerm = "") {
+        const container = document.getElementById("hospitalListContainer");
+        const noResultsMsg = document.getElementById("noHospitalsMessage");
+
+        // Filter hospitals based on search term
+        const filtered = searchTerm
+          ? hospitals.filter(
+              (h) =>
+                h.hospital_name
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase()) ||
+                (h.city &&
+                  h.city.toLowerCase().includes(searchTerm.toLowerCase())),
+            )
+          : hospitals;
+
+        if (filtered.length === 0) {
+          container.innerHTML = "";
+          noResultsMsg.classList.remove("hidden");
+          return;
+        }
+
+        noResultsMsg.classList.add("hidden");
+        container.innerHTML = filtered
+          .map(
+            (h) => `
+          <div 
+            class="hospital-option px-4 py-3 hover:bg-red-50 cursor-pointer border-b border-gray-100 last:border-0 transition-colors"
+            data-id="${h.id}"
+            data-name="${h.hospital_name}"
+            data-city="${h.city || ""}"
+            data-address="${h.address || ""}"
+            data-phone="${h.phone || ""}"
+            data-type="${h.hospital_type || ""}"
+            data-hours="${h.operating_hours || ""}"
+            data-bloodbank="${h.has_blood_bank ? "Yes" : "No"}"
+          >
+            <div class="flex items-center gap-3">
+              <div class="size-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i data-lucide="building-2" class="size-5 text-gray-600"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="font-medium text-gray-900 truncate">${h.hospital_name}</div>
+                <div class="text-sm text-gray-500 flex items-center gap-1">
+                  <i data-lucide="map-pin" class="size-3"></i>
+                  <span>${h.city || "N/A"}</span>
+                  ${h.has_blood_bank ? '<span class="ml-2 text-xs text-green-600 bg-green-100 px-1.5 py-0.5 rounded">Blood Bank</span>' : ""}
+                </div>
+              </div>
+            </div>
+          </div>
+        `,
+          )
+          .join("");
+
+        if (window.lucide) window.lucide.createIcons();
+
+        // Attach click handlers
+        container.querySelectorAll(".hospital-option").forEach((option) => {
+          option.addEventListener("click", () => selectHospital(option));
+        });
+      }
+
+      function selectHospital(optionEl) {
+        const id = optionEl.dataset.id;
+        const name = optionEl.dataset.name;
+        const city = optionEl.dataset.city;
+
+        // Update hidden select
+        const select = document.getElementById("hospitalSelect");
+        select.value = id;
+
+        // Update search input to show selected hospital
+        const searchInput = document.getElementById("hospitalSearch");
+        searchInput.value = name + (city ? ` - ${city}` : "");
+
+        // Close dropdown
+        closeHospitalDropdown();
+
+        // Show preview
+        showHospitalPreviewFromData({
+          name: name,
+          city: city,
+          address: optionEl.dataset.address,
+          phone: optionEl.dataset.phone,
+          type: optionEl.dataset.type,
+          hours: optionEl.dataset.hours,
+          bloodbank: optionEl.dataset.bloodbank,
+        });
+      }
+
+      function showHospitalPreviewFromData(data) {
+        const preview = document.getElementById("hospitalPreview");
+
+        document.getElementById("previewHospitalName").textContent = data.name;
+        document.getElementById("previewHospitalCity").innerHTML =
+          `<i data-lucide="map-pin" class="size-3"></i><span>${data.city || "N/A"}</span>`;
+
+        let details = [];
+        if (data.type)
+          details.push(`<span class="capitalize">${data.type}</span>`);
+        if (data.hours) details.push(`Hours: ${data.hours}`);
+        if (data.bloodbank === "Yes")
+          details.push(`<span class="text-green-600">Has Blood Bank</span>`);
+
+        document.getElementById("previewHospitalDetails").innerHTML =
+          details.join(" • ");
+        preview.classList.remove("hidden");
+        if (window.lucide) window.lucide.createIcons();
       }
 
       function showHospitalPreview() {
@@ -912,6 +1034,21 @@
           details.join(" • ");
         preview.classList.remove("hidden");
         if (window.lucide) window.lucide.createIcons();
+      }
+
+      function openHospitalDropdown() {
+        const dropdown = document.getElementById("hospitalDropdown");
+        const icon = document.getElementById("hospitalDropdownIcon");
+        dropdown.classList.remove("hidden");
+        icon.classList.add("rotate-180");
+        renderHospitalDropdown(document.getElementById("hospitalSearch").value);
+      }
+
+      function closeHospitalDropdown() {
+        const dropdown = document.getElementById("hospitalDropdown");
+        const icon = document.getElementById("hospitalDropdownIcon");
+        dropdown.classList.add("hidden");
+        icon.classList.remove("rotate-180");
       }
 
       // ============================================
@@ -1430,25 +1567,61 @@
           form.addEventListener("submit", submitVoluntaryRequest);
         }
 
-        // Hospital selection change
-        const hospitalSelect = document.getElementById("hospitalSelect");
-        if (hospitalSelect) {
-          hospitalSelect.addEventListener("change", showHospitalPreview);
+        // Hospital searchable dropdown behavior
+        const hospitalSearch = document.getElementById("hospitalSearch");
+        const hospitalDropdown = document.getElementById("hospitalDropdown");
+
+        if (hospitalSearch) {
+          // Open dropdown on focus
+          hospitalSearch.addEventListener("focus", () => {
+            openHospitalDropdown();
+          });
+
+          // Filter as user types
+          hospitalSearch.addEventListener("input", (e) => {
+            const searchTerm = e.target.value;
+            // Clear selection if user is typing something different
+            const select = document.getElementById("hospitalSelect");
+            if (select.value) {
+              const selectedOption = select.options[select.selectedIndex];
+              if (
+                selectedOption &&
+                !selectedOption.text
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase())
+              ) {
+                select.value = "";
+                document
+                  .getElementById("hospitalPreview")
+                  .classList.add("hidden");
+              }
+            }
+            renderHospitalDropdown(searchTerm);
+            if (!hospitalDropdown.classList.contains("hidden") === false) {
+              openHospitalDropdown();
+            }
+          });
+
+          // Handle clicking outside to close dropdown
+          document.addEventListener("click", (e) => {
+            const container = document.getElementById(
+              "hospitalSelectContainer",
+            );
+            if (container && !container.contains(e.target)) {
+              closeHospitalDropdown();
+            }
+          });
         }
 
-        // City filter change
+        // City filter change - reload hospitals
         const cityFilter = document.getElementById("cityFilter");
         if (cityFilter) {
-          cityFilter.addEventListener("change", loadHospitals);
-        }
-
-        // Hospital search with debounce
-        let searchTimeout;
-        const hospitalSearch = document.getElementById("hospitalSearch");
-        if (hospitalSearch) {
-          hospitalSearch.addEventListener("input", () => {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(loadHospitals, 300);
+          cityFilter.addEventListener("change", async () => {
+            await loadHospitals();
+            // Clear current selection when city changes
+            document.getElementById("hospitalSelect").value = "";
+            document.getElementById("hospitalSearch").value = "";
+            document.getElementById("hospitalPreview").classList.add("hidden");
           });
         }
 

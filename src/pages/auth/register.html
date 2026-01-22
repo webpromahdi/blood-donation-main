@@ -1,666 +1,1027 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - BloodConnect</title>
+    <link rel="stylesheet" href="/src/styles/styles.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register - BloodConnect</title>
-  <link rel="stylesheet" href="/src/styles/styles.css" />
-</head>
-
-<body class="min-h-screen bg-linear-to-br from-red-50 via-white to-red-50 flex items-center justify-center p-6">
-  <div class="w-full max-w-md">
-    <!-- Back Button -->
-    <div class="mb-8">
-      <a href="/"
-        class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors">
-        <i data-lucide="arrow-left" class="size-4 mr-2"></i>
-        Back to Home
-      </a>
-    </div>
-
-    <!-- Register Card -->
-    <div class="p-8 bg-white shadow-xl border-2 border-gray-100 rounded-xl">
-      <!-- Role Icon -->
-      <div class="text-center mb-6">
-        <div class="bg-red-600 size-16 rounded-lg flex items-center justify-center mx-auto mb-4" id="roleIconContainer">
-          <i data-lucide="heart" class="size-8 text-white"></i>
-        </div>
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">
-          Create Your Account
-        </h3>
-        <p class="text-gray-600">
-          Registering as
-          <span class="text-red-600 font-medium" id="roleTitle">Donor</span>
-        </p>
+  <body
+    class="min-h-screen bg-linear-to-br from-red-50 via-white to-red-50 flex items-center justify-center p-6"
+  >
+    <div class="w-full max-w-md">
+      <!-- Back Button -->
+      <div class="mb-8">
+        <a
+          href="/"
+          class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors"
+        >
+          <i data-lucide="arrow-left" class="size-4 mr-2"></i>
+          Back to Home
+        </a>
       </div>
 
-      <!-- Role Selector -->
-      <div class="mb-6">
-        <label class="text-gray-700 mb-3 block font-medium">Select Your Role</label>
-        <div class="grid grid-cols-4 gap-2 p-1 bg-gray-100 rounded-lg" id="roleSelector">
-          <button type="button" onclick="selectRole('donor')" data-role="donor"
-            class="role-btn px-3 py-2 rounded-md transition-all bg-white text-red-600 shadow-sm">
-            <i data-lucide="heart" class="size-5 mx-auto mb-1"></i>
-            <div class="text-xs">Donor</div>
-          </button>
-          <button type="button" onclick="selectRole('admin')" data-role="admin"
-            class="role-btn px-3 py-2 rounded-md transition-all text-gray-600 hover:text-gray-900">
-            <i data-lucide="shield" class="size-5 mx-auto mb-1"></i>
-            <div class="text-xs">Admin</div>
-          </button>
-          <button type="button" onclick="selectRole('hospital')" data-role="hospital"
-            class="role-btn px-3 py-2 rounded-md transition-all text-gray-600 hover:text-gray-900">
-            <i data-lucide="building-2" class="size-5 mx-auto mb-1"></i>
-            <div class="text-xs">Hospital</div>
-          </button>
-          <button type="button" onclick="selectRole('seeker')" data-role="seeker"
-            class="role-btn px-3 py-2 rounded-md transition-all text-gray-600 hover:text-gray-900">
-            <i data-lucide="search" class="size-5 mx-auto mb-1"></i>
-            <div class="text-xs">Seeker</div>
-          </button>
-        </div>
-      </div>
-
-      <!-- Registration Form -->
-      <form id="registerForm" class="space-y-5">
-        <!-- Name Field (hidden for admin) -->
-        <div id="nameFieldContainer">
-          <label for="name" class="text-gray-700 mb-2 block font-medium">Full Name</label>
-          <div class="relative">
-            <i data-lucide="user" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
-            <input id="name" name="name" type="text" placeholder="Enter your full name"
-              class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
+      <!-- Register Card -->
+      <div class="p-8 bg-white shadow-xl border-2 border-gray-100 rounded-xl">
+        <!-- Role Icon -->
+        <div class="text-center mb-6">
+          <div
+            class="bg-red-600 size-16 rounded-lg flex items-center justify-center mx-auto mb-4"
+            id="roleIconContainer"
+          >
+            <i data-lucide="heart" class="size-8 text-white"></i>
           </div>
-          <p class="text-red-500 text-sm mt-1 hidden" id="nameError"></p>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            Create Your Account
+          </h3>
+          <p class="text-gray-600">
+            Registering as
+            <span class="text-red-600 font-medium" id="roleTitle">Donor</span>
+          </p>
         </div>
 
-        <!-- Email Field -->
-        <div>
-          <label for="email" class="text-gray-700 mb-2 block font-medium">Email Address</label>
-          <div class="relative">
-            <i data-lucide="mail" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
-            <input id="email" name="email" type="email" placeholder="Enter your email"
-              class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
-          </div>
-          <p class="text-red-500 text-sm mt-1 hidden" id="emailError"></p>
-        </div>
-
-        <!-- Password Field -->
-        <div>
-          <label for="password" class="text-gray-700 mb-2 block font-medium">Password</label>
-          <div class="relative">
-            <i data-lucide="lock" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
-            <input id="password" name="password" type="password" placeholder="Create a password"
-              class="w-full h-12 pl-10 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
-            <button type="button" onclick="togglePassword('password', 'passwordToggleIcon')"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
-              <i data-lucide="eye" class="size-5" id="passwordToggleIcon"></i>
+        <!-- Role Selector -->
+        <div class="mb-6">
+          <label class="text-gray-700 mb-3 block font-medium"
+            >Select Your Role</label
+          >
+          <div
+            class="grid grid-cols-4 gap-2 p-1 bg-gray-100 rounded-lg"
+            id="roleSelector"
+          >
+            <button
+              type="button"
+              onclick="selectRole('donor')"
+              data-role="donor"
+              class="role-btn px-3 py-2 rounded-md transition-all bg-white text-red-600 shadow-sm"
+            >
+              <i data-lucide="heart" class="size-5 mx-auto mb-1"></i>
+              <div class="text-xs">Donor</div>
+            </button>
+            <button
+              type="button"
+              onclick="selectRole('admin')"
+              data-role="admin"
+              class="role-btn px-3 py-2 rounded-md transition-all text-gray-600 hover:text-gray-900"
+            >
+              <i data-lucide="shield" class="size-5 mx-auto mb-1"></i>
+              <div class="text-xs">Admin</div>
+            </button>
+            <button
+              type="button"
+              onclick="selectRole('hospital')"
+              data-role="hospital"
+              class="role-btn px-3 py-2 rounded-md transition-all text-gray-600 hover:text-gray-900"
+            >
+              <i data-lucide="building-2" class="size-5 mx-auto mb-1"></i>
+              <div class="text-xs">Hospital</div>
+            </button>
+            <button
+              type="button"
+              onclick="selectRole('seeker')"
+              data-role="seeker"
+              class="role-btn px-3 py-2 rounded-md transition-all text-gray-600 hover:text-gray-900"
+            >
+              <i data-lucide="search" class="size-5 mx-auto mb-1"></i>
+              <div class="text-xs">Seeker</div>
             </button>
           </div>
-          <p class="text-red-500 text-sm mt-1 hidden" id="passwordError"></p>
         </div>
 
-        <!-- Confirm Password Field -->
-        <div>
-          <label for="confirmPassword" class="text-gray-700 mb-2 block font-medium">Confirm Password</label>
-          <div class="relative">
-            <i data-lucide="lock" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
-            <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm your password"
-              class="w-full h-12 pl-10 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
-            <button type="button" onclick="togglePassword('confirmPassword', 'confirmPasswordToggleIcon')"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
-              <i data-lucide="eye" class="size-5" id="confirmPasswordToggleIcon"></i>
-            </button>
+        <!-- Registration Form -->
+        <form id="registerForm" class="space-y-5">
+          <!-- Name Field (hidden for admin) -->
+          <div id="nameFieldContainer">
+            <label for="name" class="text-gray-700 mb-2 block font-medium"
+              >Full Name</label
+            >
+            <div class="relative">
+              <i
+                data-lucide="user"
+                class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+              ></i>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Enter your full name"
+                class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+              />
+            </div>
+            <p class="text-red-500 text-sm mt-1 hidden" id="nameError"></p>
           </div>
-          <p class="text-red-500 text-sm mt-1 hidden" id="confirmPasswordError"></p>
+
+          <!-- Email Field -->
+          <div>
+            <label for="email" class="text-gray-700 mb-2 block font-medium"
+              >Email Address</label
+            >
+            <div class="relative">
+              <i
+                data-lucide="mail"
+                class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+              ></i>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+                class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+              />
+            </div>
+            <p class="text-red-500 text-sm mt-1 hidden" id="emailError"></p>
+          </div>
+
+          <!-- Password Field -->
+          <div>
+            <label for="password" class="text-gray-700 mb-2 block font-medium"
+              >Password</label
+            >
+            <div class="relative">
+              <i
+                data-lucide="lock"
+                class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+              ></i>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Create a password"
+                class="w-full h-12 pl-10 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+              />
+              <button
+                type="button"
+                onclick="togglePassword('password', 'passwordToggleIcon')"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                <i data-lucide="eye" class="size-5" id="passwordToggleIcon"></i>
+              </button>
+            </div>
+            <p class="text-red-500 text-sm mt-1 hidden" id="passwordError"></p>
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div>
+            <label
+              for="confirmPassword"
+              class="text-gray-700 mb-2 block font-medium"
+              >Confirm Password</label
+            >
+            <div class="relative">
+              <i
+                data-lucide="lock"
+                class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+              ></i>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirm your password"
+                class="w-full h-12 pl-10 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+              />
+              <button
+                type="button"
+                onclick="
+                  togglePassword('confirmPassword', 'confirmPasswordToggleIcon')
+                "
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                <i
+                  data-lucide="eye"
+                  class="size-5"
+                  id="confirmPasswordToggleIcon"
+                ></i>
+              </button>
+            </div>
+            <p
+              class="text-red-500 text-sm mt-1 hidden"
+              id="confirmPasswordError"
+            ></p>
+          </div>
+
+          <!-- Phone Field -->
+          <div>
+            <label for="phone" class="text-gray-700 mb-2 block font-medium"
+              >Phone Number</label
+            >
+            <div class="relative">
+              <i
+                data-lucide="phone"
+                class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+              ></i>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="Enter your phone number"
+                class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+              />
+            </div>
+            <p class="text-red-500 text-sm mt-1 hidden" id="phoneError"></p>
+          </div>
+
+          <!-- Donor Specific Fields -->
+          <div id="donorFields" class="space-y-5">
+            <!-- Blood Group -->
+            <div>
+              <label
+                for="bloodGroup"
+                class="text-gray-700 mb-2 block font-medium"
+                >Blood Group</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="droplet"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400 pointer-events-none z-10"
+                ></i>
+                <select
+                  id="bloodGroup"
+                  name="bloodGroup"
+                  class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all appearance-none bg-white cursor-pointer"
+                >
+                  <option value="">Select your blood group</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                </select>
+                <i
+                  data-lucide="chevron-down"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-gray-400 pointer-events-none"
+                ></i>
+              </div>
+              <p
+                class="text-red-500 text-sm mt-1 hidden"
+                id="bloodGroupError"
+              ></p>
+            </div>
+
+            <!-- Age -->
+            <div>
+              <label for="age" class="text-gray-700 mb-2 block font-medium"
+                >Age</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="calendar"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+                ></i>
+                <input
+                  id="age"
+                  name="age"
+                  type="number"
+                  min="18"
+                  max="65"
+                  placeholder="Enter your age"
+                  class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                />
+              </div>
+              <p class="text-red-500 text-sm mt-1 hidden" id="ageError"></p>
+            </div>
+
+            <!-- Weight -->
+            <div>
+              <label for="weight" class="text-gray-700 mb-2 block font-medium"
+                >Weight (kg)</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="scale"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+                ></i>
+                <input
+                  id="weight"
+                  name="weight"
+                  type="number"
+                  min="45"
+                  placeholder="Enter your weight"
+                  class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                />
+              </div>
+              <p class="text-red-500 text-sm mt-1 hidden" id="weightError"></p>
+            </div>
+
+            <!-- City -->
+            <div>
+              <label for="city" class="text-gray-700 mb-2 block font-medium"
+                >City</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="map-pin"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+                ></i>
+                <input
+                  id="city"
+                  name="city"
+                  type="text"
+                  placeholder="Enter city"
+                  class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                />
+              </div>
+              <p class="text-red-500 text-sm mt-1 hidden" id="cityError"></p>
+            </div>
+
+            <!-- Address -->
+            <div>
+              <label for="address" class="text-gray-700 mb-2 block font-medium"
+                >Address</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="map-pin"
+                  class="absolute left-3 top-3 size-5 text-gray-400"
+                ></i>
+                <textarea
+                  id="address"
+                  name="address"
+                  placeholder="Enter your address"
+                  rows="3"
+                  class="w-full min-h-20 pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all resize-none"
+                ></textarea>
+              </div>
+              <p class="text-red-500 text-sm mt-1 hidden" id="addressError"></p>
+            </div>
+          </div>
+
+          <!-- Hospital Specific Fields -->
+          <div id="hospitalFields" class="space-y-5 hidden">
+            <!-- Hospital Name is already the "name" field -->
+
+            <!-- Registration Number -->
+            <div>
+              <label
+                for="registrationNumber"
+                class="text-gray-700 mb-2 block font-medium"
+                >Registration/License Number</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="shield"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+                ></i>
+                <input
+                  id="registrationNumber"
+                  name="registrationNumber"
+                  type="text"
+                  placeholder="Enter registration/license number"
+                  class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                />
+              </div>
+              <p
+                class="text-red-500 text-sm mt-1 hidden"
+                id="registrationNumberError"
+              ></p>
+            </div>
+
+            <!-- Hospital Type -->
+            <div>
+              <label
+                for="hospitalType"
+                class="text-gray-700 mb-2 block font-medium"
+                >Hospital Type</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="building-2"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400 pointer-events-none z-10"
+                ></i>
+                <select
+                  id="hospitalType"
+                  name="hospitalType"
+                  class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all appearance-none bg-white cursor-pointer"
+                >
+                  <option value="private">Private</option>
+                  <option value="government">Government</option>
+                  <option value="charity">Charity</option>
+                </select>
+                <i
+                  data-lucide="chevron-down"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-gray-400 pointer-events-none"
+                ></i>
+              </div>
+            </div>
+
+            <!-- Hospital Address -->
+            <div>
+              <label
+                for="hospitalAddress"
+                class="text-gray-700 mb-2 block font-medium"
+                >Hospital Address</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="map-pin"
+                  class="absolute left-3 top-3 size-5 text-gray-400"
+                ></i>
+                <textarea
+                  id="hospitalAddress"
+                  name="hospitalAddress"
+                  placeholder="Enter hospital address"
+                  rows="3"
+                  class="w-full min-h-20 pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all resize-none"
+                ></textarea>
+              </div>
+              <p
+                class="text-red-500 text-sm mt-1 hidden"
+                id="hospitalAddressError"
+              ></p>
+            </div>
+
+            <!-- City & State Row -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="hospitalCity"
+                  class="text-gray-700 mb-2 block font-medium"
+                  >City</label
+                >
+                <div class="relative">
+                  <i
+                    data-lucide="map-pin"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+                  ></i>
+                  <input
+                    id="hospitalCity"
+                    name="hospitalCity"
+                    type="text"
+                    placeholder="Enter city"
+                    class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                  />
+                </div>
+                <p
+                  class="text-red-500 text-sm mt-1 hidden"
+                  id="hospitalCityError"
+                ></p>
+              </div>
+              <div>
+                <label for="state" class="text-gray-700 mb-2 block font-medium"
+                  >State</label
+                >
+                <div class="relative">
+                  <i
+                    data-lucide="map"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+                  ></i>
+                  <input
+                    id="state"
+                    name="state"
+                    type="text"
+                    placeholder="Enter state"
+                    class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Pincode -->
+            <div>
+              <label for="pincode" class="text-gray-700 mb-2 block font-medium"
+                >PIN/ZIP Code</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="hash"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+                ></i>
+                <input
+                  id="pincode"
+                  name="pincode"
+                  type="text"
+                  placeholder="Enter PIN/ZIP code"
+                  class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                />
+              </div>
+            </div>
+
+            <!-- Website -->
+            <div>
+              <label for="website" class="text-gray-700 mb-2 block font-medium"
+                >Website</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="link-2"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+                ></i>
+                <input
+                  id="website"
+                  name="website"
+                  type="url"
+                  placeholder="Website URL (optional)"
+                  class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                />
+              </div>
+            </div>
+
+            <!-- Contact Person -->
+            <div>
+              <label
+                for="contactPerson"
+                class="text-gray-700 mb-2 block font-medium"
+                >Contact Person</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="user"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+                ></i>
+                <input
+                  id="contactPerson"
+                  name="contactPerson"
+                  type="text"
+                  placeholder="Enter contact person name"
+                  class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                />
+              </div>
+              <p
+                class="text-red-500 text-sm mt-1 hidden"
+                id="contactPersonError"
+              ></p>
+            </div>
+
+            <!-- Operating Hours -->
+            <div>
+              <label
+                for="operatingHours"
+                class="text-gray-700 mb-2 block font-medium"
+                >Operating Hours</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="clock"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+                ></i>
+                <input
+                  id="operatingHours"
+                  name="operatingHours"
+                  type="text"
+                  placeholder="e.g., 24/7 or 8AM - 8PM"
+                  class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                />
+              </div>
+            </div>
+
+            <!-- Has Blood Bank -->
+            <div class="flex items-center gap-3">
+              <input
+                type="checkbox"
+                id="hasBloodBank"
+                name="hasBloodBank"
+                class="w-5 h-5 rounded border-gray-300 text-red-600 focus:ring-red-500"
+              />
+              <label for="hasBloodBank" class="text-gray-700 font-medium"
+                >Hospital has a Blood Bank</label
+              >
+            </div>
+          </div>
+
+          <!-- Terms & Conditions -->
+          <div class="flex items-start gap-2">
+            <input
+              type="checkbox"
+              id="terms"
+              class="mt-1 rounded border-gray-300 text-red-600 focus:ring-red-500"
+            />
+            <label for="terms" class="text-sm text-gray-600">
+              I agree to the
+              <span class="text-red-600 hover:underline cursor-pointer"
+                >Terms of Service</span
+              >
+              and
+              <span class="text-red-600 hover:underline cursor-pointer"
+                >Privacy Policy</span
+              >
+            </label>
+          </div>
+          <p class="text-red-500 text-sm mt-1 hidden" id="termsError"></p>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            class="w-full h-12 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+          >
+            Create Account
+          </button>
+        </form>
+
+        <!-- Login Link -->
+        <div class="mt-6 text-center">
+          <p class="text-gray-600">
+            Already have an account?
+            <a
+              href="/src/pages/auth/login.html"
+              id="loginLink"
+              class="text-red-600 hover:underline ml-1"
+            >
+              Login here
+            </a>
+          </p>
         </div>
-
-        <!-- Phone Field -->
-        <div>
-          <label for="phone" class="text-gray-700 mb-2 block font-medium">Phone Number</label>
-          <div class="relative">
-            <i data-lucide="phone" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
-            <input id="phone" name="phone" type="tel" placeholder="Enter your phone number"
-              class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
-          </div>
-          <p class="text-red-500 text-sm mt-1 hidden" id="phoneError"></p>
-        </div>
-
-        <!-- Donor Specific Fields -->
-        <div id="donorFields" class="space-y-5">
-          <!-- Blood Group -->
-          <div>
-            <label for="bloodGroup" class="text-gray-700 mb-2 block font-medium">Blood Group</label>
-            <div class="relative">
-              <i data-lucide="droplet"
-                class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400 pointer-events-none z-10"></i>
-              <select id="bloodGroup" name="bloodGroup"
-                class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all appearance-none bg-white cursor-pointer">
-                <option value="">Select your blood group</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-              </select>
-              <i data-lucide="chevron-down"
-                class="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-gray-400 pointer-events-none"></i>
-            </div>
-            <p class="text-red-500 text-sm mt-1 hidden" id="bloodGroupError"></p>
-          </div>
-
-          <!-- Age -->
-          <div>
-            <label for="age" class="text-gray-700 mb-2 block font-medium">Age</label>
-            <div class="relative">
-              <i data-lucide="calendar" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
-              <input id="age" name="age" type="number" min="18" max="65" placeholder="Enter your age"
-                class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
-            </div>
-            <p class="text-red-500 text-sm mt-1 hidden" id="ageError"></p>
-          </div>
-
-          <!-- Weight -->
-          <div>
-            <label for="weight" class="text-gray-700 mb-2 block font-medium">Weight (kg)</label>
-            <div class="relative">
-              <i data-lucide="scale" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
-              <input id="weight" name="weight" type="number" min="45" placeholder="Enter your weight"
-                class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
-            </div>
-            <p class="text-red-500 text-sm mt-1 hidden" id="weightError"></p>
-          </div>
-
-          <!-- City -->
-          <div>
-            <label for="city" class="text-gray-700 mb-2 block font-medium">City</label>
-            <div class="relative">
-              <i data-lucide="map-pin" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
-              <input id="city" name="city" type="text" placeholder="Enter city"
-                class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
-            </div>
-            <p class="text-red-500 text-sm mt-1 hidden" id="cityError"></p>
-          </div>
-
-          <!-- Address -->
-          <div>
-            <label for="address" class="text-gray-700 mb-2 block font-medium">Address</label>
-            <div class="relative">
-              <i data-lucide="map-pin" class="absolute left-3 top-3 size-5 text-gray-400"></i>
-              <textarea id="address" name="address" placeholder="Enter your address" rows="3"
-                class="w-full min-h-20 pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all resize-none"></textarea>
-            </div>
-            <p class="text-red-500 text-sm mt-1 hidden" id="addressError"></p>
-          </div>
-        </div>
-
-        <!-- Hospital Specific Fields -->
-        <div id="hospitalFields" class="space-y-5 hidden">
-          <!-- Registration Number -->
-          <div>
-            <label for="registrationNumber" class="text-gray-700 mb-2 block font-medium">Registration Number</label>
-            <div class="relative">
-              <i data-lucide="shield" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
-              <input id="registrationNumber" name="registrationNumber" type="text"
-                placeholder="Enter registration number"
-                class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
-            </div>
-            <p class="text-red-500 text-sm mt-1 hidden" id="registrationNumberError"></p>
-          </div>
-
-          <!-- Hospital Address -->
-          <div>
-            <label for="hospitalAddress" class="text-gray-700 mb-2 block font-medium">Hospital Address</label>
-            <div class="relative">
-              <i data-lucide="map-pin" class="absolute left-3 top-3 size-5 text-gray-400"></i>
-              <textarea id="hospitalAddress" name="hospitalAddress" placeholder="Enter hospital address" rows="3"
-                class="w-full min-h-20 pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all resize-none"></textarea>
-            </div>
-            <p class="text-red-500 text-sm mt-1 hidden" id="hospitalAddressError"></p>
-          </div>
-
-          <!-- Website -->
-
-          <div>
-            <label for="website" class="text-gray-700 mb-2 block font-medium">Website</label>
-            <div class="relative">
-              <i data-lucide="link-2" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
-              <input id="website" name="website" type="url" placeholder="Website URL (optional)"
-                class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
-            </div>
-          </div>
-
-          <!-- City -->
-          <div>
-            <label for="hospitalCity" class="text-gray-700 mb-2 block font-medium">City</label>
-            <div class="relative">
-              <i data-lucide="map-pin" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
-              <input id="hospitalCity" name="hospitalCity" type="text" placeholder="Enter city"
-                class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
-            </div>
-            <p class="text-red-500 text-sm mt-1 hidden" id="hospitalCityError"></p>
-          </div>
-
-          <!-- Contact Person -->
-          <div>
-            <label for="contactPerson" class="text-gray-700 mb-2 block font-medium">Contact Person</label>
-            <div class="relative">
-              <i data-lucide="user" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"></i>
-              <input id="contactPerson" name="contactPerson" type="text" placeholder="Enter contact person name"
-                class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all" />
-            </div>
-            <p class="text-red-500 text-sm mt-1 hidden" id="contactPersonError"></p>
-          </div>
-        </div>
-
-        <!-- Terms & Conditions -->
-        <div class="flex items-start gap-2">
-          <input type="checkbox" id="terms" class="mt-1 rounded border-gray-300 text-red-600 focus:ring-red-500" />
-          <label for="terms" class="text-sm text-gray-600">
-            I agree to the
-            <span class="text-red-600 hover:underline cursor-pointer">Terms of Service</span>
-            and
-            <span class="text-red-600 hover:underline cursor-pointer">Privacy Policy</span>
-          </label>
-        </div>
-        <p class="text-red-500 text-sm mt-1 hidden" id="termsError"></p>
-
-        <!-- Submit Button -->
-        <button type="submit"
-          class="w-full h-12 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
-          Create Account
-        </button>
-      </form>
-
-      <!-- Login Link -->
-      <div class="mt-6 text-center">
-        <p class="text-gray-600">
-          Already have an account?
-          <a href="/src/pages/auth/login.html" id="loginLink" class="text-red-600 hover:underline ml-1">
-            Login here
-          </a>
-        </p>
       </div>
     </div>
-  </div>
 
-  <script type="module" src="/src/scripts/main.js"></script>
-  <script>
-    let selectedRole = "donor";
+    <script type="module" src="/src/scripts/main.js"></script>
+    <script>
+      let selectedRole = "donor";
 
-    const roleConfig = {
-      donor: {
-        title: "Donor",
-        icon: "heart",
-        path: "/src/pages/donor/dashboard.html",
-      },
-      admin: {
-        title: "Admin",
-        icon: "shield",
-        path: "/src/pages/admin/dashboard.html",
-      },
-      hospital: {
-        title: "Hospital",
-        icon: "building-2",
-        path: "/src/pages/hospital/dashboard.html",
-      },
-      seeker: {
-        title: "Blood Seeker",
-        icon: "search",
-        path: "/src/pages/seeker/request.html",
-      },
-    };
+      const roleConfig = {
+        donor: {
+          title: "Donor",
+          icon: "heart",
+          path: "/src/pages/donor/dashboard.html",
+        },
+        admin: {
+          title: "Admin",
+          icon: "shield",
+          path: "/src/pages/admin/dashboard.html",
+        },
+        hospital: {
+          title: "Hospital",
+          icon: "building-2",
+          path: "/src/pages/hospital/dashboard.html",
+        },
+        seeker: {
+          title: "Blood Seeker",
+          icon: "search",
+          path: "/src/pages/seeker/request.html",
+        },
+      };
 
-    // Check URL params for role
-    const urlParams = new URLSearchParams(window.location.search);
-    const roleParam = urlParams.get("role");
-    if (roleParam && roleConfig[roleParam]) {
-      selectedRole = roleParam;
-      document.addEventListener("DOMContentLoaded", () => {
-        selectRole(roleParam);
-      });
-    }
-
-    function selectRole(role) {
-      selectedRole = role;
-      const config = roleConfig[role];
-
-      // Update button styles
-      document.querySelectorAll(".role-btn").forEach((btn) => {
-        btn.classList.remove("bg-white", "text-red-600", "shadow-sm");
-        btn.classList.add("text-gray-600");
-      });
-
-      const selectedBtn = document.querySelector(`[data-role="${role}"]`);
-      selectedBtn.classList.add("bg-white", "text-red-600", "shadow-sm");
-      selectedBtn.classList.remove("text-gray-600");
-
-      // Update role title
-      document.getElementById("roleTitle").textContent = config.title;
-
-      // Update role icon
-      const iconContainer = document.getElementById("roleIconContainer");
-      iconContainer.innerHTML = `<i data-lucide="${config.icon}" class="size-8 text-white"></i>`;
-
-      // Show/hide role-specific fields
-      document.getElementById("donorFields").classList.add("hidden");
-      document.getElementById("hospitalFields").classList.add("hidden");
-
-      // Show/hide name field (hidden for admin only)
-      const nameFieldContainer = document.getElementById("nameFieldContainer");
-      if (role === "admin") {
-        nameFieldContainer.classList.add("hidden");
-      } else {
-        nameFieldContainer.classList.remove("hidden");
+      // Check URL params for role
+      const urlParams = new URLSearchParams(window.location.search);
+      const roleParam = urlParams.get("role");
+      if (roleParam && roleConfig[roleParam]) {
+        selectedRole = roleParam;
+        document.addEventListener("DOMContentLoaded", () => {
+          selectRole(roleParam);
+        });
       }
 
-      if (role === "donor") {
-        document.getElementById("donorFields").classList.remove("hidden");
-      } else if (role === "hospital") {
-        document.getElementById("hospitalFields").classList.remove("hidden");
-      }
+      function selectRole(role) {
+        selectedRole = role;
+        const config = roleConfig[role];
 
-      // Update login link with role param
-      document.getElementById(
-        "loginLink"
-      ).href = `/src/pages/auth/login.html?role=${role}`;
+        // Update button styles
+        document.querySelectorAll(".role-btn").forEach((btn) => {
+          btn.classList.remove("bg-white", "text-red-600", "shadow-sm");
+          btn.classList.add("text-gray-600");
+        });
 
-      // Clear all errors when role changes
-      clearAllErrors();
+        const selectedBtn = document.querySelector(`[data-role="${role}"]`);
+        selectedBtn.classList.add("bg-white", "text-red-600", "shadow-sm");
+        selectedBtn.classList.remove("text-gray-600");
 
-      // Re-initialize Lucide icons
-      if (window.lucide) {
-        window.lucide.createIcons();
-      }
-    }
+        // Update role title
+        document.getElementById("roleTitle").textContent = config.title;
 
-    function togglePassword(fieldId, iconId) {
-      const field = document.getElementById(fieldId);
-      const icon = document.getElementById(iconId);
+        // Update role icon
+        const iconContainer = document.getElementById("roleIconContainer");
+        iconContainer.innerHTML = `<i data-lucide="${config.icon}" class="size-8 text-white"></i>`;
 
-      if (field.type === "password") {
-        field.type = "text";
-        icon.setAttribute("data-lucide", "eye-off");
-      } else {
-        field.type = "password";
-        icon.setAttribute("data-lucide", "eye");
-      }
+        // Show/hide role-specific fields
+        document.getElementById("donorFields").classList.add("hidden");
+        document.getElementById("hospitalFields").classList.add("hidden");
 
-      // Re-initialize Lucide icons
-      if (window.lucide) {
-        window.lucide.createIcons();
-      }
-    }
-
-    function showError(fieldId, message) {
-      const errorElement = document.getElementById(fieldId + "Error");
-      const inputElement = document.getElementById(fieldId);
-
-      if (errorElement) {
-        errorElement.textContent = message;
-        errorElement.classList.remove("hidden");
-      }
-
-      if (inputElement) {
-        inputElement.classList.add("border-red-500");
-        inputElement.classList.remove("border-gray-300");
-      }
-    }
-
-    function clearError(fieldId) {
-      const errorElement = document.getElementById(fieldId + "Error");
-      const inputElement = document.getElementById(fieldId);
-
-      if (errorElement) {
-        errorElement.textContent = "";
-        errorElement.classList.add("hidden");
-      }
-
-      if (inputElement) {
-        inputElement.classList.remove("border-red-500");
-        inputElement.classList.add("border-gray-300");
-      }
-    }
-
-    function clearAllErrors() {
-      const errorFields = [
-        "email",
-        "password",
-        "confirmPassword",
-        "phone",
-        "bloodGroup",
-        "age",
-        "weight",
-        "address",
-        "registrationNumber",
-        "hospitalAddress",
-        "city",
-        "hospitalCity",
-        "contactPerson",
-        "terms",
-        "name",
-      ];
-      errorFields.forEach((field) => clearError(field));
-    }
-
-    function validateForm() {
-      let isValid = true;
-      clearAllErrors();
-
-      // Get form values
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const confirmPassword =
-        document.getElementById("confirmPassword").value;
-      const phone = document.getElementById("phone").value.trim();
-      const terms = document.getElementById("terms").checked;
-
-      // Name validation (required for all except admin)
-      if (selectedRole !== "admin" && !name) {
-        showError("name", "Full name is required");
-        isValid = false;
-      }
-
-      // Email validation
-      if (!email) {
-        showError("email", "Email is required");
-        isValid = false;
-      } else if (!/\S+@\S+\.\S+/.test(email)) {
-        showError("email", "Email is invalid");
-        isValid = false;
-      }
-
-      // Password validation with complexity
-      if (!password) {
-        showError("password", "Password is required");
-        isValid = false;
-      } else if (password.length < 6) {
-        showError("password", "Password must be at least 6 characters");
-        isValid = false;
-      } else if (!/[A-Z]/.test(password)) {
-        showError("password", "Password must include at least one uppercase letter");
-        isValid = false;
-      } else if (!/[a-z]/.test(password)) {
-        showError("password", "Password must include at least one lowercase letter");
-        isValid = false;
-      } else if (!/[0-9]/.test(password)) {
-        showError("password", "Password must include at least one number");
-        isValid = false;
-      } else if (!/[^A-Za-z0-9]/.test(password)) {
-        showError("password", "Password must include at least one special character");
-        isValid = false;
-      }
-
-      // Confirm password validation
-      if (!confirmPassword) {
-        showError("confirmPassword", "Please confirm your password");
-        isValid = false;
-      } else if (password !== confirmPassword) {
-        showError("confirmPassword", "Passwords do not match");
-        isValid = false;
-      }
-
-      // Phone validation
-      if (!phone) {
-        showError("phone", "Phone number is required");
-        isValid = false;
-      }
-
-      // Terms validation
-      if (!terms) {
-        showError("terms", "You must agree to the Terms of Service");
-        isValid = false;
-      }
-
-      // Donor-specific validation
-      if (selectedRole === "donor") {
-        const bloodGroup = document.getElementById("bloodGroup").value;
-        const age = document.getElementById("age").value;
-        const weight = document.getElementById("weight").value;
-        const address = document.getElementById("address").value.trim();
-
-        if (!bloodGroup) {
-          showError("bloodGroup", "Blood group is required");
-          isValid = false;
+        // Show/hide name field (hidden for admin only)
+        const nameFieldContainer =
+          document.getElementById("nameFieldContainer");
+        if (role === "admin") {
+          nameFieldContainer.classList.add("hidden");
+        } else {
+          nameFieldContainer.classList.remove("hidden");
         }
-        if (!age) {
-          showError("age", "Age is required");
-          isValid = false;
+
+        if (role === "donor") {
+          document.getElementById("donorFields").classList.remove("hidden");
+        } else if (role === "hospital") {
+          document.getElementById("hospitalFields").classList.remove("hidden");
         }
-        if (!weight) {
-          showError("weight", "Weight is required");
-          isValid = false;
-        }
-        if (!address) {
-          showError("address", "Address is required");
-          isValid = false;
+
+        // Update login link with role param
+        document.getElementById("loginLink").href =
+          `/src/pages/auth/login.html?role=${role}`;
+
+        // Clear all errors when role changes
+        clearAllErrors();
+
+        // Re-initialize Lucide icons
+        if (window.lucide) {
+          window.lucide.createIcons();
         }
       }
 
-      // Hospital-specific validation
-      if (selectedRole === "hospital") {
-        const registrationNumber = document
-          .getElementById("registrationNumber")
-          .value.trim();
-        const hospitalAddress = document
-          .getElementById("hospitalAddress")
-          .value.trim();
-        const hospitalCity = document.getElementById("hospitalCity").value.trim();
-        const contactPerson = document
-          .getElementById("contactPerson")
-          .value.trim();
+      function togglePassword(fieldId, iconId) {
+        const field = document.getElementById(fieldId);
+        const icon = document.getElementById(iconId);
 
-        if (!registrationNumber) {
-          showError("registrationNumber", "Registration number is required");
-          isValid = false;
+        if (field.type === "password") {
+          field.type = "text";
+          icon.setAttribute("data-lucide", "eye-off");
+        } else {
+          field.type = "password";
+          icon.setAttribute("data-lucide", "eye");
         }
-        if (!hospitalAddress) {
-          showError("hospitalAddress", "Hospital address is required");
-          isValid = false;
-        }
-        if (!hospitalCity) {
-          showError("hospitalCity", "City is required");
-          isValid = false;
-        }
-        if (!contactPerson) {
-          showError("contactPerson", "Contact person is required");
-          isValid = false;
+
+        // Re-initialize Lucide icons
+        if (window.lucide) {
+          window.lucide.createIcons();
         }
       }
 
-      return isValid;
-    }
+      function showError(fieldId, message) {
+        const errorElement = document.getElementById(fieldId + "Error");
+        const inputElement = document.getElementById(fieldId);
 
-    // Clear error on input
-    document.querySelectorAll("input, textarea, select").forEach((input) => {
-      input.addEventListener("input", () => {
-        clearError(input.id);
-      });
-      input.addEventListener("change", () => {
-        clearError(input.id);
-      });
-    });
+        if (errorElement) {
+          errorElement.textContent = message;
+          errorElement.classList.remove("hidden");
+        }
 
-    // Form submission
-    document
-      .getElementById("registerForm")
-      .addEventListener("submit", async function (e) {
-        e.preventDefault();
+        if (inputElement) {
+          inputElement.classList.add("border-red-500");
+          inputElement.classList.remove("border-gray-300");
+        }
+      }
 
-        if (validateForm()) {
-          // Collect form data
-          const formData = {
-            email: document.getElementById("email").value,
-            password: document.getElementById("password").value,
-            phone: document.getElementById("phone").value,
-            role: selectedRole,
-            name: selectedRole !== "admin" ? document.getElementById("name").value.trim() : 'Admin',
-          };
+      function clearError(fieldId) {
+        const errorElement = document.getElementById(fieldId + "Error");
+        const inputElement = document.getElementById(fieldId);
 
-          // Add role-specific data
-          if (selectedRole === "donor") {
-            formData.bloodGroup = document.getElementById("bloodGroup").value;
-            formData.age = document.getElementById("age").value;
-            formData.weight = document.getElementById("weight").value;
-            formData.city = document.getElementById("city").value;
-            formData.address = document.getElementById("address").value;
-          } else if (selectedRole === "hospital") {
-            formData.registrationNumber =
-              document.getElementById("registrationNumber").value;
-            formData.hospitalAddress =
-              document.getElementById("hospitalAddress").value;
-            formData.city = document.getElementById("hospitalCity").value;
-            formData.website = document.getElementById("website").value;
-            formData.contactPerson =
-              document.getElementById("contactPerson").value;
+        if (errorElement) {
+          errorElement.textContent = "";
+          errorElement.classList.add("hidden");
+        }
+
+        if (inputElement) {
+          inputElement.classList.remove("border-red-500");
+          inputElement.classList.add("border-gray-300");
+        }
+      }
+
+      function clearAllErrors() {
+        const errorFields = [
+          "email",
+          "password",
+          "confirmPassword",
+          "phone",
+          "bloodGroup",
+          "age",
+          "weight",
+          "address",
+          "registrationNumber",
+          "hospitalAddress",
+          "city",
+          "hospitalCity",
+          "contactPerson",
+          "terms",
+          "name",
+        ];
+        errorFields.forEach((field) => clearError(field));
+      }
+
+      function validateForm() {
+        let isValid = true;
+        clearAllErrors();
+
+        // Get form values
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+        const phone = document.getElementById("phone").value.trim();
+        const terms = document.getElementById("terms").checked;
+
+        // Name validation (required for all except admin)
+        if (selectedRole !== "admin" && !name) {
+          showError("name", "Full name is required");
+          isValid = false;
+        }
+
+        // Email validation
+        if (!email) {
+          showError("email", "Email is required");
+          isValid = false;
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+          showError("email", "Email is invalid");
+          isValid = false;
+        }
+
+        // Password validation with complexity
+        if (!password) {
+          showError("password", "Password is required");
+          isValid = false;
+        } else if (password.length < 6) {
+          showError("password", "Password must be at least 6 characters");
+          isValid = false;
+        } else if (!/[A-Z]/.test(password)) {
+          showError(
+            "password",
+            "Password must include at least one uppercase letter",
+          );
+          isValid = false;
+        } else if (!/[a-z]/.test(password)) {
+          showError(
+            "password",
+            "Password must include at least one lowercase letter",
+          );
+          isValid = false;
+        } else if (!/[0-9]/.test(password)) {
+          showError("password", "Password must include at least one number");
+          isValid = false;
+        } else if (!/[^A-Za-z0-9]/.test(password)) {
+          showError(
+            "password",
+            "Password must include at least one special character",
+          );
+          isValid = false;
+        }
+
+        // Confirm password validation
+        if (!confirmPassword) {
+          showError("confirmPassword", "Please confirm your password");
+          isValid = false;
+        } else if (password !== confirmPassword) {
+          showError("confirmPassword", "Passwords do not match");
+          isValid = false;
+        }
+
+        // Phone validation
+        if (!phone) {
+          showError("phone", "Phone number is required");
+          isValid = false;
+        }
+
+        // Terms validation
+        if (!terms) {
+          showError("terms", "You must agree to the Terms of Service");
+          isValid = false;
+        }
+
+        // Donor-specific validation
+        if (selectedRole === "donor") {
+          const bloodGroup = document.getElementById("bloodGroup").value;
+          const age = document.getElementById("age").value;
+          const weight = document.getElementById("weight").value;
+          const address = document.getElementById("address").value.trim();
+
+          if (!bloodGroup) {
+            showError("bloodGroup", "Blood group is required");
+            isValid = false;
           }
+          if (!age) {
+            showError("age", "Age is required");
+            isValid = false;
+          }
+          if (!weight) {
+            showError("weight", "Weight is required");
+            isValid = false;
+          }
+          if (!address) {
+            showError("address", "Address is required");
+            isValid = false;
+          }
+        }
 
-          // Get submit button and show loading state
-          const submitBtn = document.querySelector('button[type="submit"]');
-          const originalText = submitBtn.textContent;
-          submitBtn.disabled = true;
-          submitBtn.textContent = 'Creating Account...';
+        // Hospital-specific validation
+        if (selectedRole === "hospital") {
+          const registrationNumber = document
+            .getElementById("registrationNumber")
+            .value.trim();
+          const hospitalAddress = document
+            .getElementById("hospitalAddress")
+            .value.trim();
+          const hospitalCity = document
+            .getElementById("hospitalCity")
+            .value.trim();
+          const contactPerson = document
+            .getElementById("contactPerson")
+            .value.trim();
 
-          try {
-            // POST to PHP backend
-            const response = await fetch('/api/auth/register.php', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(formData)
-            });
+          if (!registrationNumber) {
+            showError("registrationNumber", "Registration number is required");
+            isValid = false;
+          }
+          if (!hospitalAddress) {
+            showError("hospitalAddress", "Hospital address is required");
+            isValid = false;
+          }
+          if (!hospitalCity) {
+            showError("hospitalCity", "City is required");
+            isValid = false;
+          }
+          if (!contactPerson) {
+            showError("contactPerson", "Contact person is required");
+            isValid = false;
+          }
+        }
 
-            const data = await response.json();
+        return isValid;
+      }
 
-            if (data.success) {
-              // Registration successful - redirect based on role
-              const config = roleConfig[data.user.role];
-              window.location.href = config.path;
-            } else {
-              // Show error message
-              if (data.message.toLowerCase().includes('email')) {
-                showError('email', data.message);
+      // Clear error on input
+      document.querySelectorAll("input, textarea, select").forEach((input) => {
+        input.addEventListener("input", () => {
+          clearError(input.id);
+        });
+        input.addEventListener("change", () => {
+          clearError(input.id);
+        });
+      });
+
+      // Form submission
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          if (validateForm()) {
+            // Collect form data
+            const formData = {
+              email: document.getElementById("email").value,
+              password: document.getElementById("password").value,
+              phone: document.getElementById("phone").value,
+              role: selectedRole,
+              name:
+                selectedRole !== "admin"
+                  ? document.getElementById("name").value.trim()
+                  : "Admin",
+            };
+
+            // Add role-specific data
+            if (selectedRole === "donor") {
+              formData.bloodGroup = document.getElementById("bloodGroup").value;
+              formData.age = document.getElementById("age").value;
+              formData.weight = document.getElementById("weight").value;
+              formData.city = document.getElementById("city").value;
+              formData.address = document.getElementById("address").value;
+            } else if (selectedRole === "hospital") {
+              formData.registrationNumber =
+                document.getElementById("registrationNumber").value;
+              formData.hospitalType =
+                document.getElementById("hospitalType").value;
+              formData.hospitalAddress =
+                document.getElementById("hospitalAddress").value;
+              formData.city = document.getElementById("hospitalCity").value;
+              formData.state = document.getElementById("state").value;
+              formData.pincode = document.getElementById("pincode").value;
+              formData.website = document.getElementById("website").value;
+              formData.contactPerson =
+                document.getElementById("contactPerson").value;
+              formData.operatingHours =
+                document.getElementById("operatingHours").value;
+              formData.hasBloodBank = document.getElementById("hasBloodBank")
+                .checked
+                ? 1
+                : 0;
+            }
+
+            // Get submit button and show loading state
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Creating Account...";
+
+            try {
+              // POST to PHP backend
+              const response = await fetch("/api/auth/register.php", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+              });
+
+              const data = await response.json();
+
+              if (data.success) {
+                // Registration successful - redirect based on role
+                const config = roleConfig[data.user.role];
+                window.location.href = config.path;
               } else {
-                showError('email', data.message || 'Registration failed');
+                // Show error message
+                if (data.message.toLowerCase().includes("email")) {
+                  showError("email", data.message);
+                } else {
+                  showError("email", data.message || "Registration failed");
+                }
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
               }
+            } catch (error) {
+              console.error("Registration error:", error);
+              showError("email", "Connection error. Please try again.");
               submitBtn.disabled = false;
               submitBtn.textContent = originalText;
             }
-          } catch (error) {
-            console.error('Registration error:', error);
-            showError('email', 'Connection error. Please try again.');
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalText;
           }
-        }
-      });
-  </script>
-</body>
-
+        });
+    </script>
+  </body>
 </html>
