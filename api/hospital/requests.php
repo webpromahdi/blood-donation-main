@@ -4,8 +4,8 @@
  * GET /api/hospital/requests.php
  * Returns all blood requests for the logged-in hospital
  * 
- * Normalized Schema: Uses hospital_id FK, blood_groups.blood_type, 
- *                    JOINs donations -> donors -> users for donor info
+ * Normalized Schema: Uses requester_id + requester_type for polymorphic relation,
+ *                    blood_groups.blood_type, JOINs donations -> donors -> users for donor info
  */
 
 header('Content-Type: application/json');
@@ -45,7 +45,7 @@ if (!$conn) {
 }
 
 try {
-    // Get hospital_id from hospitals table
+    // Verify hospital exists
     $stmt = $conn->prepare("SELECT id FROM hospitals WHERE user_id = ?");
     $stmt->execute([$userId]);
     $hospital = $stmt->fetch();
@@ -55,10 +55,8 @@ try {
         echo json_encode(['success' => false, 'message' => 'Hospital record not found']);
         exit;
     }
-    
-    $hospitalId = $hospital['id'];
 
-    // Query with normalized schema joins
+    // Query with normalized schema - use requester_id + requester_type
     $sql = "SELECT r.*, bg.blood_type,
                    dn.id as donation_id, dn.status as donation_status, dn.donor_id,
                    dn.accepted_at, dn.started_at, dn.reached_at, dn.completed_at,
@@ -70,11 +68,11 @@ try {
             LEFT JOIN donors d ON dn.donor_id = d.id
             LEFT JOIN users donor_user ON d.user_id = donor_user.id
             LEFT JOIN blood_groups donor_bg ON d.blood_group_id = donor_bg.id
-            WHERE r.hospital_id = ?
+            WHERE r.requester_id = ? AND r.requester_type = 'hospital'
             ORDER BY r.urgency DESC, r.created_at DESC";
 
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$hospitalId]);
+    $stmt->execute([$userId]);
     $requests = $stmt->fetchAll();
 
     $formattedRequests = array_map(function ($req) {

@@ -59,6 +59,7 @@ try {
 
     // Get donors who have donated for requests made by this hospital
     // Using normalized schema: donations -> donors -> users + blood_groups
+    // Note: requester_id is the user_id, not the hospital table id
     $sql = "SELECT DISTINCT d.id as donor_id, u.id as user_id, u.name, u.email, u.phone, 
                    bg.blood_type as blood_group, d.age, d.city,
                    COUNT(DISTINCT dn.id) as donations_here,
@@ -68,12 +69,12 @@ try {
             JOIN blood_groups bg ON d.blood_group_id = bg.id
             JOIN donations dn ON d.id = dn.donor_id AND dn.status = 'completed'
             JOIN blood_requests r ON dn.request_id = r.id
-            WHERE r.hospital_id = ?
+            WHERE r.requester_id = ? AND r.requester_type = 'hospital'
             GROUP BY d.id
             ORDER BY last_donation_here DESC";
 
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$hospitalId]);
+    $stmt->execute([$userId]);
     $donors = $stmt->fetchAll();
 
     // Also get donors who are currently assigned to hospital's pending requests
@@ -85,11 +86,11 @@ try {
                   JOIN blood_groups bg ON d.blood_group_id = bg.id
                   JOIN donations dn ON d.id = dn.donor_id
                   JOIN blood_requests r ON dn.request_id = r.id
-                  WHERE r.hospital_id = ?
+                  WHERE r.requester_id = ? AND r.requester_type = 'hospital'
                   AND dn.status NOT IN ('completed', 'cancelled')";
 
     $stmtActive = $conn->prepare($sqlActive);
-    $stmtActive->execute([$hospitalId]);
+    $stmtActive->execute([$userId]);
     $activeDonors = $stmtActive->fetchAll();
 
     // Get all donors with their overall stats

@@ -3,8 +3,12 @@
  * Hospital Blood Request Creation Endpoint
  * POST /api/hospital/requests/create.php
  * 
- * Normalized Schema: Uses blood_group_id FK, hospital_id FK from hospitals table
+ * Normalized Schema: Uses blood_group_id FK, requester_id + requester_type for polymorphic relation
  */
+
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -34,6 +38,13 @@ requireApprovedStatus($_SESSION['user_id'], 'hospital');
 
 $input = json_decode(file_get_contents('php://input'), true);
 
+// Check if JSON parsing failed
+if ($input === null && json_last_error() !== JSON_ERROR_NONE) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Invalid JSON payload']);
+    exit;
+}
+
 // Validate required fields
 $required = ['patientName', 'contactPhone', 'bloodType', 'quantity', 'city', 'requiredDate'];
 foreach ($required as $field) {
@@ -46,14 +57,14 @@ foreach ($required as $field) {
 
 // Sanitize inputs
 $patientName = trim($input['patientName']);
-$patientAge = isset($input['patientAge']) ? (int) $input['patientAge'] : null;
+$patientAge = isset($input['patientAge']) && $input['patientAge'] !== '' ? (int) $input['patientAge'] : null;
 $contactPhone = trim($input['contactPhone']);
-$contactEmail = isset($input['email']) ? trim($input['email']) : null;
+$contactEmail = isset($input['email']) && $input['email'] !== '' ? trim($input['email']) : null;
 $bloodType = $input['bloodType'];
 $quantity = (int) $input['quantity'];
 $city = trim($input['city']);
 $requiredDate = $input['requiredDate'];
-$medicalReason = isset($input['medicalReason']) ? trim($input['medicalReason']) : null;
+$medicalReason = isset($input['medicalReason']) && $input['medicalReason'] !== '' ? trim($input['medicalReason']) : null;
 $isEmergency = isset($input['emergency']) && $input['emergency'] === true;
 
 // Connect to database
@@ -74,7 +85,7 @@ try {
     
     if (!$bloodGroup) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Invalid blood type']);
+        echo json_encode(['success' => false, 'message' => 'Invalid blood type: ' . $bloodType]);
         exit;
     }
     
@@ -83,7 +94,7 @@ try {
     // Get hospital info from hospitals table
     $userId = $_SESSION['user_id'];
     $stmt = $conn->prepare("
-        SELECT h.id as hospital_id, u.name as hospital_name 
+        SELECT h.id as hospital_table_id, u.name as hospital_name 
         FROM hospitals h
         JOIN users u ON h.user_id = u.id
         WHERE h.user_id = ?
@@ -93,11 +104,11 @@ try {
     
     if (!$hospital) {
         http_response_code(404);
-        echo json_encode(['success' => false, 'message' => 'Hospital record not found']);
+        echo json_encode(['success' => false, 'message' => 'Hospital profile not found. Please contact support.']);
         exit;
     }
     
-    $hospitalId = $hospital['hospital_id'];
+    $hospitalTableId = $hospital['hospital_table_id'];
     $hospitalName = $hospital['hospital_name'];
 
     // Generate unique request code
@@ -108,23 +119,24 @@ try {
 
     $conn->beginTransaction();
 
-    // Insert blood request with normalized foreign keys
+    // Insert blood request with polymorphic requester_id + requester_type
     $sql = 'INSERT INTO blood_requests (
-        request_code, blood_group_id, patient_name, patient_age,
-        contact_phone, contact_email, quantity, hospital_id,
-        hospital_name, city, required_date, medical_reason, urgency, status
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        request_code, blood_group_id, requester_id, requester_type, patient_name, patient_age,
+        contact_phone, contact_email, quantity, hospital_name, city, required_date, 
+        medical_reason, urgency, status
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
     $stmt = $conn->prepare($sql);
     $stmt->execute([
         $requestCode,
         $bloodGroupId,
+        $userId,           // requester_id is the user_id
+        'hospital',        // requester_type
         $patientName,
         $patientAge,
         $contactPhone,
         $contactEmail,
         $quantity,
-        $hospitalId,
         $hospitalName,
         $city,
         $requiredDate,
@@ -137,7 +149,7 @@ try {
     
     // Update hospital's total_requests count
     $stmt = $conn->prepare("UPDATE hospitals SET total_requests = total_requests + 1 WHERE id = ?");
-    $stmt->execute([$hospitalId]);
+    $stmt->execute([$hospitalTableId]);
 
     $conn->commit();
 
@@ -158,5 +170,9 @@ try {
     }
     error_log("Hospital Request Error: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Failed to create request. Please try again.']);
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Failed to create request. Please try again.',
+        'debug' => $e->getMessage()
+    ]);
 }

@@ -3,8 +3,13 @@
  * Seeker Blood Request Creation Endpoint
  * POST /api/seeker/requests/create.php
  * 
- * Normalized Schema: Uses seeker_id FK from seekers table, blood_group_id FK from blood_groups table
+ * Normalized Schema: Uses requester_id + requester_type for polymorphic relation,
+ * blood_group_id FK from blood_groups table
  */
+
+// Enable error reporting for debugging (remove in production)
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // Don't display, but log
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -31,6 +36,13 @@ requireAuth(['seeker']);
 
 $input = json_decode(file_get_contents('php://input'), true);
 
+// Check if JSON parsing failed
+if ($input === null && json_last_error() !== JSON_ERROR_NONE) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Invalid JSON payload']);
+    exit;
+}
+
 // Validate required fields
 $required = ['patientName', 'contactPhone', 'bloodType', 'quantity', 'hospitalName', 'city', 'requiredDate'];
 foreach ($required as $field) {
@@ -43,15 +55,15 @@ foreach ($required as $field) {
 
 // Sanitize inputs
 $patientName = trim($input['patientName']);
-$patientAge = isset($input['patientAge']) ? (int) $input['patientAge'] : null;
+$patientAge = isset($input['patientAge']) && $input['patientAge'] !== '' ? (int) $input['patientAge'] : null;
 $contactPhone = trim($input['contactPhone']);
-$contactEmail = isset($input['email']) ? trim($input['email']) : null;
+$contactEmail = isset($input['email']) && $input['email'] !== '' ? trim($input['email']) : null;
 $bloodType = $input['bloodType'];
 $quantity = (int) $input['quantity'];
 $hospitalName = trim($input['hospitalName']);
 $city = trim($input['city']);
 $requiredDate = $input['requiredDate'];
-$medicalReason = isset($input['medicalReason']) ? trim($input['medicalReason']) : null;
+$medicalReason = isset($input['medicalReason']) && $input['medicalReason'] !== '' ? trim($input['medicalReason']) : null;
 $isEmergency = isset($input['emergency']) && $input['emergency'] === true;
 
 // Connect to database
@@ -72,25 +84,27 @@ try {
     
     if (!$bloodGroup) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Invalid blood type']);
+        echo json_encode(['success' => false, 'message' => 'Invalid blood type: ' . $bloodType]);
         exit;
     }
     
     $bloodGroupId = $bloodGroup['id'];
     
-    // Get seeker_id from seekers table
+    // Get user_id from session (this is the requester_id for blood_requests)
     $userId = $_SESSION['user_id'];
+    
+    // Verify seeker exists in seekers table (for updating total_requests later)
     $stmt = $conn->prepare("SELECT id FROM seekers WHERE user_id = ?");
     $stmt->execute([$userId]);
     $seeker = $stmt->fetch();
     
     if (!$seeker) {
         http_response_code(404);
-        echo json_encode(['success' => false, 'message' => 'Seeker record not found']);
+        echo json_encode(['success' => false, 'message' => 'Seeker profile not found. Please contact support.']);
         exit;
     }
     
-    $seekerId = $seeker['id'];
+    $seekerTableId = $seeker['id'];
 
     // Generate unique request code
     $stmt = $conn->query('SELECT MAX(id) as max_id FROM blood_requests');
@@ -100,18 +114,19 @@ try {
 
     $conn->beginTransaction();
 
-    // Insert blood request with normalized foreign keys
+    // Insert blood request with correct column names (requester_id, requester_type)
     $sql = 'INSERT INTO blood_requests (
-        request_code, blood_group_id, seeker_id, patient_name, patient_age,
+        request_code, blood_group_id, requester_id, requester_type, patient_name, patient_age,
         contact_phone, contact_email, quantity, hospital_name,
         city, required_date, medical_reason, urgency, status
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
     $stmt = $conn->prepare($sql);
     $stmt->execute([
         $requestCode,
         $bloodGroupId,
-        $seekerId,
+        $userId,           // requester_id is the user_id
+        'seeker',          // requester_type
         $patientName,
         $patientAge,
         $contactPhone,
@@ -129,7 +144,7 @@ try {
     
     // Update seeker's total_requests count
     $stmt = $conn->prepare("UPDATE seekers SET total_requests = total_requests + 1 WHERE id = ?");
-    $stmt->execute([$seekerId]);
+    $stmt->execute([$seekerTableId]);
 
     $conn->commit();
 
@@ -150,5 +165,9 @@ try {
     }
     error_log("Seeker Request Error: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Failed to create request. Please try again.']);
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Failed to create request. Please try again.',
+        'debug' => $e->getMessage() // Remove in production
+    ]);
 }

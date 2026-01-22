@@ -1,10 +1,18 @@
 <?php
 /**
  * Get Donor Health Details Endpoint
- * GET /api/donor/health/details.php?donor_id={id}
+ * GET /api/donor/health/details.php?donor_id={id}&request_id={id}
  * Returns detailed health information for a specific donor
  * Used by seekers to view assigned donor's health info
+ * 
+ * Normalized Schema: donors.id is the donor_id, linked to users via user_id
+ *                    donor_health.donor_id references donors.id
+ *                    donations.donor_id references donors.id
  */
+
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -49,8 +57,9 @@ if (!$conn) {
 
 try {
     // If request_id is provided, get donor_id from the donation
+    // donations.donor_id references donors.id (NOT users.id)
     if ($requestId && !$donorId) {
-        $stmt = $conn->prepare("SELECT d.donor_id FROM donations d WHERE d.request_id = ? AND d.status != 'cancelled'");
+        $stmt = $conn->prepare("SELECT dn.donor_id FROM donations dn WHERE dn.request_id = ? AND dn.status != 'cancelled' LIMIT 1");
         $stmt->execute([$requestId]);
         $donation = $stmt->fetch();
         
@@ -64,10 +73,14 @@ try {
 
     // Verify the requester has access (seeker must own the request, or admin/hospital)
     if ($_SESSION['role'] === 'seeker') {
+        // Check that the seeker owns a request that has this donor assigned
         $stmt = $conn->prepare("
-            SELECT d.id FROM donations d 
-            JOIN blood_requests r ON d.request_id = r.id 
-            WHERE d.donor_id = ? AND r.requester_id = ? AND d.status != 'cancelled'
+            SELECT dn.id FROM donations dn 
+            JOIN blood_requests r ON dn.request_id = r.id 
+            WHERE dn.donor_id = ? 
+            AND r.requester_id = ? 
+            AND r.requester_type = 'seeker'
+            AND dn.status != 'cancelled'
         ");
         $stmt->execute([$donorId, $_SESSION['user_id']]);
         if (!$stmt->fetch()) {
@@ -77,8 +90,16 @@ try {
         }
     }
 
-    // Get donor basic info
-    $stmt = $conn->prepare("SELECT id, name, phone, email, blood_group, age, city, created_at FROM users WHERE id = ? AND role = 'donor'");
+    // Get donor basic info from normalized tables (donors + users + blood_groups)
+    $stmt = $conn->prepare("
+        SELECT d.id as donor_id, u.id as user_id, u.name, u.phone, u.email, 
+               bg.blood_type as blood_group, d.age, d.city, d.total_donations as stored_donations,
+               u.created_at
+        FROM donors d
+        JOIN users u ON d.user_id = u.id
+        LEFT JOIN blood_groups bg ON d.blood_group_id = bg.id
+        WHERE d.id = ?
+    ");
     $stmt->execute([$donorId]);
     $donor = $stmt->fetch();
 
@@ -88,12 +109,12 @@ try {
         exit;
     }
 
-    // Get donor health info
+    // Get donor health info - donor_health.donor_id references donors.id
     $stmt = $conn->prepare("SELECT * FROM donor_health WHERE donor_id = ?");
     $stmt->execute([$donorId]);
     $health = $stmt->fetch();
 
-    // Get donation stats
+    // Get donation stats - donations.donor_id references donors.id
     $stmt = $conn->prepare("SELECT COUNT(*) as count FROM donations WHERE donor_id = ? AND status = 'completed'");
     $stmt->execute([$donorId]);
     $totalDonations = $stmt->fetch()['count'];
@@ -102,14 +123,15 @@ try {
     $response = [
         'success' => true,
         'donor' => [
-            'id' => $donor['id'],
+            'id' => $donor['donor_id'],
+            'user_id' => $donor['user_id'],
             'name' => $donor['name'],
             'phone' => $donor['phone'],
             'email' => $donor['email'],
             'blood_group' => $donor['blood_group'],
             'age' => $donor['age'],
             'city' => $donor['city'],
-            'total_donations' => (int)$totalDonations,
+            'total_donations' => max((int)$totalDonations, (int)$donor['stored_donations']),
             'member_since' => $donor['created_at']
         ],
         'health' => $health ? [
@@ -128,7 +150,7 @@ try {
             ],
             'lifestyle' => [
                 'smoking' => $health['smoking_status'] === 'no' ? 'No' : ($health['smoking_status'] === 'occasionally' ? 'Occasionally' : 'Yes'),
-                'alcohol' => $health['alcohol_consumption'] === 'none' ? 'None' : ($health['alcohol_consumption'] === 'occasional' ? 'Occasional' : 'Regular'),
+                'alcohol' => $health['alcohol_consumption'] === 'none' ? 'None' : ($health['alcohol_consumption'] === 'occasionally' ? 'Occasional' : 'Regular'),
                 'exercise' => formatExerciseFrequency($health['exercise_frequency'])
             ],
             'last_checkup' => $health['last_medical_checkup'],
@@ -162,12 +184,13 @@ try {
 } catch (PDOException $e) {
     error_log("Donor Health Details Error: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Failed to fetch donor health details']);
+    echo json_encode(['success' => false, 'message' => 'Failed to fetch donor health details', 'debug' => $e->getMessage()]);
 }
 
 function formatExerciseFrequency($freq) {
     $map = [
         'rarely' => 'Rarely',
+        'weekly' => '1-2 times/week',
         '1-2_weekly' => '1-2 times/week',
         '3-4_weekly' => '3-4 times/week',
         'daily' => 'Daily'

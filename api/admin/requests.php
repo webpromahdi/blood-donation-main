@@ -4,7 +4,7 @@
  * GET /api/admin/requests.php
  * Query params: ?status=pending|approved|rejected|in_progress|completed&urgency=normal|emergency
  * 
- * Normalized Schema: Uses blood_group_id FK, seeker_id/hospital_id FKs,
+ * Normalized Schema: Uses blood_group_id FK, requester_id + requester_type for polymorphic relation,
  *                    donations -> donors -> users for donor info
  */
 
@@ -40,21 +40,18 @@ if (!$conn) {
 }
 
 try {
-    // Query with normalized schema
+    // Query with normalized schema - using requester_id + requester_type
     $sql = "SELECT r.*, bg.blood_type,
-                   -- Requester info (hospital or seeker)
-                   COALESCE(h_user.name, s_user.name) as requester_name, 
-                   COALESCE(h_user.email, s_user.email) as requester_email,
-                   CASE WHEN r.hospital_id IS NOT NULL THEN 'hospital' ELSE 'seeker' END as requester_type,
+                   -- Requester info (from users table via requester_id)
+                   req_user.name as requester_name, 
+                   req_user.email as requester_email,
+                   r.requester_type,
                    -- Donation info
                    dn.id as donation_id, dn.status as donation_status, dn.donor_id,
                    donor_user.name as donor_name
             FROM blood_requests r
             JOIN blood_groups bg ON r.blood_group_id = bg.id
-            LEFT JOIN hospitals h ON r.hospital_id = h.id
-            LEFT JOIN users h_user ON h.user_id = h_user.id
-            LEFT JOIN seekers s ON r.seeker_id = s.id
-            LEFT JOIN users s_user ON s.user_id = s_user.id
+            JOIN users req_user ON r.requester_id = req_user.id
             LEFT JOIN donations dn ON r.id = dn.request_id AND dn.status != 'cancelled'
             LEFT JOIN donors d ON dn.donor_id = d.id
             LEFT JOIN users donor_user ON d.user_id = donor_user.id

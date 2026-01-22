@@ -58,6 +58,7 @@ try {
     $hospitalId = $hospital['id'];
 
     // Get all donations linked to hospital's requests - normalized schema joins
+    // Note: requester_id is the user_id, not the hospital table id
     $sql = "SELECT dn.id, dn.status, dn.accepted_at, dn.started_at, dn.reached_at, dn.completed_at,
                    r.id as request_id, r.request_code, bg.blood_type, r.quantity, r.urgency,
                    r.patient_name, r.required_date,
@@ -69,11 +70,11 @@ try {
             JOIN donors d ON dn.donor_id = d.id
             JOIN users u ON d.user_id = u.id
             JOIN blood_groups donor_bg ON d.blood_group_id = donor_bg.id
-            WHERE r.hospital_id = ?
+            WHERE r.requester_id = ? AND r.requester_type = 'hospital'
             ORDER BY dn.created_at DESC";
 
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$hospitalId]);
+    $stmt->execute([$userId]);
     $appointments = $stmt->fetchAll();
 
     // Format response

@@ -4,8 +4,8 @@
  * GET /api/seeker/requests.php
  * Returns all blood requests for the logged-in seeker with lifecycle status
  * 
- * Normalized Schema: Uses seeker_id FK, blood_groups.blood_type,
- *                    donations -> donors -> users for donor info
+ * Normalized Schema: Uses requester_id + requester_type for polymorphic relation,
+ *                    blood_groups.blood_type, donations -> donors -> users for donor info
  */
 
 header('Content-Type: application/json');
@@ -42,7 +42,7 @@ if (!$conn) {
 }
 
 try {
-    // Get seeker_id from seekers table
+    // Get seeker record for updating stats later if needed
     $stmt = $conn->prepare("SELECT id FROM seekers WHERE user_id = ?");
     $stmt->execute([$userId]);
     $seeker = $stmt->fetch();
@@ -52,10 +52,8 @@ try {
         echo json_encode(['success' => false, 'message' => 'Seeker record not found']);
         exit;
     }
-    
-    $seekerId = $seeker['id'];
 
-    // Query with normalized schema joins
+    // Query with normalized schema - use requester_id + requester_type
     $sql = "SELECT r.*, bg.blood_type,
                    dn.id as donation_id, dn.status as donation_status, dn.donor_id,
                    dn.accepted_at, dn.started_at, dn.reached_at, dn.completed_at,
@@ -65,11 +63,11 @@ try {
             LEFT JOIN donations dn ON r.id = dn.request_id AND dn.status != 'cancelled'
             LEFT JOIN donors d ON dn.donor_id = d.id
             LEFT JOIN users donor_user ON d.user_id = donor_user.id
-            WHERE r.seeker_id = ?
+            WHERE r.requester_id = ? AND r.requester_type = 'seeker'
             ORDER BY r.created_at DESC";
 
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$seekerId]);
+    $stmt->execute([$userId]);
     $requests = $stmt->fetchAll();
 
     // Map to frontend-friendly format with lifecycle status

@@ -40,6 +40,7 @@ if (!$conn) {
 
 try {
     // Query with normalized schema - JOIN users and hospitals tables
+    // Note: r.requester_id references users.id (not hospitals.id) with requester_type = 'hospital'
     $sql = "SELECT u.id as user_id, h.id as hospital_id, u.name, u.email, u.phone, 
                    h.address, h.registration_number, h.website, h.contact_person, 
                    h.city, u.status, u.created_at, h.total_requests,
@@ -47,7 +48,7 @@ try {
                    SUM(CASE WHEN r.status = 'pending' THEN 1 ELSE 0 END) as pending_requests
             FROM users u
             JOIN hospitals h ON u.id = h.user_id
-            LEFT JOIN blood_requests r ON h.id = r.hospital_id
+            LEFT JOIN blood_requests r ON u.id = r.requester_id AND r.requester_type = 'hospital'
             WHERE u.role = 'hospital'
             GROUP BY u.id, h.id
             ORDER BY u.created_at DESC";

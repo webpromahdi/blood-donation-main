@@ -84,15 +84,16 @@ try {
         exit;
     }
 
-    // Get request statistics - use hospital_id FK
+    // Get request statistics - use requester_id + requester_type
+    // Note: requester_id references users.id, not hospitals.id
     $stmt = $conn->prepare("SELECT 
         COUNT(*) as total,
         SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
         SUM(CASE WHEN status IN ('approved', 'in_progress') THEN 1 ELSE 0 END) as active,
         SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed,
         SUM(CASE WHEN urgency = 'emergency' AND status NOT IN ('completed', 'rejected', 'cancelled') THEN 1 ELSE 0 END) as emergency
-        FROM blood_requests WHERE hospital_id = ?");
-    $stmt->execute([$hospitalId]);
+        FROM blood_requests WHERE requester_id = ? AND requester_type = 'hospital'");
+    $stmt->execute([$userId]);
     $stats = $stmt->fetch();
 
     // Get available donors count (approved donors)

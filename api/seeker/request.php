@@ -4,8 +4,8 @@
  * GET /api/seeker/request.php?id={id}
  * Returns full details of a single blood request
  * 
- * Normalized Schema: Uses seeker_id FK, blood_groups.blood_type, 
- *                    donations -> donors -> users for donor info
+ * Normalized Schema: Uses requester_id + requester_type for polymorphic relation, 
+ *                    blood_groups.blood_type, donations -> donors -> users for donor info
  */
 
 header('Content-Type: application/json');
@@ -52,7 +52,7 @@ if (!$conn) {
 }
 
 try {
-    // Get seeker_id from seekers table
+    // Verify seeker exists
     $stmt = $conn->prepare("SELECT id FROM seekers WHERE user_id = ?");
     $stmt->execute([$userId]);
     $seeker = $stmt->fetch();
@@ -62,10 +62,8 @@ try {
         echo json_encode(['success' => false, 'message' => 'Seeker record not found']);
         exit;
     }
-    
-    $seekerId = $seeker['id'];
 
-    // Build query based on ID or code - using normalized schema
+    // Build query based on ID or code - using normalized schema with requester_id
     $baseSelect = "SELECT r.*, bg.blood_type, 
                        dn.id as donation_id, dn.status as donation_status, dn.donor_id,
                        dn.accepted_at, dn.started_at, dn.reached_at, dn.completed_at,
@@ -79,13 +77,13 @@ try {
                 LEFT JOIN blood_groups donor_bg ON d.blood_group_id = donor_bg.id";
                 
     if ($requestId) {
-        $sql = $baseSelect . " WHERE r.id = ? AND r.seeker_id = ?";
+        $sql = $baseSelect . " WHERE r.id = ? AND r.requester_id = ? AND r.requester_type = 'seeker'";
         $stmt = $conn->prepare($sql);
-        $stmt->execute([$requestId, $seekerId]);
+        $stmt->execute([$requestId, $userId]);
     } else {
-        $sql = $baseSelect . " WHERE r.request_code = ? AND r.seeker_id = ?";
+        $sql = $baseSelect . " WHERE r.request_code = ? AND r.requester_id = ? AND r.requester_type = 'seeker'";
         $stmt = $conn->prepare($sql);
-        $stmt->execute([$requestCode, $seekerId]);
+        $stmt->execute([$requestCode, $userId]);
     }
 
     $request = $stmt->fetch();
