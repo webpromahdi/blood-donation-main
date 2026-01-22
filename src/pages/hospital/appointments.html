@@ -430,23 +430,30 @@
           }
 
           // Transform appointments data to match expected format
+          // API now returns both request-based and voluntary donations
           appointments = (data.appointments || []).map((apt) => ({
-            id: apt.id
-              ? `APT${String(apt.id).padStart(3, "0")}`
-              : apt.appointment_id,
-            donor: apt.donor_name || "Unknown Donor",
-            bloodType: apt.blood_type || "N/A",
-            date: apt.appointment_date || apt.created_at,
-            time: apt.appointment_time || "10:00 AM",
-            type: apt.urgency === "emergency" ? "Emergency" : "Request",
-            status: capitalizeStatus(apt.donation_status || apt.status),
-            age: apt.donor_age || "N/A",
-            gender: apt.donor_gender || "N/A",
-            weight: apt.donor_weight || "N/A",
-            email: apt.donor_email || "N/A",
-            phone: apt.donor_phone || "N/A",
-            address: apt.donor_address || "N/A",
-            city: apt.donor_city || "N/A",
+            id:
+              apt.id ||
+              `APT${String(apt.donation_id || apt.voluntary_id).padStart(3, "0")}`,
+            donation_id: apt.donation_id,
+            voluntary_id: apt.voluntary_id,
+            donor: apt.donor?.name || apt.donor_name || "Unknown Donor",
+            bloodType: apt.blood_type || apt.donor?.blood_group || "N/A",
+            date: formatDate(
+              apt.date || apt.appointment_date || apt.created_at,
+            ),
+            time: apt.time || apt.appointment_time || "10:00 AM",
+            type:
+              apt.type ||
+              (apt.urgency === "emergency" ? "Emergency" : "Request"),
+            status: apt.status || capitalizeStatus(apt.donation_status),
+            age: apt.donor?.age || apt.donor_age || "N/A",
+            gender: apt.donor?.gender || apt.donor_gender || "N/A",
+            weight: apt.donor?.weight || apt.donor_weight || "N/A",
+            email: apt.donor?.email || apt.donor_email || "N/A",
+            phone: apt.donor?.phone || apt.donor_phone || "N/A",
+            address: apt.donor?.address || apt.donor_address || "N/A",
+            city: apt.donor?.city || apt.donor_city || "N/A",
             healthStatus: "Healthy",
             medicalConditions: "None reported",
             hemoglobin: "N/A",
@@ -456,7 +463,9 @@
             registeredAt: apt.donor_registered || "N/A",
             request_code: apt.request_code,
             patient_name: apt.patient_name,
-            quantity: apt.quantity,
+            quantity: apt.quantity || 1,
+            notes: apt.notes,
+            preferred_time: apt.preferred_time,
           }));
 
           window.renderAppointments();
@@ -478,6 +487,7 @@
           completed: "Completed",
           cancelled: "Cancelled",
           pending: "Pending",
+          approved: "Pending", // Voluntary donations approved by admin are pending for hospital
         };
         return (
           statusMap[status.toLowerCase()] ||
@@ -495,30 +505,8 @@
         );
         const tabButtons = document.querySelectorAll(".tab-btn");
 
-        // Tab click handlers
-        tabButtons.forEach((btn) => {
-          btn.addEventListener("click", function () {
-            currentTab = this.dataset.tab;
-            updateTabStyles();
-            window.renderAppointments();
-          });
-        });
-
-        // Load from API
-        loadAppointments();
-      });
-
-      // Helper functions (need to be in global scope for existing code)
-      document.addEventListener("DOMContentLoaded", function () {
-        const tableBody = document.getElementById("appointmentsTableBody");
-        const emptyState = document.getElementById("emptyState");
-        const emptyStateMessage = document.getElementById("emptyStateMessage");
-        const statCards = document.querySelectorAll(
-          ".grid.grid-cols-1.md\\:grid-cols-4 .text-3xl",
-        );
-        const tabButtons = document.querySelectorAll(".tab-btn");
-
-        function updateTabStyles() {
+        // Make updateTabStyles global
+        window.updateTabStyles = function() {
           tabButtons.forEach((btn) => {
             const isActive = btn.dataset.tab === currentTab;
             btn.classList.toggle("border-red-600", isActive);
@@ -526,8 +514,21 @@
             btn.classList.toggle("border-transparent", !isActive);
             btn.classList.toggle("text-gray-600", !isActive);
           });
-        }
+        };
 
+        // Tab click handlers
+        tabButtons.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            currentTab = this.dataset.tab;
+            window.updateTabStyles();
+            window.renderAppointments();
+          });
+        });
+
+        // Load from API
+        loadAppointments();
+
+        // Define helper functions in this scope
         function getFilteredAppointments() {
           if (currentTab === "pending") {
             return appointments.filter((a) => a.status === "Pending");
@@ -703,9 +704,65 @@
 
         function updateAppointmentStatus(id, newStatus) {
           const apt = appointments.find((a) => a.id === id);
-          if (apt) {
-            apt.status = newStatus;
+          if (!apt) return;
 
+          // Determine which API to call based on appointment type
+          const isVoluntary = apt.type === "Voluntary" || apt.voluntary_id;
+
+          // Map UI status to API status
+          const statusMap = {
+            Confirmed: "confirmed",
+            Completed: "completed",
+            Cancelled: "cancelled",
+          };
+          const apiStatus = statusMap[newStatus] || newStatus.toLowerCase();
+
+          // Show loading state
+          showNotification(`Updating appointment...`, "info");
+
+          if (isVoluntary) {
+            // Call voluntary donation update API
+            fetch("/api/hospital/voluntary/update-status.php", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                voluntary_id: apt.voluntary_id,
+                status: apiStatus,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.success) {
+                  apt.status = newStatus;
+                  let message = "";
+                  let type = "success";
+                  if (newStatus === "Confirmed") {
+                    message = `Voluntary donation from ${apt.donor} has been confirmed!`;
+                  } else if (newStatus === "Completed") {
+                    message = `Donation from ${apt.donor} marked as completed! Certificate generated.`;
+                  } else if (newStatus === "Cancelled") {
+                    message = `Voluntary donation from ${apt.donor} has been cancelled.`;
+                    type = "info";
+                  }
+                  showNotification(message, type);
+                  window.renderAppointments();
+                } else {
+                  showNotification(
+                    data.message || "Failed to update status",
+                    "error",
+                  );
+                }
+              })
+              .catch((error) => {
+                console.error("Error updating status:", error);
+                showNotification(
+                  "Failed to update appointment status",
+                  "error",
+                );
+              });
+          } else {
+            // For request-based donations, update locally for now (TODO: implement API)
+            apt.status = newStatus;
             let message = "";
             let type = "success";
             if (newStatus === "Confirmed") {
@@ -716,29 +773,40 @@
               message = `Appointment with ${apt.donor} has been cancelled.`;
               type = "info";
             }
-
             showNotification(message, type);
             window.renderAppointments();
           }
         }
 
         function showNotification(message, type = "success") {
-          const bgColor =
-            type === "success"
-              ? "bg-green-50 border-green-600"
-              : "bg-gray-50 border-gray-600";
-          const textColor =
-            type === "success" ? "text-green-900" : "text-gray-900";
-          const iconColor =
-            type === "success" ? "text-green-600" : "text-gray-600";
-          const icon = type === "success" ? "check-circle" : "info";
+          const colors = {
+            success: {
+              bg: "bg-green-50 border-green-600",
+              text: "text-green-900",
+              icon: "text-green-600",
+              iconName: "check-circle",
+            },
+            info: {
+              bg: "bg-blue-50 border-blue-600",
+              text: "text-blue-900",
+              icon: "text-blue-600",
+              iconName: "info",
+            },
+            error: {
+              bg: "bg-red-50 border-red-600",
+              text: "text-red-900",
+              icon: "text-red-600",
+              iconName: "alert-circle",
+            },
+          };
+          const style = colors[type] || colors.info;
 
           const notification = document.createElement("div");
-          notification.className = `fixed top-20 right-8 p-4 ${bgColor} border-l-4 rounded-lg shadow-lg z-50`;
+          notification.className = `fixed top-20 right-8 p-4 ${style.bg} border-l-4 rounded-lg shadow-lg z-50`;
           notification.innerHTML = `
             <div class="flex items-center gap-3">
-              <i data-lucide="${icon}" class="size-5 ${iconColor}"></i>
-              <p class="${textColor}">${message}</p>
+              <i data-lucide="${style.iconName}" class="size-5 ${style.icon}"></i>
+              <p class="${style.text}">${message}</p>
             </div>
           `;
           document.body.appendChild(notification);

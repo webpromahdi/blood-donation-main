@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voluntary Donations - BloodConnect Admin</title>
+    <link rel="stylesheet" href="/src/styles/styles.css" />
+  </head>
+
+  <body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div
+      class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="bg-red-600 p-2 rounded-lg">
+            <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-red-600">BloodConnect</div>
+            <div class="text-sm text-gray-500">Admin Panel</div>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-1 overflow-y-auto py-4">
+        <a
+          href="/src/pages/admin/dashboard.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+        >
+          <i data-lucide="layout-dashboard" class="size-5"></i>
+          <span>Dashboard</span>
+        </a>
+        <a
+          href="/src/pages/admin/donors.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+        >
+          <i data-lucide="users" class="size-5"></i>
+          <span>Donors</span>
+        </a>
+        <a
+          href="/src/pages/admin/hospitals.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+        >
+          <i data-lucide="building-2" class="size-5"></i>
+          <span>Hospitals</span>
+        </a>
+        <a
+          href="/src/pages/admin/voluntary.html"
+          class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
+        >
+          <i data-lucide="hand-heart" class="size-5"></i>
+          <span>Voluntary Donations</span>
+        </a>
+        <a
+          href="/src/pages/admin/blood-groups.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+        >
+          <i data-lucide="droplet" class="size-5"></i>
+          <span>Blood Groups</span>
+        </a>
+        <a
+          href="/src/pages/admin/reports.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+        >
+          <i data-lucide="file-text" class="size-5"></i>
+          <span>Reports</span>
+        </a>
+        <a
+          href="/src/pages/admin/announcements.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+        >
+          <i data-lucide="megaphone" class="size-5"></i>
+          <span>Announcements</span>
+        </a>
+        <a
+          href="/src/pages/admin/chat.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+        >
+          <i data-lucide="message-square" class="size-5"></i>
+          <span>Chat</span>
+        </a>
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <div class="text-center text-sm text-gray-500">
+          <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header
+      class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8"
+    >
+      <div class="flex items-center gap-4 flex-1">
+        <div class="relative flex-1 max-w-md">
+          <i
+            data-lucide="search"
+            class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"
+          ></i>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search by donor name or city..."
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <button
+          class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+          <span
+            class="absolute -top-1 -right-1 size-5 flex items-center justify-center p-0 bg-red-600 text-white text-xs rounded-full"
+            id="notificationBadge"
+            >0</span
+          >
+        </button>
+        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+          <div class="text-right">
+            <div class="text-sm font-medium text-gray-900" data-user-name>
+              Admin User
+            </div>
+            <div class="text-xs text-gray-500" data-user-role>
+              System Administrator
+            </div>
+          </div>
+          <div
+            class="size-10 bg-red-100 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="shield" class="size-5 text-red-600"></i>
+          </div>
+        </div>
+        <a href="/" class="p-2 text-gray-600 hover:text-red-600"
+          ><i data-lucide="log-out" class="size-5"></i
+        ></a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 pt-16 p-8">
+      <div class="space-y-8">
+        <!-- Page Header -->
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">
+              Voluntary Donation Requests
+            </h1>
+            <p class="text-gray-600">
+              Review and approve voluntary donation requests from donors
+            </p>
+          </div>
+          <span
+            class="px-4 py-2 bg-yellow-600 text-white rounded-full font-medium"
+            id="pendingBadge"
+          >
+            <i data-lucide="loader" class="size-4 inline animate-spin"></i>
+          </span>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center gap-4">
+              <div
+                class="size-12 bg-blue-100 rounded-full flex items-center justify-center"
+              >
+                <i data-lucide="list" class="size-6 text-blue-600"></i>
+              </div>
+              <div>
+                <p class="text-2xl font-bold text-gray-900" id="totalCount">
+                  0
+                </p>
+                <p class="text-sm text-gray-600">Total</p>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center gap-4">
+              <div
+                class="size-12 bg-yellow-100 rounded-full flex items-center justify-center"
+              >
+                <i data-lucide="clock" class="size-6 text-yellow-600"></i>
+              </div>
+              <div>
+                <p class="text-2xl font-bold text-gray-900" id="pendingCount">
+                  0
+                </p>
+                <p class="text-sm text-gray-600">Pending</p>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center gap-4">
+              <div
+                class="size-12 bg-green-100 rounded-full flex items-center justify-center"
+              >
+                <i data-lucide="check-circle" class="size-6 text-green-600"></i>
+              </div>
+              <div>
+                <p class="text-2xl font-bold text-gray-900" id="approvedCount">
+                  0
+                </p>
+                <p class="text-sm text-gray-600">Approved</p>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center gap-4">
+              <div
+                class="size-12 bg-red-100 rounded-full flex items-center justify-center"
+              >
+                <i data-lucide="x-circle" class="size-6 text-red-600"></i>
+              </div>
+              <div>
+                <p class="text-2xl font-bold text-gray-900" id="rejectedCount">
+                  0
+                </p>
+                <p class="text-sm text-gray-600">Rejected</p>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 bg-white border border-gray-200 rounded-xl">
+            <div class="flex items-center gap-4">
+              <div
+                class="size-12 bg-emerald-100 rounded-full flex items-center justify-center"
+              >
+                <i
+                  data-lucide="heart-handshake"
+                  class="size-6 text-emerald-600"
+                ></i>
+              </div>
+              <div>
+                <p class="text-2xl font-bold text-gray-900" id="completedCount">
+                  0
+                </p>
+                <p class="text-sm text-gray-600">Completed</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl">
+          <div class="flex flex-wrap items-center gap-4">
+            <div class="flex-1 min-w-[150px]">
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Status</label
+              >
+              <select
+                id="statusFilter"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="flex-1 min-w-[150px]">
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Blood Group</label
+              >
+              <select
+                id="bloodGroupFilter"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                <option value="">All Blood Groups</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+            </div>
+            <div class="flex-1 min-w-[150px]">
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >City</label
+              >
+              <input
+                type="text"
+                id="cityFilter"
+                placeholder="Filter by city"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              />
+            </div>
+            <div class="flex items-end gap-2">
+              <button
+                id="applyFilters"
+                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+              >
+                Apply
+              </button>
+              <button
+                id="clearFilters"
+                class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg text-gray-700"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Requests Table -->
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <!-- Loading State -->
+          <div id="loadingState" class="text-center py-12">
+            <i
+              data-lucide="loader"
+              class="size-8 text-gray-400 mx-auto mb-3 animate-spin"
+            ></i>
+            <p class="text-gray-500">Loading voluntary donation requests...</p>
+          </div>
+
+          <!-- Empty State -->
+          <div id="emptyState" class="hidden text-center py-12">
+            <div
+              class="inline-flex items-center justify-center size-16 rounded-full bg-gray-100 mb-4"
+            >
+              <i data-lucide="inbox" class="size-8 text-gray-400"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+              No Requests Found
+            </h3>
+            <p class="text-gray-600">
+              No voluntary donation requests match your criteria.
+            </p>
+          </div>
+
+          <!-- Table -->
+          <div id="tableContainer" class="hidden overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th
+                    class="px-6 py-4 text-left text-sm font-medium text-gray-700"
+                  >
+                    Donor
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left text-sm font-medium text-gray-700"
+                  >
+                    Blood Group
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left text-sm font-medium text-gray-700"
+                  >
+                    City
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left text-sm font-medium text-gray-700"
+                  >
+                    Available Date
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left text-sm font-medium text-gray-700"
+                  >
+                    Time
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left text-sm font-medium text-gray-700"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left text-sm font-medium text-gray-700"
+                  >
+                    Created
+                  </th>
+                  <th
+                    class="px-6 py-4 text-right text-sm font-medium text-gray-700"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="tableBody" class="divide-y divide-gray-200">
+                <!-- Rows will be populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Approve Modal -->
+    <div id="approveModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+      <div class="flex items-center justify-center min-h-screen p-4">
+        <div
+          class="fixed inset-0 bg-black/50 z-0"
+          onclick="closeApproveModal()"
+        ></div>
+        <div
+          class="relative z-10 bg-white rounded-xl shadow-xl max-w-md w-full p-6"
+        >
+          <div class="text-center">
+            <div
+              class="size-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <i data-lucide="check-circle" class="size-8 text-green-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">
+              Approve Request?
+            </h3>
+            <p class="text-gray-600 mb-2" id="approveDetails">
+              Are you sure you want to approve this voluntary donation request?
+            </p>
+            <p class="text-sm text-gray-500 mb-6">
+              The donor will be notified and hospitals will be able to view this
+              request.
+            </p>
+            <div class="flex gap-3">
+              <button
+                onclick="closeApproveModal()"
+                class="flex-1 px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium text-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                id="confirmApproveBtn"
+                class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium"
+              >
+                Approve
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reject Modal -->
+    <div id="rejectModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+      <div class="flex items-center justify-center min-h-screen p-4">
+        <div
+          class="fixed inset-0 bg-black/50 z-0"
+          onclick="closeRejectModal()"
+        ></div>
+        <div
+          class="relative z-10 bg-white rounded-xl shadow-xl max-w-md w-full p-6"
+        >
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-bold text-gray-900">Reject Request</h3>
+            <button
+              onclick="closeRejectModal()"
+              class="p-2 hover:bg-gray-100 rounded-lg"
+            >
+              <i data-lucide="x" class="size-5 text-gray-500"></i>
+            </button>
+          </div>
+          <div class="space-y-4">
+            <p class="text-gray-600" id="rejectDetails">
+              Please provide a reason for rejecting this request.
+            </p>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Rejection Reason <span class="text-red-500">*</span>
+              </label>
+              <textarea
+                id="rejectionReason"
+                rows="3"
+                required
+                placeholder="Enter reason for rejection..."
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              ></textarea>
+            </div>
+            <div class="flex gap-3 pt-2">
+              <button
+                onclick="closeRejectModal()"
+                class="flex-1 px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg font-medium text-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                id="confirmRejectBtn"
+                class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium"
+              >
+                Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Details Modal -->
+    <div id="detailsModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+      <div class="flex items-center justify-center min-h-screen p-4">
+        <div
+          class="fixed inset-0 bg-black/50 z-0"
+          onclick="closeDetailsModal()"
+        ></div>
+        <div
+          class="relative z-10 bg-white rounded-xl shadow-xl max-w-lg w-full p-6"
+        >
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-bold text-gray-900">Request Details</h3>
+            <button
+              onclick="closeDetailsModal()"
+              class="p-2 hover:bg-gray-100 rounded-lg"
+            >
+              <i data-lucide="x" class="size-5 text-gray-500"></i>
+            </button>
+          </div>
+          <div id="detailsContent" class="space-y-4">
+            <!-- Content populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/scripts/main.js"></script>
+    <script type="module">
+      import { initUserLoader } from "/src/scripts/user-loader.js";
+      initUserLoader();
+
+      let requests = [];
+      let stats = {};
+      let currentRequestId = null;
+      let searchTimeout = null;
+
+      // Load requests
+      async function loadRequests() {
+        const loadingState = document.getElementById("loadingState");
+        const emptyState = document.getElementById("emptyState");
+        const tableContainer = document.getElementById("tableContainer");
+
+        try {
+          const params = new URLSearchParams();
+
+          const status = document.getElementById("statusFilter").value;
+          const bloodGroup = document.getElementById("bloodGroupFilter").value;
+          const city = document.getElementById("cityFilter").value;
+          const search = document.getElementById("searchInput").value;
+
+          if (status) params.append("status", status);
+          if (bloodGroup) params.append("blood_group", bloodGroup);
+          if (city) params.append("city", city);
+          if (search) params.append("search", search);
+
+          const url = `/api/admin/voluntary/list.php${params.toString() ? "?" + params.toString() : ""}`;
+          const response = await fetch(url, { credentials: "include" });
+          const data = await response.json();
+
+          if (loadingState) loadingState.classList.add("hidden");
+
+          if (!data.success) {
+            showNotification(
+              data.message || "Failed to load requests",
+              "error",
+            );
+            return;
+          }
+
+          requests = data.donations || [];
+          stats = data.stats || {};
+
+          // Update stats
+          document.getElementById("totalCount").textContent = stats.total || 0;
+          document.getElementById("pendingCount").textContent =
+            stats.pending || 0;
+          document.getElementById("approvedCount").textContent =
+            stats.approved || 0;
+          document.getElementById("rejectedCount").textContent =
+            stats.rejected || 0;
+          document.getElementById("completedCount").textContent =
+            stats.completed || 0;
+          document.getElementById("pendingBadge").textContent =
+            `${stats.pending || 0} Pending`;
+
+          if (requests.length === 0) {
+            if (emptyState) emptyState.classList.remove("hidden");
+            if (tableContainer) tableContainer.classList.add("hidden");
+          } else {
+            if (emptyState) emptyState.classList.add("hidden");
+            if (tableContainer) tableContainer.classList.remove("hidden");
+            renderTable();
+          }
+        } catch (error) {
+          console.error("Error loading requests:", error);
+          if (loadingState) loadingState.classList.add("hidden");
+          showNotification("Failed to load requests", "error");
+        }
+      }
+
+      // Render table
+      function renderTable() {
+        const tbody = document.getElementById("tableBody");
+        if (!tbody) return;
+
+        const statusColors = {
+          pending: "bg-yellow-100 text-yellow-800",
+          approved: "bg-green-100 text-green-800",
+          rejected: "bg-red-100 text-red-800",
+          completed: "bg-blue-100 text-blue-800",
+          cancelled: "bg-gray-100 text-gray-800",
+        };
+
+        tbody.innerHTML = requests
+          .map((request) => {
+            const statusColor =
+              statusColors[request.status] || "bg-gray-100 text-gray-800";
+            const isPending = request.status === "pending";
+
+            return `
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <div class="size-10 bg-green-100 rounded-full flex items-center justify-center">
+                    <i data-lucide="user" class="size-5 text-green-600"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium text-gray-900">${request.donor_name || "Unknown"}</p>
+                    <p class="text-sm text-gray-500">${request.donor_email || ""}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">
+                  ${request.blood_type || "-"}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-gray-600">${request.city || "-"}</td>
+              <td class="px-6 py-4 text-gray-600">
+                ${new Date(request.availability_date).toLocaleDateString(
+                  "en-US",
+                  {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  },
+                )}
+              </td>
+              <td class="px-6 py-4 text-gray-600 capitalize">${request.preferred_time || "-"}</td>
+              <td class="px-6 py-4">
+                <span class="px-2 py-1 ${statusColor} rounded-full text-xs font-medium capitalize">
+                  ${request.status}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-gray-500 text-sm">
+                ${new Date(request.created_at).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })}
+              </td>
+              <td class="px-6 py-4 text-right">
+                <div class="flex items-center justify-end gap-2">
+                  <button
+                    onclick="viewDetails(${request.id})"
+                    class="p-2 hover:bg-gray-100 rounded-lg text-gray-600"
+                    title="View Details"
+                  >
+                    <i data-lucide="eye" class="size-4"></i>
+                  </button>
+                  ${
+                    isPending
+                      ? `
+                    <button
+                      onclick="openApproveModal(${request.id})"
+                      class="p-2 hover:bg-green-100 rounded-lg text-green-600"
+                      title="Approve"
+                    >
+                      <i data-lucide="check" class="size-4"></i>
+                    </button>
+                    <button
+                      onclick="openRejectModal(${request.id})"
+                      class="p-2 hover:bg-red-100 rounded-lg text-red-600"
+                      title="Reject"
+                    >
+                      <i data-lucide="x" class="size-4"></i>
+                    </button>
+                  `
+                      : ""
+                  }
+                </div>
+              </td>
+            </tr>
+          `;
+          })
+          .join("");
+
+        if (window.lucide) window.lucide.createIcons();
+      }
+
+      // View details
+      window.viewDetails = function (requestId) {
+        const request = requests.find((r) => r.id === requestId);
+        if (!request) return;
+
+        const content = document.getElementById("detailsContent");
+        content.innerHTML = `
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <p class="text-sm text-gray-600">Donor Name</p>
+              <p class="font-medium text-gray-900">${request.donor_name || "-"}</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <p class="text-sm text-gray-600">Blood Group</p>
+              <p class="font-medium text-gray-900">${request.blood_type || "-"}</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <p class="text-sm text-gray-600">Email</p>
+              <p class="font-medium text-gray-900">${request.donor_email || "-"}</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <p class="text-sm text-gray-600">Phone</p>
+              <p class="font-medium text-gray-900">${request.donor_phone || "-"}</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <p class="text-sm text-gray-600">City</p>
+              <p class="font-medium text-gray-900">${request.city || "-"}</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <p class="text-sm text-gray-600">Status</p>
+              <p class="font-medium text-gray-900 capitalize">${request.status}</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <p class="text-sm text-gray-600">Available Date</p>
+              <p class="font-medium text-gray-900">${new Date(request.availability_date).toLocaleDateString()}</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <p class="text-sm text-gray-600">Preferred Time</p>
+              <p class="font-medium text-gray-900 capitalize">${request.preferred_time || "-"}</p>
+            </div>
+          </div>
+          ${
+            request.notes
+              ? `
+            <div class="p-4 bg-gray-50 rounded-lg mt-4">
+              <p class="text-sm text-gray-600">Notes</p>
+              <p class="font-medium text-gray-900">${request.notes}</p>
+            </div>
+          `
+              : ""
+          }
+          ${
+            request.rejection_reason
+              ? `
+            <div class="p-4 bg-red-50 border border-red-200 rounded-lg mt-4">
+              <p class="text-sm text-red-600">Rejection Reason</p>
+              <p class="font-medium text-red-900">${request.rejection_reason}</p>
+            </div>
+          `
+              : ""
+          }
+        `;
+
+        document.getElementById("detailsModal").classList.remove("hidden");
+        if (window.lucide) window.lucide.createIcons();
+      };
+
+      window.closeDetailsModal = function () {
+        document.getElementById("detailsModal").classList.add("hidden");
+      };
+
+      // Approve modal
+      window.openApproveModal = function (requestId) {
+        currentRequestId = requestId;
+        const request = requests.find((r) => r.id === requestId);
+        if (request) {
+          document.getElementById("approveDetails").textContent =
+            `Approve ${request.donor_name}'s voluntary donation request for ${request.availability_date}?`;
+        }
+        document.getElementById("approveModal").classList.remove("hidden");
+        if (window.lucide) window.lucide.createIcons();
+      };
+
+      window.closeApproveModal = function () {
+        currentRequestId = null;
+        document.getElementById("approveModal").classList.add("hidden");
+      };
+
+      // Reject modal
+      window.openRejectModal = function (requestId) {
+        currentRequestId = requestId;
+        const request = requests.find((r) => r.id === requestId);
+        if (request) {
+          document.getElementById("rejectDetails").textContent =
+            `Rejecting ${request.donor_name}'s voluntary donation request. Please provide a reason.`;
+        }
+        document.getElementById("rejectModal").classList.remove("hidden");
+        if (window.lucide) window.lucide.createIcons();
+      };
+
+      window.closeRejectModal = function () {
+        currentRequestId = null;
+        document.getElementById("rejectionReason").value = "";
+        document.getElementById("rejectModal").classList.add("hidden");
+      };
+
+      // Approve request
+      async function approveRequest() {
+        if (!currentRequestId) return;
+
+        const btn = document.getElementById("confirmApproveBtn");
+        const originalText = btn.textContent;
+
+        try {
+          btn.disabled = true;
+          btn.textContent = "Approving...";
+
+          const response = await fetch("/api/admin/voluntary/approve.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ voluntary_id: currentRequestId }),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            showNotification("Request approved successfully", "success");
+            closeApproveModal();
+            loadRequests();
+          } else {
+            showNotification(
+              data.message || "Failed to approve request",
+              "error",
+            );
+          }
+        } catch (error) {
+          console.error("Error approving request:", error);
+          showNotification("Failed to approve request", "error");
+        } finally {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+      }
+
+      // Reject request
+      async function rejectRequest() {
+        if (!currentRequestId) return;
+
+        const reason = document.getElementById("rejectionReason").value.trim();
+        if (!reason) {
+          showNotification("Please provide a rejection reason", "error");
+          return;
+        }
+
+        const btn = document.getElementById("confirmRejectBtn");
+        const originalText = btn.textContent;
+
+        try {
+          btn.disabled = true;
+          btn.textContent = "Rejecting...";
+
+          const response = await fetch("/api/admin/voluntary/reject.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              voluntary_id: currentRequestId,
+              reason: reason,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            showNotification("Request rejected", "success");
+            closeRejectModal();
+            loadRequests();
+          } else {
+            showNotification(
+              data.message || "Failed to reject request",
+              "error",
+            );
+          }
+        } catch (error) {
+          console.error("Error rejecting request:", error);
+          showNotification("Failed to reject request", "error");
+        } finally {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+      }
+
+      // Notification helper
+      function showNotification(message, type = "info") {
+        const colors = {
+          success: "bg-green-50 border-green-600 text-green-900",
+          error: "bg-red-50 border-red-600 text-red-900",
+          info: "bg-blue-50 border-blue-600 text-blue-900",
+        };
+        const icons = {
+          success: "check-circle",
+          error: "x-circle",
+          info: "info",
+        };
+
+        const notification = document.createElement("div");
+        notification.className = `fixed top-20 right-8 p-4 ${colors[type]} border-l-4 rounded-lg shadow-lg z-50`;
+        notification.innerHTML = `
+          <div class="flex items-center gap-3">
+            <i data-lucide="${icons[type]}" class="size-5"></i>
+            <p>${message}</p>
+          </div>
+        `;
+        document.body.appendChild(notification);
+        if (window.lucide) window.lucide.createIcons();
+        setTimeout(() => notification.remove(), 5000);
+      }
+
+      // Event listeners
+      document.addEventListener("DOMContentLoaded", () => {
+        loadRequests();
+
+        // Approve/Reject buttons
+        document
+          .getElementById("confirmApproveBtn")
+          .addEventListener("click", approveRequest);
+        document
+          .getElementById("confirmRejectBtn")
+          .addEventListener("click", rejectRequest);
+
+        // Filters
+        document
+          .getElementById("applyFilters")
+          .addEventListener("click", loadRequests);
+        document
+          .getElementById("clearFilters")
+          .addEventListener("click", () => {
+            document.getElementById("statusFilter").value = "";
+            document.getElementById("bloodGroupFilter").value = "";
+            document.getElementById("cityFilter").value = "";
+            document.getElementById("searchInput").value = "";
+            loadRequests();
+          });
+
+        // Search with debounce
+        document
+          .getElementById("searchInput")
+          .addEventListener("input", (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => loadRequests(), 300);
+          });
+      });
+    </script>
+  </body>
+</html>

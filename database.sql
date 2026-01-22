@@ -431,6 +431,49 @@ CREATE TABLE chat_messages (
 ) ENGINE=InnoDB;
 
 -- =====================================================
+-- VOLUNTARY_DONATIONS TABLE
+-- Tracks voluntary donation requests from donors
+-- =====================================================
+CREATE TABLE voluntary_donations (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    donor_id INT NOT NULL,
+    blood_group_id INT NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    availability_date DATE NOT NULL,
+    preferred_time ENUM('morning', 'afternoon', 'evening', 'any') DEFAULT 'any',
+    notes TEXT,
+    
+    -- Status tracking
+    status ENUM('pending', 'approved', 'rejected', 'completed', 'cancelled') DEFAULT 'pending',
+    
+    -- Admin processing
+    approved_by_admin_id INT NULL,
+    approved_at TIMESTAMP NULL,
+    rejected_at TIMESTAMP NULL,
+    rejection_reason TEXT,
+    
+    -- Hospital assignment (after approval)
+    hospital_id INT NULL,
+    scheduled_date DATE NULL,
+    scheduled_time TIME NULL,
+    
+    -- Timestamps
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (donor_id) REFERENCES donors(id) ON DELETE CASCADE,
+    FOREIGN KEY (blood_group_id) REFERENCES blood_groups(id) ON DELETE RESTRICT,
+    FOREIGN KEY (approved_by_admin_id) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (hospital_id) REFERENCES hospitals(id) ON DELETE SET NULL,
+    
+    INDEX idx_voluntary_donor (donor_id),
+    INDEX idx_voluntary_blood_group (blood_group_id),
+    INDEX idx_voluntary_city (city),
+    INDEX idx_voluntary_status (status),
+    INDEX idx_voluntary_date (availability_date)
+) ENGINE=InnoDB;
+
+-- =====================================================
 -- DEFAULT ADMIN USER
 -- Password: admin123 (hashed with bcrypt)
 -- =====================================================

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -40,6 +40,12 @@
           class="flex items-center gap-3 px-6 py-3 text-red-600 bg-red-50 border-r-4 border-red-600"
           ><i data-lucide="building-2" class="size-5"></i
           ><span>Hospitals</span></a
+        >
+        <a
+          href="/src/pages/admin/voluntary.html"
+          class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          ><i data-lucide="hand-heart" class="size-5"></i
+          ><span>Voluntary Donations</span></a
         >
         <a
           href="/src/pages/admin/blood-groups.html"
@@ -596,8 +602,8 @@
                   <div class="${
                     n.iconBg
                   } p-2 rounded-lg h-fit"><i data-lucide="${
-              n.icon
-            }" class="size-4 ${n.iconColor}"></i></div>
+                    n.icon
+                  }" class="size-4 ${n.iconColor}"></i></div>
                   <div class="flex-1 min-w-0">
                     <div class="flex items-start justify-between gap-2">
                       <p class="text-sm ${
@@ -618,7 +624,7 @@
                   </div>
                 </div>
               </div>
-            `
+            `,
           )
           .join("");
         if (window.lucide) {
@@ -727,8 +733,8 @@
               (h.status === "approved"
                 ? "Approved"
                 : h.status === "rejected"
-                ? "Rejected"
-                : "Pending"),
+                  ? "Rejected"
+                  : "Pending"),
             address: h.address || "N/A",
             city: h.city || "N/A",
             state: h.state || "N/A",
@@ -752,7 +758,7 @@
         } catch (error) {
           console.error("Error loading hospitals:", error);
           showTableError(
-            "Unable to connect to the server. Please try again later."
+            "Unable to connect to the server. Please try again later.",
           );
         }
       }
@@ -761,7 +767,7 @@
       document.addEventListener("DOMContentLoaded", function () {
         const tableBody = document.querySelector("tbody");
         const statCards = document.querySelectorAll(
-          ".grid.grid-cols-1.md\\:grid-cols-4 .text-3xl"
+          ".grid.grid-cols-1.md\\:grid-cols-4 .text-3xl",
         );
 
         // Create filter tabs
@@ -792,13 +798,13 @@
 
         window.updateStats = function () {
           const pending = hospitals.filter(
-            (h) => h.status === "Pending"
+            (h) => h.status === "Pending",
           ).length;
           const approved = hospitals.filter(
-            (h) => h.status === "Approved"
+            (h) => h.status === "Approved",
           ).length;
           const rejected = hospitals.filter(
-            (h) => h.status === "Rejected"
+            (h) => h.status === "Rejected",
           ).length;
           const active = approved;
 
@@ -870,17 +876,17 @@
               <td class="py-3 px-4 text-sm text-gray-900">${hospital.phone}</td>
               <td class="py-3 px-4">
                 <span class="px-2 py-1 text-xs font-medium border ${getTypeBadge(
-                  hospital.type
+                  hospital.type,
                 )} rounded-full">${hospital.type}</span>
               </td>
               <td class="py-3 px-4">
                 <span class="px-2 py-1 text-xs font-medium border ${getStatusBadge(
-                  hospital.status
+                  hospital.status,
                 )} rounded-full">${hospital.status}</span>
               </td>
               <td class="py-3 px-4">${getActionButtons(hospital)}</td>
             </tr>
-          `
+          `,
             )
             .join("");
 
@@ -892,17 +898,17 @@
         function attachEventListeners() {
           document.querySelectorAll(".approve-btn").forEach((btn) => {
             btn.addEventListener("click", () =>
-              updateHospitalStatus(btn.dataset.id, "Approved")
+              updateHospitalStatus(btn.dataset.id, "Approved"),
             );
           });
           document.querySelectorAll(".reject-btn").forEach((btn) => {
             btn.addEventListener("click", () =>
-              updateHospitalStatus(btn.dataset.id, "Rejected")
+              updateHospitalStatus(btn.dataset.id, "Rejected"),
             );
           });
           document.querySelectorAll(".view-btn").forEach((btn) => {
             btn.addEventListener("click", () =>
-              openHospitalModal(btn.dataset.id)
+              openHospitalModal(btn.dataset.id),
             );
           });
         }
@@ -963,7 +969,7 @@
 
           // Update emergency services badge
           const emergencyBadge = document.getElementById(
-            "modalEmergencyServices"
+            "modalEmergencyServices",
           );
           if (hospital.emergencyServices) {
             emergencyBadge.innerHTML =
@@ -993,7 +999,7 @@
 
           // Show/hide rejection reason
           const rejectionSection = document.getElementById(
-            "modalRejectionSection"
+            "modalRejectionSection",
           );
           if (rejectionSection) {
             if (hospital.status === "Rejected" && hospital.rejectionReason) {
@@ -1083,7 +1089,7 @@
                   `<strong>${
                     hospital.name
                   }</strong> has been ${newStatus.toLowerCase()} successfully!`,
-                  newStatus === "Approved" ? "success" : "error"
+                  newStatus === "Approved" ? "success" : "error",
                 );
                 window.renderHospitals();
               } else {
@@ -1091,7 +1097,7 @@
                   `Failed to ${newStatus.toLowerCase()} hospital: ${
                     data.message
                   }`,
-                  "error"
+                  "error",
                 );
               }
             })
@@ -1099,7 +1105,7 @@
               console.error("Error updating hospital status:", error);
               showNotification(
                 `Error updating hospital status: ${error.message}`,
-                "error"
+                "error",
               );
             });
         }
