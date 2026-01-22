@@ -80,7 +80,29 @@ try {
     $stmt->execute([$donorId]);
     $donations = $stmt->fetchAll();
 
-    // Format response
+    // Also fetch completed voluntary donations that may not have a donations record (legacy data)
+    $sqlVoluntary = "SELECT v.id, v.status, v.availability_date, v.scheduled_date, v.updated_at as completed_at,
+                            v.city, bg.blood_type, h.id as hospital_id, u.name as hospital_name,
+                            'Voluntary Donation' as patient_name, 'Voluntary blood donation' as medical_reason,
+                            'normal' as urgency, v.blood_group_id
+                     FROM voluntary_donations v
+                     JOIN blood_groups bg ON v.blood_group_id = bg.id
+                     LEFT JOIN hospitals h ON v.hospital_id = h.id
+                     LEFT JOIN users u ON h.user_id = u.id
+                     WHERE v.donor_id = ? AND v.status = 'completed'
+                     AND NOT EXISTS (
+                         SELECT 1 FROM donations d 
+                         JOIN blood_requests r ON d.request_id = r.id 
+                         WHERE d.donor_id = v.donor_id 
+                         AND r.request_code = CONCAT('VOL-', DATE_FORMAT(v.updated_at, '%Y%m%d'), '-', LPAD(v.id, 4, '0'))
+                     )
+                     ORDER BY v.updated_at DESC";
+
+    $stmt = $conn->prepare($sqlVoluntary);
+    $stmt->execute([$donorId]);
+    $legacyVoluntary = $stmt->fetchAll();
+
+    // Format donations from donations table
     $formattedDonations = array_map(function ($donation) use ($donor) {
         $donationId = 'DON' . str_pad($donation['id'], 3, '0', STR_PAD_LEFT);
         $isVoluntary = $donation['donation_type'] === 'voluntary';
@@ -111,8 +133,46 @@ try {
         ];
     }, $donations);
 
-    // Calculate stats
-    $completedDonations = array_filter($formattedDonations, fn($d) => $d['status'] === 'completed');
+    // Format legacy voluntary donations (completed but no donations record)
+    $formattedLegacyVoluntary = array_map(function ($vol) use ($donor) {
+        $donationId = 'VOL' . str_pad($vol['id'], 3, '0', STR_PAD_LEFT);
+
+        return [
+            'id' => 'vol_' . $vol['id'],
+            'donation_id' => $donationId,
+            'request_code' => 'VOL-LEGACY-' . $vol['id'],
+            'date' => $vol['completed_at'] ?? $vol['scheduled_date'] ?? $vol['availability_date'],
+            'hospital' => $vol['hospital_name'] ?? 'Hospital',
+            'city' => $vol['city'],
+            'blood_type' => $vol['blood_type'],
+            'quantity' => 1,
+            'urgency' => 'normal',
+            'status' => 'completed',
+            'patient_name' => 'Voluntary Donation',
+            'donation_type' => 'Voluntary',
+            'is_voluntary' => true,
+            // Certificate data
+            'certificate' => [
+                'cert_id' => 'CERT-' . date('Y', strtotime($vol['completed_at'] ?? 'now')) . '-' . $donationId,
+                'donor_name' => $donor['name'],
+                'blood_group' => $donor['blood_group'],
+                'date' => $vol['completed_at'] ?? $vol['scheduled_date'] ?? $vol['availability_date'],
+                'hospital' => $vol['hospital_name'] ?? 'Hospital',
+                'quantity' => '1 Unit(s)'
+            ]
+        ];
+    }, $legacyVoluntary);
+
+    // Merge both arrays
+    $allDonations = array_merge($formattedDonations, $formattedLegacyVoluntary);
+
+    // Sort by date descending
+    usort($allDonations, function($a, $b) {
+        return strtotime($b['date'] ?? '1970-01-01') - strtotime($a['date'] ?? '1970-01-01');
+    });
+
+    // Calculate stats using all donations (including legacy voluntary)
+    $completedDonations = array_filter($allDonations, fn($d) => $d['status'] === 'completed');
     $voluntaryDonations = array_filter($completedDonations, fn($d) => $d['is_voluntary']);
     $requestDonations = array_filter($completedDonations, fn($d) => !$d['is_voluntary']);
     $totalQuantity = array_sum(array_map(fn($d) => $d['quantity'], $completedDonations));
@@ -131,7 +191,7 @@ try {
 
     echo json_encode([
         'success' => true,
-        'donations' => $formattedDonations,
+        'donations' => $allDonations,
         'stats' => $stats,
         'donor' => [
             'name' => $donor['name'],
