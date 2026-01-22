@@ -4,6 +4,8 @@
  * GET /api/guest/track.php
  * Query params: ?code=REQ00001 OR ?phone=01700000001
  * Returns limited public information about request status
+ * 
+ * Normalized Schema: Uses blood_groups.blood_type instead of blood_type column
  */
 
 header('Content-Type: application/json');
@@ -48,12 +50,13 @@ try {
     $requests = [];
 
     if ($code) {
-        // Search by request code
-        $sql = "SELECT r.request_code, r.patient_name, r.blood_type, r.quantity, 
+        // Search by request code - using normalized schema
+        $sql = "SELECT r.request_code, r.patient_name, bg.blood_type, r.quantity, 
                        r.hospital_name, r.urgency, r.status, r.created_at,
-                       d.status as donation_status
+                       dn.status as donation_status
                 FROM blood_requests r
-                LEFT JOIN donations d ON r.id = d.request_id AND d.status != 'cancelled'
+                JOIN blood_groups bg ON r.blood_group_id = bg.id
+                LEFT JOIN donations dn ON r.id = dn.request_id AND dn.status != 'cancelled'
                 WHERE r.request_code = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([strtoupper($code)]);
@@ -63,12 +66,13 @@ try {
             $requests[] = formatGuestRequest($result);
         }
     } else {
-        // Search by phone
-        $sql = "SELECT r.request_code, r.patient_name, r.blood_type, r.quantity, 
+        // Search by phone - using normalized schema
+        $sql = "SELECT r.request_code, r.patient_name, bg.blood_type, r.quantity, 
                        r.hospital_name, r.urgency, r.status, r.created_at,
-                       d.status as donation_status
+                       dn.status as donation_status
                 FROM blood_requests r
-                LEFT JOIN donations d ON r.id = d.request_id AND d.status != 'cancelled'
+                JOIN blood_groups bg ON r.blood_group_id = bg.id
+                LEFT JOIN donations dn ON r.id = dn.request_id AND dn.status != 'cancelled'
                 WHERE r.contact_phone = ?
                 ORDER BY r.created_at DESC
                 LIMIT 10";

@@ -71,8 +71,14 @@ if (!$conn) {
 }
 
 try {
-    // Get donor's profile
-    $stmt = $conn->prepare("SELECT name, blood_group FROM users WHERE id = ?");
+    // Get donor's profile from normalized tables
+    $stmt = $conn->prepare("
+        SELECT u.name, bg.blood_type as blood_group, d.id as donor_id
+        FROM users u
+        JOIN donors d ON u.id = d.user_id
+        LEFT JOIN blood_groups bg ON d.blood_group_id = bg.id
+        WHERE u.id = ?
+    ");
     $stmt->execute([$donorId]);
     $donor = $stmt->fetch();
 
@@ -83,10 +89,12 @@ try {
         echo json_encode(['success' => false, 'message' => 'Donor not found']);
         exit;
     }
+    
+    $donorRecordId = $donor['donor_id'];
 
-    // Count completed donations
+    // Count completed donations using donor_id (donors.id)
     $stmt = $conn->prepare("SELECT COUNT(*) as total FROM donations WHERE donor_id = ? AND status = 'completed'");
-    $stmt->execute([$donorId]);
+    $stmt->execute([$donorRecordId]);
     $result = $stmt->fetch();
     $totalDonations = (int) $result['total'];
 

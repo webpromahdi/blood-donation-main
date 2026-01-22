@@ -2,7 +2,8 @@
 /**
  * Donor Health Update Endpoint
  * POST /api/donor/health/update.php
- * Saves or updates donor health information
+ * 
+ * Normalized Schema: Updates donor_health table (linked to donors table)
  */
 
 header('Content-Type: application/json');
@@ -30,7 +31,7 @@ $user = requireAuth(['donor']);
 // Require approved status to update health information
 requireApprovedStatus($_SESSION['user_id'], 'donor');
 
-$donorId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
 $input = json_decode(file_get_contents('php://input'), true);
 
@@ -44,8 +45,20 @@ if (!$conn) {
 }
 
 try {
+    // Get donor_id from donors table
+    $stmt = $conn->prepare("SELECT id FROM donors WHERE user_id = ?");
+    $stmt->execute([$userId]);
+    $donor = $stmt->fetch();
+    
+    if (!$donor) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Donor record not found']);
+        exit;
+    }
+    
+    $donorId = $donor['id'];
+
     // Extract and sanitize input data
-    $weight = isset($input['weight']) ? floatval($input['weight']) : null;
     $height = isset($input['height']) ? floatval($input['height']) : null;
     $bpSystolic = isset($input['blood_pressure_systolic']) ? intval($input['blood_pressure_systolic']) : null;
     $bpDiastolic = isset($input['blood_pressure_diastolic']) ? intval($input['blood_pressure_diastolic']) : null;
@@ -55,6 +68,8 @@ try {
     $hasDiabetes = isset($input['has_diabetes']) ? (bool)$input['has_diabetes'] : false;
     $hasHypertension = isset($input['has_hypertension']) ? (bool)$input['has_hypertension'] : false;
     $hasHeartDisease = isset($input['has_heart_disease']) ? (bool)$input['has_heart_disease'] : false;
+    $hasBloodDisorders = isset($input['has_blood_disorders']) ? (bool)$input['has_blood_disorders'] : false;
+    $hasInfectiousDisease = isset($input['has_infectious_disease']) ? (bool)$input['has_infectious_disease'] : false;
     $hasAsthma = isset($input['has_asthma']) ? (bool)$input['has_asthma'] : false;
     $hasAllergies = isset($input['has_allergies']) ? (bool)$input['has_allergies'] : false;
     $hasRecentSurgery = isset($input['has_recent_surgery']) ? (bool)$input['has_recent_surgery'] : false;
@@ -63,12 +78,14 @@ try {
     // Lifestyle
     $smokingStatus = isset($input['smoking_status']) && in_array($input['smoking_status'], ['no', 'occasionally', 'regularly']) 
         ? $input['smoking_status'] : 'no';
-    $alcoholConsumption = isset($input['alcohol_consumption']) && in_array($input['alcohol_consumption'], ['none', 'occasional', 'regular'])
+    $alcoholConsumption = isset($input['alcohol_consumption']) && in_array($input['alcohol_consumption'], ['none', 'occasionally', 'regularly'])
         ? $input['alcohol_consumption'] : 'none';
-    $exerciseFrequency = isset($input['exercise_frequency']) && in_array($input['exercise_frequency'], ['rarely', '1-2_weekly', '3-4_weekly', 'daily'])
+    $exerciseFrequency = isset($input['exercise_frequency']) && in_array($input['exercise_frequency'], ['rarely', 'weekly', 'daily'])
         ? $input['exercise_frequency'] : 'rarely';
     
     // Additional
+    $medications = isset($input['medications']) ? trim($input['medications']) : null;
+    $allergiesDetails = isset($input['allergies_details']) ? trim($input['allergies_details']) : null;
     $lastMedicalCheckup = isset($input['last_medical_checkup']) && !empty($input['last_medical_checkup']) 
         ? $input['last_medical_checkup'] : null;
     $additionalNotes = isset($input['additional_notes']) ? trim($input['additional_notes']) : null;
@@ -81,40 +98,44 @@ try {
     if ($existingHealth) {
         // Update existing record
         $sql = "UPDATE donor_health SET 
-                weight = ?, height = ?, blood_pressure_systolic = ?, blood_pressure_diastolic = ?,
+                height = ?, blood_pressure_systolic = ?, blood_pressure_diastolic = ?,
                 hemoglobin = ?, has_diabetes = ?, has_hypertension = ?, has_heart_disease = ?,
+                has_blood_disorders = ?, has_infectious_disease = ?,
                 has_asthma = ?, has_allergies = ?, has_recent_surgery = ?, is_on_medication = ?,
                 smoking_status = ?, alcohol_consumption = ?, exercise_frequency = ?,
-                last_medical_checkup = ?, additional_notes = ?, updated_at = NOW()
+                medications = ?, allergies_details = ?, last_medical_checkup = ?, additional_notes = ?, 
+                updated_at = NOW()
                 WHERE donor_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
-            $weight, $height, $bpSystolic, $bpDiastolic, $hemoglobin,
-            $hasDiabetes, $hasHypertension, $hasHeartDisease, $hasAsthma,
-            $hasAllergies, $hasRecentSurgery, $isOnMedication,
+            $height, $bpSystolic, $bpDiastolic, $hemoglobin,
+            $hasDiabetes, $hasHypertension, $hasHeartDisease, $hasBloodDisorders, $hasInfectiousDisease,
+            $hasAsthma, $hasAllergies, $hasRecentSurgery, $isOnMedication,
             $smokingStatus, $alcoholConsumption, $exerciseFrequency,
-            $lastMedicalCheckup, $additionalNotes, $donorId
+            $medications, $allergiesDetails, $lastMedicalCheckup, $additionalNotes, $donorId
         ]);
     } else {
         // Insert new record
-        $sql = "INSERT INTO donor_health (donor_id, weight, height, blood_pressure_systolic, blood_pressure_diastolic,
-                hemoglobin, has_diabetes, has_hypertension, has_heart_disease, has_asthma, has_allergies,
-                has_recent_surgery, is_on_medication, smoking_status, alcohol_consumption, exercise_frequency,
-                last_medical_checkup, additional_notes)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO donor_health (donor_id, height, blood_pressure_systolic, blood_pressure_diastolic,
+                hemoglobin, has_diabetes, has_hypertension, has_heart_disease, has_blood_disorders, has_infectious_disease,
+                has_asthma, has_allergies, has_recent_surgery, is_on_medication, 
+                smoking_status, alcohol_consumption, exercise_frequency,
+                medications, allergies_details, last_medical_checkup, additional_notes)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
-            $donorId, $weight, $height, $bpSystolic, $bpDiastolic, $hemoglobin,
-            $hasDiabetes, $hasHypertension, $hasHeartDisease, $hasAsthma,
-            $hasAllergies, $hasRecentSurgery, $isOnMedication,
+            $donorId, $height, $bpSystolic, $bpDiastolic, $hemoglobin,
+            $hasDiabetes, $hasHypertension, $hasHeartDisease, $hasBloodDisorders, $hasInfectiousDisease,
+            $hasAsthma, $hasAllergies, $hasRecentSurgery, $isOnMedication,
             $smokingStatus, $alcoholConsumption, $exerciseFrequency,
-            $lastMedicalCheckup, $additionalNotes
+            $medications, $allergiesDetails, $lastMedicalCheckup, $additionalNotes
         ]);
     }
 
-    // Also update the weight in users table for compatibility
-    if ($weight) {
-        $stmt = $conn->prepare("UPDATE users SET weight = ? WHERE id = ?");
+    // Update weight in donors table if provided
+    if (isset($input['weight'])) {
+        $weight = floatval($input['weight']);
+        $stmt = $conn->prepare("UPDATE donors SET weight = ? WHERE id = ?");
         $stmt->execute([$weight, $donorId]);
     }
 

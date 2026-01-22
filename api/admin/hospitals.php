@@ -3,6 +3,8 @@
  * Admin List Hospitals Endpoint
  * GET /api/admin/hospitals.php
  * Query params: ?status=active
+ * 
+ * Normalized Schema: JOINs users + hospitals tables
  */
 
 header('Content-Type: application/json');
@@ -37,15 +39,17 @@ if (!$conn) {
 }
 
 try {
-    $sql = "SELECT u.id, u.name, u.email, u.phone, u.hospital_address, u.registration_number, 
-                   u.website, u.contact_person, u.city, u.status, u.created_at,
-                   COUNT(DISTINCT r.id) as total_requests,
+    // Query with normalized schema - JOIN users and hospitals tables
+    $sql = "SELECT u.id as user_id, h.id as hospital_id, u.name, u.email, u.phone, 
+                   h.address, h.registration_number, h.website, h.contact_person, 
+                   h.city, u.status, u.created_at, h.total_requests,
                    SUM(CASE WHEN r.status = 'completed' THEN 1 ELSE 0 END) as completed_requests,
                    SUM(CASE WHEN r.status = 'pending' THEN 1 ELSE 0 END) as pending_requests
             FROM users u
-            LEFT JOIN blood_requests r ON u.id = r.requester_id AND r.requester_type = 'hospital'
+            JOIN hospitals h ON u.id = h.user_id
+            LEFT JOIN blood_requests r ON h.id = r.hospital_id
             WHERE u.role = 'hospital'
-            GROUP BY u.id
+            GROUP BY u.id, h.id
             ORDER BY u.created_at DESC";
     
     $stmt = $conn->prepare($sql);
@@ -61,20 +65,21 @@ try {
         $displayStatus = $approvalStatus === 'approved' ? 'Approved' : ($approvalStatus === 'rejected' ? 'Rejected' : 'Pending');
 
         return [
-            'id' => $hospital['id'],
+            'id' => $hospital['user_id'],
+            'hospital_id' => $hospital['hospital_id'],
             'name' => $hospital['name'],
             'email' => $hospital['email'],
             'phone' => $hospital['phone'],
-            'address' => $hospital['hospital_address'],
+            'address' => $hospital['address'],
             'city' => $hospital['city'],
             'registration_number' => $hospital['registration_number'],
             'website' => $hospital['website'],
             'contact_person' => $hospital['contact_person'],
             'status' => $approvalStatus,
             'display_status' => $displayStatus,
-            'total_requests' => (int) $hospital['total_requests'],
-            'completed_requests' => (int) $hospital['completed_requests'],
-            'pending_requests' => (int) $hospital['pending_requests'],
+            'total_requests' => (int) ($hospital['total_requests'] ?? 0),
+            'completed_requests' => (int) ($hospital['completed_requests'] ?? 0),
+            'pending_requests' => (int) ($hospital['pending_requests'] ?? 0),
             'registered_at' => $hospital['created_at']
         ];
     }, $hospitals);

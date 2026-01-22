@@ -51,9 +51,22 @@ if (!$conn) {
 }
 
 try {
-    // Get donation and verify ownership
+    // Get donor_id from donors table (normalized schema)
+    $stmt = $conn->prepare("SELECT id FROM donors WHERE user_id = ?");
+    $stmt->execute([$donorId]);
+    $donorRecord = $stmt->fetch();
+    
+    if (!$donorRecord) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Donor record not found']);
+        exit;
+    }
+    
+    $donorRecordId = $donorRecord['id'];
+
+    // Get donation and verify ownership - donations.donor_id references donors.id
     $stmt = $conn->prepare("SELECT d.*, r.id as request_id FROM donations d JOIN blood_requests r ON d.request_id = r.id WHERE d.id = ? AND d.donor_id = ?");
-    $stmt->execute([$donationId, $donorId]);
+    $stmt->execute([$donationId, $donorRecordId]);
     $donation = $stmt->fetch();
 
     if (!$donation) {

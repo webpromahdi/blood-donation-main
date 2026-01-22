@@ -3,6 +3,9 @@
  * Seeker Single Request Details Endpoint
  * GET /api/seeker/request.php?id={id}
  * Returns full details of a single blood request
+ * 
+ * Normalized Schema: Uses seeker_id FK, blood_groups.blood_type, 
+ *                    donations -> donors -> users for donor info
  */
 
 header('Content-Type: application/json');
@@ -27,7 +30,7 @@ require_once __DIR__ . '/../middleware/auth.php';
 
 requireAuth(['seeker']);
 
-$seekerId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
 // Get request ID from query params
 $requestId = $_GET['id'] ?? null;
@@ -49,29 +52,38 @@ if (!$conn) {
 }
 
 try {
-    // Build query based on ID or code
-    if ($requestId) {
-        $sql = "SELECT r.*, 
-                       d.id as donation_id, d.status as donation_status, d.donor_id,
-                       d.accepted_at, d.started_at, d.reached_at, d.completed_at,
-                       donor.name as donor_name, donor.phone as donor_phone, 
-                       donor.blood_group as donor_blood_group, donor.city as donor_city
+    // Get seeker_id from seekers table
+    $stmt = $conn->prepare("SELECT id FROM seekers WHERE user_id = ?");
+    $stmt->execute([$userId]);
+    $seeker = $stmt->fetch();
+    
+    if (!$seeker) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Seeker record not found']);
+        exit;
+    }
+    
+    $seekerId = $seeker['id'];
+
+    // Build query based on ID or code - using normalized schema
+    $baseSelect = "SELECT r.*, bg.blood_type, 
+                       dn.id as donation_id, dn.status as donation_status, dn.donor_id,
+                       dn.accepted_at, dn.started_at, dn.reached_at, dn.completed_at,
+                       donor_user.name as donor_name, donor_user.phone as donor_phone, 
+                       donor_bg.blood_type as donor_blood_group, d.city as donor_city
                 FROM blood_requests r
-                LEFT JOIN donations d ON r.id = d.request_id AND d.status != 'cancelled'
-                LEFT JOIN users donor ON d.donor_id = donor.id
-                WHERE r.id = ? AND r.requester_id = ? AND r.requester_type = 'seeker'";
+                JOIN blood_groups bg ON r.blood_group_id = bg.id
+                LEFT JOIN donations dn ON r.id = dn.request_id AND dn.status != 'cancelled'
+                LEFT JOIN donors d ON dn.donor_id = d.id
+                LEFT JOIN users donor_user ON d.user_id = donor_user.id
+                LEFT JOIN blood_groups donor_bg ON d.blood_group_id = donor_bg.id";
+                
+    if ($requestId) {
+        $sql = $baseSelect . " WHERE r.id = ? AND r.seeker_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$requestId, $seekerId]);
     } else {
-        $sql = "SELECT r.*, 
-                       d.id as donation_id, d.status as donation_status, d.donor_id,
-                       d.accepted_at, d.started_at, d.reached_at, d.completed_at,
-                       donor.name as donor_name, donor.phone as donor_phone,
-                       donor.blood_group as donor_blood_group, donor.city as donor_city
-                FROM blood_requests r
-                LEFT JOIN donations d ON r.id = d.request_id AND d.status != 'cancelled'
-                LEFT JOIN users donor ON d.donor_id = donor.id
-                WHERE r.request_code = ? AND r.requester_id = ? AND r.requester_type = 'seeker'";
+        $sql = $baseSelect . " WHERE r.request_code = ? AND r.seeker_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$requestCode, $seekerId]);
     }

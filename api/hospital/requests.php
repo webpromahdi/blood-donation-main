@@ -3,6 +3,9 @@
  * Hospital List Requests Endpoint
  * GET /api/hospital/requests.php
  * Returns all blood requests for the logged-in hospital
+ * 
+ * Normalized Schema: Uses hospital_id FK, blood_groups.blood_type, 
+ *                    JOINs donations -> donors -> users for donor info
  */
 
 header('Content-Type: application/json');
@@ -30,7 +33,7 @@ $user = requireAuth(['hospital']);
 // Require approved status to view blood requests
 requireApprovedStatus($_SESSION['user_id'], 'hospital');
 
-$hospitalId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
 $database = new Database();
 $conn = $database->getConnection();
@@ -42,14 +45,32 @@ if (!$conn) {
 }
 
 try {
-    $sql = "SELECT r.*, 
-                   d.id as donation_id, d.status as donation_status, d.donor_id,
-                   d.accepted_at, d.started_at, d.reached_at, d.completed_at,
-                   donor.name as donor_name, donor.phone as donor_phone, donor.blood_group
+    // Get hospital_id from hospitals table
+    $stmt = $conn->prepare("SELECT id FROM hospitals WHERE user_id = ?");
+    $stmt->execute([$userId]);
+    $hospital = $stmt->fetch();
+    
+    if (!$hospital) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Hospital record not found']);
+        exit;
+    }
+    
+    $hospitalId = $hospital['id'];
+
+    // Query with normalized schema joins
+    $sql = "SELECT r.*, bg.blood_type,
+                   dn.id as donation_id, dn.status as donation_status, dn.donor_id,
+                   dn.accepted_at, dn.started_at, dn.reached_at, dn.completed_at,
+                   donor_user.name as donor_name, donor_user.phone as donor_phone, 
+                   donor_bg.blood_type as donor_blood_group
             FROM blood_requests r
-            LEFT JOIN donations d ON r.id = d.request_id AND d.status != 'cancelled'
-            LEFT JOIN users donor ON d.donor_id = donor.id
-            WHERE r.requester_id = ? AND r.requester_type = 'hospital'
+            JOIN blood_groups bg ON r.blood_group_id = bg.id
+            LEFT JOIN donations dn ON r.id = dn.request_id AND dn.status != 'cancelled'
+            LEFT JOIN donors d ON dn.donor_id = d.id
+            LEFT JOIN users donor_user ON d.user_id = donor_user.id
+            LEFT JOIN blood_groups donor_bg ON d.blood_group_id = donor_bg.id
+            WHERE r.hospital_id = ?
             ORDER BY r.urgency DESC, r.created_at DESC";
 
     $stmt = $conn->prepare($sql);
@@ -77,7 +98,7 @@ try {
                 'status' => $req['donation_status'],
                 'donor_name' => $req['donor_name'],
                 'donor_phone' => $req['donor_phone'],
-                'donor_blood_group' => $req['blood_group'],
+                'donor_blood_group' => $req['donor_blood_group'],
                 'accepted_at' => $req['accepted_at'],
                 'started_at' => $req['started_at'],
                 'reached_at' => $req['reached_at'],

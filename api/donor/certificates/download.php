@@ -74,23 +74,41 @@ if (!$conn) {
 }
 
 try {
-    // Fetch donation with all required data
-    // Validate: donation belongs to logged-in donor AND status is completed
+    // Get donor_id from donors table (normalized schema)
+    $stmt = $conn->prepare("SELECT id FROM donors WHERE user_id = ?");
+    $stmt->execute([$donorId]);
+    $donorRecord = $stmt->fetch();
+    
+    if (!$donorRecord) {
+        ob_end_clean();
+        error_log("Certificate download failed: Donor record not found for user $donorId");
+        header('Content-Type: application/json');
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Donor record not found']);
+        exit;
+    }
+    
+    $donorRecordId = $donorRecord['id'];
+
+    // Fetch donation with all required data using normalized schema
+    // donations.donor_id references donors.id (not users.id)
     $sql = "SELECT 
-                d.id AS donation_id,
-                d.status,
-                d.completed_at,
+                dn.id AS donation_id,
+                dn.status,
+                dn.completed_at,
                 u.name AS donor_name,
-                u.blood_group,
+                bg.blood_type AS blood_group,
                 r.hospital_name,
                 r.request_code
-            FROM donations d
-            JOIN users u ON d.donor_id = u.id
-            JOIN blood_requests r ON d.request_id = r.id
-            WHERE d.id = ? AND d.donor_id = ?";
+            FROM donations dn
+            JOIN donors d ON dn.donor_id = d.id
+            JOIN users u ON d.user_id = u.id
+            JOIN blood_groups bg ON d.blood_group_id = bg.id
+            JOIN blood_requests r ON dn.request_id = r.id
+            WHERE dn.id = ? AND dn.donor_id = ?";
 
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$donationId, $donorId]);
+    $stmt->execute([$donationId, $donorRecordId]);
     $donation = $stmt->fetch();
 
     // Check if donation exists and belongs to this donor

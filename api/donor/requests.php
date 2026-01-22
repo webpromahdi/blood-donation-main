@@ -2,7 +2,8 @@
 /**
  * Donor Matching Blood Requests Endpoint
  * GET /api/donor/requests.php
- * Returns approved blood requests matching donor's blood type
+ * 
+ * Normalized Schema: Reads from donors + blood_groups + blood_requests
  */
 
 header('Content-Type: application/json');
@@ -30,7 +31,7 @@ $user = requireAuth(['donor']);
 // Require approved status to view/accept blood requests
 requireApprovedStatus($_SESSION['user_id'], 'donor');
 
-$donorId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
 $database = new Database();
 $conn = $database->getConnection();
@@ -42,9 +43,14 @@ if (!$conn) {
 }
 
 try {
-    // Get donor's blood group
-    $stmt = $conn->prepare("SELECT blood_group FROM users WHERE id = ?");
-    $stmt->execute([$donorId]);
+    // Get donor's blood group from normalized tables
+    $stmt = $conn->prepare("
+        SELECT d.id as donor_id, bg.blood_type as blood_group, bg.can_donate_to
+        FROM donors d 
+        JOIN blood_groups bg ON d.blood_group_id = bg.id
+        WHERE d.user_id = ?
+    ");
+    $stmt->execute([$userId]);
     $donor = $stmt->fetch();
 
     if (!$donor || !$donor['blood_group']) {
@@ -53,24 +59,36 @@ try {
         exit;
     }
 
+    $donorId = $donor['donor_id'];
     $donorBloodGroup = $donor['blood_group'];
+    
+    // Get compatible blood types from the JSON field
+    $canDonateTo = json_decode($donor['can_donate_to'], true) ?? [$donorBloodGroup];
 
-    // Blood compatibility chart - who can this donor donate to?
-    $compatibleTypes = getCompatibleRecipients($donorBloodGroup);
+    // Get blood group IDs for compatible types
+    $placeholders = str_repeat('?,', count($canDonateTo) - 1) . '?';
+    $stmt = $conn->prepare("SELECT id FROM blood_groups WHERE blood_type IN ($placeholders)");
+    $stmt->execute($canDonateTo);
+    $compatibleIds = array_column($stmt->fetchAll(), 'id');
+    
+    if (empty($compatibleIds)) {
+        $compatibleIds = [0]; // Prevent SQL error
+    }
 
-    // Build SQL with compatible blood types
-    $placeholders = str_repeat('?,', count($compatibleTypes) - 1) . '?';
+    // Build SQL with compatible blood group IDs
+    $idPlaceholders = str_repeat('?,', count($compatibleIds) - 1) . '?';
 
     $sql = "SELECT r.*, 
+                   bg.blood_type,
                    u.name as requester_name,
                    u.phone as requester_phone,
                    u.email as requester_email,
-                   u.age as requester_age,
                    (SELECT COUNT(*) FROM donations d WHERE d.request_id = r.id AND d.status != 'cancelled') as donor_responses
             FROM blood_requests r
+            JOIN blood_groups bg ON r.blood_group_id = bg.id
             LEFT JOIN users u ON r.requester_id = u.id
             WHERE r.status = 'approved' 
-            AND r.blood_type IN ($placeholders)
+            AND r.blood_group_id IN ($idPlaceholders)
             AND NOT EXISTS (
                 SELECT 1 FROM donations d 
                 WHERE d.request_id = r.id 
@@ -79,7 +97,7 @@ try {
             )";
 
     // Filter by urgency if specified
-    $params = $compatibleTypes;
+    $params = $compatibleIds;
     $params[] = $donorId;
 
     if (isset($_GET['urgency']) && in_array($_GET['urgency'], ['normal', 'emergency'])) {
@@ -114,8 +132,7 @@ try {
             'contact_email' => $req['contact_email'],
             'requester_name' => $req['requester_name'],
             'requester_phone' => $req['requester_phone'],
-            'requester_email' => $req['requester_email'],
-            'requester_age' => $req['requester_age']
+            'requester_email' => $req['requester_email']
         ];
     }, $requests);
 
@@ -135,24 +152,4 @@ try {
     error_log("Donor Requests Error: " . $e->getMessage());
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Failed to fetch requests']);
-}
-
-/**
- * Returns blood types that this donor can donate to
- * Based on blood compatibility rules
- */
-function getCompatibleRecipients($donorType)
-{
-    $compatibility = [
-        'O-' => ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'], // Universal donor
-        'O+' => ['O+', 'A+', 'B+', 'AB+'],
-        'A-' => ['A-', 'A+', 'AB-', 'AB+'],
-        'A+' => ['A+', 'AB+'],
-        'B-' => ['B-', 'B+', 'AB-', 'AB+'],
-        'B+' => ['B+', 'AB+'],
-        'AB-' => ['AB-', 'AB+'],
-        'AB+' => ['AB+'] // Universal recipient (can only donate to AB+)
-    ];
-
-    return $compatibility[$donorType] ?? [$donorType];
 }

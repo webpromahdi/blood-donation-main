@@ -2,7 +2,8 @@
 /**
  * Donor Donation History Endpoint
  * GET /api/donor/history.php
- * Returns completed donations for the logged-in donor
+ * 
+ * Normalized Schema: Reads from donors + donations + blood_requests + certificates
  */
 
 header('Content-Type: application/json');
@@ -30,7 +31,7 @@ $user = requireAuth(['donor']);
 // Require approved status to view donation history
 requireApprovedStatus($_SESSION['user_id'], 'donor');
 
-$donorId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
 $database = new Database();
 $conn = $database->getConnection();
@@ -42,19 +43,36 @@ if (!$conn) {
 }
 
 try {
-    // Get donor's profile for certificate data
-    $stmt = $conn->prepare("SELECT name, blood_group FROM users WHERE id = ?");
-    $stmt->execute([$donorId]);
+    // Get donor's profile from normalized tables
+    $stmt = $conn->prepare("
+        SELECT d.id as donor_id, u.name, bg.blood_type as blood_group
+        FROM donors d
+        JOIN users u ON d.user_id = u.id
+        JOIN blood_groups bg ON d.blood_group_id = bg.id
+        WHERE d.user_id = ?
+    ");
+    $stmt->execute([$userId]);
     $donor = $stmt->fetch();
+    
+    if (!$donor) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Donor not found']);
+        exit;
+    }
+
+    $donorId = $donor['donor_id'];
 
     // Get all donations with request details
-    $sql = "SELECT d.id, d.status, d.accepted_at, d.completed_at,
-                   r.request_code, r.blood_type, r.quantity, r.hospital_name, r.city,
-                   r.urgency, r.patient_name
-            FROM donations d
-            JOIN blood_requests r ON d.request_id = r.id
-            WHERE d.donor_id = ?
-            ORDER BY d.created_at DESC";
+    $sql = "SELECT dn.id, dn.status, dn.accepted_at, dn.completed_at, dn.quantity,
+                   r.request_code, bg.blood_type, r.hospital_name, r.city,
+                   r.urgency, r.patient_name,
+                   c.certificate_code, c.issued_at as certificate_issued_at
+            FROM donations dn
+            JOIN blood_requests r ON dn.request_id = r.id
+            JOIN blood_groups bg ON r.blood_group_id = bg.id
+            LEFT JOIN certificates c ON dn.id = c.donation_id
+            WHERE dn.donor_id = ?
+            ORDER BY dn.created_at DESC";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute([$donorId]);
@@ -78,7 +96,7 @@ try {
             'patient_name' => $donation['patient_name'],
             // Certificate data
             'certificate' => $donation['status'] === 'completed' ? [
-                'cert_id' => 'CERT-' . date('Y', strtotime($donation['completed_at'])) . '-' . $donationId,
+                'cert_id' => $donation['certificate_code'] ?? ('CERT-' . date('Y', strtotime($donation['completed_at'])) . '-' . $donationId),
                 'donor_name' => $donor['name'],
                 'blood_group' => $donor['blood_group'],
                 'date' => $donation['completed_at'],

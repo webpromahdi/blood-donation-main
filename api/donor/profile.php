@@ -2,6 +2,8 @@
 /**
  * Donor Profile & Stats Endpoint
  * GET /api/donor/profile.php
+ * 
+ * Normalized Schema: Reads from users + donors + blood_groups tables
  */
 
 header('Content-Type: application/json');
@@ -26,11 +28,7 @@ require_once __DIR__ . '/../middleware/auth.php';
 
 $user = requireAuth(['donor']);
 
-// Check if account is approved before allowing access to full profile data
-// Note: Profile endpoint returns status for dashboard to check, so we don't block here
-// But we do include status in response
-
-$donorId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
 $database = new Database();
 $conn = $database->getConnection();
@@ -42,10 +40,25 @@ if (!$conn) {
 }
 
 try {
-    // Get donor profile including status
-    $stmt = $conn->prepare("SELECT id, name, email, phone, blood_group, age, weight, city, address, status, created_at FROM users WHERE id = ?");
-    $stmt->execute([$donorId]);
+    // Get donor profile from normalized tables (users + donors + blood_groups)
+    $stmt = $conn->prepare("
+        SELECT u.id, u.name, u.email, u.phone, u.status, u.created_at,
+               d.id as donor_id, d.age, d.weight, d.gender, d.city, d.address,
+               d.is_available, d.total_donations, d.last_donation_date, d.next_eligible_date,
+               bg.blood_type as blood_group
+        FROM users u
+        JOIN donors d ON u.id = d.user_id
+        JOIN blood_groups bg ON d.blood_group_id = bg.id
+        WHERE u.id = ?
+    ");
+    $stmt->execute([$userId]);
     $donor = $stmt->fetch();
+
+    if (!$donor) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Donor profile not found']);
+        exit;
+    }
 
     // Get account status - return early if pending
     $accountStatus = $donor['status'] ?? 'pending';
@@ -68,29 +81,34 @@ try {
         exit;
     }
 
-    // Total donations completed
+    $donorId = $donor['donor_id'];
+
+    // Get total completed donations from donations table
     $stmt = $conn->prepare("SELECT COUNT(*) as count FROM donations WHERE donor_id = ? AND status = 'completed'");
     $stmt->execute([$donorId]);
     $totalDonations = $stmt->fetch()['count'];
 
-    // Last donation date
+    // Last donation date from donations table
     $stmt = $conn->prepare("SELECT completed_at FROM donations WHERE donor_id = ? AND status = 'completed' ORDER BY completed_at DESC LIMIT 1");
     $stmt->execute([$donorId]);
     $lastDonation = $stmt->fetch();
 
     // Active donation (if any)
-    $stmt = $conn->prepare("SELECT d.*, r.request_code, r.hospital_name, r.city, r.blood_type,
-                                   r.urgency, r.quantity, r.patient_name, r.required_date, r.id as request_id
-                            FROM donations d 
-                            JOIN blood_requests r ON d.request_id = r.id 
-                            WHERE d.donor_id = ? AND d.status NOT IN ('completed', 'cancelled')
-                            ORDER BY d.created_at DESC LIMIT 1");
+    $stmt = $conn->prepare("
+        SELECT d.*, r.request_code, r.hospital_name, r.city as request_city, 
+               bg.blood_type, r.urgency, r.quantity, r.patient_name, r.required_date, r.id as request_id
+        FROM donations d 
+        JOIN blood_requests r ON d.request_id = r.id 
+        JOIN blood_groups bg ON r.blood_group_id = bg.id
+        WHERE d.donor_id = ? AND d.status NOT IN ('completed', 'cancelled')
+        ORDER BY d.created_at DESC LIMIT 1
+    ");
     $stmt->execute([$donorId]);
     $activeDonation = $stmt->fetch();
 
     // Calculate next eligible date (56 days after last donation)
-    $nextEligible = null;
-    if ($lastDonation && $lastDonation['completed_at']) {
+    $nextEligible = $donor['next_eligible_date'];
+    if (!$nextEligible && $lastDonation && $lastDonation['completed_at']) {
         $lastDate = new DateTime($lastDonation['completed_at']);
         $nextDate = $lastDate->modify('+56 days');
         $nextEligible = $nextDate->format('Y-m-d');
@@ -103,14 +121,17 @@ try {
         'success' => true,
         'profile' => [
             'id' => $donor['id'],
+            'donor_id' => $donorId,
             'name' => $donor['name'],
             'email' => $donor['email'],
             'phone' => $donor['phone'],
             'blood_group' => $donor['blood_group'],
             'age' => $donor['age'],
             'weight' => $donor['weight'],
+            'gender' => $donor['gender'],
             'city' => $donor['city'],
             'address' => $donor['address'],
+            'is_available' => (bool) $donor['is_available'],
             'status' => $accountStatus,
             'member_since' => $donor['created_at']
         ],
@@ -118,7 +139,7 @@ try {
         'stats' => [
             'total_donations' => (int) $totalDonations,
             'lives_saved' => (int) $livesSaved,
-            'last_donation' => $lastDonation ? $lastDonation['completed_at'] : null,
+            'last_donation' => $lastDonation ? $lastDonation['completed_at'] : $donor['last_donation_date'],
             'next_eligible' => $nextEligible
         ],
         'active_donation' => $activeDonation ? [
@@ -127,7 +148,7 @@ try {
             'request_code' => $activeDonation['request_code'],
             'status' => $activeDonation['status'],
             'hospital_name' => $activeDonation['hospital_name'],
-            'city' => $activeDonation['city'],
+            'city' => $activeDonation['request_city'],
             'blood_type' => $activeDonation['blood_type'],
             'urgency' => $activeDonation['urgency'],
             'quantity' => (int) $activeDonation['quantity'],

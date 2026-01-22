@@ -3,6 +3,8 @@
  * Hospital Appointments Endpoint
  * GET /api/hospital/appointments.php
  * Returns donation appointments for the hospital's requests
+ * 
+ * Normalized Schema: Uses hospitals table, donations -> donors -> users, blood_groups
  */
 
 header('Content-Type: application/json');
@@ -30,7 +32,7 @@ $user = requireAuth(['hospital']);
 // Require approved status to view appointments
 requireApprovedStatus($_SESSION['user_id'], 'hospital');
 
-$hospitalId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
 $database = new Database();
 $conn = $database->getConnection();
@@ -42,17 +44,33 @@ if (!$conn) {
 }
 
 try {
-    // Get all donations linked to hospital's requests
-    $sql = "SELECT d.id, d.status, d.accepted_at, d.started_at, d.reached_at, d.completed_at,
-                   r.id as request_id, r.request_code, r.blood_type, r.quantity, r.urgency,
+    // Get hospital_id from hospitals table
+    $stmt = $conn->prepare("SELECT id FROM hospitals WHERE user_id = ?");
+    $stmt->execute([$userId]);
+    $hospital = $stmt->fetch();
+    
+    if (!$hospital) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Hospital record not found']);
+        exit;
+    }
+    
+    $hospitalId = $hospital['id'];
+
+    // Get all donations linked to hospital's requests - normalized schema joins
+    $sql = "SELECT dn.id, dn.status, dn.accepted_at, dn.started_at, dn.reached_at, dn.completed_at,
+                   r.id as request_id, r.request_code, bg.blood_type, r.quantity, r.urgency,
                    r.patient_name, r.required_date,
-                   u.id as donor_id, u.name as donor_name, u.email as donor_email, 
-                   u.phone as donor_phone, u.blood_group, u.age, u.city as donor_city
-            FROM donations d
-            JOIN blood_requests r ON d.request_id = r.id
-            JOIN users u ON d.donor_id = u.id
-            WHERE r.requester_id = ? AND r.requester_type = 'hospital'
-            ORDER BY d.created_at DESC";
+                   d.id as donor_id, u.name as donor_name, u.email as donor_email, 
+                   u.phone as donor_phone, donor_bg.blood_type as blood_group, d.age, d.city as donor_city
+            FROM donations dn
+            JOIN blood_requests r ON dn.request_id = r.id
+            JOIN blood_groups bg ON r.blood_group_id = bg.id
+            JOIN donors d ON dn.donor_id = d.id
+            JOIN users u ON d.user_id = u.id
+            JOIN blood_groups donor_bg ON d.blood_group_id = donor_bg.id
+            WHERE r.hospital_id = ?
+            ORDER BY dn.created_at DESC";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute([$hospitalId]);

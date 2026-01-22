@@ -2,6 +2,8 @@
 /**
  * Donor Update Donation Status Endpoint
  * POST /api/donor/donations/update.php
+ * 
+ * Normalized Schema: Updates donations table with proper donor_id reference
  * Status flow: accepted -> on_the_way -> reached -> completed
  */
 
@@ -40,7 +42,7 @@ if (empty($input['donation_id']) || empty($input['status'])) {
 
 $donationId = (int) $input['donation_id'];
 $newStatus = $input['status'];
-$donorId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
 // Valid status transitions
 $validStatuses = ['on_the_way', 'reached', 'completed'];
@@ -60,8 +62,27 @@ if (!$conn) {
 }
 
 try {
+    // Get donor_id from donors table
+    $stmt = $conn->prepare("SELECT id FROM donors WHERE user_id = ?");
+    $stmt->execute([$userId]);
+    $donor = $stmt->fetch();
+    
+    if (!$donor) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Donor record not found']);
+        exit;
+    }
+    
+    $donorId = $donor['id'];
+
     // Get donation and verify ownership
-    $stmt = $conn->prepare("SELECT d.*, r.id as request_id FROM donations d JOIN blood_requests r ON d.request_id = r.id WHERE d.id = ? AND d.donor_id = ?");
+    $stmt = $conn->prepare("
+        SELECT d.*, r.id as request_id, r.hospital_name, bg.blood_type
+        FROM donations d 
+        JOIN blood_requests r ON d.request_id = r.id 
+        JOIN blood_groups bg ON r.blood_group_id = bg.id
+        WHERE d.id = ? AND d.donor_id = ?
+    ");
     $stmt->execute([$donationId, $donorId]);
     $donation = $stmt->fetch();
 
@@ -104,10 +125,48 @@ try {
         $stmt->execute([$newStatus, $donationId]);
     }
 
-    // If completed, update request status too
+    // If completed, update request status and donor stats
     if ($newStatus === 'completed') {
+        // Update request status
         $stmt = $conn->prepare("UPDATE blood_requests SET status = 'completed' WHERE id = ?");
         $stmt->execute([$donation['request_id']]);
+        
+        // Update donor stats
+        $stmt = $conn->prepare("
+            UPDATE donors 
+            SET total_donations = total_donations + 1,
+                last_donation_date = CURDATE(),
+                next_eligible_date = DATE_ADD(CURDATE(), INTERVAL 56 DAY)
+            WHERE id = ?
+        ");
+        $stmt->execute([$donorId]);
+        
+        // Generate certificate
+        $certCode = 'CERT-' . date('Y') . '-DON' . str_pad($donationId, 5, '0', STR_PAD_LEFT);
+        $stmt = $conn->prepare("
+            SELECT u.name, bg.blood_type 
+            FROM donors d 
+            JOIN users u ON d.user_id = u.id
+            JOIN blood_groups bg ON d.blood_group_id = bg.id
+            WHERE d.id = ?
+        ");
+        $stmt->execute([$donorId]);
+        $donorInfo = $stmt->fetch();
+        
+        $stmt = $conn->prepare("
+            INSERT INTO certificates (certificate_code, donation_id, donor_id, donor_name, blood_group, donation_date, hospital_name, quantity)
+            VALUES (?, ?, ?, ?, ?, CURDATE(), ?, ?)
+            ON DUPLICATE KEY UPDATE downloaded_at = downloaded_at
+        ");
+        $stmt->execute([
+            $certCode,
+            $donationId,
+            $donorId,
+            $donorInfo['name'],
+            $donorInfo['blood_type'],
+            $donation['hospital_name'],
+            $donation['quantity'] ?? 1
+        ]);
     }
 
     $conn->commit();
@@ -122,7 +181,9 @@ try {
     ]);
 
 } catch (PDOException $e) {
-    $conn->rollBack();
+    if ($conn->inTransaction()) {
+        $conn->rollBack();
+    }
     error_log("Donation Update Error: " . $e->getMessage());
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Failed to update status']);

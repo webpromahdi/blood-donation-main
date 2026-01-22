@@ -3,6 +3,9 @@
  * Seeker List Requests Endpoint
  * GET /api/seeker/requests.php
  * Returns all blood requests for the logged-in seeker with lifecycle status
+ * 
+ * Normalized Schema: Uses seeker_id FK, blood_groups.blood_type,
+ *                    donations -> donors -> users for donor info
  */
 
 header('Content-Type: application/json');
@@ -27,7 +30,7 @@ require_once __DIR__ . '/../middleware/auth.php';
 
 requireAuth(['seeker']);
 
-$seekerId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
 $database = new Database();
 $conn = $database->getConnection();
@@ -39,14 +42,30 @@ if (!$conn) {
 }
 
 try {
-    $sql = "SELECT r.*, 
-                   d.id as donation_id, d.status as donation_status, d.donor_id,
-                   d.accepted_at, d.started_at, d.reached_at, d.completed_at,
-                   donor.name as donor_name, donor.phone as donor_phone
+    // Get seeker_id from seekers table
+    $stmt = $conn->prepare("SELECT id FROM seekers WHERE user_id = ?");
+    $stmt->execute([$userId]);
+    $seeker = $stmt->fetch();
+    
+    if (!$seeker) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Seeker record not found']);
+        exit;
+    }
+    
+    $seekerId = $seeker['id'];
+
+    // Query with normalized schema joins
+    $sql = "SELECT r.*, bg.blood_type,
+                   dn.id as donation_id, dn.status as donation_status, dn.donor_id,
+                   dn.accepted_at, dn.started_at, dn.reached_at, dn.completed_at,
+                   donor_user.name as donor_name, donor_user.phone as donor_phone
             FROM blood_requests r
-            LEFT JOIN donations d ON r.id = d.request_id AND d.status != 'cancelled'
-            LEFT JOIN users donor ON d.donor_id = donor.id
-            WHERE r.requester_id = ? AND r.requester_type = 'seeker'
+            JOIN blood_groups bg ON r.blood_group_id = bg.id
+            LEFT JOIN donations dn ON r.id = dn.request_id AND dn.status != 'cancelled'
+            LEFT JOIN donors d ON dn.donor_id = d.id
+            LEFT JOIN users donor_user ON d.user_id = donor_user.id
+            WHERE r.seeker_id = ?
             ORDER BY r.created_at DESC";
 
     $stmt = $conn->prepare($sql);

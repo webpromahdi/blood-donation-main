@@ -4,6 +4,8 @@
  * GET /api/admin/blood-groups.php
  * Query params: ?blood_type=O+ (optional, returns all if not specified)
  * Returns blood group statistics and donor lists
+ * 
+ * Normalized Schema: Uses blood_groups table, donors table with proper JOINs
  */
 
 header('Content-Type: application/json');
@@ -38,164 +40,95 @@ if (!$conn) {
 }
 
 try {
-    // Check if donor_health table exists
-    $healthTableExists = false;
-    try {
-        $checkTable = $conn->query("SHOW TABLES LIKE 'donor_health'");
-        $healthTableExists = $checkTable->rowCount() > 0;
-    } catch (Exception $e) {
-        $healthTableExists = false;
-    }
-
-    // Get blood group counts
-    $bloodTypes = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
-    $counts = [];
+    // Get blood group counts from blood_groups table and donors
+    $stmt = $conn->query("
+        SELECT bg.blood_type, COUNT(d.id) as count 
+        FROM blood_groups bg
+        LEFT JOIN donors d ON bg.id = d.blood_group_id
+        LEFT JOIN users u ON d.user_id = u.id AND u.status = 'approved'
+        GROUP BY bg.id, bg.blood_type
+        ORDER BY bg.id
+    ");
+    $bloodGroupRows = $stmt->fetchAll();
     
-    foreach ($bloodTypes as $type) {
-        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM users WHERE role = 'donor' AND blood_group = ? AND status = 'approved'");
-        $stmt->execute([$type]);
-        $counts[$type] = (int)$stmt->fetch()['count'];
+    $counts = [];
+    $bloodTypes = [];
+    foreach ($bloodGroupRows as $row) {
+        $counts[$row['blood_type']] = (int) $row['count'];
+        $bloodTypes[] = $row['blood_type'];
     }
 
     // If a specific blood type is requested, get donor list
     $donors = [];
     $bloodTypeFilter = isset($_GET['blood_type']) ? $_GET['blood_type'] : null;
     
+    // Build base query with normalized schema
+    $baseQuery = "SELECT d.id as donor_id, u.id as user_id, u.name, u.email, u.phone, 
+                         bg.blood_type as blood_group, d.age, d.gender, d.weight, d.city, d.address,
+                         u.status, u.created_at, d.total_donations, d.last_donation_date, d.next_eligible_date,
+                         dh.has_diabetes, dh.has_hypertension, dh.has_heart_disease, dh.height
+                  FROM donors d
+                  JOIN users u ON d.user_id = u.id
+                  LEFT JOIN blood_groups bg ON d.blood_group_id = bg.id
+                  LEFT JOIN donor_health dh ON d.id = dh.donor_id
+                  WHERE u.status = 'approved'";
+    
     if ($bloodTypeFilter && in_array($bloodTypeFilter, $bloodTypes)) {
-        if ($healthTableExists) {
-            $sql = "SELECT u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address,
-                           u.weight, u.status, u.created_at,
-                           COUNT(DISTINCT d.id) as total_donations,
-                           MAX(d.completed_at) as last_donation,
-                           MAX(dh.weight) as health_weight, MAX(dh.height) as height, 
-                           MAX(dh.has_diabetes) as has_diabetes, MAX(dh.has_hypertension) as has_hypertension,
-                           MAX(dh.has_heart_disease) as has_heart_disease
-                    FROM users u
-                    LEFT JOIN donations d ON u.id = d.donor_id AND d.status = 'completed'
-                    LEFT JOIN donor_health dh ON u.id = dh.donor_id
-                    WHERE u.role = 'donor' AND u.blood_group = ? AND u.status = 'approved'
-                    GROUP BY u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address, u.weight, u.status, u.created_at
-                    ORDER BY total_donations DESC, u.created_at DESC";
-        } else {
-            $sql = "SELECT u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address,
-                           u.weight, u.status, u.created_at,
-                           COUNT(DISTINCT d.id) as total_donations,
-                           MAX(d.completed_at) as last_donation,
-                           NULL as health_weight, NULL as height, 
-                           0 as has_diabetes, 0 as has_hypertension, 0 as has_heart_disease
-                    FROM users u
-                    LEFT JOIN donations d ON u.id = d.donor_id AND d.status = 'completed'
-                    WHERE u.role = 'donor' AND u.blood_group = ? AND u.status = 'approved'
-                    GROUP BY u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address, u.weight, u.status, u.created_at
-                    ORDER BY total_donations DESC, u.created_at DESC";
-        }
-        
+        $sql = $baseQuery . " AND bg.blood_type = ? ORDER BY d.total_donations DESC, u.created_at DESC";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$bloodTypeFilter]);
-        $results = $stmt->fetchAll();
-        
-        foreach ($results as $donor) {
-            // Determine health status
-            $healthStatus = 'Healthy';
-            if ($donor['has_diabetes'] || $donor['has_hypertension'] || $donor['has_heart_disease']) {
-                $healthStatus = 'Requires Review';
-            }
-            
-            // Determine availability status
-            $displayStatus = 'Available';
-            
-            // Check if donor has active donation
-            $stmt2 = $conn->prepare("SELECT id FROM donations WHERE donor_id = ? AND status NOT IN ('completed', 'cancelled')");
-            $stmt2->execute([$donor['id']]);
-            if ($stmt2->fetch()) {
-                $displayStatus = 'Busy';
-            }
-            
-            $donors[] = [
-                'id' => $donor['id'],
-                'name' => $donor['name'],
-                'email' => $donor['email'],
-                'phone' => $donor['phone'],
-                'group' => $donor['blood_group'],
-                'age' => $donor['age'],
-                'gender' => 'Not specified', // Add gender field to users table if needed
-                'weight' => $donor['health_weight'] ?? $donor['weight'],
-                'city' => $donor['city'],
-                'address' => $donor['address'],
-                'location' => $donor['city'] ?? 'Unknown',
-                'status' => $displayStatus,
-                'healthStatus' => $healthStatus,
-                'donations' => (int)$donor['total_donations'],
-                'lastDonation' => $donor['last_donation'] ? date('M d, Y', strtotime($donor['last_donation'])) : 'Never',
-                'registeredAt' => date('M d, Y', strtotime($donor['created_at']))
-            ];
-        }
     } else {
         // Return all donors if no specific type requested
-        if ($healthTableExists) {
-            $sql = "SELECT u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address,
-                           u.weight, u.status, u.created_at,
-                           COUNT(DISTINCT d.id) as total_donations,
-                           MAX(d.completed_at) as last_donation,
-                           MAX(dh.weight) as health_weight, MAX(dh.height) as height, 
-                           MAX(dh.has_diabetes) as has_diabetes, MAX(dh.has_hypertension) as has_hypertension,
-                           MAX(dh.has_heart_disease) as has_heart_disease
-                    FROM users u
-                    LEFT JOIN donations d ON u.id = d.donor_id AND d.status = 'completed'
-                    LEFT JOIN donor_health dh ON u.id = dh.donor_id
-                    WHERE u.role = 'donor' AND u.status = 'approved'
-                    GROUP BY u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address, u.weight, u.status, u.created_at
-                    ORDER BY u.blood_group, total_donations DESC";
-        } else {
-            $sql = "SELECT u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address,
-                           u.weight, u.status, u.created_at,
-                           COUNT(DISTINCT d.id) as total_donations,
-                           MAX(d.completed_at) as last_donation,
-                           NULL as health_weight, NULL as height, 
-                           0 as has_diabetes, 0 as has_hypertension, 0 as has_heart_disease
-                    FROM users u
-                    LEFT JOIN donations d ON u.id = d.donor_id AND d.status = 'completed'
-                    WHERE u.role = 'donor' AND u.status = 'approved'
-                    GROUP BY u.id, u.name, u.email, u.phone, u.blood_group, u.age, u.city, u.address, u.weight, u.status, u.created_at
-                    ORDER BY u.blood_group, total_donations DESC";
-        }
-        
+        $sql = $baseQuery . " ORDER BY bg.blood_type, d.total_donations DESC";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
-        $results = $stmt->fetchAll();
-        
-        foreach ($results as $donor) {
-            $healthStatus = 'Healthy';
-            if ($donor['has_diabetes'] || $donor['has_hypertension'] || $donor['has_heart_disease']) {
-                $healthStatus = 'Requires Review';
-            }
-            
-            $displayStatus = 'Available';
-            $stmt2 = $conn->prepare("SELECT id FROM donations WHERE donor_id = ? AND status NOT IN ('completed', 'cancelled')");
-            $stmt2->execute([$donor['id']]);
-            if ($stmt2->fetch()) {
-                $displayStatus = 'Busy';
-            }
-            
-            $donors[] = [
-                'id' => $donor['id'],
-                'name' => $donor['name'],
-                'email' => $donor['email'],
-                'phone' => $donor['phone'],
-                'group' => $donor['blood_group'],
-                'age' => $donor['age'],
-                'gender' => 'Not specified',
-                'weight' => $donor['health_weight'] ?? $donor['weight'],
-                'city' => $donor['city'],
-                'address' => $donor['address'],
-                'location' => $donor['city'] ?? 'Unknown',
-                'status' => $displayStatus,
-                'healthStatus' => $healthStatus,
-                'donations' => (int)$donor['total_donations'],
-                'lastDonation' => $donor['last_donation'] ? date('M d, Y', strtotime($donor['last_donation'])) : 'Never',
-                'registeredAt' => date('M d, Y', strtotime($donor['created_at']))
-            ];
+    }
+    
+    $results = $stmt->fetchAll();
+    
+    foreach ($results as $donor) {
+        // Determine health status
+        $healthStatus = 'Healthy';
+        if ($donor['has_diabetes'] || $donor['has_hypertension'] || $donor['has_heart_disease']) {
+            $healthStatus = 'Requires Review';
         }
+        
+        // Determine availability status based on next_eligible_date
+        $displayStatus = 'Available';
+        
+        // Check if donor is eligible based on date
+        if ($donor['next_eligible_date'] && new DateTime($donor['next_eligible_date']) > new DateTime()) {
+            $displayStatus = 'Not Eligible';
+        }
+        
+        // Check if donor has active donation
+        $stmt2 = $conn->prepare("SELECT id FROM donations WHERE donor_id = ? AND status NOT IN ('completed', 'cancelled')");
+        $stmt2->execute([$donor['donor_id']]);
+        if ($stmt2->fetch()) {
+            $displayStatus = 'Busy';
+        }
+        
+        $donors[] = [
+            'id' => $donor['user_id'],
+            'donor_id' => $donor['donor_id'],
+            'name' => $donor['name'],
+            'email' => $donor['email'],
+            'phone' => $donor['phone'],
+            'group' => $donor['blood_group'],
+            'age' => $donor['age'],
+            'gender' => $donor['gender'] ?? 'Not specified',
+            'weight' => $donor['weight'],
+            'height' => $donor['height'],
+            'city' => $donor['city'],
+            'address' => $donor['address'],
+            'location' => $donor['city'] ?? 'Unknown',
+            'status' => $displayStatus,
+            'healthStatus' => $healthStatus,
+            'donations' => (int) $donor['total_donations'],
+            'lastDonation' => $donor['last_donation_date'] ? date('M d, Y', strtotime($donor['last_donation_date'])) : 'Never',
+            'nextEligibleDate' => $donor['next_eligible_date'],
+            'registeredAt' => date('M d, Y', strtotime($donor['created_at']))
+        ];
     }
 
     echo json_encode([

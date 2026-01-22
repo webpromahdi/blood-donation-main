@@ -2,7 +2,8 @@
 /**
  * Donor Health Profile Endpoint
  * GET /api/donor/health.php
- * Returns health information for the logged-in donor
+ * 
+ * Normalized Schema: Reads from users + donors + donor_health + blood_groups
  */
 
 header('Content-Type: application/json');
@@ -30,7 +31,7 @@ $user = requireAuth(['donor']);
 // Require approved status to access health information
 requireApprovedStatus($_SESSION['user_id'], 'donor');
 
-$donorId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
 $database = new Database();
 $conn = $database->getConnection();
@@ -42,9 +43,18 @@ if (!$conn) {
 }
 
 try {
-    // Get donor's profile
-    $stmt = $conn->prepare("SELECT id, name, email, phone, blood_group, age, weight, city, address, created_at FROM users WHERE id = ?");
-    $stmt->execute([$donorId]);
+    // Get donor's profile from normalized tables
+    $stmt = $conn->prepare("
+        SELECT u.id, u.name, u.email, u.phone, u.created_at,
+               d.id as donor_id, d.age, d.weight, d.gender, d.city, d.address,
+               d.total_donations, d.last_donation_date, d.next_eligible_date,
+               bg.blood_type as blood_group
+        FROM users u
+        JOIN donors d ON u.id = d.user_id
+        JOIN blood_groups bg ON d.blood_group_id = bg.id
+        WHERE u.id = ?
+    ");
+    $stmt->execute([$userId]);
     $donor = $stmt->fetch();
 
     if (!$donor) {
@@ -52,6 +62,8 @@ try {
         echo json_encode(['success' => false, 'message' => 'Donor not found']);
         exit;
     }
+
+    $donorId = $donor['donor_id'];
 
     // Get detailed health info from donor_health table
     $stmt = $conn->prepare("SELECT * FROM donor_health WHERE donor_id = ?");
@@ -73,7 +85,7 @@ try {
     $eligibilityReasons = [];
 
     // Check last donation date
-    $nextEligibleDate = null;
+    $nextEligibleDate = $donor['next_eligible_date'];
     if ($lastDonation && $lastDonation['completed_at']) {
         $lastDate = new DateTime($lastDonation['completed_at']);
         $nextDate = clone $lastDate;
@@ -86,7 +98,8 @@ try {
         }
     }
 
-    // Check weight
+    // Check weight (use health weight if available, otherwise donor weight)
+    $weight = $healthInfo && $healthInfo['height'] ? $healthInfo['height'] : $donor['weight'];
     if ($donor['weight'] && $donor['weight'] < 50) {
         $isEligible = false;
         $eligibilityReasons[] = 'Minimum weight requirement is 50 kg';
@@ -103,17 +116,30 @@ try {
         }
     }
 
-    // Use weight from health info if available, otherwise from user profile
-    $weight = $healthInfo && $healthInfo['weight'] ? $healthInfo['weight'] : $donor['weight'];
-    $height = $healthInfo ? $healthInfo['height'] : null;
+    // Check health conditions
+    if ($healthInfo) {
+        if ($healthInfo['has_heart_disease']) {
+            $isEligible = false;
+            $eligibilityReasons[] = 'Heart disease detected';
+        }
+        if ($healthInfo['has_infectious_disease']) {
+            $isEligible = false;
+            $eligibilityReasons[] = 'Infectious disease detected';
+        }
+        if ($healthInfo['has_blood_disorders']) {
+            $isEligible = false;
+            $eligibilityReasons[] = 'Blood disorder detected';
+        }
+    }
 
     echo json_encode([
         'success' => true,
         'health' => [
             'blood_group' => $donor['blood_group'],
             'age' => $donor['age'],
-            'weight' => $weight,
-            'height' => $height,
+            'weight' => $donor['weight'],
+            'height' => $healthInfo ? $healthInfo['height'] : null,
+            'gender' => $donor['gender'],
             'city' => $donor['city'],
             'address' => $donor['address'],
             'blood_pressure_systolic' => $healthInfo ? $healthInfo['blood_pressure_systolic'] : null,
@@ -122,6 +148,8 @@ try {
             'has_diabetes' => $healthInfo ? (bool)$healthInfo['has_diabetes'] : false,
             'has_hypertension' => $healthInfo ? (bool)$healthInfo['has_hypertension'] : false,
             'has_heart_disease' => $healthInfo ? (bool)$healthInfo['has_heart_disease'] : false,
+            'has_blood_disorders' => $healthInfo ? (bool)$healthInfo['has_blood_disorders'] : false,
+            'has_infectious_disease' => $healthInfo ? (bool)$healthInfo['has_infectious_disease'] : false,
             'has_asthma' => $healthInfo ? (bool)$healthInfo['has_asthma'] : false,
             'has_allergies' => $healthInfo ? (bool)$healthInfo['has_allergies'] : false,
             'has_recent_surgery' => $healthInfo ? (bool)$healthInfo['has_recent_surgery'] : false,
@@ -135,7 +163,7 @@ try {
         'eligibility' => [
             'is_eligible' => $isEligible,
             'reasons' => $eligibilityReasons,
-            'last_donation' => $lastDonation ? $lastDonation['completed_at'] : null,
+            'last_donation' => $lastDonation ? $lastDonation['completed_at'] : $donor['last_donation_date'],
             'next_eligible_date' => $nextEligibleDate,
             'total_donations' => (int) $totalDonations
         ],
@@ -148,6 +176,10 @@ try {
     ]);
 
 } catch (PDOException $e) {
+    error_log("Donor Health Error: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Failed to fetch health information']);
+}
     error_log("Donor Health Error: " . $e->getMessage());
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Failed to fetch health info']);

@@ -2,6 +2,8 @@
 /**
  * Donor Accept Blood Request Endpoint
  * POST /api/donor/requests/accept.php
+ * 
+ * Normalized Schema: Creates donation linked to donors table
  */
 
 header('Content-Type: application/json');
@@ -38,7 +40,7 @@ if (empty($input['request_id'])) {
 }
 
 $requestId = (int) $input['request_id'];
-$donorId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
 $database = new Database();
 $conn = $database->getConnection();
@@ -50,6 +52,19 @@ if (!$conn) {
 }
 
 try {
+    // Get donor_id from donors table
+    $stmt = $conn->prepare("SELECT id, next_eligible_date FROM donors WHERE user_id = ?");
+    $stmt->execute([$userId]);
+    $donor = $stmt->fetch();
+    
+    if (!$donor) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Donor record not found']);
+        exit;
+    }
+    
+    $donorId = $donor['id'];
+
     $conn->beginTransaction();
 
     // Check if request exists and is available
@@ -64,7 +79,7 @@ try {
         exit;
     }
 
-    // Only allow accepting 'approved' requests (not pending, not already in_progress by another donor)
+    // Only allow accepting 'approved' requests
     if ($request['status'] !== 'approved') {
         $conn->rollBack();
         $statusMessage = $request['status'] === 'pending' 
@@ -97,14 +112,9 @@ try {
         exit;
     }
 
-    // Check donor eligibility (must wait 56 days between donations)
-    $stmt = $conn->prepare("SELECT completed_at FROM donations WHERE donor_id = ? AND status = 'completed' ORDER BY completed_at DESC LIMIT 1");
-    $stmt->execute([$donorId]);
-    $lastDonation = $stmt->fetch();
-
-    if ($lastDonation && $lastDonation['completed_at']) {
-        $lastDonationDate = new DateTime($lastDonation['completed_at']);
-        $nextEligibleDate = (clone $lastDonationDate)->modify('+56 days');
+    // Check donor eligibility using next_eligible_date from donors table
+    if ($donor['next_eligible_date']) {
+        $nextEligibleDate = new DateTime($donor['next_eligible_date']);
         $today = new DateTime();
 
         if ($today < $nextEligibleDate) {

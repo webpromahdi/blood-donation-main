@@ -2,6 +2,8 @@
 /**
  * Hospital Blood Request Creation Endpoint
  * POST /api/hospital/requests/create.php
+ * 
+ * Normalized Schema: Uses blood_group_id FK, hospital_id FK from hospitals table
  */
 
 header('Content-Type: application/json');
@@ -54,14 +56,6 @@ $requiredDate = $input['requiredDate'];
 $medicalReason = isset($input['medicalReason']) ? trim($input['medicalReason']) : null;
 $isEmergency = isset($input['emergency']) && $input['emergency'] === true;
 
-// Validate blood type
-$validBloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-if (!in_array($bloodType, $validBloodTypes)) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Invalid blood type']);
-    exit;
-}
-
 // Connect to database
 $database = new Database();
 $conn = $database->getConnection();
@@ -73,33 +67,62 @@ if (!$conn) {
 }
 
 try {
+    // Lookup blood_group_id from blood_groups table
+    $stmt = $conn->prepare("SELECT id FROM blood_groups WHERE blood_type = ?");
+    $stmt->execute([$bloodType]);
+    $bloodGroup = $stmt->fetch();
+    
+    if (!$bloodGroup) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Invalid blood type']);
+        exit;
+    }
+    
+    $bloodGroupId = $bloodGroup['id'];
+    
+    // Get hospital info from hospitals table
+    $userId = $_SESSION['user_id'];
+    $stmt = $conn->prepare("
+        SELECT h.id as hospital_id, u.name as hospital_name 
+        FROM hospitals h
+        JOIN users u ON h.user_id = u.id
+        WHERE h.user_id = ?
+    ");
+    $stmt->execute([$userId]);
+    $hospital = $stmt->fetch();
+    
+    if (!$hospital) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Hospital record not found']);
+        exit;
+    }
+    
+    $hospitalId = $hospital['hospital_id'];
+    $hospitalName = $hospital['hospital_name'];
+
     // Generate unique request code
     $stmt = $conn->query('SELECT MAX(id) as max_id FROM blood_requests');
     $result = $stmt->fetch();
     $nextId = ($result['max_id'] ?? 0) + 1;
     $requestCode = 'REQ' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
 
-    // Get hospital info from session
-    $hospitalId = $_SESSION['user_id'];
-    $hospitalName = $_SESSION['name'];
+    $conn->beginTransaction();
 
-    // Insert blood request
+    // Insert blood request with normalized foreign keys
     $sql = 'INSERT INTO blood_requests (
-        request_code, requester_id, requester_type, patient_name, patient_age,
-        contact_phone, contact_email, blood_type, quantity, hospital_id,
+        request_code, blood_group_id, patient_name, patient_age,
+        contact_phone, contact_email, quantity, hospital_id,
         hospital_name, city, required_date, medical_reason, urgency, status
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
     $stmt = $conn->prepare($sql);
     $stmt->execute([
         $requestCode,
-        $hospitalId,
-        'hospital',
+        $bloodGroupId,
         $patientName,
         $patientAge,
         $contactPhone,
         $contactEmail,
-        $bloodType,
         $quantity,
         $hospitalId,
         $hospitalName,
@@ -111,6 +134,12 @@ try {
     ]);
 
     $requestId = $conn->lastInsertId();
+    
+    // Update hospital's total_requests count
+    $stmt = $conn->prepare("UPDATE hospitals SET total_requests = total_requests + 1 WHERE id = ?");
+    $stmt->execute([$hospitalId]);
+
+    $conn->commit();
 
     echo json_encode([
         'success' => true,
@@ -124,6 +153,9 @@ try {
     ]);
 
 } catch (PDOException $e) {
+    if ($conn->inTransaction()) {
+        $conn->rollBack();
+    }
     error_log("Hospital Request Error: " . $e->getMessage());
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Failed to create request. Please try again.']);

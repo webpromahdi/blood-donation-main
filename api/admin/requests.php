@@ -3,6 +3,9 @@
  * Admin List Blood Requests Endpoint
  * GET /api/admin/requests.php
  * Query params: ?status=pending|approved|rejected|in_progress|completed&urgency=normal|emergency
+ * 
+ * Normalized Schema: Uses blood_group_id FK, seeker_id/hospital_id FKs,
+ *                    donations -> donors -> users for donor info
  */
 
 header('Content-Type: application/json');
@@ -37,13 +40,24 @@ if (!$conn) {
 }
 
 try {
-    $sql = "SELECT r.*, u.name as requester_name, u.email as requester_email,
-                   d.id as donation_id, d.status as donation_status, d.donor_id,
-                   donor.name as donor_name
+    // Query with normalized schema
+    $sql = "SELECT r.*, bg.blood_type,
+                   -- Requester info (hospital or seeker)
+                   COALESCE(h_user.name, s_user.name) as requester_name, 
+                   COALESCE(h_user.email, s_user.email) as requester_email,
+                   CASE WHEN r.hospital_id IS NOT NULL THEN 'hospital' ELSE 'seeker' END as requester_type,
+                   -- Donation info
+                   dn.id as donation_id, dn.status as donation_status, dn.donor_id,
+                   donor_user.name as donor_name
             FROM blood_requests r
-            LEFT JOIN users u ON r.requester_id = u.id
-            LEFT JOIN donations d ON r.id = d.request_id AND d.status != 'cancelled'
-            LEFT JOIN users donor ON d.donor_id = donor.id
+            JOIN blood_groups bg ON r.blood_group_id = bg.id
+            LEFT JOIN hospitals h ON r.hospital_id = h.id
+            LEFT JOIN users h_user ON h.user_id = h_user.id
+            LEFT JOIN seekers s ON r.seeker_id = s.id
+            LEFT JOIN users s_user ON s.user_id = s_user.id
+            LEFT JOIN donations dn ON r.id = dn.request_id AND dn.status != 'cancelled'
+            LEFT JOIN donors d ON dn.donor_id = d.id
+            LEFT JOIN users donor_user ON d.user_id = donor_user.id
             WHERE 1=1";
 
     $params = [];
