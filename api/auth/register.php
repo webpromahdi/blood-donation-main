@@ -28,8 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Start session
 session_start();
 
-// Include database
+// Include database and notification service
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../services/NotificationService.php';
 
 // Get JSON input
 $input = json_decode(file_get_contents('php://input'), true);
@@ -167,6 +168,19 @@ try {
     }
 
     $conn->commit();
+    
+    // Send notifications for pending registrations (A1, A2)
+    if ($status === 'pending') {
+        $notificationService = new NotificationService($conn);
+        
+        if ($role === 'donor') {
+            // A2: Notify admins of new donor registration
+            $notificationService->notifyAdminNewDonorRegistration($userId, $name);
+        } elseif ($role === 'hospital') {
+            // A1: Notify admins of new hospital registration
+            $notificationService->notifyAdminNewHospitalRegistration($userId, $name);
+        }
+    }
 
     // Set session data
     $_SESSION['user_id'] = $userId;

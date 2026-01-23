@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../services/NotificationService.php';
 
 requireAuth(['admin']);
 
@@ -47,8 +48,14 @@ if (!$conn) {
 }
 
 try {
-    // Check if request exists and is pending
-    $stmt = $conn->prepare("SELECT id, status FROM blood_requests WHERE id = ?");
+    // Check if request exists and is pending - get full details
+    $stmt = $conn->prepare("
+        SELECT r.*, bg.blood_type, u.name as requester_name
+        FROM blood_requests r
+        JOIN blood_groups bg ON r.blood_group_id = bg.id
+        JOIN users u ON r.requester_id = u.id
+        WHERE r.id = ?
+    ");
     $stmt->execute([$requestId]);
     $request = $stmt->fetch();
 
@@ -67,6 +74,26 @@ try {
     // Approve the request
     $stmt = $conn->prepare("UPDATE blood_requests SET status = 'approved', admin_id = ?, approved_at = NOW() WHERE id = ?");
     $stmt->execute([$adminId, $requestId]);
+    
+    // Send notifications
+    $notificationService = new NotificationService($conn);
+    
+    if ($request['requester_type'] === 'hospital') {
+        // H3: Notify hospital their request was approved
+        $notificationService->notifyHospitalRequestApproved($request['requester_id'], $requestId, $request['request_code']);
+    } else {
+        // S2: Notify seeker their request was approved
+        $notificationService->notifySeekerRequestApproved($request['requester_id'], $requestId, $request['request_code']);
+    }
+    
+    // D3/D4: Notify matching donors (by blood type and city)
+    $notificationService->notifyMatchingDonors(
+        $requestId, 
+        $request['blood_type'], 
+        $request['city'], 
+        $request['hospital_name'],
+        $request['urgency']
+    );
 
     echo json_encode([
         'success' => true,

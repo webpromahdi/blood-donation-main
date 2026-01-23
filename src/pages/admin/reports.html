@@ -121,11 +121,12 @@
               <!-- Notifications will be populated by JS -->
             </div>
             <div class="p-3 border-t border-gray-200 text-center">
-              <button
+              <a
+                href="/src/pages/admin/notifications.html"
                 class="text-sm text-red-600 hover:text-red-700 font-medium"
               >
                 View all notifications
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -1595,102 +1596,11 @@
         document.getElementById("successToast").classList.add("hidden");
       }
 
-      // =====================================================
-      // NOTIFICATION SYSTEM
-      // =====================================================
-      let notifications = [];
-
-      async function loadNotifications() {
-        try {
-          notifications = [];
-          renderNotifications();
-        } catch (error) {
-          console.error("Error loading notifications:", error);
-          notifications = [];
-          renderNotifications();
-        }
-      }
-
-      function renderNotifications() {
-        const container = document.getElementById("notificationList");
-        const unreadCount = notifications.filter((n) => !n.read).length;
-        const badge = document.getElementById("notificationBadge");
-
-        if (unreadCount > 0) {
-          badge.textContent = unreadCount;
-          badge.classList.remove("hidden");
-        } else {
-          badge.classList.add("hidden");
-        }
-
-        if (notifications.length === 0) {
-          container.innerHTML =
-            '<div class="p-4 text-center text-gray-500">No notifications</div>';
-          return;
-        }
-
-        container.innerHTML = notifications
-          .map(
-            (n) => `
-          <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${n.read ? "opacity-70" : ""}" data-id="${n.id}" onclick="markAsRead(${n.id})">
-            <div class="flex gap-3">
-              <div class="${n.iconBg} p-2 rounded-lg h-fit"><i data-lucide="${n.icon}" class="size-4 ${n.iconColor}"></i></div>
-              <div class="flex-1 min-w-0">
-                <div class="flex items-start justify-between gap-2">
-                  <p class="text-sm ${n.read ? "font-normal text-gray-700" : "font-semibold text-gray-900"} truncate">${n.title}</p>
-                  ${!n.read ? '<span class="size-2 bg-red-600 rounded-full flex-shrink-0 mt-1.5"></span>' : ""}
-                </div>
-                <p class="text-xs text-gray-500 mt-0.5 line-clamp-1">${n.message}</p>
-                <p class="text-xs text-gray-400 mt-1">${n.time}</p>
-              </div>
-            </div>
-          </div>
-        `,
-          )
-          .join("");
-
-        if (window.lucide) {
-          window.lucide.createIcons();
-        }
-      }
-
-      function toggleNotifications() {
-        const panel = document.getElementById("notificationPanel");
-        panel.classList.toggle("hidden");
-        if (!panel.classList.contains("hidden")) {
-          renderNotifications();
-        }
-      }
-
-      function markAsRead(id) {
-        const n = notifications.find((x) => x.id === id);
-        if (n) {
-          n.read = true;
-          renderNotifications();
-        }
-      }
-
-      function markAllAsRead() {
-        notifications.forEach((n) => (n.read = true));
-        renderNotifications();
-      }
-
-      document.addEventListener("click", function (e) {
-        const dropdown = document.getElementById("notificationDropdown");
-        const panel = document.getElementById("notificationPanel");
-        if (
-          !dropdown.contains(e.target) &&
-          !panel.classList.contains("hidden")
-        ) {
-          panel.classList.add("hidden");
-        }
-      });
-
-      // Initialize on load
-      document.addEventListener("DOMContentLoaded", function () {
-        loadNotifications();
-      });
     </script>
     <script type="module" src="/src/scripts/main.js"></script>
+    <script type="module">
+      import { initNotificationDropdown } from "/src/scripts/components/notification-dropdown.js";
+      initNotificationDropdown("admin");
+    </script>
   </body>
 </html>

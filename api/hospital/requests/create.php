@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../services/NotificationService.php';
 
 // Require hospital role
 $user = requireAuth(['hospital']);
@@ -152,6 +153,12 @@ try {
     $stmt->execute([$hospitalTableId]);
 
     $conn->commit();
+    
+    // Send notifications
+    $notificationService = new NotificationService($conn);
+    
+    // A3: Notify admins of new hospital request (A5 emergency alert is handled inside)
+    $notificationService->notifyAdminNewHospitalRequest($requestId, $hospitalName, $bloodType, $isEmergency ? 'emergency' : 'normal');
 
     echo json_encode([
         'success' => true,

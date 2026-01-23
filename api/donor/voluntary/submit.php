@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../services/NotificationService.php';
 
 $user = requireAuth(['donor']);
 
@@ -196,6 +197,26 @@ try {
     ]);
 
     $voluntaryId = $conn->lastInsertId();
+    
+    // Get donor name and blood type for notification
+    $stmt = $conn->prepare("
+        SELECT u.name, bg.blood_type 
+        FROM users u 
+        JOIN donors d ON d.user_id = u.id
+        JOIN blood_groups bg ON d.blood_group_id = bg.id
+        WHERE u.id = ?
+    ");
+    $stmt->execute([$_SESSION['user_id']]);
+    $donorInfo = $stmt->fetch();
+    
+    // A6: Notify admins of voluntary donation submission
+    $notificationService = new NotificationService($conn);
+    $notificationService->notifyAdminVoluntaryDonationSubmitted(
+        $voluntaryId, 
+        $donorInfo['name'] ?? 'Unknown', 
+        $donorInfo['blood_type'] ?? 'Unknown',
+        $hospital['city'] ?? 'Unknown'
+    );
 
     echo json_encode([
         'success' => true,

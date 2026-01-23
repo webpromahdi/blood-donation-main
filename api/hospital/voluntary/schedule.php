@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../services/NotificationService.php';
 
 requireAuth(['hospital']);
 
@@ -64,10 +65,11 @@ try {
 
     // Verify voluntary donation exists, is approved, and not already scheduled
     $stmt = $conn->prepare("
-        SELECT v.id, v.status, v.donor_id, v.hospital_id, u.name as donor_name, d.user_id as donor_user_id
+        SELECT v.id, v.status, v.donor_id, v.hospital_id, bg.blood_type, u.name as donor_name, d.user_id as donor_user_id
         FROM voluntary_donations v
         JOIN donors d ON v.donor_id = d.id
         JOIN users u ON d.user_id = u.id
+        JOIN blood_groups bg ON v.blood_group_id = bg.id
         WHERE v.id = ?
     ");
     $stmt->execute([$input['voluntary_id']]);
@@ -119,17 +121,43 @@ try {
         $input['scheduled_time'] ?? '09:00:00',
         $input['notes'] ?? 'Voluntary donation appointment'
     ]);
-
-    // Create notification for donor
-    $stmt = $conn->prepare("
-        INSERT INTO notifications (user_id, title, message, type, related_type, related_id)
-        VALUES (?, 'Donation Scheduled', ?, 'success', 'voluntary_donation', ?)
-    ");
-    $stmt->execute([
+    
+    $appointmentId = $conn->lastInsertId();
+    
+    // Get hospital name for notifications
+    $stmt = $conn->prepare("SELECT name FROM users WHERE id = ?");
+    $stmt->execute([$_SESSION['user_id']]);
+    $hospitalUser = $stmt->fetch();
+    $hospitalName = $hospitalUser ? $hospitalUser['name'] : 'Hospital';
+    
+    // Send notifications using NotificationService
+    $notificationService = new NotificationService($conn);
+    
+    // D11: Notify donor that hospital was assigned (with schedule)
+    $notificationService->notifyDonorHospitalAssigned(
+        $voluntary['donor_user_id'], 
+        $input['voluntary_id'], 
+        $hospitalName, 
+        $input['scheduled_date']
+    );
+    
+    // D6: Notify donor of scheduled appointment
+    $notificationService->notifyDonorAppointmentScheduled(
         $voluntary['donor_user_id'],
-        'A hospital has scheduled your voluntary donation for ' . $input['scheduled_date'] . '. Please check your appointments.',
-        $input['voluntary_id']
-    ]);
+        $appointmentId,
+        $hospitalName,
+        $input['scheduled_date'],
+        $input['scheduled_time'] ?? null
+    );
+    
+    // H10: Notify hospital of voluntary donor assigned (self-notification for record)
+    $notificationService->notifyHospitalVoluntaryDonorAssigned(
+        $_SESSION['user_id'],
+        $input['voluntary_id'],
+        $voluntary['donor_name'],
+        $voluntary['blood_type'],
+        $input['scheduled_date']
+    );
 
     echo json_encode([
         'success' => true,

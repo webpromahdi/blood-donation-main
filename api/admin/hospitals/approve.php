@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../services/NotificationService.php';
 
 requireAuth(['admin']);
 
@@ -61,6 +62,10 @@ try {
     // Update status to approved
     $stmt = $conn->prepare('UPDATE users SET status = ?, updated_at = NOW() WHERE id = ?');
     $stmt->execute(['approved', $hospitalId]);
+    
+    // H1: Notify hospital that their account has been approved
+    $notificationService = new NotificationService($conn);
+    $notificationService->notifyHospitalAccountApproved($hospitalId);
 
     echo json_encode([
         'success' => true,

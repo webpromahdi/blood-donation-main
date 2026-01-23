@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../services/NotificationService.php';
 
 // Require seeker role
 requireAuth(['seeker']);
@@ -147,6 +148,21 @@ try {
     $stmt->execute([$seekerTableId]);
 
     $conn->commit();
+    
+    // Get seeker name for notifications
+    $stmt = $conn->prepare("SELECT name FROM users WHERE id = ?");
+    $stmt->execute([$userId]);
+    $seekerUser = $stmt->fetch();
+    $seekerName = $seekerUser ? $seekerUser['name'] : 'Unknown';
+    
+    // Send notifications
+    $notificationService = new NotificationService($conn);
+    
+    // S1: Notify seeker that request was submitted
+    $notificationService->notifySeekerRequestSubmitted($userId, $requestId, $requestCode);
+    
+    // A4: Notify admins of new seeker request (A5 emergency alert is handled inside)
+    $notificationService->notifyAdminNewSeekerRequest($requestId, $seekerName, $bloodType, $isEmergency ? 'emergency' : 'normal');
 
     echo json_encode([
         'success' => true,

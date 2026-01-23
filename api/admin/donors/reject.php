@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../services/NotificationService.php';
 
 requireAuth(['admin']);
 
@@ -62,6 +63,10 @@ try {
     // Update status to rejected
     $stmt = $conn->prepare('UPDATE users SET status = ?, updated_at = NOW() WHERE id = ?');
     $stmt->execute(['rejected', $donorId]);
+    
+    // D2: Notify donor that their account has been rejected
+    $notificationService = new NotificationService($conn);
+    $notificationService->notifyDonorAccountRejected($donorId, $reason);
 
     echo json_encode([
         'success' => true,

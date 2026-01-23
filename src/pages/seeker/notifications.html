@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications - BloodConnect Seeker</title>
+  <link rel="stylesheet" href="/src/styles/styles.css" />
+</head>
+
+<body class="min-h-screen bg-gray-50">
+  <!-- Sidebar -->
+  <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center gap-3">
+        <div class="bg-red-600 p-2 rounded-lg">
+          <i data-lucide="heart" class="size-6 text-white fill-white"></i>
+        </div>
+        <div>
+          <div class="font-semibold text-red-600">BloodConnect</div>
+          <div class="text-sm text-gray-500">Seeker Portal</div>
+        </div>
+      </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-4">
+      <a href="/src/pages/seeker/request.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i data-lucide="send"
+          class="size-5"></i><span>Submit Blood Request</span></a>
+      <a href="/src/pages/seeker/tracking.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="clipboard-list" class="size-5"></i><span>Track Request</span></a>
+      <a href="/src/pages/seeker/chat.html"
+        class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"><i
+          data-lucide="message-square" class="size-5"></i><span>Chat with Donor</span></a>
+    </nav>
+    <div class="p-4 border-t border-gray-200">
+      <div class="text-center text-sm text-gray-500">
+        <p>Emergency: <span class="text-red-600 font-semibold">911</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header
+    class="h-16 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-10 flex items-center justify-between px-8">
+    <div class="flex items-center gap-4 flex-1">
+      <h2 class="text-lg font-semibold text-gray-900">All Notifications</h2>
+    </div>
+    <div class="flex items-center gap-4">
+      <!-- Notification Dropdown -->
+      <div class="relative" id="notificationDropdown">
+        <button
+          class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          onclick="toggleNotifications()"
+          id="notificationBell"
+        >
+          <i data-lucide="bell" class="size-5 text-gray-700"></i>
+          <span
+            class="absolute -top-1 -right-1 size-5 flex items-center justify-center p-0 bg-red-600 text-white text-xs rounded-full hidden"
+            id="notificationBadge"
+            >0</span
+          >
+        </button>
+
+        <!-- Notification Panel -->
+        <div
+          id="notificationPanel"
+          class="hidden absolute right-0 top-12 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50"
+        >
+          <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+            <h3 class="font-semibold text-gray-900">Notifications</h3>
+            <button onclick="markAllAsRead()" class="text-xs text-red-600 hover:text-red-700 font-medium">Mark all as read</button>
+          </div>
+          <div class="max-h-80 overflow-y-auto" id="notificationList"></div>
+          <div class="p-3 border-t border-gray-200 text-center">
+            <a href="/src/pages/seeker/notifications.html" class="text-sm text-red-600 hover:text-red-700 font-medium">View all notifications</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+        <div class="text-right">
+          <div class="text-sm font-medium text-gray-900" data-user-name>Seeker</div>
+          <div class="text-xs text-gray-500" data-user-role>Blood Seeker</div>
+        </div>
+        <div class="size-10 bg-orange-100 rounded-full flex items-center justify-center">
+          <i data-lucide="user" class="size-5 text-orange-600"></i>
+        </div>
+      </div>
+      <a href="/" class="p-2 text-gray-600 hover:text-red-600"><i data-lucide="log-out" class="size-5"></i></a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="ml-64 pt-16 p-8">
+    <div class="space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900">Notifications</h2>
+          <p class="text-gray-600">View and manage all your notifications</p>
+        </div>
+        <button
+          onclick="markAllNotificationsAsRead()"
+          class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+        >
+          <i data-lucide="check-check" class="size-4"></i>
+          Mark all as read
+        </button>
+      </div>
+
+      <div class="flex gap-4">
+        <button onclick="filterNotifications('all')" class="px-4 py-2 bg-red-600 text-white rounded-lg filter-btn active" data-filter="all">All</button>
+        <button onclick="filterNotifications('unread')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 filter-btn" data-filter="unread">Unread</button>
+        <button onclick="filterNotifications('read')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 filter-btn" data-filter="read">Read</button>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <div id="allNotificationsList" class="divide-y divide-gray-100">
+          <div class="p-8 text-center text-gray-500">
+            <i data-lucide="loader" class="size-8 mx-auto mb-2 animate-spin"></i>
+            <p>Loading notifications...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between" id="paginationContainer">
+        <p class="text-sm text-gray-600" id="paginationInfo">Showing 0 notifications</p>
+        <div class="flex gap-2">
+          <button onclick="loadPreviousPage()" id="prevPageBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Previous</button>
+          <button onclick="loadNextPage()" id="nextPageBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Next</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import { initNotificationDropdown } from "/src/scripts/components/notification-dropdown.js";
+
+    const API_BASE = "/api/notifications";
+    let allNotifications = [];
+    let currentFilter = "all";
+    let currentPage = 1;
+    const perPage = 20;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      initNotificationDropdown();
+      loadAllNotifications();
+    });
+
+    async function loadAllNotifications() {
+      try {
+        const response = await fetch(API_BASE + "/list.php?limit=100", { credentials: "include" });
+        if (!response.ok) throw new Error("Failed to fetch");
+        const data = await response.json();
+        if (data.success) { allNotifications = data.notifications; renderAllNotifications(); }
+      } catch (error) {
+        console.error("Failed to load notifications:", error);
+        document.getElementById("allNotificationsList").innerHTML = '<div class="p-8 text-center text-gray-500"><i data-lucide="alert-circle" class="size-8 mx-auto mb-2"></i><p>Failed to load notifications</p></div>';
+        lucide.createIcons();
+      }
+    }
+
+    function renderAllNotifications() {
+      const container = document.getElementById("allNotificationsList");
+      let filtered = allNotifications;
+      if (currentFilter === "unread") filtered = allNotifications.filter((n) => !n.read);
+      else if (currentFilter === "read") filtered = allNotifications.filter((n) => n.read);
+
+      const start = (currentPage - 1) * perPage;
+      const end = start + perPage;
+      const paginated = filtered.slice(start, end);
+
+      document.getElementById("paginationInfo").textContent = "Showing " + Math.min(paginated.length, perPage) + " of " + filtered.length + " notifications";
+      document.getElementById("prevPageBtn").disabled = currentPage === 1;
+      document.getElementById("nextPageBtn").disabled = end >= filtered.length;
+
+      if (paginated.length === 0) {
+        container.innerHTML = '<div class="p-8 text-center text-gray-500"><i data-lucide="bell-off" class="size-8 mx-auto mb-2 opacity-50"></i><p>No notifications found</p></div>';
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = paginated.map((notification) => {
+        const emergencyClass = notification.isEmergency ? "border-l-4 border-red-500 bg-red-50" : "";
+        const readClass = notification.read ? "bg-gray-50" : "bg-white";
+        const titleClass = notification.read ? "font-normal text-gray-700" : "font-semibold text-gray-900";
+        const unreadDot = !notification.read ? '<span class="size-3 bg-red-600 rounded-full flex-shrink-0"></span>' : "";
+        return '<div class="p-4 hover:bg-gray-100 cursor-pointer transition-colors ' + readClass + " " + emergencyClass +
+          '" onclick="handleNotificationClick(' + notification.id + ', \'' + (notification.relatedType || '') + "', " + (notification.relatedId || "null") + ')">' +
+          '<div class="flex gap-4 items-start"><div class="' + notification.iconBg + ' p-3 rounded-lg">' +
+          '<i data-lucide="' + notification.icon + '" class="size-5 ' + notification.iconColor + '"></i></div>' +
+          '<div class="flex-1 min-w-0"><div class="flex items-center justify-between gap-2">' +
+          '<p class="text-base ' + titleClass + '">' + notification.title + "</p>" + unreadDot + "</div>" +
+          '<p class="text-sm text-gray-600 mt-1">' + notification.message + "</p>" +
+          '<p class="text-xs text-gray-400 mt-2">' + notification.time + "</p></div></div></div>";
+      }).join("");
+      lucide.createIcons();
+    }
+
+    window.filterNotifications = function (filter) {
+      currentFilter = filter;
+      currentPage = 1;
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        if (btn.dataset.filter === filter) { btn.classList.remove("bg-gray-200", "text-gray-700"); btn.classList.add("bg-red-600", "text-white"); }
+        else { btn.classList.remove("bg-red-600", "text-white"); btn.classList.add("bg-gray-200", "text-gray-700"); }
+      });
+      renderAllNotifications();
+    };
+
+    window.loadPreviousPage = function () { if (currentPage > 1) { currentPage--; renderAllNotifications(); } };
+    window.loadNextPage = function () { currentPage++; renderAllNotifications(); };
+
+    window.handleNotificationClick = async function (id, relatedType, relatedId) {
+      try {
+        await fetch(API_BASE + "/mark-read.php", { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify({ notification_id: id }) });
+        const notification = allNotifications.find((n) => n.id === id);
+        if (notification) { notification.read = true; renderAllNotifications(); }
+      } catch (error) { console.error("Failed to mark as read:", error); }
+    };
+
+    window.markAllNotificationsAsRead = async function () {
+      try {
+        await fetch(API_BASE + "/mark-all-read.php", { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include" });
+        allNotifications.forEach((n) => (n.read = true));
+        renderAllNotifications();
+      } catch (error) { console.error("Failed to mark all as read:", error); }
+    };
+  </script>
+</body>
+</html>

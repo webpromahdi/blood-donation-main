@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../services/NotificationService.php';
 
 $user = requireAuth(['donor']);
 
@@ -65,7 +66,12 @@ try {
     $donorRecordId = $donorRecord['id'];
 
     // Get donation and verify ownership - donations.donor_id references donors.id
-    $stmt = $conn->prepare("SELECT d.*, r.id as request_id FROM donations d JOIN blood_requests r ON d.request_id = r.id WHERE d.id = ? AND d.donor_id = ?");
+    $stmt = $conn->prepare("
+        SELECT d.*, r.id as request_id, r.request_code, r.requester_id, r.requester_type 
+        FROM donations d 
+        JOIN blood_requests r ON d.request_id = r.id 
+        WHERE d.id = ? AND d.donor_id = ?
+    ");
     $stmt->execute([$donationId, $donorRecordId]);
     $donation = $stmt->fetch();
 
@@ -98,6 +104,29 @@ try {
     $stmt->execute([$donation['request_id']]);
 
     $conn->commit();
+    
+    // Get donor name for notifications
+    $stmt = $conn->prepare("SELECT name FROM users WHERE id = ?");
+    $stmt->execute([$donorId]);
+    $donorUser = $stmt->fetch();
+    $donorName = $donorUser ? $donorUser['name'] : 'Unknown';
+    
+    // Send notifications
+    $notificationService = new NotificationService($conn);
+    
+    // A8: Notify admins donation was cancelled
+    $notificationService->notifyAdminDonationCancelled($donationId, $donorName, $donation['request_code']);
+    
+    // H8: Notify hospital donor cancelled (if requester is hospital)
+    if ($donation['requester_type'] === 'hospital') {
+        $notificationService->notifyHospitalDonorCancelled(
+            $donation['requester_id'], 
+            $donationId, 
+            $donorName, 
+            $donation['request_code'], 
+            $reason
+        );
+    }
 
     echo json_encode([
         'success' => true,

@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../services/NotificationService.php';
 
 $user = requireAuth(['donor']);
 
@@ -67,8 +68,14 @@ try {
 
     $conn->beginTransaction();
 
-    // Check if request exists and is available
-    $stmt = $conn->prepare("SELECT id, status, request_code, hospital_name, city FROM blood_requests WHERE id = ?");
+    // Check if request exists and is available - get full details
+    $stmt = $conn->prepare("
+        SELECT r.id, r.status, r.request_code, r.hospital_name, r.city, 
+               r.requester_id, r.requester_type, bg.blood_type
+        FROM blood_requests r
+        JOIN blood_groups bg ON r.blood_group_id = bg.id
+        WHERE r.id = ?
+    ");
     $stmt->execute([$requestId]);
     $request = $stmt->fetch();
 
@@ -139,6 +146,34 @@ try {
     $stmt->execute([$requestId]);
 
     $conn->commit();
+    
+    // Get donor name for notifications
+    $stmt = $conn->prepare("SELECT name FROM users WHERE id = ?");
+    $stmt->execute([$userId]);
+    $donorUser = $stmt->fetch();
+    $donorName = $donorUser ? $donorUser['name'] : 'Unknown';
+    
+    // Send notifications
+    $notificationService = new NotificationService($conn);
+    
+    // D5: Confirm to donor that they accepted the request
+    $notificationService->notifyDonorDonationAccepted($userId, $donationId, $request['request_code'], $request['hospital_name']);
+    
+    // H5: Notify hospital that donor accepted (if requester is hospital)
+    if ($request['requester_type'] === 'hospital') {
+        $notificationService->notifyHospitalDonorAccepted(
+            $request['requester_id'], 
+            $donationId, 
+            $donorName, 
+            $request['blood_type'], 
+            $request['request_code']
+        );
+    }
+    
+    // S4: Notify seeker that a donor was found (if requester is seeker)
+    if ($request['requester_type'] === 'seeker') {
+        $notificationService->notifySeekerDonorFound($request['requester_id'], $requestId, $request['request_code'], $donorName);
+    }
 
     echo json_encode([
         'success' => true,

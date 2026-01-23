@@ -69,9 +69,45 @@
         <h2 class="text-lg font-semibold text-gray-900">Request Blood</h2>
       </div>
       <div class="flex items-center gap-4">
-        <button class="relative p-2 hover:bg-gray-100 rounded-lg">
-          <i data-lucide="bell" class="size-5 text-gray-700"></i>
-        </button>
+        <!-- Notification Dropdown -->
+        <div class="relative" id="notificationDropdown">
+          <button
+            class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            onclick="toggleNotifications()"
+            id="notificationBell"
+          >
+            <i data-lucide="bell" class="size-5 text-gray-700"></i>
+            <span
+              class="absolute -top-1 -right-1 size-5 flex items-center justify-center bg-red-600 text-white text-xs rounded-full hidden"
+              id="notificationBadge"
+            >0</span>
+          </button>
+
+          <!-- Notification Panel -->
+          <div
+            id="notificationPanel"
+            class="hidden absolute right-0 top-12 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50"
+          >
+            <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+              <h3 class="font-semibold text-gray-900">Notifications</h3>
+              <button
+                onclick="markAllAsRead()"
+                class="text-xs text-red-600 hover:text-red-700 font-medium"
+              >
+                Mark all as read
+              </button>
+            </div>
+            <div class="max-h-80 overflow-y-auto" id="notificationList">
+              <!-- Notifications will be populated by JS -->
+            </div>
+            <div class="p-3 border-t border-gray-200 text-center">
+              <a href="/src/pages/hospital/notifications.html" class="text-sm text-red-600 hover:text-red-700 font-medium">
+                View all notifications
+              </a>
+            </div>
+          </div>
+        </div>
+
         <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
           <div class="text-right">
             <div class="text-sm font-medium text-gray-900" data-user-name>
@@ -653,7 +689,9 @@
     </script>
     <script type="module">
       import { initUserLoader } from "/src/scripts/user-loader.js";
+      import { initNotificationDropdown } from "/src/scripts/components/notification-dropdown.js";
       initUserLoader();
+      initNotificationDropdown("hospital");
     </script>
   </body>
 </html>

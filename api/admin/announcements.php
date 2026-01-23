@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 session_start();
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../middleware/auth.php';
+require_once __DIR__ . '/../services/NotificationService.php';
 
 requireAuth(['admin']);
 
@@ -59,13 +60,36 @@ try {
  * Automatically publishes scheduled announcements when their time has come
  */
 function handleGet($conn) {
-    // Auto-publish scheduled announcements whose time has come
-    $updateSql = "UPDATE announcements 
-                  SET status = 'published' 
-                  WHERE status = 'scheduled' 
-                  AND scheduled_at IS NOT NULL 
-                  AND scheduled_at <= NOW()";
-    $conn->exec($updateSql);
+    // First, find scheduled announcements that need to be published and send notifications
+    $findScheduledSql = "SELECT id, title, message, target_audience, priority 
+                         FROM announcements 
+                         WHERE status = 'scheduled' 
+                         AND scheduled_at IS NOT NULL 
+                         AND scheduled_at <= NOW()";
+    $scheduledStmt = $conn->query($findScheduledSql);
+    $scheduledAnnouncements = $scheduledStmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Send notifications for each announcement being auto-published
+    if (!empty($scheduledAnnouncements)) {
+        $notificationService = new NotificationService($conn);
+        foreach ($scheduledAnnouncements as $announcement) {
+            $notificationService->notifyAnnouncementPublished(
+                $announcement['id'],
+                $announcement['title'],
+                $announcement['message'],
+                $announcement['target_audience'],
+                $announcement['priority']
+            );
+        }
+        
+        // Now update the status to published
+        $updateSql = "UPDATE announcements 
+                      SET status = 'published' 
+                      WHERE status = 'scheduled' 
+                      AND scheduled_at IS NOT NULL 
+                      AND scheduled_at <= NOW()";
+        $conn->exec($updateSql);
+    }
     
     // Fetch all announcements for admin view (including scheduled and archived)
     $sql = "SELECT a.*, u.name as admin_name 
@@ -159,6 +183,13 @@ function handlePost($conn) {
     
     $newId = $conn->lastInsertId();
     
+    // Send notifications to users if announcement is published immediately (not scheduled)
+    $notifiedCount = 0;
+    if ($status === 'published') {
+        $notificationService = new NotificationService($conn);
+        $notifiedCount = $notificationService->notifyAnnouncementPublished($newId, $title, $message, $targetAudience, $priority);
+    }
+    
     echo json_encode([
         'success' => true,
         'message' => 'Announcement created successfully',
@@ -170,7 +201,8 @@ function handlePost($conn) {
             'priority' => $priority,
             'status' => $status,
             'scheduled_at' => $scheduledAt
-        ]
+        ],
+        'notified_users' => $notifiedCount
     ]);
 }
 

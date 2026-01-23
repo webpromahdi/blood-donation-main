@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../services/NotificationService.php';
 
 $user = requireAuth(['donor']);
 
@@ -75,9 +76,9 @@ try {
     
     $donorId = $donor['id'];
 
-    // Get donation and verify ownership
+    // Get donation and verify ownership - include request details for notifications
     $stmt = $conn->prepare("
-        SELECT d.*, r.id as request_id, r.hospital_name, bg.blood_type
+        SELECT d.*, r.id as request_id, r.request_code, r.hospital_name, r.requester_id, r.requester_type, bg.blood_type
         FROM donations d 
         JOIN blood_requests r ON d.request_id = r.id 
         JOIN blood_groups bg ON r.blood_group_id = bg.id
@@ -170,6 +171,69 @@ try {
     }
 
     $conn->commit();
+    
+    // Get donor name for notifications
+    $stmt = $conn->prepare("SELECT name FROM users WHERE id = ?");
+    $stmt->execute([$userId]);
+    $donorUser = $stmt->fetch();
+    $donorName = $donorUser ? $donorUser['name'] : 'Unknown';
+    
+    // Send notifications based on status update
+    $notificationService = new NotificationService($conn);
+    
+    if ($newStatus === 'on_the_way') {
+        // H6: Notify hospital donor is on the way
+        if ($donation['requester_type'] === 'hospital') {
+            $notificationService->notifyHospitalDonorOnTheWay($donation['requester_id'], $donationId, $donorName);
+        }
+        // S5: Notify seeker donor is on the way
+        if ($donation['requester_type'] === 'seeker') {
+            $notificationService->notifySeekerDonorOnTheWay($donation['requester_id'], $donation['request_id'], $donorName);
+        }
+    } elseif ($newStatus === 'reached') {
+        // H7: Notify hospital donor has reached
+        if ($donation['requester_type'] === 'hospital') {
+            $notificationService->notifyHospitalDonorReached($donation['requester_id'], $donationId, $donorName);
+        }
+    } elseif ($newStatus === 'completed') {
+        // D8: Notify donor donation is complete
+        $notificationService->notifyDonorDonationCompleted($userId, $donationId, $donation['hospital_name']);
+        
+        // A7: Notify admins donation is complete
+        $notificationService->notifyAdminDonationCompleted($donationId, $donorName, $donation['hospital_name']);
+        
+        // S6: Notify seeker donation completed
+        if ($donation['requester_type'] === 'seeker') {
+            $notificationService->notifySeekerDonationCompleted($donation['requester_id'], $donation['request_id'], $donorName);
+        }
+        
+        // H9/S7: Check if request is fully fulfilled
+        $stmt = $conn->prepare("
+            SELECT r.quantity, COUNT(d.id) as completed_donations
+            FROM blood_requests r
+            LEFT JOIN donations d ON r.id = d.request_id AND d.status = 'completed'
+            WHERE r.id = ?
+            GROUP BY r.id
+        ");
+        $stmt->execute([$donation['request_id']]);
+        $fulfillmentCheck = $stmt->fetch();
+        
+        if ($fulfillmentCheck && $fulfillmentCheck['completed_donations'] >= $fulfillmentCheck['quantity']) {
+            if ($donation['requester_type'] === 'hospital') {
+                $notificationService->notifyHospitalRequestFulfilled($donation['requester_id'], $donation['request_id'], $donation['request_code']);
+            } else {
+                $notificationService->notifySeekerRequestFulfilled($donation['requester_id'], $donation['request_id'], $donation['request_code']);
+            }
+        }
+        
+        // D13: Check for achievement milestones
+        $stmt = $conn->prepare("SELECT total_donations FROM donors WHERE id = ?");
+        $stmt->execute([$donorId]);
+        $donorStats = $stmt->fetch();
+        if ($donorStats) {
+            $notificationService->checkAndNotifyAchievement($userId, $donorStats['total_donations']);
+        }
+    }
 
     echo json_encode([
         'success' => true,

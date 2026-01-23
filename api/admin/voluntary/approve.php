@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../services/NotificationService.php';
 
 requireAuth(['admin']);
 
@@ -47,7 +48,7 @@ if (!$conn) {
 try {
     // Verify voluntary donation exists and is pending
     $stmt = $conn->prepare("
-        SELECT v.id, v.status, v.donor_id, u.name as donor_name
+        SELECT v.id, v.status, v.donor_id, d.user_id as donor_user_id, u.name as donor_name
         FROM voluntary_donations v
         JOIN donors d ON v.donor_id = d.id
         JOIN users u ON d.user_id = u.id
@@ -79,16 +80,9 @@ try {
     ");
     $stmt->execute([$_SESSION['user_id'], $input['voluntary_id']]);
 
-    // Create notification for donor
-    $stmt = $conn->prepare("
-        INSERT INTO notifications (user_id, title, message, type, related_type, related_id)
-        SELECT d.user_id, 'Voluntary Donation Approved', 
-               'Your voluntary donation request has been approved. Hospitals can now see your availability.',
-               'success', 'voluntary_donation', ?
-        FROM donors d
-        WHERE d.id = ?
-    ");
-    $stmt->execute([$input['voluntary_id'], $voluntary['donor_id']]);
+    // D9: Notify donor their voluntary donation was approved using NotificationService
+    $notificationService = new NotificationService($conn);
+    $notificationService->notifyDonorVoluntaryApproved($voluntary['donor_user_id'], $input['voluntary_id']);
 
     echo json_encode([
         'success' => true,
