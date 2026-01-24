@@ -37,11 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/auth.php';
 
-// Enable error logging for debugging
-error_log("Certificate download request - donation_id: " . ($_GET['donation_id'] ?? 'not set'));
-error_log("Session user_id: " . ($_SESSION['user_id'] ?? 'not set'));
-error_log("Session role: " . ($_SESSION['role'] ?? 'not set'));
-
 // Validate user is logged in as donor
 $user = requireAuth(['donor']);
 
@@ -60,7 +55,6 @@ if (!isset($_GET['donation_id']) || !is_numeric($_GET['donation_id'])) {
 }
 
 $donationId = (int) $_GET['donation_id'];
-error_log("Processing certificate for donation ID: $donationId, donor ID: $donorId");
 
 $database = new Database();
 $conn = $database->getConnection();

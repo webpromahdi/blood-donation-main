@@ -143,7 +143,7 @@ try {
         'success' => true,
         'messages' => $formattedMessages,
         'last_timestamp' => $lastTimestamp,
-        'current_user_id' => $currentUserId,  // DEBUG: Help trace is_mine issues
+        'current_user_id' => $currentUserId,
         'other_user' => [
             'id' => (int)$otherUser['id'],
             'name' => $otherUser['name'],

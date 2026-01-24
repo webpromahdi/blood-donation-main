@@ -188,7 +188,7 @@ try {
 } catch (PDOException $e) {
     error_log("Donor Health Details Error: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Failed to fetch donor health details', 'debug' => $e->getMessage()]);
+    echo json_encode(['success' => false, 'message' => 'Failed to fetch donor health details']);
 }
 
 function formatExerciseFrequency($freq) {

@@ -179,7 +179,6 @@ try {
     http_response_code(500);
     echo json_encode([
         'success' => false, 
-        'message' => 'Failed to create request. Please try again.',
-        'debug' => $e->getMessage()
+        'message' => 'Failed to create request. Please try again.'
     ]);
 }

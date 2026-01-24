@@ -252,16 +252,6 @@
         // Update register link with role param
         document.getElementById("registerLink").href =
           `/src/pages/auth/register.html?role=${role}`;
-
-        // DEV: Pre-fill test credentials based on role
-        const testCredentials = {
-          donor: "donor@test.com",
-          admin: "admin@test.com",
-          hospital: "hospital@test.com",
-          seeker: "seeker@test.com",
-        };
-        document.getElementById("email").value = testCredentials[role];
-        document.getElementById("password").value = "Test123!";
       }
 
       function togglePassword(fieldId) {

@@ -1,14 +1,6 @@
 /**
  * Chat Component
  * Shared chat functionality for all portals
- *
- * @version 3.0.0 - Complete rewrite for stable message rendering
- *
- * FIXES:
- * - Messages now correctly appear left/right based on sender
- * - Polling appends new messages without clearing existing ones
- * - Optimistic UI for sent messages works properly
- * - No more disappearing messages after multiple sends
  */
 
 // ===========================================
@@ -60,7 +52,6 @@ export async function initChat(
 ) {
   // Prevent double initialization
   if (isInitialized) {
-    console.warn("Chat already initialized");
     return;
   }
   isInitialized = true;
@@ -73,7 +64,6 @@ export async function initChat(
     const authData = await authResponse.json();
     if (authData.success && authData.logged_in && authData.user) {
       currentUserId = parseInt(authData.user.id, 10);
-      console.log("[Chat] Current user ID set to:", currentUserId);
     }
   } catch (error) {
     console.error("[Chat] Failed to get current user ID:", error);
@@ -181,7 +171,6 @@ async function loadConversations() {
  */
 export function selectConversation(userId, userName, userRole) {
   if (!userId || isNaN(userId) || userId <= 0) {
-    console.error("Invalid userId for selectConversation:", userId);
     showMessagePanelError("Unable to load conversation. Invalid user ID.");
     return;
   }
@@ -332,13 +321,11 @@ function updateConversationSelection() {
  */
 async function loadMessages(incremental = false) {
   if (!selectedUserId) {
-    console.log("[Chat] No conversation selected, skipping load");
     return;
   }
 
   // Guard against concurrent requests for incremental loads
   if (incremental && isLoading) {
-    console.log("[Chat] Already loading, skipping incremental load");
     return;
   }
 
@@ -360,9 +347,6 @@ async function loadMessages(incremental = false) {
 
     // Check if conversation changed during fetch
     if (requestId !== currentRequestId || requestUserId !== selectedUserId) {
-      console.log(
-        "[Chat] Conversation changed during fetch, discarding results",
-      );
       return;
     }
 
@@ -370,9 +354,6 @@ async function loadMessages(incremental = false) {
 
     // Double-check after parsing
     if (requestId !== currentRequestId || requestUserId !== selectedUserId) {
-      console.log(
-        "[Chat] Conversation changed after parse, discarding results",
-      );
       return;
     }
 
@@ -407,7 +388,6 @@ async function loadMessages(incremental = false) {
         }
 
         if (newMessages.length > 0) {
-          console.log(`[Chat] Appending ${newMessages.length} new messages`);
           appendMessagesToDOM(newMessages);
         }
       } else if (!incremental) {
@@ -418,7 +398,6 @@ async function loadMessages(incremental = false) {
           messageIdSet.add(parseInt(msg.id, 10)),
         );
 
-        console.log(`[Chat] Full load: ${currentMessages.length} messages`);
         renderAllMessages();
       }
 
@@ -456,7 +435,6 @@ async function loadMessages(incremental = false) {
 function renderAllMessages() {
   const container = document.getElementById("messageList");
   if (!container) {
-    console.error("[Chat] Message container #messageList not found!");
     return;
   }
 
@@ -531,7 +509,6 @@ function createDateSeparator(dateString) {
 function appendMessagesToDOM(newMessages) {
   const container = document.getElementById("messageList");
   if (!container) {
-    console.error("[Chat] Message container #messageList not found!");
     return;
   }
 
@@ -625,15 +602,6 @@ function createMessageElement(msg) {
  * Checks is_mine flag from backend, with fallback to sender_id comparison
  */
 function isMessageMine(msg) {
-  // Debug log to trace issues
-  // console.log('[Chat] isMessageMine check:', {
-  //   msgId: msg.id,
-  //   is_mine: msg.is_mine,
-  //   is_mine_type: typeof msg.is_mine,
-  //   sender_id: msg.sender_id,
-  //   currentUserId: currentUserId
-  // });
-
   // Backend sends is_mine as boolean - check it directly first
   if (typeof msg.is_mine === "boolean") {
     return msg.is_mine;

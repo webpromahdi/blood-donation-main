@@ -88,7 +88,8 @@
             <span
               class="absolute -top-1 -right-1 size-5 flex items-center justify-center bg-red-600 text-white text-xs rounded-full hidden"
               id="notificationBadge"
-            >0</span>
+              >0</span
+            >
           </button>
 
           <!-- Notification Panel -->
@@ -96,7 +97,9 @@
             id="notificationPanel"
             class="hidden absolute right-0 top-12 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50"
           >
-            <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+            <div
+              class="p-4 border-b border-gray-200 flex items-center justify-between"
+            >
               <h3 class="font-semibold text-gray-900">Notifications</h3>
               <button
                 onclick="markAllAsRead()"
@@ -109,7 +112,10 @@
               <!-- Notifications will be populated by JS -->
             </div>
             <div class="p-3 border-t border-gray-200 text-center">
-              <a href="/src/pages/donor/notifications.html" class="text-sm text-red-600 hover:text-red-700 font-medium">
+              <a
+                href="/src/pages/donor/notifications.html"
+                class="text-sm text-red-600 hover:text-red-700 font-medium"
+              >
                 View all notifications
               </a>
             </div>
@@ -610,8 +616,6 @@
 
       // Download certificate for a specific donation
       async function downloadCertificate(donationId) {
-        console.log("downloadCertificate called with ID:", donationId);
-
         // Clear any previous error messages
         hideDownloadError();
 
