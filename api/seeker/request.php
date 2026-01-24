@@ -67,7 +67,7 @@ try {
     $baseSelect = "SELECT r.*, bg.blood_type, 
                        dn.id as donation_id, dn.status as donation_status, dn.donor_id,
                        dn.accepted_at, dn.started_at, dn.reached_at, dn.completed_at,
-                       donor_user.name as donor_name, donor_user.phone as donor_phone, 
+                       donor_user.id as donor_user_id, donor_user.name as donor_name, donor_user.phone as donor_phone, 
                        donor_bg.blood_type as donor_blood_group, d.city as donor_city
                 FROM blood_requests r
                 JOIN blood_groups bg ON r.blood_group_id = bg.id
@@ -121,6 +121,7 @@ try {
         'donation' => $request['donation_id'] ? [
             'id' => $request['donation_id'],
             'status' => $request['donation_status'],
+            'donor_user_id' => $request['donor_user_id'],
             'donor_name' => $request['donor_name'],
             'donor_phone' => in_array($request['donation_status'], ['on_the_way', 'reached', 'completed']) ? $request['donor_phone'] : null,
             'donor_blood_group' => $request['donor_blood_group'],

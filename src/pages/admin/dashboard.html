@@ -80,6 +80,10 @@
         >
           <i data-lucide="message-square" class="size-5"></i>
           <span>Chat</span>
+          <span
+            id="chatUnreadBadge"
+            class="hidden ml-auto px-2 py-0.5 text-xs font-medium bg-red-500 text-white rounded-full"
+          ></span>
         </a>
       </nav>
 
@@ -605,9 +609,11 @@
       import { setupLogoutButton } from "/src/scripts/auth.js";
       import { initUserLoader } from "/src/scripts/user-loader.js";
       import { initNotificationDropdown } from "/src/scripts/components/notification-dropdown.js";
+      import { initChatBadge } from "/src/scripts/components/chat-badge.js";
       setupLogoutButton();
       initUserLoader();
       initNotificationDropdown("admin");
+      initChatBadge();
     </script>
     <script>
       // Blood requests data - loaded from API
@@ -658,6 +664,9 @@
               urgency: req.urgency,
               status: req.status,
               requestedAt: new Date(req.created_at).toLocaleString(),
+              requesterId: req.requester_id,
+              requesterType: req.requester_type,
+              requesterName: req.requester_name,
               seekerName:
                 req.requester_name +
                 " (" +
@@ -726,10 +735,13 @@
 
       // Render action buttons based on status
       function renderActionButtons(request) {
+        const chatBtn = `<button onclick="chatWithRequester(${request.requesterId}, '${encodeURIComponent(request.requesterName)}', '${request.requesterType}')" class="px-3 py-1 text-xs border border-blue-500 text-blue-600 rounded-lg hover:bg-blue-50"><i data-lucide="message-square" class="size-3 inline mr-1"></i>Chat</button>`;
+
         if (request.status === "pending") {
           return `
             <div class="flex gap-2">
               <button onclick="openRequestModal('${request.id}')" class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"><i data-lucide="eye" class="size-3 inline mr-1"></i>View</button>
+              ${chatBtn}
               <button onclick="approveRequest('${request.id}')" class="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700" data-id="${request.id}">Approve</button>
               <button onclick="rejectRequest('${request.id}')" class="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700" data-id="${request.id}">Reject</button>
             </div>
@@ -738,6 +750,7 @@
           return `
             <div class="flex gap-2">
               <button onclick="openRequestModal('${request.id}')" class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"><i data-lucide="eye" class="size-3 inline mr-1"></i>View</button>
+              ${chatBtn}
               <button onclick="cancelRequest('${request.id}')" class="px-3 py-1 text-xs border border-red-300 text-red-600 rounded-lg hover:bg-red-50" data-id="${request.id}">Cancel</button>
             </div>
           `;
@@ -745,6 +758,7 @@
           return `
             <div class="flex gap-2">
               <button onclick="openRequestModal('${request.id}')" class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"><i data-lucide="eye" class="size-3 inline mr-1"></i>View</button>
+              ${chatBtn}
               <span class="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-lg">Donor Assigned</span>
             </div>
           `;
@@ -752,6 +766,7 @@
           return `
             <div class="flex gap-2">
               <button onclick="openRequestModal('${request.id}')" class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"><i data-lucide="eye" class="size-3 inline mr-1"></i>View</button>
+              ${chatBtn}
               <button onclick="dismissRequest('${request.id}')" class="px-3 py-1 text-xs border border-gray-300 text-gray-500 rounded-lg hover:bg-gray-50" data-id="${request.id}">Dismiss</button>
             </div>
           `;
@@ -759,9 +774,17 @@
           return `
             <div class="flex gap-2">
               <button onclick="openRequestModal('${request.id}')" class="px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50"><i data-lucide="eye" class="size-3 inline mr-1"></i>View</button>
+              ${chatBtn}
             </div>
           `;
         }
+      }
+
+      // Navigate to chat with requester
+      function chatWithRequester(requesterId, requesterName, requesterType) {
+        const name = decodeURIComponent(requesterName);
+        const role = requesterType === "hospital" ? "hospital" : "seeker";
+        window.location.href = `/src/pages/admin/chat.html?user=${requesterId}&name=${encodeURIComponent(name)}&role=${role}`;
       }
 
       // Render blood requests table

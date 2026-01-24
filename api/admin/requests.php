@@ -94,6 +94,7 @@ try {
             'medical_reason' => $req['medical_reason'],
             'urgency' => $req['urgency'],
             'status' => $req['status'],
+            'requester_id' => $req['requester_id'],
             'requester_type' => $req['requester_type'],
             'requester_name' => $req['requester_name'],
             'created_at' => $req['created_at'],

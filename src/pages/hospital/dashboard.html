@@ -51,8 +51,9 @@
           href="/src/pages/hospital/chat.html"
           class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600"
           ><i data-lucide="message-square" class="size-5"></i
-          ><span>Chat</span></a
-        >
+          ><span>Chat</span>
+          <span id="chatUnreadBadge" class="hidden ml-auto px-2 py-0.5 text-xs font-medium bg-red-500 text-white rounded-full"></span>
+        </a>
       </nav>
       <div class="p-4 border-t border-gray-200">
         <div class="text-center text-sm text-gray-500">
@@ -468,9 +469,11 @@
       import { setupLogoutButton } from "/src/scripts/auth.js";
       import { initUserLoader } from "/src/scripts/user-loader.js";
       import { initNotificationDropdown } from "/src/scripts/components/notification-dropdown.js";
+      import { initChatBadge } from "/src/scripts/components/chat-badge.js";
       setupLogoutButton();
       initUserLoader();
       initNotificationDropdown("hospital");
+      initChatBadge();
     </script>
     <script>
       // Hospital Dashboard - Dynamic Data from API

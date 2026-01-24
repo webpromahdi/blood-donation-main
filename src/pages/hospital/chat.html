@@ -80,7 +80,8 @@
             <span
               class="absolute -top-1 -right-1 size-5 flex items-center justify-center bg-red-600 text-white text-xs rounded-full hidden"
               id="notificationBadge"
-            >0</span>
+              >0</span
+            >
           </button>
 
           <!-- Notification Panel -->
@@ -88,7 +89,9 @@
             id="notificationPanel"
             class="hidden absolute right-0 top-12 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50"
           >
-            <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+            <div
+              class="p-4 border-b border-gray-200 flex items-center justify-between"
+            >
               <h3 class="font-semibold text-gray-900">Notifications</h3>
               <button
                 onclick="markAllAsRead()"
@@ -101,7 +104,10 @@
               <!-- Notifications will be populated by JS -->
             </div>
             <div class="p-3 border-t border-gray-200 text-center">
-              <a href="/src/pages/hospital/notifications.html" class="text-sm text-red-600 hover:text-red-700 font-medium">
+              <a
+                href="/src/pages/hospital/notifications.html"
+                class="text-sm text-red-600 hover:text-red-700 font-medium"
+              >
                 View all notifications
               </a>
             </div>
@@ -130,9 +136,9 @@
     </header>
 
     <!-- Main Content -->
-    <main class="ml-64 pt-16 h-screen">
+    <main class="ml-64 pt-16 h-screen overflow-hidden">
       <!-- Pending Approval Message (Hidden by default) -->
-      <div id="pendingApprovalMessage" class="hidden p-8">
+      <div id="pendingApprovalMessage" class="hidden p-8 overflow-y-auto">
         <div class="max-w-2xl mx-auto mt-16">
           <div
             class="p-8 bg-white border border-gray-200 rounded-xl text-center"
@@ -164,38 +170,125 @@
       <!-- Dashboard Content (Shown when approved) -->
       <div
         id="dashboardContent"
-        class="flex h-[calc(100vh-64px)] items-center justify-center"
+        class="flex h-[calc(100vh-64px)] overflow-hidden"
       >
-        <!-- Coming Soon State -->
-        <div class="text-center max-w-md px-8">
-          <div
-            class="bg-gray-100 size-24 rounded-full flex items-center justify-center mx-auto mb-6"
-          >
-            <i data-lucide="message-square" class="size-12 text-gray-400"></i>
+        <!-- Conversation List Panel -->
+        <div
+          class="w-80 bg-white border-r border-gray-200 flex flex-col h-full overflow-hidden"
+        >
+          <!-- Search/Header -->
+          <div class="p-4 border-b border-gray-200">
+            <h3 class="font-semibold text-gray-900 mb-3">Conversations</h3>
+            <div class="relative">
+              <input
+                type="text"
+                id="searchConversations"
+                placeholder="Search conversations..."
+                class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+              />
+              <i
+                data-lucide="search"
+                class="size-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"
+              ></i>
+            </div>
           </div>
-          <h2 class="text-2xl font-bold text-gray-900 mb-3">
-            Chat Feature Coming Soon
-          </h2>
-          <p class="text-gray-600 mb-6">
-            Real-time messaging with donors and administrators will be available
-            in a future update. For now, donor contact information is available
-            when they accept your requests.
-          </p>
-          <div class="flex flex-col gap-3">
-            <a
-              href="/src/pages/hospital/dashboard.html"
-              class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium"
+
+          <!-- Conversation List -->
+          <div class="flex-1 overflow-y-auto" id="conversationList">
+            <!-- Conversations will be loaded here -->
+            <div class="p-6 text-center text-gray-500">
+              <i
+                data-lucide="loader-2"
+                class="size-8 mx-auto mb-2 animate-spin opacity-50"
+              ></i>
+              <p class="text-sm">Loading conversations...</p>
+            </div>
+          </div>
+
+          <!-- Contact Admin Button -->
+          <div class="p-4 border-t border-gray-200">
+            <button
+              id="contactAdminBtn"
+              class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
             >
-              <i data-lucide="layout-dashboard" class="size-5"></i>
-              Go to Dashboard
-            </a>
-            <a
-              href="/src/pages/hospital/appointments.html"
-              class="inline-flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              <i data-lucide="headphones" class="size-5"></i>
+              <span>Contact Admin Support</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Message Panel -->
+        <div class="flex-1 flex flex-col">
+          <!-- Empty State -->
+          <div
+            id="chatEmptyState"
+            class="flex-1 flex items-center justify-center bg-gray-50"
+          >
+            <div class="text-center max-w-md px-8">
+              <div
+                class="bg-gray-100 size-20 rounded-full flex items-center justify-center mx-auto mb-4"
+              >
+                <i
+                  data-lucide="message-square"
+                  class="size-10 text-gray-400"
+                ></i>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                Select a Conversation
+              </h3>
+              <p class="text-gray-600">
+                Choose a conversation from the list or start a new chat with
+                donors from the Donors page.
+              </p>
+            </div>
+          </div>
+
+          <!-- Active Chat Panel (hidden initially) -->
+          <div
+            id="messagePanel"
+            class="hidden flex-1 flex flex-col h-full overflow-hidden"
+          >
+            <!-- Chat Header -->
+            <div
+              id="chatHeader"
+              class="p-4 border-b border-gray-200 bg-white flex-shrink-0"
             >
-              <i data-lucide="calendar-check" class="size-5"></i>
-              View Appointments
-            </a>
+              <!-- Will be populated by JS -->
+            </div>
+
+            <!-- Messages Area -->
+            <div
+              id="messageList"
+              class="flex-1 overflow-y-auto p-4 space-y-1"
+              style="background-color: #f5f5f5"
+            >
+              <!-- Messages will be loaded here -->
+            </div>
+
+            <!-- Message Input -->
+            <div class="p-4 border-t border-gray-200 bg-white flex-shrink-0">
+              <div class="flex gap-3">
+                <div class="flex-1 relative">
+                  <textarea
+                    id="messageInput"
+                    placeholder="Type a message..."
+                    rows="1"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none"
+                  ></textarea>
+                  <span
+                    id="charCounter"
+                    class="absolute right-3 bottom-2 text-xs text-gray-400"
+                    >0/2000</span
+                  >
+                </div>
+                <button
+                  id="sendMessageBtn"
+                  class="px-4 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors"
+                >
+                  <i data-lucide="send" class="size-5"></i>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -205,8 +298,18 @@
     <script type="module">
       import { initUserLoader } from "/src/scripts/user-loader.js";
       import { initNotificationDropdown } from "/src/scripts/components/notification-dropdown.js";
+      import { initChat } from "/src/scripts/components/chat.js";
+
       initUserLoader();
       initNotificationDropdown("hospital");
+
+      // Get URL params for pre-selected user
+      const urlParams = new URLSearchParams(window.location.search);
+      const userParam = urlParams.get("user");
+      const targetUserId = userParam ? parseInt(userParam, 10) : null;
+      const targetUserName = urlParams.get("name")
+        ? decodeURIComponent(urlParams.get("name"))
+        : null;
 
       // Account status check
       async function checkAccountStatus() {
@@ -243,6 +346,10 @@
 
           if (dashboardContent) dashboardContent.classList.remove("hidden");
           if (pendingMessage) pendingMessage.classList.add("hidden");
+
+          // Initialize chat after account is verified
+          initChat("hospital", targetUserId, targetUserName);
+
           return true;
         } catch (error) {
           console.error("Failed to check account status:", error);

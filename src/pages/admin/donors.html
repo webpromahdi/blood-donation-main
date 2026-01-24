@@ -545,29 +545,39 @@
           <div
             class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 rounded-b-2xl"
           >
-            <div class="flex items-center justify-end gap-3">
+            <div class="flex items-center justify-between">
               <button
-                onclick="closeDonorModal()"
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                id="modalChatBtn"
+                onclick="chatFromModal()"
+                class="px-4 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-500 rounded-lg hover:bg-blue-50 transition-colors"
               >
-                Close
+                <i data-lucide="message-square" class="size-4 inline mr-1.5"></i
+                >Chat with Donor
               </button>
-              <button
-                id="modalRejectBtn"
-                onclick="rejectFromModal()"
-                class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
-              >
-                <i data-lucide="x-circle" class="size-4 inline mr-1.5"></i
-                >Reject
-              </button>
-              <button
-                id="modalApproveBtn"
-                onclick="approveFromModal()"
-                class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
-              >
-                <i data-lucide="check-circle" class="size-4 inline mr-1.5"></i
-                >Approve
-              </button>
+              <div class="flex items-center gap-3">
+                <button
+                  onclick="closeDonorModal()"
+                  class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Close
+                </button>
+                <button
+                  id="modalRejectBtn"
+                  onclick="rejectFromModal()"
+                  class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  <i data-lucide="x-circle" class="size-4 inline mr-1.5"></i
+                  >Reject
+                </button>
+                <button
+                  id="modalApproveBtn"
+                  onclick="approveFromModal()"
+                  class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  <i data-lucide="check-circle" class="size-4 inline mr-1.5"></i
+                  >Approve
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -650,6 +660,7 @@
           // Transform donors data to match expected format
           donors = (data.donors || []).map((d) => ({
             id: `DON${String(d.id).padStart(3, "0")}`,
+            rawId: d.id,
             name: d.name || "Unknown",
             email: d.email || "N/A",
             phone: d.phone || "N/A",
@@ -724,12 +735,19 @@
         }
 
         function getActionButtons(donor) {
+          // Use rawId directly (the actual database ID)
+          const numericId = donor.rawId;
+          const chatBtn = `<button class="chat-btn px-3 py-1 text-xs border border-blue-500 text-blue-600 rounded-lg hover:bg-blue-50" data-id="${donor.id}" data-name="${donor.name}" data-numeric-id="${numericId}">
+            <i data-lucide="message-square" class="size-3 inline mr-1"></i>Chat
+          </button>`;
+
           if (donor.status === "Pending") {
             return `
               <div class="flex gap-2">
                 <button class="view-btn px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50" data-id="${donor.id}">
                   <i data-lucide="eye" class="size-3 inline mr-1"></i>View
                 </button>
+                ${chatBtn}
                 <button class="approve-btn px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700" data-id="${donor.id}">
                   <i data-lucide="check-circle" class="size-3 inline mr-1"></i>Approve
                 </button>
@@ -740,9 +758,12 @@
             `;
           }
           return `
-            <button class="view-btn px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50" data-id="${donor.id}">
-              <i data-lucide="eye" class="size-3 inline mr-1"></i>View
-            </button>
+            <div class="flex gap-2">
+              <button class="view-btn px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50" data-id="${donor.id}">
+                <i data-lucide="eye" class="size-3 inline mr-1"></i>View
+              </button>
+              ${chatBtn}
+            </div>
           `;
         }
 
@@ -815,6 +836,14 @@
           });
           document.querySelectorAll(".view-btn").forEach((btn) => {
             btn.addEventListener("click", () => openDonorModal(btn.dataset.id));
+          });
+          // Chat button - navigate to chat page with user params
+          document.querySelectorAll(".chat-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const numericId = btn.dataset.numericId;
+              const name = encodeURIComponent(btn.dataset.name);
+              window.location.href = `/src/pages/admin/chat.html?user=${numericId}&name=${name}&role=donor`;
+            });
           });
         }
 
@@ -929,6 +958,17 @@
           if (currentModalDonorId) {
             window.closeDonorModal();
             await updateDonorStatus(currentModalDonorId, "Rejected");
+          }
+        };
+
+        window.chatFromModal = function () {
+          if (currentModalDonorId) {
+            const donor = donors.find((d) => d.id === currentModalDonorId);
+            if (donor) {
+              const numericId = donor.rawId;
+              const name = encodeURIComponent(donor.name);
+              window.location.href = `/src/pages/admin/chat.html?user=${numericId}&name=${name}&role=donor`;
+            }
           }
         };
 

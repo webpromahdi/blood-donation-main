@@ -57,7 +57,7 @@ try {
     $sql = "SELECT r.*, bg.blood_type,
                    dn.id as donation_id, dn.status as donation_status, dn.donor_id,
                    dn.accepted_at, dn.started_at, dn.reached_at, dn.completed_at,
-                   donor_user.name as donor_name, donor_user.phone as donor_phone
+                   donor_user.id as donor_user_id, donor_user.name as donor_name, donor_user.phone as donor_phone
             FROM blood_requests r
             JOIN blood_groups bg ON r.blood_group_id = bg.id
             LEFT JOIN donations dn ON r.id = dn.request_id AND dn.status != 'cancelled'
@@ -90,6 +90,7 @@ try {
             'donation' => $req['donation_id'] ? [
                 'id' => $req['donation_id'],
                 'status' => $req['donation_status'],
+                'donor_user_id' => $req['donor_user_id'],
                 'donor_name' => $req['donor_name'],
                 'donor_phone' => $req['donation_status'] === 'on_the_way' || $req['donation_status'] === 'reached' ? $req['donor_phone'] : null,
                 'accepted_at' => $req['accepted_at'],

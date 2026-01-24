@@ -522,27 +522,37 @@
           <div
             class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 rounded-b-2xl"
           >
-            <div class="flex items-center justify-end gap-3">
+            <div class="flex items-center justify-between">
               <button
-                onclick="closeHospitalModal()"
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                id="modalChatBtn"
+                onclick="chatFromModal()"
+                class="px-4 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-500 rounded-lg hover:bg-blue-50 transition-colors"
               >
-                Close
+                <i data-lucide="message-square" class="size-4 inline mr-1.5"></i
+                >Chat with Hospital
               </button>
-              <button
-                id="rejectHospitalBtn"
-                class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
-              >
-                <i data-lucide="x-circle" class="size-4 inline mr-1.5"></i
-                >Reject
-              </button>
-              <button
-                id="approveHospitalBtn"
-                class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
-              >
-                <i data-lucide="check-circle" class="size-4 inline mr-1.5"></i
-                >Approve
-              </button>
+              <div class="flex items-center gap-3">
+                <button
+                  onclick="closeHospitalModal()"
+                  class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Close
+                </button>
+                <button
+                  id="rejectHospitalBtn"
+                  class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  <i data-lucide="x-circle" class="size-4 inline mr-1.5"></i
+                  >Reject
+                </button>
+                <button
+                  id="approveHospitalBtn"
+                  class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  <i data-lucide="check-circle" class="size-4 inline mr-1.5"></i
+                  >Approve
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -729,16 +739,28 @@
         }
 
         function getActionButtons(hospital) {
+          // Use rawId directly (the actual database ID)
+          const numericId = hospital.rawId;
+          const chatBtn = `<button class="chat-btn px-3 py-1 text-xs border border-blue-500 text-blue-600 rounded-lg hover:bg-blue-50" data-id="${hospital.id}" data-name="${hospital.name}" data-numeric-id="${numericId}">
+            <i data-lucide="message-square" class="size-3 inline mr-1"></i>Chat
+          </button>`;
+
           if (hospital.status === "Pending") {
             return `
               <div class="flex gap-2">
                 <button class="view-btn px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50" data-id="${hospital.id}">View</button>
+                ${chatBtn}
                 <button class="approve-btn px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700" data-id="${hospital.id}">Approve</button>
                 <button class="reject-btn px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700" data-id="${hospital.id}">Reject</button>
               </div>
             `;
           }
-          return `<button class="view-btn px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50" data-id="${hospital.id}">View</button>`;
+          return `
+            <div class="flex gap-2">
+              <button class="view-btn px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50" data-id="${hospital.id}">View</button>
+              ${chatBtn}
+            </div>
+          `;
         }
 
         // Assign to window for cross-scope access
@@ -809,6 +831,14 @@
             btn.addEventListener("click", () =>
               openHospitalModal(btn.dataset.id),
             );
+          });
+          // Chat button - navigate to chat page with user params
+          document.querySelectorAll(".chat-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const numericId = btn.dataset.numericId;
+              const name = encodeURIComponent(btn.dataset.name);
+              window.location.href = `/src/pages/admin/chat.html?user=${numericId}&name=${name}&role=hospital`;
+            });
           });
         }
 
@@ -942,6 +972,19 @@
           if (currentModalHospitalId) {
             updateHospitalStatus(currentModalHospitalId, "Rejected");
             window.closeHospitalModal();
+          }
+        };
+
+        window.chatFromModal = function () {
+          if (currentModalHospitalId) {
+            const hospital = hospitals.find(
+              (h) => h.id === currentModalHospitalId,
+            );
+            if (hospital) {
+              const numericId = hospital.rawId;
+              const name = encodeURIComponent(hospital.name);
+              window.location.href = `/src/pages/admin/chat.html?user=${numericId}&name=${name}&role=hospital`;
+            }
           }
         };
 

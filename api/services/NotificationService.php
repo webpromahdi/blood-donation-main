@@ -984,4 +984,24 @@ class NotificationService
         
         return count($userIds);
     }
+    
+    // =========================================================================
+    // CHAT NOTIFICATIONS (C1)
+    // =========================================================================
+    
+    /**
+     * C1: New Chat Message Received
+     * Trigger: When a user receives a new chat message
+     */
+    public function notifyNewChatMessage($receiverId, $senderName, $messagePreview, $messageId)
+    {
+        $this->create(
+            $receiverId,
+            "New Message from {$senderName}",
+            $messagePreview,
+            self::TYPE_INFO,
+            'chat_message',
+            $messageId
+        );
+    }
 }

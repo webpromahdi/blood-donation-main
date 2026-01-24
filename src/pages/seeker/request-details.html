@@ -309,6 +309,7 @@
                       View Details
                     </button>
                     <a
+                      id="chatWithDonorBtn2"
                       href="/src/pages/seeker/chat.html"
                       class="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
                     >
@@ -1081,6 +1082,12 @@
             "3-4 times/week",
           ]);
         }
+
+        // Update chat button with donor's user_id
+        const chatBtn = document.getElementById("chatWithDonorBtn");
+        if (chatBtn && donor.user_id) {
+          chatBtn.href = `/src/pages/seeker/chat.html?user=${donor.user_id}&name=${encodeURIComponent(donor.name || "Donor")}`;
+        }
       }
 
       // Helper to get lifestyle indicator class
@@ -1460,7 +1467,7 @@
                     <i data-lucide="file-text" class="size-5"></i>
                     View Details
                   </button>
-                  <a href="/src/pages/seeker/chat.html" class="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium flex items-center justify-center gap-2 transition-colors">
+                  <a href="/src/pages/seeker/chat.html?user=${donor.donor_user_id || ""}&name=${encodeURIComponent(donor.donor_name || "Donor")}" class="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium flex items-center justify-center gap-2 transition-colors">
                     <i data-lucide="message-square" class="size-5"></i>
                     Chat with Donor
                   </a>
@@ -1481,6 +1488,12 @@
                 fetchDonorHealthDetails(currentRequestData.id);
               }
             });
+          }
+
+          // Update static chat button with donor user_id
+          const chatBtn2 = document.getElementById("chatWithDonorBtn2");
+          if (chatBtn2 && donor.donor_user_id) {
+            chatBtn2.href = `/src/pages/seeker/chat.html?user=${donor.donor_user_id}&name=${encodeURIComponent(donor.donor_name || "Donor")}`;
           }
         }
 
