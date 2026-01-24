@@ -399,20 +399,22 @@ CREATE TABLE notifications (
 ) ENGINE=InnoDB;
 
 -- =====================================================
--- CHAT_MESSAGES TABLE
--- Chat messages between users
--- =====================================================
 CREATE TABLE chat_messages (
     id INT PRIMARY KEY AUTO_INCREMENT,
+    
+    -- Message Identity
+    conversation_id VARCHAR(50) NOT NULL,
     sender_id INT NOT NULL,
     receiver_id INT NOT NULL,
     
     -- Message content
     message TEXT NOT NULL,
+    message_type ENUM('text', 'system') DEFAULT 'text',
     
     -- Related context (optional)
     request_id INT NULL,
     donation_id INT NULL,
+    voluntary_donation_id INT NULL,
     
     -- Status
     is_read BOOLEAN DEFAULT FALSE,
@@ -420,16 +422,74 @@ CREATE TABLE chat_messages (
     
     -- Timestamps
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (request_id) REFERENCES blood_requests(id) ON DELETE SET NULL,
     FOREIGN KEY (donation_id) REFERENCES donations(id) ON DELETE SET NULL,
+    FOREIGN KEY (voluntary_donation_id) REFERENCES voluntary_donations(id) ON DELETE SET NULL,
     
-    INDEX idx_chat_sender (sender_id),
-    INDEX idx_chat_receiver (receiver_id),
-    INDEX idx_chat_conversation (sender_id, receiver_id)
+    -- CRITICAL INDEXES
+    INDEX idx_conversation (conversation_id, created_at DESC),
+    INDEX idx_sender (sender_id, created_at DESC),
+    INDEX idx_receiver (receiver_id, is_read, created_at DESC),
+    INDEX idx_unread (receiver_id, is_read, created_at DESC),
+    INDEX idx_request_context (request_id, created_at DESC),
+    INDEX idx_donation_context (donation_id, created_at DESC)
 ) ENGINE=InnoDB;
+
+-- ============================================
+-- CHAT_CONVERSATIONS TABLE (Metadata Cache)
+-- Optional but recommended for unread counts
+-- ============================================
+CREATE TABLE chat_conversations (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    conversation_id VARCHAR(50) NOT NULL UNIQUE,
+    user_1_id INT NOT NULL,
+    user_2_id INT NOT NULL,
+    
+    last_message_id INT NULL,
+    last_message_at TIMESTAMP NULL,
+    
+    user_1_unread_count INT DEFAULT 0,
+    user_2_unread_count INT DEFAULT 0,
+    
+    is_blocked BOOLEAN DEFAULT FALSE,
+    blocked_by INT NULL,
+    
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (user_1_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_2_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (last_message_id) REFERENCES chat_messages(id) ON DELETE SET NULL,
+    
+    INDEX idx_users (user_1_id, user_2_id)
+) ENGINE=InnoDB;
+
+-- ============================================
+-- TRIGGER: Create notification on new chat message
+-- ============================================
+DELIMITER //
+CREATE TRIGGER tr_new_chat_message
+AFTER INSERT ON chat_messages
+FOR EACH ROW
+BEGIN
+    INSERT INTO notifications 
+    (user_id, title, message, type, related_type, related_id, is_read, created_at)
+    SELECT 
+        NEW.receiver_id,
+        'New Message',
+        CONCAT(u.name, ' sent you a message'),
+        'info',
+        'chat_message',
+        NEW.id,
+        0,
+        NOW()
+    FROM users u WHERE u.id = NEW.sender_id;
+END;//
+DELIMITER ;
 
 -- =====================================================
 -- VOLUNTARY_DONATIONS TABLE

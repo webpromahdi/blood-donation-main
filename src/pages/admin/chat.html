@@ -111,6 +111,7 @@
     </header>
 
     <!-- Main Content -->
+<<<<<<< HEAD
     <main class="ml-64 pt-16 h-screen overflow-hidden">
       <div class="flex h-[calc(100vh-64px)] overflow-hidden">
         <!-- Conversation List Panel -->
@@ -143,10 +144,45 @@
                 class="size-8 mx-auto mb-2 animate-spin opacity-50"
               ></i>
               <p class="text-sm">Loading conversations...</p>
+=======
+    <main class="ml-64 pt-16 h-screen bg-gray-50" id="dashboardContent">
+      <div class="flex h-[calc(100vh-64px)]">
+        <!-- Conversations Sidebar -->
+        <div
+          class="w-80 bg-white border-r border-gray-200 flex flex-col overflow-hidden"
+        >
+          <div class="p-4 border-b border-gray-200 bg-white">
+            <div class="relative">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              <input
+                type="text"
+                placeholder="Search conversations..."
+                class="w-full pl-10 pr-4 py-2.5 bg-gray-100 rounded-lg border-0 focus:ring-2 focus:ring-red-500 focus:bg-white outline-none text-sm transition-all"
+                id="searchInput"
+              />
+            </div>
+          </div>
+          <div
+            class="flex-1 overflow-y-auto"
+            id="conversationsList"
+          >
+            <!-- Skeleton loading -->
+            <div class="p-4">
+              <div class="flex items-center gap-3 p-3 animate-pulse">
+                <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
+                <div class="flex-1">
+                  <div class="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+                  <div class="h-3 bg-gray-100 rounded w-32"></div>
+                </div>
+              </div>
+>>>>>>> 4a2d98e84ac74c58d418328fd399f3b8c0f065fb
             </div>
           </div>
         </div>
 
+<<<<<<< HEAD
         <!-- Message Panel -->
         <div class="flex-1 flex flex-col">
           <!-- Empty State -->
@@ -218,6 +254,55 @@
                   <i data-lucide="send" class="size-5"></i>
                 </button>
               </div>
+=======
+        <!-- Chat Area -->
+        <div
+          class="flex-1 flex flex-col bg-gray-50"
+        >
+          <!-- Chat Header -->
+          <div class="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-3">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="font-semibold text-gray-900" id="chatTitle">
+                    Select a conversation
+                  </h3>
+                  <span id="chatHeaderBadge"></span>
+                </div>
+                <p class="text-sm text-gray-500" id="chatSubtitle"></p>
+              </div>
+            </div>
+            <div id="chatContext"></div>
+          </div>
+
+          <!-- Messages Container -->
+          <div
+            class="flex-1 overflow-y-auto p-6 bg-gray-50"
+            id="messagesContainer"
+          >
+            <!-- Empty state will be injected by JS -->
+          </div>
+
+          <!-- Message Input -->
+          <div class="bg-white border-t border-gray-200 p-4 shadow-sm">
+            <div class="flex gap-3 items-end">
+              <textarea
+                id="messageInput"
+                placeholder="Select a conversation to send messages..."
+                class="flex-1 px-4 py-3 border border-gray-200 rounded-xl resize-none focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none min-h-[48px] max-h-[120px] text-sm transition-all disabled:bg-gray-50 disabled:text-gray-400"
+                rows="1"
+                disabled
+              ></textarea>
+              <button
+                id="sendMessageBtn"
+                class="px-5 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 font-medium flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed min-w-[48px]"
+                disabled
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+              </button>
+>>>>>>> 4a2d98e84ac74c58d418328fd399f3b8c0f065fb
             </div>
           </div>
         </div>
@@ -227,6 +312,7 @@
     <script type="module" src="/src/scripts/main.js"></script>
     <script type="module">
       import { initUserLoader } from "/src/scripts/user-loader.js";
+<<<<<<< HEAD
       import { initChat } from "/src/scripts/components/chat.js";
 
       initUserLoader();
@@ -244,6 +330,14 @@
       document.addEventListener("DOMContentLoaded", () => {
         initChat("admin", targetUserId, targetUserName, targetUserRole);
       });
+=======
+      import { initNotificationDropdown } from "/src/scripts/components/notification-dropdown.js";
+      import { initChatModule } from "/src/scripts/components/chat.js";
+      
+      initUserLoader();
+      initNotificationDropdown("admin");
+      initChatModule();
+>>>>>>> 4a2d98e84ac74c58d418328fd399f3b8c0f065fb
     </script>
   </body>
 </html>
