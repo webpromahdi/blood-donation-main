@@ -174,7 +174,6 @@
       <!-- Dashboard Content (Shown when approved) -->
       <div
         id="dashboardContent"
-<<<<<<< HEAD
         class="flex h-[calc(100vh-64px)] overflow-hidden"
       >
         <!-- Conversation List Panel -->
@@ -294,79 +293,6 @@
                   <i data-lucide="send" class="size-5"></i>
                 </button>
               </div>
-=======
-        class="flex h-[calc(100vh-64px)]"
-      >
-        <!-- Conversations List -->
-        <div class="w-80 border-r border-gray-200 bg-white overflow-y-auto flex flex-col">
-          <div class="p-4 border-b border-gray-200 bg-white">
-            <div class="relative">
-              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-              </svg>
-              <input
-                type="text"
-                id="searchInput"
-                placeholder="Search users..."
-                class="w-full pl-10 pr-4 py-2.5 bg-gray-100 rounded-lg border-0 focus:ring-2 focus:ring-red-500 focus:bg-white outline-none text-sm transition-all"
-              />
-            </div>
-          </div>
-          <div id="conversationsList" class="flex-1 overflow-y-auto">
-            <!-- Skeleton loading -->
-            <div class="p-4">
-              <div class="flex items-center gap-3 p-3 animate-pulse">
-                <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
-                <div class="flex-1">
-                  <div class="h-4 bg-gray-200 rounded w-24 mb-2"></div>
-                  <div class="h-3 bg-gray-100 rounded w-32"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Chat Area -->
-        <div class="flex-1 flex flex-col bg-gray-50">
-          <!-- Chat Header -->
-          <div class="h-16 bg-white border-b border-gray-200 flex items-center px-6 shadow-sm">
-            <div class="flex items-center gap-3">
-              <div>
-                <div class="flex items-center gap-2">
-                  <h2 id="chatTitle" class="font-semibold text-gray-900">Select a conversation</h2>
-                  <span id="chatHeaderBadge"></span>
-                </div>
-                <p id="chatSubtitle" class="text-sm text-gray-500"></p>
-              </div>
-            </div>
-            <div id="chatContext" class="ml-auto"></div>
-          </div>
-
-          <!-- Messages Container -->
-          <div id="messagesContainer" class="flex-1 overflow-y-auto p-6 bg-gray-50">
-            <!-- Empty state will be injected by JS -->
-          </div>
-
-          <!-- Message Input -->
-          <div class="bg-white border-t border-gray-200 p-4 shadow-sm">
-            <div class="flex gap-3 items-end">
-              <textarea 
-                id="messageInput" 
-                class="flex-1 px-4 py-3 border border-gray-200 rounded-xl resize-none focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none min-h-[48px] max-h-[120px] text-sm transition-all disabled:bg-gray-50 disabled:text-gray-400"
-                placeholder="Select a conversation to send messages..."
-                rows="1"
-                disabled
-              ></textarea>
-              <button 
-                id="sendMessageBtn"
-                class="px-5 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-medium flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed min-w-[48px]"
-                disabled
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                </svg>
-              </button>
->>>>>>> 4a2d98e84ac74c58d418328fd399f3b8c0f065fb
             </div>
           </div>
         </div>
@@ -377,13 +303,8 @@
     <script type="module">
       import { initUserLoader } from "/src/scripts/user-loader.js";
       import { initNotificationDropdown } from "/src/scripts/components/notification-dropdown.js";
-<<<<<<< HEAD
       import { initChat } from "/src/scripts/components/chat.js";
 
-=======
-      import { initChatModule } from "/src/scripts/components/chat.js";
-      
->>>>>>> 4a2d98e84ac74c58d418328fd399f3b8c0f065fb
       initUserLoader();
       initNotificationDropdown("donor");
 
@@ -430,17 +351,10 @@
 
           if (dashboardContent) dashboardContent.classList.remove("hidden");
           if (pendingMessage) pendingMessage.classList.add("hidden");
-<<<<<<< HEAD
 
           // Initialize chat after account is verified
           initChat("donor", targetUserId, targetUserName);
 
-=======
-          
-          // Initialize chat
-          initChatModule();
-          
->>>>>>> 4a2d98e84ac74c58d418328fd399f3b8c0f065fb
           return true;
         } catch (error) {
           console.error("Failed to check account status:", error);
