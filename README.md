@@ -590,23 +590,23 @@ For scheduled notifications:
 
 ### Landing Page
 
-_[Add screenshot of landing page]_
+![Landing Page](screenshots/landing-page.png)
 
 ### Donor Dashboard
 
-_[Add screenshot of donor dashboard]_
+![Donor Dashboard](screenshots/donor-dashboard.png)
 
 ### Blood Request Form
 
-_[Add screenshot of request form]_
+![Blood Request Form](screenshots/blood-request.png)
 
 ### Admin Dashboard
 
-_[Add screenshot of admin dashboard]_
+![Admin Dashboard](screenshots/admin-dashboard.png)
 
 ### Chat Interface
 
-_[Add screenshot of chat]_
+![Chat Interface](screenshots/chat-interface.png)
 
 ---
 
