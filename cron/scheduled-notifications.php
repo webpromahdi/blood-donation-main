@@ -10,6 +10,12 @@
  * - S8: Request expired (required date passed)
  */
 
+// Security: Only allow CLI execution
+if (php_sapi_name() !== 'cli') {
+    http_response_code(403);
+    die('This script can only be run from command line');
+}
+
 // Set error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 0);

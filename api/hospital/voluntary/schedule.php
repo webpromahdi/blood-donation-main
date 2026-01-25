@@ -87,18 +87,28 @@ try {
         exit;
     }
 
-    if ($voluntary['hospital_id']) {
+    // Check if this hospital can schedule this donation
+    // Either: donation is assigned to this hospital OR donation has no hospital assigned
+    if ($voluntary['hospital_id'] && $voluntary['hospital_id'] != $hospital['id']) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'This voluntary donation is already scheduled with another hospital']);
+        echo json_encode(['success' => false, 'message' => 'This voluntary donation is assigned to another hospital']);
         exit;
     }
 
-    // Update voluntary donation with hospital and schedule
+    // Check if already scheduled (has scheduled_date set)
+    if ($voluntary['status'] === 'scheduled') {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'This voluntary donation is already scheduled']);
+        exit;
+    }
+
+    // Update voluntary donation with hospital, schedule, and status
     $stmt = $conn->prepare("
         UPDATE voluntary_donations 
         SET hospital_id = ?, 
             scheduled_date = ?,
             scheduled_time = ?,
+            status = 'scheduled',
             updated_at = NOW()
         WHERE id = ?
     ");

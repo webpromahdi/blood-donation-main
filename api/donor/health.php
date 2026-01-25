@@ -98,9 +98,9 @@ try {
         }
     }
 
-    // Check weight (use health weight if available, otherwise donor weight)
-    $weight = $healthInfo && $healthInfo['height'] ? $healthInfo['height'] : $donor['weight'];
-    if ($donor['weight'] && $donor['weight'] < 50) {
+    // Check weight (use donor weight from profile)
+    $weight = $donor['weight'];
+    if ($weight && $weight < 50) {
         $isEligible = false;
         $eligibilityReasons[] = 'Minimum weight requirement is 50 kg';
     }

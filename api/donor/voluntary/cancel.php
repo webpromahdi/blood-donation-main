@@ -58,8 +58,10 @@ try {
 
     // Verify ownership and cancellable status
     $stmt = $conn->prepare("
-        SELECT id, status FROM voluntary_donations 
-        WHERE id = ? AND donor_id = ?
+        SELECT v.id, v.status, v.hospital_id, h.user_id as hospital_user_id
+        FROM voluntary_donations v
+        LEFT JOIN hospitals h ON v.hospital_id = h.id
+        WHERE v.id = ? AND v.donor_id = ?
     ");
     $stmt->execute([$input['voluntary_id'], $donor['id']]);
     $voluntary = $stmt->fetch();
@@ -70,9 +72,10 @@ try {
         exit;
     }
 
-    if (!in_array($voluntary['status'], ['pending', 'approved'])) {
+    // Allow cancelling pending, approved, or scheduled status
+    if (!in_array($voluntary['status'], ['pending', 'approved', 'scheduled'])) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Only pending or approved requests can be cancelled']);
+        echo json_encode(['success' => false, 'message' => 'Only pending, approved, or scheduled requests can be cancelled']);
         exit;
     }
 
@@ -83,6 +86,25 @@ try {
         WHERE id = ?
     ");
     $stmt->execute([$input['voluntary_id']]);
+    
+    // If there was an appointment scheduled, cancel it
+    if ($voluntary['status'] === 'scheduled' && $voluntary['hospital_id']) {
+        $stmt = $conn->prepare("
+            UPDATE appointments 
+            SET status = 'cancelled', updated_at = NOW()
+            WHERE donor_id = ? AND hospital_id = ? AND status = 'scheduled'
+        ");
+        $stmt->execute([$donor['id'], $voluntary['hospital_id']]);
+        
+        // Notify hospital about cancellation
+        if ($voluntary['hospital_user_id']) {
+            $stmt = $conn->prepare("
+                INSERT INTO notifications (user_id, title, message, type)
+                VALUES (?, 'Voluntary Donation Cancelled', 'A donor has cancelled their scheduled voluntary donation.', 'voluntary')
+            ");
+            $stmt->execute([$voluntary['hospital_user_id']]);
+        }
+    }
 
     echo json_encode([
         'success' => true,

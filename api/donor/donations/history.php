@@ -30,7 +30,7 @@ $user = requireAuth(['donor']);
 // Require approved status to view donation history
 requireApprovedStatus($_SESSION['user_id'], 'donor');
 
-$donorId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
 $database = new Database();
 $conn = $database->getConnection();
@@ -42,10 +42,25 @@ if (!$conn) {
 }
 
 try {
-    $sql = "SELECT d.*, r.request_code, r.patient_name, r.blood_type, r.quantity, 
-                   r.hospital_name, r.city, r.urgency
+    // First get the donor record ID from users.id
+    $stmt = $conn->prepare("SELECT id FROM donors WHERE user_id = ?");
+    $stmt->execute([$userId]);
+    $donorRecord = $stmt->fetch();
+    
+    if (!$donorRecord) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Donor profile not found']);
+        exit;
+    }
+    
+    $donorId = $donorRecord['id'];
+    
+    // Query uses donor_id which references donors.id, not users.id
+    $sql = "SELECT d.*, r.request_code, r.patient_name, r.quantity, 
+                   r.hospital_name, r.city, r.urgency, bg.blood_type
             FROM donations d
             JOIN blood_requests r ON d.request_id = r.id
+            LEFT JOIN blood_groups bg ON r.blood_group_id = bg.id
             WHERE d.donor_id = ?
             ORDER BY d.created_at DESC";
 

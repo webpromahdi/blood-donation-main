@@ -13,7 +13,7 @@
  * - report_type: donor | hospital | request | donation | monthly (for downloads)
  */
 
-header('Content-Type: application/json');
+// Don't set Content-Type header here - let each action set its own
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    header('Content-Type: application/json');
     http_response_code(405);
     echo json_encode(['success' => false, 'message' => 'Method not allowed']);
     exit;
@@ -39,6 +40,7 @@ $database = new Database();
 $conn = $database->getConnection();
 
 if (!$conn) {
+    header('Content-Type: application/json');
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Database connection failed']);
     exit;
@@ -56,37 +58,47 @@ $reportType = $_GET['report_type'] ?? 'donor';
 try {
     switch ($action) {
         case 'chart_data':
+            header('Content-Type: application/json');
             echo json_encode(getChartData($conn, $startDate, $endDate));
             break;
         case 'monthly_registrations':
+            header('Content-Type: application/json');
             echo json_encode(getMonthlyRegistrations($conn, $startDate, $endDate));
             break;
         case 'donors':
+            header('Content-Type: application/json');
             echo json_encode(getDonorReport($conn, $startDate, $endDate, $bloodGroup, $status));
             break;
         case 'hospitals':
+            header('Content-Type: application/json');
             echo json_encode(getHospitalReport($conn, $startDate, $endDate, $status));
             break;
         case 'requests':
+            header('Content-Type: application/json');
             echo json_encode(getRequestsReport($conn, $startDate, $endDate, $bloodGroup, $status));
             break;
         case 'donations':
+            header('Content-Type: application/json');
             echo json_encode(getDonationsReport($conn, $startDate, $endDate, $bloodGroup, $status));
             break;
         case 'monthly_summary':
+            header('Content-Type: application/json');
             echo json_encode(getMonthlySummary($conn, $startDate, $endDate));
             break;
         case 'download':
             handleDownload($conn, $reportType, $format, $startDate, $endDate, $bloodGroup, $status);
             break;
         case 'custom':
+            header('Content-Type: application/json');
             echo json_encode(getCustomReport($conn, $reportType, $startDate, $endDate, $bloodGroup, $status));
             break;
         default:
+            header('Content-Type: application/json');
             echo json_encode(['success' => false, 'message' => 'Invalid action']);
     }
 } catch (PDOException $e) {
     error_log("Reports API Error: " . $e->getMessage());
+    header('Content-Type: application/json');
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Failed to generate report']);
 }
@@ -269,14 +281,16 @@ function getChartData($conn, $startDate, $endDate) {
     
     $result['monthly_trends'] = array_values($monthlyData);
     
-    // Blood type distribution
-    $stmt = $conn->query("
+    // Blood type distribution - use normalized schema with donors and blood_groups tables
+    $stmt = $conn->query(\"
         SELECT 
-            blood_group,
+            bg.blood_type,
             COUNT(*) as count
-        FROM users 
-        WHERE role = 'donor' AND blood_group IS NOT NULL AND blood_group != ''
-        GROUP BY blood_group
+        FROM donors d
+        JOIN blood_groups bg ON d.blood_group_id = bg.id
+        JOIN users u ON d.user_id = u.id
+        WHERE u.status = 'approved'
+        GROUP BY bg.blood_type
         ORDER BY count DESC
     ");
     $bloodTypes = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -290,9 +304,9 @@ function getChartData($conn, $startDate, $endDate) {
     
     foreach ($bloodTypes as $bt) {
         $result['blood_type_distribution'][] = [
-            'name' => $bt['blood_group'],
+            'name' => $bt['blood_type'],
             'value' => (int)$bt['count'],
-            'color' => $colors[$bt['blood_group']] ?? '#6B7280'
+            'color' => $colors[$bt['blood_type']] ?? '#6B7280'
         ];
     }
     
@@ -334,7 +348,7 @@ function getDonorReport($conn, $startDate, $endDate, $bloodGroup = null, $status
     $where = "WHERE u.role = 'donor' AND u.created_at BETWEEN :start_date AND :end_date";
     
     if ($bloodGroup) {
-        $where .= " AND u.blood_group = :blood_group";
+        $where .= " AND bg.blood_type = :blood_group";
         $params['blood_group'] = $bloodGroup;
     }
     
@@ -349,14 +363,15 @@ function getDonorReport($conn, $startDate, $endDate, $bloodGroup = null, $status
             u.name,
             u.email,
             u.phone,
-            u.blood_group,
-            u.city,
+            bg.blood_type as blood_group,
+            dn.city,
             u.status,
             u.created_at,
-            COUNT(d.id) as total_donations,
-            SUM(CASE WHEN d.status = 'completed' THEN 1 ELSE 0 END) as completed_donations
+            dn.total_donations,
+            (SELECT COUNT(*) FROM donations d WHERE d.donor_id = dn.id AND d.status = 'completed') as completed_donations
         FROM users u
-        LEFT JOIN donations d ON u.id = d.donor_id
+        LEFT JOIN donors dn ON u.id = dn.user_id
+        LEFT JOIN blood_groups bg ON dn.blood_group_id = bg.id
         $where
         GROUP BY u.id
         ORDER BY u.created_at DESC
@@ -400,14 +415,15 @@ function getHospitalReport($conn, $startDate, $endDate, $status = null) {
             u.name,
             u.email,
             u.phone,
-            u.city,
-            u.hospital_address,
-            u.registration_number,
+            h.city,
+            h.address as hospital_address,
+            h.registration_number,
             u.status,
             u.created_at,
             COUNT(br.id) as total_requests,
             SUM(CASE WHEN br.status = 'completed' THEN 1 ELSE 0 END) as fulfilled_requests
         FROM users u
+        LEFT JOIN hospitals h ON u.id = h.user_id
         LEFT JOIN blood_requests br ON u.id = br.requester_id AND br.requester_type = 'hospital'
         $where
         GROUP BY u.id
@@ -443,7 +459,7 @@ function getRequestsReport($conn, $startDate, $endDate, $bloodGroup = null, $sta
     $where = "WHERE br.created_at BETWEEN :start_date AND :end_date";
     
     if ($bloodGroup) {
-        $where .= " AND br.blood_type = :blood_group";
+        $where .= " AND bg.blood_type = :blood_group";
         $params['blood_group'] = $bloodGroup;
     }
     
@@ -457,7 +473,7 @@ function getRequestsReport($conn, $startDate, $endDate, $bloodGroup = null, $sta
             br.id,
             br.request_code,
             br.patient_name,
-            br.blood_type,
+            bg.blood_type,
             br.quantity,
             br.urgency,
             br.status,
@@ -467,6 +483,7 @@ function getRequestsReport($conn, $startDate, $endDate, $bloodGroup = null, $sta
             br.created_at,
             u.name as requester_name
         FROM blood_requests br
+        LEFT JOIN blood_groups bg ON br.blood_group_id = bg.id
         LEFT JOIN users u ON br.requester_id = u.id
         $where
         ORDER BY br.created_at DESC
@@ -515,7 +532,7 @@ function getDonationsReport($conn, $startDate, $endDate, $bloodGroup = null, $st
     $where = "WHERE d.created_at BETWEEN :start_date AND :end_date";
     
     if ($bloodGroup) {
-        $where .= " AND br.blood_type = :blood_group";
+        $where .= " AND bg.blood_type = :blood_group";
         $params['blood_group'] = $bloodGroup;
     }
     
@@ -530,16 +547,19 @@ function getDonationsReport($conn, $startDate, $endDate, $bloodGroup = null, $st
             d.status,
             d.created_at,
             d.completed_at,
-            donor.name as donor_name,
-            donor.blood_group as donor_blood_type,
-            donor.city as donor_city,
+            u.name as donor_name,
+            bg.blood_type as donor_blood_type,
+            dn.city as donor_city,
             br.request_code,
-            br.blood_type as requested_blood_type,
+            bg_req.blood_type as requested_blood_type,
             br.hospital_name,
             br.urgency
         FROM donations d
-        JOIN users donor ON d.donor_id = donor.id
+        JOIN donors dn ON d.donor_id = dn.id
+        JOIN users u ON dn.user_id = u.id
+        JOIN blood_groups bg ON dn.blood_group_id = bg.id
         JOIN blood_requests br ON d.request_id = br.id
+        JOIN blood_groups bg_req ON br.blood_group_id = bg_req.id
         $where
         ORDER BY d.created_at DESC
     ");
@@ -600,10 +620,11 @@ function getMonthlySummary($conn, $startDate, $endDate) {
     
     // Blood type demand
     $stmt = $conn->prepare("
-        SELECT blood_type, COUNT(*) as count 
-        FROM blood_requests 
-        WHERE DATE_FORMAT(created_at, '%Y-%m') = :month
-        GROUP BY blood_type
+        SELECT bg.blood_type, COUNT(*) as count 
+        FROM blood_requests br
+        JOIN blood_groups bg ON br.blood_group_id = bg.id
+        WHERE DATE_FORMAT(br.created_at, '%Y-%m') = :month
+        GROUP BY bg.blood_type
         ORDER BY count DESC
     ");
     $stmt->execute(['month' => $currentMonth]);
@@ -688,6 +709,7 @@ function handleDownload($conn, $reportType, $format, $startDate, $endDate, $bloo
             $filename = 'donations_report';
             break;
         default:
+            header('Content-Type: application/json');
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Invalid report type']);
             return;
@@ -700,6 +722,7 @@ function handleDownload($conn, $reportType, $format, $startDate, $endDate, $bloo
     } else {
         // For PDF, return JSON data and let frontend handle rendering
         // Since we're not using external PHP PDF libraries
+        header('Content-Type: application/json');
         echo json_encode([
             'success' => true,
             'format' => 'pdf_data',

@@ -38,7 +38,22 @@ if (!$conn) {
 }
 
 try {
-    // Build query with optional filters - ONLY approved voluntary donations
+    // Get current hospital ID
+    $stmt = $conn->prepare("SELECT id FROM hospitals WHERE user_id = ?");
+    $stmt->execute([$_SESSION['user_id']]);
+    $hospital = $stmt->fetch();
+    
+    if (!$hospital) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Hospital profile not found']);
+        exit;
+    }
+    
+    $hospitalId = $hospital['id'];
+    
+    // Build query with optional filters
+    // Show: approved donations assigned to THIS hospital OR with no hospital (open for any)
+    // Also show scheduled donations for this hospital
     $bloodGroupFilter = isset($_GET['blood_group']) ? $_GET['blood_group'] : null;
     $cityFilter = isset($_GET['city']) ? $_GET['city'] : null;
     $dateFilter = isset($_GET['date']) ? $_GET['date'] : null;
@@ -53,6 +68,8 @@ try {
             v.status,
             v.approved_at,
             v.created_at,
+            v.scheduled_date,
+            v.scheduled_time,
             bg.blood_type,
             d.id as donor_id,
             d.age as donor_age,
@@ -66,11 +83,12 @@ try {
         JOIN donors d ON v.donor_id = d.id
         JOIN users u_donor ON d.user_id = u_donor.id
         JOIN blood_groups bg ON v.blood_group_id = bg.id
-        WHERE v.status = 'approved'
+        WHERE v.status IN ('approved', 'scheduled')
         AND v.availability_date >= CURDATE()
+        AND (v.hospital_id = ? OR v.hospital_id IS NULL)
     ";
 
-    $params = [];
+    $params = [$hospitalId];
 
     if ($bloodGroupFilter) {
         $sql .= " AND bg.blood_type = ?";

@@ -47,7 +47,7 @@
             >Select Your Role</label
           >
           <div
-            class="grid grid-cols-4 gap-2 p-1 bg-gray-100 rounded-lg"
+            class="grid grid-cols-3 gap-2 p-1 bg-gray-100 rounded-lg"
             id="roleSelector"
           >
             <button
@@ -58,15 +58,6 @@
             >
               <i data-lucide="heart" class="size-5 mx-auto mb-1"></i>
               <div class="text-xs">Donor</div>
-            </button>
-            <button
-              type="button"
-              onclick="selectRole('admin')"
-              data-role="admin"
-              class="role-btn px-3 py-2 rounded-md transition-all text-gray-600 hover:text-gray-900"
-            >
-              <i data-lucide="shield" class="size-5 mx-auto mb-1"></i>
-              <div class="text-xs">Admin</div>
             </button>
             <button
               type="button"
@@ -307,6 +298,34 @@
                 />
               </div>
               <p class="text-red-500 text-sm mt-1 hidden" id="weightError"></p>
+            </div>
+
+            <!-- Gender -->
+            <div>
+              <label for="gender" class="text-gray-700 mb-2 block font-medium"
+                >Gender</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="user"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400 pointer-events-none z-10"
+                ></i>
+                <select
+                  id="gender"
+                  name="gender"
+                  class="w-full h-12 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all appearance-none bg-white cursor-pointer"
+                >
+                  <option value="">Select your gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+                <i
+                  data-lucide="chevron-down"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-gray-400 pointer-events-none"
+                ></i>
+              </div>
+              <p class="text-red-500 text-sm mt-1 hidden" id="genderError"></p>
             </div>
 
             <!-- City -->
@@ -630,11 +649,6 @@
           icon: "heart",
           path: "/src/pages/donor/dashboard.html",
         },
-        admin: {
-          title: "Admin",
-          icon: "shield",
-          path: "/src/pages/admin/dashboard.html",
-        },
         hospital: {
           title: "Hospital",
           icon: "building-2",
@@ -647,7 +661,7 @@
         },
       };
 
-      // Check URL params for role
+      // Check URL params for role (only allow valid public roles)
       const urlParams = new URLSearchParams(window.location.search);
       const roleParam = urlParams.get("role");
       if (roleParam && roleConfig[roleParam]) {
@@ -777,6 +791,7 @@
           "bloodGroup",
           "age",
           "weight",
+          "gender",
           "address",
           "registrationNumber",
           "hospitalAddress",
@@ -874,6 +889,7 @@
           const bloodGroup = document.getElementById("bloodGroup").value;
           const age = document.getElementById("age").value;
           const weight = document.getElementById("weight").value;
+          const gender = document.getElementById("gender").value;
           const address = document.getElementById("address").value.trim();
 
           if (!bloodGroup) {
@@ -886,6 +902,10 @@
           }
           if (!weight) {
             showError("weight", "Weight is required");
+            isValid = false;
+          }
+          if (!gender) {
+            showError("gender", "Gender is required");
             isValid = false;
           }
           if (!address) {
@@ -971,6 +991,7 @@
               formData.bloodGroup = document.getElementById("bloodGroup").value;
               formData.age = document.getElementById("age").value;
               formData.weight = document.getElementById("weight").value;
+              formData.gender = document.getElementById("gender").value;
               formData.city = document.getElementById("city").value;
               formData.address = document.getElementById("address").value;
             } else if (selectedRole === "hospital") {

@@ -118,7 +118,7 @@ try {
         ORDER BY completed_at ASC 
         LIMIT 1 OFFSET ?
     ");
-    $stmt->execute([$donorId, $requiredDonations - 1]);
+    $stmt->execute([$donorRecordId, $requiredDonations - 1]);
     $milestoneRow = $stmt->fetch();
     $milestoneDate = $milestoneRow ? date('F j, Y', strtotime($milestoneRow['completed_at'])) : date('F j, Y');
 

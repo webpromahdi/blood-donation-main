@@ -741,15 +741,18 @@
         function getActionButtons(hospital) {
           // Use rawId directly (the actual database ID)
           const numericId = hospital.rawId;
-          const chatBtn = `<button class="chat-btn px-3 py-1 text-xs border border-blue-500 text-blue-600 rounded-lg hover:bg-blue-50" data-id="${hospital.id}" data-name="${hospital.name}" data-numeric-id="${numericId}">
+          // Only show chat button for approved hospitals
+          const chatBtn =
+            hospital.status === "Approved"
+              ? `<button class="chat-btn px-3 py-1 text-xs border border-blue-500 text-blue-600 rounded-lg hover:bg-blue-50" data-id="${hospital.id}" data-name="${hospital.name}" data-numeric-id="${numericId}">
             <i data-lucide="message-square" class="size-3 inline mr-1"></i>Chat
-          </button>`;
+          </button>`
+              : "";
 
           if (hospital.status === "Pending") {
             return `
               <div class="flex gap-2">
                 <button class="view-btn px-3 py-1 text-xs border border-gray-300 rounded-lg hover:bg-gray-50" data-id="${hospital.id}">View</button>
-                ${chatBtn}
                 <button class="approve-btn px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700" data-id="${hospital.id}">Approve</button>
                 <button class="reject-btn px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700" data-id="${hospital.id}">Reject</button>
               </div>
@@ -939,12 +942,20 @@
           // Show/hide action buttons
           const approveBtn = document.getElementById("approveHospitalBtn");
           const rejectBtn = document.getElementById("rejectHospitalBtn");
+          const modalChatBtn = document.getElementById("modalChatBtn");
           if (hospital.status === "Pending") {
             if (approveBtn) approveBtn.classList.remove("hidden");
             if (rejectBtn) rejectBtn.classList.remove("hidden");
           } else {
             if (approveBtn) approveBtn.classList.add("hidden");
             if (rejectBtn) rejectBtn.classList.add("hidden");
+          }
+
+          // Only show chat button for approved hospitals
+          if (hospital.status === "Approved") {
+            if (modalChatBtn) modalChatBtn.classList.remove("hidden");
+          } else {
+            if (modalChatBtn) modalChatBtn.classList.add("hidden");
           }
 
           // Show modal

@@ -6,6 +6,11 @@
  * Normalized Schema: Creates user + role-specific record (donors/hospitals/seekers)
  */
 
+// Enable error reporting for debugging (disable in production)
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // Don't display errors directly - log them instead
+ini_set('log_errors', 1);
+
 // CORS headers for frontend
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -45,6 +50,13 @@ foreach ($required as $field) {
     }
 }
 
+// For donors, name is required
+if ($input['role'] === 'donor' && empty($input['name'])) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Name is required for donors']);
+    exit;
+}
+
 $email = filter_var(trim($input['email']), FILTER_SANITIZE_EMAIL);
 $password = $input['password'];
 $role = $input['role'];
@@ -58,8 +70,8 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-// Validate role
-$validRoles = ['admin', 'donor', 'hospital', 'seeker'];
+// Validate role - Admin registration is not allowed through public API
+$validRoles = ['donor', 'hospital', 'seeker'];
 if (!in_array($role, $validRoles)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Invalid role']);
@@ -110,28 +122,41 @@ try {
 
     // Insert into role-specific table
     if ($role === 'donor') {
-        // Get blood group ID
-        $bloodGroup = isset($input['bloodGroup']) ? $input['bloodGroup'] : null;
+        // Get blood group ID - blood_group_id is NOT NULL, so we must find a valid ID
+        $bloodGroup = isset($input['bloodGroup']) && !empty($input['bloodGroup']) ? trim($input['bloodGroup']) : 'O+';
         $bloodGroupId = null;
         
-        if ($bloodGroup) {
-            $stmt = $conn->prepare('SELECT id FROM blood_groups WHERE blood_type = ?');
-            $stmt->execute([$bloodGroup]);
-            $bgResult = $stmt->fetch();
-            $bloodGroupId = $bgResult ? $bgResult['id'] : null;
-        }
+        // First try to get the specified blood group
+        $stmt = $conn->prepare('SELECT id FROM blood_groups WHERE blood_type = ?');
+        $stmt->execute([$bloodGroup]);
+        $bgResult = $stmt->fetch();
         
-        // If no valid blood group, use a default (O+)
-        if (!$bloodGroupId) {
+        if ($bgResult) {
+            $bloodGroupId = $bgResult['id'];
+        } else {
+            // Fall back to O+ as default
             $stmt = $conn->prepare('SELECT id FROM blood_groups WHERE blood_type = ?');
             $stmt->execute(['O+']);
             $bgResult = $stmt->fetch();
-            $bloodGroupId = $bgResult['id'];
+            if ($bgResult) {
+                $bloodGroupId = $bgResult['id'];
+            } else {
+                // Last resort: get the first available blood group
+                $stmt = $conn->prepare('SELECT id FROM blood_groups LIMIT 1');
+                $stmt->execute();
+                $bgResult = $stmt->fetch();
+                if ($bgResult) {
+                    $bloodGroupId = $bgResult['id'];
+                } else {
+                    // No blood groups exist in database - cannot proceed
+                    throw new Exception('No blood groups found in database. Please ensure blood_groups table is populated.');
+                }
+            }
         }
         
-        $age = isset($input['age']) ? (int) $input['age'] : null;
-        $weight = isset($input['weight']) ? (float) $input['weight'] : null;
-        $gender = isset($input['gender']) ? $input['gender'] : null;
+        $age = isset($input['age']) && !empty($input['age']) ? (int) $input['age'] : null;
+        $weight = isset($input['weight']) && !empty($input['weight']) ? (float) $input['weight'] : null;
+        $gender = isset($input['gender']) && !empty($input['gender']) ? trim($input['gender']) : null;
         $city = isset($input['city']) ? trim($input['city']) : null;
         $address = isset($input['address']) ? trim($input['address']) : null;
 
@@ -204,10 +229,24 @@ try {
     ]);
 
 } catch (PDOException $e) {
-    if ($conn->inTransaction()) {
+    if ($conn && $conn->inTransaction()) {
+        $conn->rollBack();
+    }
+    error_log("Registration PDO Error: " . $e->getMessage() . " | Code: " . $e->getCode());
+    
+    // Check for duplicate entry error (MySQL error code 1062)
+    if ($e->getCode() == 23000 || strpos($e->getMessage(), 'Duplicate entry') !== false) {
+        http_response_code(409);
+        echo json_encode(['success' => false, 'message' => 'Email is already registered']);
+    } else {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Registration failed. Please try again. Error: ' . $e->getMessage()]);
+    }
+} catch (Exception $e) {
+    if ($conn && $conn->inTransaction()) {
         $conn->rollBack();
     }
     error_log("Registration Error: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Registration failed. Please try again.']);
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }

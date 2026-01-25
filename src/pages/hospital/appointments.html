@@ -465,43 +465,71 @@
           }
 
           // Transform appointments data to match expected format
-          // API now returns both request-based and voluntary donations
-          appointments = (data.appointments || []).map((apt) => ({
-            id:
-              apt.id ||
-              `APT${String(apt.donation_id || apt.voluntary_id).padStart(3, "0")}`,
-            donation_id: apt.donation_id,
-            voluntary_id: apt.voluntary_id,
-            donor: apt.donor?.name || apt.donor_name || "Unknown Donor",
-            bloodType: apt.blood_type || apt.donor?.blood_group || "N/A",
-            date: formatDate(
-              apt.date || apt.appointment_date || apt.created_at,
-            ),
-            time: apt.time || apt.appointment_time || "10:00 AM",
-            type:
-              apt.type ||
-              (apt.urgency === "emergency" ? "Emergency" : "Request"),
-            status: apt.status || capitalizeStatus(apt.donation_status),
-            age: apt.donor?.age || apt.donor_age || "N/A",
-            gender: apt.donor?.gender || apt.donor_gender || "N/A",
-            weight: apt.donor?.weight || apt.donor_weight || "N/A",
-            email: apt.donor?.email || apt.donor_email || "N/A",
-            phone: apt.donor?.phone || apt.donor_phone || "N/A",
-            address: apt.donor?.address || apt.donor_address || "N/A",
-            city: apt.donor?.city || apt.donor_city || "N/A",
-            healthStatus: "Healthy",
-            medicalConditions: "None reported",
-            hemoglobin: "N/A",
-            bloodPressure: "N/A",
-            lastDonation: apt.last_donation_date || "N/A",
-            totalDonations: apt.total_donations || 0,
-            registeredAt: apt.donor_registered || "N/A",
-            request_code: apt.request_code,
-            patient_name: apt.patient_name,
-            quantity: apt.quantity || 1,
-            notes: apt.notes,
-            preferred_time: apt.preferred_time,
-          }));
+          // API now returns both request-based and voluntary donations with health data
+          appointments = (data.appointments || []).map((apt) => {
+            // Determine health status based on medical conditions
+            const hasConditions =
+              apt.donor?.medical_conditions &&
+              apt.donor.medical_conditions !== "None reported" &&
+              apt.donor.medical_conditions !== "";
+            const healthStatus = hasConditions ? "Review Required" : "Healthy";
+
+            return {
+              id:
+                apt.id ||
+                `APT${String(apt.donation_id || apt.voluntary_id).padStart(3, "0")}`,
+              donation_id: apt.donation_id,
+              voluntary_id: apt.voluntary_id,
+              // Donor identifiers for chat
+              donor_id: apt.donor?.id || null,
+              donor_user_id: apt.donor?.user_id || null,
+              donor: apt.donor?.name || apt.donor_name || "Unknown Donor",
+              bloodType: apt.blood_type || apt.donor?.blood_group || "N/A",
+              date: formatDate(
+                apt.date || apt.appointment_date || apt.created_at,
+              ),
+              time: apt.time || apt.appointment_time || "10:00 AM",
+              type:
+                apt.type ||
+                (apt.urgency === "emergency" ? "Emergency" : "Request"),
+              status: apt.status || capitalizeStatus(apt.donation_status),
+              // Personal info
+              age: apt.donor?.age || apt.donor_age || "N/A",
+              gender: apt.donor?.gender || apt.donor_gender || "Not provided",
+              weight: apt.donor?.weight || apt.donor_weight || "Not provided",
+              height: apt.donor?.height || "Not provided",
+              email: apt.donor?.email || apt.donor_email || "N/A",
+              phone: apt.donor?.phone || apt.donor_phone || "N/A",
+              address:
+                apt.donor?.address || apt.donor_address || "Not provided",
+              city: apt.donor?.city || apt.donor_city || "N/A",
+              // Health info from donor_health table
+              healthStatus: healthStatus,
+              medicalConditions:
+                apt.donor?.medical_conditions || "None reported",
+              hemoglobin: apt.donor?.hemoglobin || "Not provided",
+              bloodPressure: apt.donor?.blood_pressure || "Not provided",
+              isOnMedication: apt.donor?.is_on_medication || false,
+              medications: apt.donor?.medications || "None",
+              allergiesDetails: apt.donor?.allergies_details || "None",
+              lastMedicalCheckup: apt.donor?.last_medical_checkup
+                ? formatDate(apt.donor.last_medical_checkup)
+                : "Not provided",
+              healthNotes: apt.donor?.health_notes || "",
+              // Donation history
+              lastDonation: apt.donor?.last_donation_date
+                ? formatDate(apt.donor.last_donation_date)
+                : "First-time donor",
+              totalDonations: apt.donor?.total_donations || 0,
+              registeredAt: apt.donor_registered || "N/A",
+              // Request info
+              request_code: apt.request_code,
+              patient_name: apt.patient_name,
+              quantity: apt.quantity || 1,
+              notes: apt.notes,
+              preferred_time: apt.preferred_time,
+            };
+          });
 
           window.renderAppointments();
         } catch (error) {
@@ -868,29 +896,61 @@
 
           currentViewedAppointmentId = aptId;
 
+          // Helper function for safe display
+          const safeValue = (val, suffix = "") => {
+            if (
+              val === null ||
+              val === undefined ||
+              val === "" ||
+              val === "N/A" ||
+              val === "Not provided"
+            ) {
+              return "Not provided";
+            }
+            return suffix ? `${val}${suffix}` : val;
+          };
+
           // Populate modal with donor data
           document.getElementById("modalAptId").textContent = apt.id;
           document.getElementById("modalDonorName").textContent = apt.donor;
-          document.getElementById("modalDonorAge").textContent =
-            `${apt.age} years`;
-          document.getElementById("modalDonorGender").textContent = apt.gender;
-          document.getElementById("modalDonorWeight").textContent =
-            `${apt.weight} kg`;
+          document.getElementById("modalDonorAge").textContent = safeValue(
+            apt.age,
+            " years",
+          );
+          document.getElementById("modalDonorGender").textContent = safeValue(
+            apt.gender,
+          );
+          document.getElementById("modalDonorWeight").textContent = safeValue(
+            apt.weight,
+            apt.weight !== "Not provided" ? " kg" : "",
+          );
+          document.getElementById("modalDonorHeight").textContent = safeValue(
+            apt.height,
+            apt.height !== "Not provided" ? " cm" : "",
+          );
           document.getElementById("modalDonorEmail").textContent = apt.email;
           document.getElementById("modalDonorPhone").textContent = apt.phone;
-          document.getElementById("modalDonorAddress").textContent =
-            apt.address;
-          document.getElementById("modalDonorCity").textContent = apt.city;
+          document.getElementById("modalDonorAddress").textContent = safeValue(
+            apt.address,
+          );
+          document.getElementById("modalDonorCity").textContent = safeValue(
+            apt.city,
+          );
           document.getElementById("modalDonorBloodType").textContent =
             apt.bloodType;
           document.getElementById("modalDonorHealthStatus").textContent =
             apt.healthStatus;
           document.getElementById("modalMedicalConditions").textContent =
             apt.medicalConditions;
-          document.getElementById("modalHemoglobin").textContent =
-            apt.hemoglobin;
-          document.getElementById("modalBloodPressure").textContent =
-            apt.bloodPressure;
+          document.getElementById("modalHemoglobin").textContent = safeValue(
+            apt.hemoglobin,
+          );
+          document.getElementById("modalBloodPressure").textContent = safeValue(
+            apt.bloodPressure,
+          );
+          document.getElementById("modalLastCheckup").textContent = safeValue(
+            apt.lastMedicalCheckup,
+          );
           document.getElementById("modalDonorTotalDonations").textContent =
             apt.totalDonations;
           document.getElementById("modalDonorLastDonation").textContent =
@@ -989,6 +1049,24 @@
           if (currentViewedAppointmentId) {
             updateAppointmentStatus(currentViewedAppointmentId, "Cancelled");
             window.closeDonorModal();
+          }
+        };
+
+        // Chat with donor from modal
+        window.chatFromModal = function () {
+          if (currentViewedAppointmentId) {
+            const apt = appointments.find(
+              (a) => a.id === currentViewedAppointmentId,
+            );
+            if (apt && apt.donor_user_id) {
+              const donorName = encodeURIComponent(apt.donor);
+              window.location.href = `/src/pages/hospital/chat.html?user=${apt.donor_user_id}&name=${donorName}&role=donor`;
+            } else {
+              showNotification(
+                "Unable to start chat - donor information not available",
+                "error",
+              );
+            }
           }
         };
 
@@ -1140,6 +1218,15 @@
                     --
                   </p>
                 </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Height</p>
+                  <p
+                    id="modalDonorHeight"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -1223,7 +1310,7 @@
                     id="modalHemoglobin"
                     class="text-sm font-medium text-gray-900"
                   >
-                    15.2 g/dL
+                    --
                   </p>
                 </div>
                 <div>
@@ -1232,7 +1319,16 @@
                     id="modalBloodPressure"
                     class="text-sm font-medium text-gray-900"
                   >
-                    120/80 mmHg
+                    --
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Last Medical Checkup</p>
+                  <p
+                    id="modalLastCheckup"
+                    class="text-sm font-medium text-gray-900"
+                  >
+                    --
                   </p>
                 </div>
                 <div class="col-span-2">
@@ -1304,29 +1400,39 @@
           <div
             class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 rounded-b-2xl"
           >
-            <div class="flex items-center justify-end gap-3">
+            <div class="flex items-center justify-between">
               <button
-                onclick="closeDonorModal()"
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                id="modalChatBtn"
+                onclick="chatFromModal()"
+                class="px-4 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-500 rounded-lg hover:bg-blue-50 transition-colors"
               >
-                Close
+                <i data-lucide="message-square" class="size-4 inline mr-1.5"></i
+                >Chat with Donor
               </button>
-              <button
-                id="modalDeclineBtn"
-                onclick="declineFromModal()"
-                class="px-4 py-2 text-sm font-medium text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors"
-              >
-                <i data-lucide="x-circle" class="size-4 inline mr-1.5"></i
-                >Decline
-              </button>
-              <button
-                id="modalAcceptBtn"
-                onclick="acceptFromModal()"
-                class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
-              >
-                <i data-lucide="check-circle" class="size-4 inline mr-1.5"></i
-                >Accept Appointment
-              </button>
+              <div class="flex items-center gap-3">
+                <button
+                  onclick="closeDonorModal()"
+                  class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Close
+                </button>
+                <button
+                  id="modalDeclineBtn"
+                  onclick="declineFromModal()"
+                  class="px-4 py-2 text-sm font-medium text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors"
+                >
+                  <i data-lucide="x-circle" class="size-4 inline mr-1.5"></i
+                  >Decline
+                </button>
+                <button
+                  id="modalAcceptBtn"
+                  onclick="acceptFromModal()"
+                  class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  <i data-lucide="check-circle" class="size-4 inline mr-1.5"></i
+                  >Accept Appointment
+                </button>
+              </div>
             </div>
           </div>
         </div>
