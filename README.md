@@ -482,6 +482,21 @@ For scheduled notifications:
 | `approved` | Full system access      |
 | `rejected` | Access denied           |
 
+### Test Credentials
+
+For testing purposes, the database comes pre-seeded with the following user accounts:
+
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **System Admin** | `admin@bloodconnect.com` | `admin123` |
+| **Donor** | `donor@test.com` | `12345678` |
+| **Seeker** | `seeker@test.com` | `12345678` |
+| **Hospital** | `testhospital@test.com` | `12345678` |
+| **Hospital** | `hospital@test.com` | `12345678` |
+| **Test Admin** | `admin@test.com` | `12345678` |
+
+*(Note: Additional dummy users ending in `@test.com` are also included, and all use the password `12345678`)*
+
 ---
 
 ## 🛡️ Security Practices
