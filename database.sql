@@ -539,7 +539,7 @@ DELIMITER ;
 -- Password: admin123 (hashed with bcrypt)
 -- =====================================================
 INSERT INTO users (email, password, name, phone, role, status) VALUES
-('admin@bloodconnect.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'System Admin', '1234567890', 'admin', 'approved');
+('admin@bloodconnect.com', '$2y$10$PoNoNzrsSKW3WEOkAiWUOuZA1H57AMsK6SpBrDyGF6z1SXpmpiIWW', 'System Admin', '1234567890', 'admin', 'approved');
 
 -- =====================================================
 -- VIEWS FOR COMMON QUERIES
@@ -646,11 +646,11 @@ JOIN blood_groups bg ON r.blood_group_id = bg.id;
 
 -- Insert test users (basic auth data only)
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `role`, `status`, `created_at`, `updated_at`) VALUES
-(14, 'Mahdi Al Hasan', 'donor@test.com', '$2y$10$1F9RdGVHT8LXp9pSMp7fxuFtU1hcxEQaY8YxjNxy48uGJ/R7dhhNC', '01537288022', 'donor', 'approved', '2026-01-15 11:22:31', '2026-01-15 11:22:31'),
-(15, 'Admin', 'admin@test.com', '$2y$10$PY07ie/HatrSi89Ry9thnegqqXcxzkcg6a2olyftB1GMKok4u6pU.', '01537288022', 'admin', 'approved', '2026-01-15 11:24:45', '2026-01-15 11:24:45'),
-(16, 'Test Hospital', 'testhospital@test.com', '$2y$10$5QKgGTRD2hl6kBajEM6ErOR/v7h3Dj/mYKOfex.F3HP.TNWjXA4UC', '01712345678', 'hospital', 'approved', '2026-01-15 11:31:59', '2026-01-15 11:31:59'),
-(17, 'Mahdi Al Hasan', 'seeker@test.com', '$2y$10$U/N6ZNxyxND1r/8vhhRjUeMIa7SSBos1sK.5C.b5YOypz6tc82a6O', '01537288022', 'seeker', 'approved', '2026-01-15 11:34:49', '2026-01-15 11:34:49'),
-(18, 'City Hospital', 'hospital@test.com', '$2y$10$5TjTboR.6F65JJOhrlzBGe12un6UlfG.zFlZnpB23MK8E2KeM6tX.', '01537288022', 'hospital', 'approved', '2026-01-15 11:40:00', '2026-01-15 11:40:00');
+(14, 'Mahdi Al Hasan', 'donor@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01537288022', 'donor', 'approved', '2026-01-15 11:22:31', '2026-01-15 11:22:31'),
+(15, 'Admin', 'admin@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01537288022', 'admin', 'approved', '2026-01-15 11:24:45', '2026-01-15 11:24:45'),
+(16, 'Test Hospital', 'testhospital@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01712345678', 'hospital', 'approved', '2026-01-15 11:31:59', '2026-01-15 11:31:59'),
+(17, 'Mahdi Al Hasan', 'seeker@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01537288022', 'seeker', 'approved', '2026-01-15 11:34:49', '2026-01-15 11:34:49'),
+(18, 'City Hospital', 'hospital@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01537288022', 'hospital', 'approved', '2026-01-15 11:40:00', '2026-01-15 11:40:00');
 
 -- Insert donor-specific data (user_id 14 is donor with A+ blood)
 INSERT INTO `donors` (`user_id`, `blood_group_id`, `age`, `weight`, `city`, `address`) VALUES
@@ -672,3 +672,62 @@ INSERT INTO `seekers` (`user_id`) VALUES
 -- =====================================================
 -- END OF SCHEMA
 -- =====================================================
+
+
+-- =====================================================
+-- MASSIVE SEED DATA
+-- =====================================================
+
+-- Insert more Users
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `role`, `status`) VALUES
+(101, 'Rahim Uddin', 'rahim.donor@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01700000001', 'donor', 'approved'),
+(102, 'Karim Hassan', 'karim.donor@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01700000002', 'donor', 'approved'),
+(103, 'Aisha Rahman', 'aisha.donor@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01700000003', 'donor', 'approved'),
+(104, 'Sajid Islam', 'sajid.donor@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01700000004', 'donor', 'approved'),
+(105, 'Nafisa Ali', 'nafisa.donor@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01700000005', 'donor', 'approved'),
+(106, 'Apollo Hospital', 'apollo@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01800000001', 'hospital', 'approved'),
+(107, 'Square Hospital', 'square@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01800000002', 'hospital', 'approved'),
+(108, 'United Hospital', 'united@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01800000003', 'hospital', 'approved'),
+(109, 'Jamil Seeker', 'jamil.seeker@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01900000001', 'seeker', 'approved'),
+(110, 'Sadia Seeker', 'sadia.seeker@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01900000002', 'seeker', 'approved'),
+(111, 'Mina Seeker', 'mina.seeker@test.com', '$2y$10$DalHTI6lyfa/QG5njATTMeENUrCNyavVtjaZrS0myCpoxyBUHZRK6', '01900000003', 'seeker', 'approved');
+
+-- Insert Donors Details
+INSERT INTO `donors` (`user_id`, `blood_group_id`, `age`, `weight`, `gender`, `city`, `address`, `is_available`, `total_donations`) VALUES
+(101, (SELECT id FROM blood_groups WHERE blood_type = 'O+'), 25, 65, 'male', 'Dhaka', 'Mirpur 10, Dhaka', TRUE, 2),
+(102, (SELECT id FROM blood_groups WHERE blood_type = 'A-'), 30, 75, 'male', 'Chittagong', 'Agrabad, Chittagong', TRUE, 1),
+(103, (SELECT id FROM blood_groups WHERE blood_type = 'B+'), 22, 55, 'female', 'Sylhet', 'Zindabazar, Sylhet', TRUE, 0),
+(104, (SELECT id FROM blood_groups WHERE blood_type = 'AB+'), 28, 80, 'male', 'Dhaka', 'Dhanmondi 27, Dhaka', FALSE, 5),
+(105, (SELECT id FROM blood_groups WHERE blood_type = 'O-'), 26, 60, 'female', 'Rajshahi', 'Shaheb Bazar, Rajshahi', TRUE, 3);
+
+-- Initialize donor_health
+INSERT INTO `donor_health` (`donor_id`) VALUES
+((SELECT id FROM donors WHERE user_id = 101)),
+((SELECT id FROM donors WHERE user_id = 102)),
+((SELECT id FROM donors WHERE user_id = 103)),
+((SELECT id FROM donors WHERE user_id = 104)),
+((SELECT id FROM donors WHERE user_id = 105));
+
+-- Insert Hospital Details
+INSERT INTO `hospitals` (`user_id`, `registration_number`, `hospital_type`, `address`, `city`, `state`, `contact_person`, `has_blood_bank`) VALUES
+(106, 'REG-APOLLO', 'private', 'Bashundhara R/A', 'Dhaka', 'Dhaka', 'Dr. Shafiq', TRUE),
+(107, 'REG-SQUARE', 'private', 'Panthapath', 'Dhaka', 'Dhaka', 'Dr. Amin', TRUE),
+(108, 'REG-UNITED', 'private', 'Gulshan 2', 'Dhaka', 'Dhaka', 'Dr. Kamal', TRUE);
+
+-- Insert Seeker Details
+INSERT INTO `seekers` (`user_id`, `city`, `address`, `total_requests`) VALUES
+(109, 'Dhaka', 'Mohammadpur, Dhaka', 1),
+(110, 'Chittagong', 'Halishahar, Chittagong', 2),
+(111, 'Sylhet', 'Subidbazar, Sylhet', 1);
+
+-- Insert Blood Requests
+INSERT INTO `blood_requests` (`request_code`, `requester_id`, `requester_type`, `patient_name`, `patient_age`, `contact_phone`, `blood_group_id`, `quantity`, `city`, `required_date`, `urgency`, `status`) VALUES
+('REQ-0001', 109, 'seeker', 'Anisur Rahman', 45, '01900000001', (SELECT id FROM blood_groups WHERE blood_type = 'O+'), 2, 'Dhaka', CURDATE() + INTERVAL 2 DAY, 'normal', 'approved'),
+('REQ-0002', 106, 'hospital', 'Tariqul Islam', 32, '01800000001', (SELECT id FROM blood_groups WHERE blood_type = 'AB-'), 1, 'Dhaka', CURDATE() + INTERVAL 1 DAY, 'emergency', 'pending'),
+('REQ-0003', 110, 'seeker', 'Salma Begum', 55, '01900000002', (SELECT id FROM blood_groups WHERE blood_type = 'B+'), 3, 'Chittagong', CURDATE() + INTERVAL 5 DAY, 'normal', 'approved'),
+('REQ-0004', 108, 'hospital', 'Kamal Hossain', 60, '01800000003', (SELECT id FROM blood_groups WHERE blood_type = 'O-'), 1, 'Dhaka', CURDATE(), 'emergency', 'in_progress');
+
+-- Insert Announcements
+INSERT INTO `announcements` (`title`, `message`, `target_audience`, `priority`, `admin_id`) VALUES
+('Welcome to BloodConnect', 'Thank you for joining our mission to save lives. Please update your profile.', 'all', 'normal', (SELECT id FROM users WHERE role = 'admin' LIMIT 1)),
+('Urgent Need of O- Blood', 'There is an emergency requirement of O- blood in United Hospital, Dhaka. Eligible donors please respond.', 'donors', 'urgent', (SELECT id FROM users WHERE role = 'admin' LIMIT 1));
