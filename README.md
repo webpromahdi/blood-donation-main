@@ -1,10 +1,10 @@
-# 🩸 BloodConnect - Blood Donation & Emergency Request Management System
+# 🚀 BloodConnect - Blood Donation & Emergency Request Management System
 
 A comprehensive web-based blood donation management platform that connects blood donors, seekers, hospitals, and administrators. The system facilitates emergency blood requests, voluntary donations, and streamlines the entire blood donation lifecycle from request to fulfillment.
 
 ---
 
-## 📋 Table of Contents
+## 🔹 Table of Contents
 
 1. [Project Overview](#project-overview)
 2. [Features by Role](#features-by-role)
@@ -28,11 +28,17 @@ A comprehensive web-based blood donation management platform that connects blood
 
 ---
 
-## 🎯 Project Overview
+## 🔹 Project Overview
 
 BloodConnect is a full-stack web application designed to address the critical need for efficient blood donation management. The platform serves as a bridge between blood seekers (patients/families), blood donors, hospitals, and system administrators.
 
-### Key Objectives
+### 🔸 The Problem
+During medical emergencies, finding a compatible blood donor quickly is often a matter of life and death. The traditional process is uncoordinated, relying heavily on social media shares or contacting blood banks individually. This causes critical delays, lacks real-time visibility into donor availability, and creates communication gaps between hospitals, patients, and donors.
+
+### 🔸 The Solution
+BloodConnect provides a centralized, real-time platform that instantly matches blood requests with available, compatible donors in the required location. By automating the matching process, strictly tracking donor health eligibility (e.g., 90-day cooldown periods), and providing an internal chat system for direct communication, it eliminates crucial delays and brings structure to emergency blood management.
+
+### 🔸 Key Objectives
 
 - **Streamline Blood Requests**: Enable seekers and hospitals to submit blood requests that get matched with compatible donors
 - **Donor Management**: Track donor eligibility, health information, and donation history
@@ -43,9 +49,9 @@ BloodConnect is a full-stack web application designed to address the critical ne
 
 ---
 
-## 👥 Features by Role
+## 🔹 Features by Role
 
-### 🔴 Blood Donor
+### 🔸 Blood Donor
 
 - **Registration & Profile**: Register with blood group, health information, and location
 - **Request Matching**: View compatible blood requests based on blood type and location
@@ -57,14 +63,14 @@ BloodConnect is a full-stack web application designed to address the critical ne
 - **Notifications**: Receive alerts for matching requests and appointment reminders
 - **Chat**: Communicate with hospitals and seekers
 
-### 🟢 Blood Seeker
+### 🔸 Blood Seeker
 
 - **Request Submission**: Submit blood requests with patient details and urgency level
 - **Request Tracking**: Track request status from submission to fulfillment
 - **Donor Communication**: Chat with assigned donors (after acceptance)
 - **Notifications**: Receive updates on request status changes
 
-### 🏥 Hospital
+### 🔸 Hospital
 
 - **Request Management**: Create and manage blood requests for patients
 - **Donor Discovery**: View available donors by blood type and location
@@ -73,7 +79,7 @@ BloodConnect is a full-stack web application designed to address the critical ne
 - **Donation Completion**: Mark donations as completed
 - **Reports**: View donation statistics and history
 
-### 🛡️ Administrator
+### 🔸 Administrator
 
 - **User Management**: Approve/reject donor and hospital registrations
 - **Request Oversight**: Review and approve/reject blood requests
@@ -85,7 +91,7 @@ BloodConnect is a full-stack web application designed to address the critical ne
 
 ---
 
-## 🏗️ System Architecture
+## 🔹 System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -136,7 +142,7 @@ BloodConnect is a full-stack web application designed to address the critical ne
 
 ---
 
-## 💻 Technology Stack
+## 🔹 Technology Stack
 
 | Layer                  | Technology                                         |
 | ---------------------- | -------------------------------------------------- |
@@ -151,9 +157,9 @@ BloodConnect is a full-stack web application designed to address the critical ne
 
 ---
 
-## 🗄️ Database Schema
+## 🔹 Database Schema
 
-### Core Tables
+### 🔸 Core Tables
 
 | Table          | Description                                             |
 | -------------- | ------------------------------------------------------- |
@@ -163,7 +169,7 @@ BloodConnect is a full-stack web application designed to address the critical ne
 | `seekers`      | Extended seeker information (linked to users)           |
 | `blood_groups` | Reference table for blood types with compatibility data |
 
-### Transaction Tables
+### 🔸 Transaction Tables
 
 | Table                 | Description                                 |
 | --------------------- | ------------------------------------------- |
@@ -173,7 +179,7 @@ BloodConnect is a full-stack web application designed to address the critical ne
 | `appointments`        | Scheduled donation appointments             |
 | `certificates`        | Generated donation certificates             |
 
-### Support Tables
+### 🔸 Support Tables
 
 | Table           | Description                  |
 | --------------- | ---------------------------- |
@@ -182,7 +188,7 @@ BloodConnect is a full-stack web application designed to address the critical ne
 | `donor_health`  | Donor health information     |
 | `announcements` | System announcements         |
 
-### Entity Relationship Summary
+### 🔸 Entity Relationship Summary
 
 ```
 users (1) ──────< donors (1)
@@ -201,7 +207,7 @@ hospitals (1) ──────< voluntary_donations (∞)
 
 ---
 
-## 🔄 Request Lifecycle
+## 🔹 Request Lifecycle
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -243,7 +249,7 @@ PENDING → APPROVED → IN_PROGRESS → COMPLETED
 
 ---
 
-## 💉 Donation Lifecycle
+## 🔹 Donation Lifecycle
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -271,7 +277,7 @@ PENDING → APPROVED → IN_PROGRESS → COMPLETED
 COOLDOWN PERIOD: 90 days between donations (configurable)
 ```
 
-### Voluntary Donation Flow
+### 🔸 Voluntary Donation Flow
 
 ```
 DONOR                    ADMIN                   HOSPITAL
@@ -300,11 +306,11 @@ DONOR                    ADMIN                   HOSPITAL
 
 ---
 
-## 🔔 Notification System
+## 🔹 Notification System
 
 The system generates notifications for key events across all user roles.
 
-### Notification Types
+### 🔸 Notification Types
 
 | Code    | Event                                 | Recipients      |
 | ------- | ------------------------------------- | --------------- |
@@ -333,11 +339,11 @@ The system generates notifications for key events across all user roles.
 
 ---
 
-## 💬 Chat System
+## 🔹 Chat System
 
 The chat system enables contextual communication between users based on their relationships.
 
-### Chat Permission Rules
+### 🔸 Chat Permission Rules
 
 | User Role    | Can Chat With                                                               |
 | ------------ | --------------------------------------------------------------------------- |
@@ -346,7 +352,7 @@ The chat system enables contextual communication between users based on their re
 | **Hospital** | Donors (with active appointments/donations), Admins                         |
 | **Admin**    | All users                                                                   |
 
-### Features
+### 🔸 Features
 
 - Real-time message updates (polling)
 - Unread message counts
@@ -355,16 +361,16 @@ The chat system enables contextual communication between users based on their re
 
 ---
 
-## 📦 Installation Guide
+## 🔹 Installation Guide
 
-### Prerequisites
+### 🔸 Prerequisites
 
 - XAMPP 8.0+ (or equivalent LAMP/WAMP stack)
 - PHP 8.0+
 - MySQL 8.0+ / MariaDB 10.4+
 - Node.js 18+ (for development/Tailwind compilation)
 
-### Step 1: Clone the Repository
+### 🔸 Step 1: Clone the Repository
 
 ```bash
 cd C:\xampp\htdocs
@@ -372,28 +378,28 @@ git clone <repository-url> blood-donation-main
 cd blood-donation-main
 ```
 
-### Step 2: Install Dependencies
+### 🔸 Step 2: Install Dependencies
 
 ```bash
 npm install
 ```
 
-### Step 3: Database Setup
+### 🔸 Step 3: Database Setup
 
 1. Start MySQL from XAMPP Control Panel
 2. Open phpMyAdmin (http://localhost/phpmyadmin)
 3. Import the database schema:
 
 ```bash
-# Option 1: Via phpMyAdmin
-# Import the file: database.sql
+# 🚀 Option 1: Via phpMyAdmin
+# 🚀 Import the file: database.sql
 
-# Option 2: Via command line
+# 🚀 Option 2: Via command line
 mysql -u root < database.sql
 mysql -u root blood_donation < data.sql  # Optional: seed data
 ```
 
-### Step 4: Configure Database Connection
+### 🔸 Step 4: Configure Database Connection
 
 Edit `api/config/database.php` if needed:
 
@@ -404,40 +410,40 @@ private $username = 'root';
 private $password = '';  // Default XAMPP password
 ```
 
-### Step 5: Start Development Server
+### 🔸 Step 5: Start Development Server
 
 ```bash
-# For Tailwind CSS compilation (development)
+# 🚀 For Tailwind CSS compilation (development)
 npm run dev
 
-# Access the application
-# http://localhost:5173 (Vite dev server)
+# 🚀 Access the application
+# 🚀 http://localhost:5173 (Vite dev server)
 ```
 
-### Step 6: Production Setup
+### 🔸 Step 6: Production Setup
 
 ```bash
-# Build CSS for production
+# 🚀 Build CSS for production
 npm run build
 
-# Access via Apache
-# http://localhost/blood-donation-main
+# 🚀 Access via Apache
+# 🚀 http://localhost/blood-donation-main
 ```
 
 ---
 
-## ⚙️ Environment Setup
+## 🔹 Environment Setup
 
-### Apache Configuration
+### 🔸 Apache Configuration
 
 Ensure `mod_rewrite` is enabled for clean URLs:
 
 ```apache
-# In httpd.conf
+# 🚀 In httpd.conf
 LoadModule rewrite_module modules/mod_rewrite.so
 ```
 
-### PHP Configuration
+### 🔸 PHP Configuration
 
 Recommended `php.ini` settings:
 
@@ -449,23 +455,23 @@ session.cookie_httponly = 1
 session.cookie_secure = 0  # Set to 1 for HTTPS
 ```
 
-### Cron Job Setup (Optional)
+### 🔸 Cron Job Setup (Optional)
 
 For scheduled notifications:
 
 ```bash
-# Linux/Mac
+# 🚀 Linux/Mac
 0 8 * * * php /path/to/cron/scheduled-notifications.php
 
-# Windows Task Scheduler
-# Create task to run: php C:\xampp\htdocs\blood-donation-main\cron\scheduled-notifications.php
+# 🚀 Windows Task Scheduler
+# 🚀 Create task to run: php C:\xampp\htdocs\blood-donation-main\cron\scheduled-notifications.php
 ```
 
 ---
 
-## 🔐 Default Roles & Access
+## 🔹 Default Roles & Access
 
-### User Roles
+### 🔸 User Roles
 
 | Role         | Registration           | Approval Required |
 | ------------ | ---------------------- | ----------------- |
@@ -474,7 +480,7 @@ For scheduled notifications:
 | **Hospital** | Public registration    | Yes               |
 | **Seeker**   | Public registration    | No                |
 
-### Account States
+### 🔸 Account States
 
 | State      | Description             |
 | ---------- | ----------------------- |
@@ -482,7 +488,7 @@ For scheduled notifications:
 | `approved` | Full system access      |
 | `rejected` | Access denied           |
 
-### Test Credentials
+### 🔸 Test Credentials
 
 For testing purposes, the database comes pre-seeded with the following user accounts:
 
@@ -499,27 +505,27 @@ For testing purposes, the database comes pre-seeded with the following user acco
 
 ---
 
-## 🛡️ Security Practices
+## 🔹 Security Practices
 
-### Authentication
+### 🔸 Authentication
 
 - Passwords hashed with `bcrypt` (PASSWORD_BCRYPT)
 - Session-based authentication with timeout (1 hour)
 - Session regeneration on login
 
-### Authorization
+### 🔸 Authorization
 
 - Role-based access control via middleware
 - API endpoints protected by role verification
 - Admin registration not allowed through public API
 
-### Data Protection
+### 🔸 Data Protection
 
 - Prepared statements for all SQL queries (PDO)
 - Input validation and sanitization
 - CORS headers configured
 
-### Recommendations for Production
+### 🔸 Recommendations for Production
 
 - Enable HTTPS
 - Set `session.cookie_secure = 1`
@@ -529,9 +535,9 @@ For testing purposes, the database comes pre-seeded with the following user acco
 
 ---
 
-## 📡 API Endpoints
+## 🔹 API Endpoints
 
-### Authentication
+### 🔸 Authentication
 
 | Method | Endpoint                 | Description          |
 | ------ | ------------------------ | -------------------- |
@@ -540,7 +546,7 @@ For testing purposes, the database comes pre-seeded with the following user acco
 | POST   | `/api/auth/logout.php`   | User logout          |
 | GET    | `/api/auth/check.php`    | Check session status |
 
-### Donor APIs
+### 🔸 Donor APIs
 
 | Method | Endpoint                          | Description               |
 | ------ | --------------------------------- | ------------------------- |
@@ -551,7 +557,7 @@ For testing purposes, the database comes pre-seeded with the following user acco
 | GET    | `/api/donor/eligibility.php`      | Check eligibility         |
 | POST   | `/api/donor/voluntary/submit.php` | Submit voluntary donation |
 
-### Hospital APIs
+### 🔸 Hospital APIs
 
 | Method | Endpoint                               | Description                 |
 | ------ | -------------------------------------- | --------------------------- |
@@ -560,7 +566,7 @@ For testing purposes, the database comes pre-seeded with the following user acco
 | GET    | `/api/hospital/donors.php`             | Get available donors        |
 | POST   | `/api/hospital/voluntary/schedule.php` | Schedule voluntary donation |
 
-### Admin APIs
+### 🔸 Admin APIs
 
 | Method | Endpoint                        | Description         |
 | ------ | ------------------------------- | ------------------- |
@@ -573,7 +579,7 @@ For testing purposes, the database comes pre-seeded with the following user acco
 
 ---
 
-## ⚠️ Known Limitations
+## 🔹 Known Limitations
 
 1. **Real-time Updates**: Chat and notifications use polling instead of WebSockets
 2. **Blood Compatibility**: System matches exact blood types; advanced compatibility (e.g., O- universal donor) is tracked but not auto-matched
@@ -584,7 +590,7 @@ For testing purposes, the database comes pre-seeded with the following user acco
 
 ---
 
-## 🚀 Future Improvements
+## 🔹 Future Improvements
 
 - [ ] WebSocket integration for real-time updates
 - [ ] SMS notifications via Twilio/similar
@@ -601,37 +607,37 @@ For testing purposes, the database comes pre-seeded with the following user acco
 
 ---
 
-## 📸 Screenshots
+## 🔹 Screenshots
 
-### Landing Page
+### 🔸 Landing Page
 
 ![Landing Page](screenshots/landing-page.png)
 
-### Donor Dashboard
+### 🔸 Donor Dashboard
 
 ![Donor Dashboard](screenshots/donor-dashboard.png)
 
-### Blood Request Form
+### 🔸 Blood Request Form
 
 ![Blood Request Form](screenshots/blood-request.png)
 
-### Admin Dashboard
+### 🔸 Admin Dashboard
 
 ![Admin Dashboard](screenshots/admin-dashboard.png)
 
-### Chat Interface
+### 🔸 Chat Interface
 
 ![Chat Interface](screenshots/chat-interface.png)
 
 ---
 
-## 📄 License
+## 🔹 License
 
 This project is developed for educational purposes. All rights reserved.
 
 ---
 
-## 👨‍💻 Author
+## 🔹 Author
 
 **BloodConnect Team**
 
