@@ -645,4 +645,4 @@ For questions or support, please contact the development team.
 
 ---
 
-_Last Updated: January 2026_
+_Last Updated: June 30, 2026_
