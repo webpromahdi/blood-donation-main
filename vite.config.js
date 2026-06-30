@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       // Proxy API requests to Apache (XAMPP)
       '/api': {
-        target: 'http://localhost/blood-donation-main',
+        target: 'http://localhost/Blood-Connect',
         changeOrigin: true,
         rewrite: (path) => path
       }
